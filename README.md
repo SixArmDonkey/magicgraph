@@ -8,6 +8,8 @@ MIT License
 
 ## Table of Contents
 
+[Generated Documentation](https://sixarmdonkey.github.io/magicgraph/)
+
 1. [Overview](#overview)
 2. [Installation](#installation)
 3. [Dependencies](#dependencies)
