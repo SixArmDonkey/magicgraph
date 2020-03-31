@@ -41,6 +41,7 @@ Magic Graph persistence uses the repository and unit of work patterns.  Any type
 is not limited to SQL.  Transactions can occur across different database connections and storage types (with obvious limitations).  
 Currently Magic Graph includes MySQL/MariaDB adapters out of the box, and additional adapters added in future releases.
 
+All examples in this documentation will assume that you want to use the persistence package.  
 
 ---
 
