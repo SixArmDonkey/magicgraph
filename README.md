@@ -79,35 +79,3 @@ In Magic Graph, a Model is an object that implements the IModel interface.
 
 
 
-
-
-    $repo = new buffalokiwi\magicgraph\persist\InlineSQLRepo( 'test', $db->getConnection(),
-      new \buffalokiwi\magicgraph\property\DefaultIntegerProperty( 'id', 0, null, buffalokiwi\magicgraph\property\IPropertyFlags::PRIMARY ),
-      new \buffalokiwi\magicgraph\property\DefaultStringProperty( 'name', '', new buffalokiwi\magicgraph\property\PropertyBehavior( 
-        /**
-         * Validate the name property 
-         * @param IProperty $prop The name property object 
-         * @param string $value The name property value 
-         * @return bool Success (required by AbstractProperty)
-         * @throws buffalokiwi\magicgraph\ValidationException 
-         */
-        function( buffalokiwi\magicgraph\property\IProperty $prop, string $value ) : bool {
-          //..Can do this 
-          if ( strlen( $value ) != 3 )
-            throw new \buffalokiwi\magicgraph\ValidationException( 'Name property must be 3 characters in length' );
-          
-          //..Return true/false for success
-          return true;
-        }
-      ), buffalokiwi\magicgraph\property\IPropertyFlags::REQUIRED )
-    );
-      
-    //..Can create and save a new record like this.
-    //$repo->save( $repo->create(['name' => 'foo']));
-      
-    //..Get the first model 
-    $model = $repo->get('1');
-    //..Validation exceptions are thrown on set AND save.
-    $model->name = 'longername';
-    //$repo->save( $model );    
- 
