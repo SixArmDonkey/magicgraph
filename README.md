@@ -14,7 +14,7 @@ MIT License
 ---
   
 
-##Overview
+## Overview
 
 The magic part of Magic Graph isn't building SQL queries using functions.  The magic is 
 how behavior is defined, how models are created and linked together, and how all of this can be done 
@@ -44,7 +44,7 @@ Currently Magic Graph includes MySQL/MariaDB adapters out of the box, and additi
 
 ---
 
-##Installation
+## Installation
 
 ```
 composer require buffalokiwi/magicgraph
