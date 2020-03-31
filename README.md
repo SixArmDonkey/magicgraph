@@ -79,5 +79,5 @@ Magic Graph requires one third party and two BuffaloKiwi libraries.
 In Magic Graph, a Model is an object that implements the IModel interface.  
 
 
-
+More documentation coming soon...
 
