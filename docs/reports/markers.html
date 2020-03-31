@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>    Documentation &raquo; Markers
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+        <li><a href="../index.html">Home</a></li>
+    </ul>
+
+    <div class="phpdocumentor-row">
+        <h2 class="phpdocumentor-content__title">Markers</h2>
+
+                    <h3>Table of Contents</h3>
+            <table class="phpdocumentor-table_of_contents">
+                                                            <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/abstractonemanypropertyservice.inc.php">src/abstractonemanypropertyservice.inc.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/defaultmodel.inc.php">src/defaultmodel.inc.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/imodel.intf.php">src/imodel.intf.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/imodelmapper.intf.php">src/imodelmapper.intf.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/modelfactory.inc.php">src/modelfactory.inc.php</a></td>
+                            <td class="phpdocumentor-cell">2</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/persist/ifilter.intf.php">src/persist/ifilter.intf.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/persist/mappingobjectfactory.inc.php">src/persist/mappingobjectfactory.inc.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/persist/sqlrepository.inc.php">src/persist/sqlrepository.inc.php</a></td>
+                            <td class="phpdocumentor-cell">2</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/persist/sqlselect.inc.php">src/persist/sqlselect.inc.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/property/defaultconfigmapper.inc.php">src/property/defaultconfigmapper.inc.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/property/ipropertyset.intf.php">src/property/ipropertyset.intf.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/property/moneyproperty.inc.php">src/property/moneyproperty.inc.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell"><a href="#src/property/propertyconfigbundle.inc.php">src/property/propertyconfigbundle.inc.php</a></td>
+                            <td class="phpdocumentor-cell">1</td>
+                        </tr>
+                                                </table>
+        
+                    <a id="src/abstractonemanypropertyservice.inc.php"></a>
+            <h3><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">29</td>
+                        <td class="phpdocumentor-cell">Write tests for how getValue uses spl_object_id and the garbage collector.</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/defaultmodel.inc.php"></a>
+            <h3><abbr title="src/defaultmodel.inc.php">defaultmodel.inc.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">543</td>
+                        <td class="phpdocumentor-cell">This method is too complex. Consider adding an isEdited property to IProperty instead of using all of this type checking.</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/imodel.intf.php"></a>
+            <h3><abbr title="src/imodel.intf.php">imodel.intf.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">27</td>
+                        <td class="phpdocumentor-cell">Write documentation</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/imodelmapper.intf.php"></a>
+            <h3><abbr title="src/imodelmapper.intf.php">imodelmapper.intf.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">41</td>
+                        <td class="phpdocumentor-cell">Create some code that can disable or remove properties in the produced model that are not
+fetched when the model is built.  Think about this a bit...</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/modelfactory.inc.php"></a>
+            <h3><abbr title="src/modelfactory.inc.php">modelfactory.inc.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">35</td>
+                        <td class="phpdocumentor-cell">This might be expensive to run.  This will need testing.</td>
+                    </tr>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">35</td>
+                        <td class="phpdocumentor-cell">figure out how to remove this.</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/persist/ifilter.intf.php"></a>
+            <h3><abbr title="src/persist/ifilter.intf.php">ifilter.intf.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">25</td>
+                        <td class="phpdocumentor-cell">Figure out how to make IFilter make more sense.  There is no way to determine which type of filter to use when using IRepository::stream(), because we
+have no idea what storage engine the repository represents (nor should we).</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/persist/mappingobjectfactory.inc.php"></a>
+            <h3><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">86</td>
+                        <td class="phpdocumentor-cell">Create some code that can disable or remove properties that are not
+fetched when the model is built.  Think about this a bit...</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/persist/sqlrepository.inc.php"></a>
+            <h3><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">302</td>
+                        <td class="phpdocumentor-cell">Make this work with in and null values.</td>
+                    </tr>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">523</td>
+                        <td class="phpdocumentor-cell">This contains some system-specific code that should really not be here. Consider moving most of this to some generic location, and passing the columns to insert/update to this method instead of processing them here.</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/persist/sqlselect.inc.php"></a>
+            <h3><abbr title="src/persist/sqlselect.inc.php">sqlselect.inc.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">24</td>
+                        <td class="phpdocumentor-cell">determine if this sucks or not.</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/property/defaultconfigmapper.inc.php"></a>
+            <h3><abbr title="src/property/defaultconfigmapper.inc.php">defaultconfigmapper.inc.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">35</td>
+                        <td class="phpdocumentor-cell">maybe make this extensible?  Create ways to create instances of</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/property/ipropertyset.intf.php"></a>
+            <h3><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">28</td>
+                        <td class="phpdocumentor-cell">Write documentation</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/property/moneyproperty.inc.php"></a>
+            <h3><abbr title="src/property/moneyproperty.inc.php">moneyproperty.inc.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">32</td>
+                        <td class="phpdocumentor-cell">Make something that can do money conversions with live exchange rates.</td>
+                    </tr>
+                                </tbody>
+            </table>
+                    <a id="src/property/propertyconfigbundle.inc.php"></a>
+            <h3><abbr title="src/property/propertyconfigbundle.inc.php">propertyconfigbundle.inc.php</abbr></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="phpdocumentor-cell">TODO</td>
+                        <td class="phpdocumentor-cell">20</td>
+                        <td class="phpdocumentor-cell">Find out what this is.</td>
+                    </tr>
+                                </tbody>
+            </table>
+            </div>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                        <li><a href="../namespaces/buffalokiwi.html">buffalokiwi</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph.html">magicgraph</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph-misc.html">misc</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph-misc-random.html">random</a></li>
+            </ul>
+
+    <article class="phpdocumentor-element phpdocumentor-class">
+        <h2 class="phpdocumentor-content__title">
+            RandomCodeGenerator
+                                                        </h2>
+        <aside class="phpdocumentor-element-found-in">
+            <abbr class="phpdocumentor-element-found-in__file" title="src/misc/random/randomcodegenerator.inc.php"><a href="../files/src-misc-random-randomcodegenerator-inc.html"><abbr title="src/misc/random/randomcodegenerator.inc.php">randomcodegenerator.inc.php</abbr></a></abbr>
+            :
+            <span class="phpdocumentor-element-found-in__line">22</span>
+        </aside>
+
+        <p class="phpdocumentor-class__summary">Generates a random code in base36</p>
+        <section class="phpdocumentor-class__description"></section>
+                
+
+        <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                                        <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-misc-random-RandomCodeGenerator.html#property_bytes">$bytes</a></th>
+                    <td class="phpdocumentor-cell">Number of bytes to use.</td>
+                    <td class="phpdocumentor-cell">int</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-misc-random-RandomCodeGenerator.html#property_invalidChars">$invalidChars</a></th>
+                    <td class="phpdocumentor-cell">A list of characters that are prohibited in generated codes.</td>
+                    <td class="phpdocumentor-cell">string[]</td>
+                </tr>
+                                                                <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-misc-random-RandomCodeGenerator.html#method___construct">__construct()</a></th>
+                    <td class="phpdocumentor-cell">Create a new Random Code Generator</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-misc-random-RandomCodeGenerator.html#method_generate">generate()</a></th>
+                    <td class="phpdocumentor-cell">Generate a random base36 code.</td>
+                    <td class="phpdocumentor-cell">string</td>
+                </tr>
+                                            </table>
+
+        
+                    <section>
+                <h3 class="phpdocumentor-properties__header">Properties</h3>
+                                    <a id="property_bytes"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$bytes</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/misc/random/randomcodegenerator.inc.php"><a href="../files/src-misc-random-randomcodegenerator-inc.html"><abbr title="src/misc/random/randomcodegenerator.inc.php">randomcodegenerator.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">28</span>
+    </aside>
+            <p class="phpdocumentor-summary">Number of bytes to use.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__name">$bytes</span>
+            </code>
+            
+</article>
+                                    <a id="property_invalidChars"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$invalidChars</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/misc/random/randomcodegenerator.inc.php"><a href="../files/src-misc-random-randomcodegenerator-inc.html"><abbr title="src/misc/random/randomcodegenerator.inc.php">randomcodegenerator.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">36</span>
+    </aside>
+            <p class="phpdocumentor-summary">A list of characters that are prohibited in generated codes.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">string[]</span>
+        <span class="phpdocumentor-signature__name">$invalidChars</span>
+         = <span class="phpdocumentor-signature__default-value">[&#039;1&#039;, &#039;I&#039;, &#039;0&#039;, &#039;O&#039;, &#039;S&#039;, &#039;5&#039;]</span>    </code>
+        <section class="phpdocumentor-description">This will generate a new code each time one of these characters is encountered
+in a generated code.</section>
+            
+</article>
+                                                            </section>
+        
+                    <section>
+                <h3 class="phpdocumentor-methods__header">Methods</h3>
+                                    <a id="method___construct"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">__construct()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/misc/random/randomcodegenerator.inc.php"><a href="../files/src-misc-random-randomcodegenerator-inc.html"><abbr title="src/misc/random/randomcodegenerator.inc.php">randomcodegenerator.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">51</span>
+    </aside>
+        <p class="phpdocumentor-summary">Create a new Random Code Generator</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">__construct</span>(
+                    <span class="phpdocumentor-signature__argument">
+            [                <span class="phpdocumentor-signature__argument__name">$bytes</span> :
+                <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">5</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$invalidChars</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$bytes</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">5</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>number of bytes to use when generating a code.
+Defaults to 5 bytes.</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$invalidChars</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>One or more invalid characters. If a generated code
+contains one of the listed characters, a new code is generated until one without
+an invalid character is generated.  Don't add too many characters here...
+I've added an arbitrary limit of 8 characters that can be omitted.
+This defaults to ['1','I','0','O']</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\InvalidArgumentException">InvalidArgumentException</abbr></span>
+                                                                                <section class="phpdocumentor-description"><p>if bytes is less than one</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method_generate"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">generate()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/misc/random/randomcodegenerator.inc.php"><a href="../files/src-misc-random-randomcodegenerator-inc.html"><abbr title="src/misc/random/randomcodegenerator.inc.php">randomcodegenerator.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">79</span>
+    </aside>
+        <p class="phpdocumentor-summary">Generate a random base36 code.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">generate</span>(
+                    <span class="phpdocumentor-signature__argument">
+            [                <span class="phpdocumentor-signature__argument__name">$split</span> :
+                <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">3</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">string</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$split</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">3</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Split the generated code every $split characters with a
+hyphen.</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+                    &mdash; <span class="phpdocumentor-description"><p>code</p></span>
+            
+</article>
+                                                            </section>
+            </article>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

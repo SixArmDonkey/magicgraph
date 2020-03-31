@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                        <li><a href="../namespaces/buffalokiwi.html">buffalokiwi</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph.html">magicgraph</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph-property.html">property</a></li>
+            </ul>
+    <article class="phpdocumentor-element phpdocumentor-interface">
+        <h2 class="phpdocumentor-content__title">
+            IPropertyConfig
+                                </h2>
+        <aside class="phpdocumentor-element-found-in">
+            <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyconfig.intf.php"><a href="../files/src-property-ipropertyconfig-intf.html"><abbr title="src/property/ipropertyconfig.intf.php">ipropertyconfig.intf.php</abbr></a></abbr>
+            :
+            <span class="phpdocumentor-element-found-in__line">19</span>
+        </aside>
+
+        <p class="phpdocumentor-interface__summary">Defines an object that can be used as configuration for the PropertyFactory</p>
+        <section class="phpdocumentor-interface__description"></section>
+                
+
+        <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                                                                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html#method_getConfig">getConfig()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the config array</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html#method_getPropertyNames">getPropertyNames()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a list of property names defined via this config</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html#method_beforeSave">beforeSave()</a></th>
+                    <td class="phpdocumentor-cell">Called via SaveableMappingObjectFactory, and happens as part of the
+beforeSave event.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html#method_afterSave">afterSave()</a></th>
+                    <td class="phpdocumentor-cell">Called via SaveableMappingObjectFactory, and happens as part of the
+afterSave event.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                                            </table>
+
+        
+        
+                    <section>
+                <h3 class="phpdocumentor-methods__header">Methods</h3>
+                                    <a id="method_getConfig"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getConfig()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyconfig.intf.php"><a href="../files/src-property-ipropertyconfig-intf.html"><abbr title="src/property/ipropertyconfig.intf.php">ipropertyconfig.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">25</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the config array</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getConfig</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+                    &mdash; <span class="phpdocumentor-description"><p>config</p></span>
+            
+</article>
+                                    <a id="method_getPropertyNames"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getPropertyNames()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyconfig.intf.php"><a href="../files/src-property-ipropertyconfig-intf.html"><abbr title="src/property/ipropertyconfig.intf.php">ipropertyconfig.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">32</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a list of property names defined via this config</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getPropertyNames</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+                    &mdash; <span class="phpdocumentor-description"><p>names</p></span>
+            
+</article>
+                                    <a id="method_beforeSave"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">beforeSave()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyconfig.intf.php"><a href="../files/src-property-ipropertyconfig-intf.html"><abbr title="src/property/ipropertyconfig.intf.php">ipropertyconfig.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">41</span>
+    </aside>
+        <p class="phpdocumentor-summary">Called via SaveableMappingObjectFactory, and happens as part of the
+beforeSave event.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">beforeSave</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\magicgraph\property\IModel">IModel</abbr></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\magicgraph\property\IModel">IModel</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Model being saved</p></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                    <a id="method_afterSave"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">afterSave()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyconfig.intf.php"><a href="../files/src-property-ipropertyconfig-intf.html"><abbr title="src/property/ipropertyconfig.intf.php">ipropertyconfig.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">50</span>
+    </aside>
+        <p class="phpdocumentor-summary">Called via SaveableMappingObjectFactory, and happens as part of the
+afterSave event.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">afterSave</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\magicgraph\property\IModel">IModel</abbr></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\magicgraph\property\IModel">IModel</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Model being saved</p></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                                            </section>
+            </article>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                        <li><a href="../namespaces/buffalokiwi.html">buffalokiwi</a></li>
+            </ul>
+
+    <h2 class="phpdocumentor-content__title">magicgraph</h2>
+
+            <h3>Namespaces</h3>
+        <dl>
+                            <dt><a href="../namespaces/buffalokiwi-magicgraph-junctionprovider.html"><abbr title="\buffalokiwi\magicgraph\junctionprovider">junctionprovider</abbr></a></dt>
+                            <dt><a href="../namespaces/buffalokiwi-magicgraph-misc.html"><abbr title="\buffalokiwi\magicgraph\misc">misc</abbr></a></dt>
+                            <dt><a href="../namespaces/buffalokiwi-magicgraph-money.html"><abbr title="\buffalokiwi\magicgraph\money">money</abbr></a></dt>
+                            <dt><a href="../namespaces/buffalokiwi-magicgraph-pdo.html"><abbr title="\buffalokiwi\magicgraph\pdo">pdo</abbr></a></dt>
+                            <dt><a href="../namespaces/buffalokiwi-magicgraph-persist.html"><abbr title="\buffalokiwi\magicgraph\persist">persist</abbr></a></dt>
+                            <dt><a href="../namespaces/buffalokiwi-magicgraph-property.html"><abbr title="\buffalokiwi\magicgraph\property">property</abbr></a></dt>
+                    </dl>
+    
+            <h3>Interfaces, Classes and Traits</h3>
+        <dl>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></dt>
+                <dd>Defines a model.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-IModelFactory.html"><abbr title="\buffalokiwi\magicgraph\IModelFactory">IModelFactory</abbr></a></dt>
+                <dd>Defines a factory for creating model instances using optional service providers.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-IModelMapper.html"><abbr title="\buffalokiwi\magicgraph\IModelMapper">IModelMapper</abbr></a></dt>
+                <dd>Defines an object that maps raw results from some data source to
+an IModel instance</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-IModelPropertyProvider.html"><abbr title="\buffalokiwi\magicgraph\IModelPropertyProvider">IModelPropertyProvider</abbr></a></dt>
+                <dd>This is a common interface used to create relationships between different
+data sources attached to a single model.  (Think foreign keys in a database).</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-IPropertyServiceProvider.html"><abbr title="\buffalokiwi\magicgraph\IPropertyServiceProvider">IPropertyServiceProvider</abbr></a></dt>
+                <dd>A property provider is used with a ModelFactory to add additional
+properties to a model in addition to the model&#039;s base configuration.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-IServiceableModel.html"><abbr title="\buffalokiwi\magicgraph\IServiceableModel">IServiceableModel</abbr></a></dt>
+                <dd>A model that has service providers attached.</dd>
+            
+                            <dt><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html"><abbr title="\buffalokiwi\magicgraph\AbstractOneManyPropertyService">AbstractOneManyPropertyService</abbr></a></dt>
+                <dd>Contains some of the base programming for a property service backed by a single
+repository and an array property full of IModel instances.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-AbstractOneOnePropertyService.html"><abbr title="\buffalokiwi\magicgraph\AbstractOneOnePropertyService">AbstractOneOnePropertyService</abbr></a></dt>
+                <dd>Contains some of the base programming for a property service backed by a single
+repository and model.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></dt>
+                <dd></dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-DefaultModel.html"><abbr title="\buffalokiwi\magicgraph\DefaultModel">DefaultModel</abbr></a></dt>
+                <dd>The default property bag model for storing stuff.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-DefaultModelMapper.html"><abbr title="\buffalokiwi\magicgraph\DefaultModelMapper">DefaultModelMapper</abbr></a></dt>
+                <dd>Used for setting model properties.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-GenericPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\GenericPropertyConfig">GenericPropertyConfig</abbr></a></dt>
+                <dd>A generic property configuration.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-GenericPropertyProvider.html"><abbr title="\buffalokiwi\magicgraph\GenericPropertyProvider">GenericPropertyProvider</abbr></a></dt>
+                <dd>A generic property provider.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-GenericPropSvcCfg.html"><abbr title="\buffalokiwi\magicgraph\GenericPropSvcCfg">GenericPropSvcCfg</abbr></a></dt>
+                <dd>A generic property service configuration object.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-GenericServiceableModelWrapper.html"><abbr title="\buffalokiwi\magicgraph\GenericServiceableModelWrapper">GenericServiceableModelWrapper</abbr></a></dt>
+                <dd></dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-ModelFactory.html"><abbr title="\buffalokiwi\magicgraph\ModelFactory">ModelFactory</abbr></a></dt>
+                <dd>Builds models with service providers.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-OneManyPropertySaveFunction.html"><abbr title="\buffalokiwi\magicgraph\OneManyPropertySaveFunction">OneManyPropertySaveFunction</abbr></a></dt>
+                <dd>WARNING: It is currently possible for child service providers to leave
+orphaned rows when deleting.  This seems to only happen with relationships nested &gt; 2 levels.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-OneManyPropertyService.html"><abbr title="\buffalokiwi\magicgraph\OneManyPropertyService">OneManyPropertyService</abbr></a></dt>
+                <dd>Contains some of the base programming for a property service backed by a single
+repository and an array property full of IModel instances.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-OneManyPropSvcCfg.html"><abbr title="\buffalokiwi\magicgraph\OneManyPropSvcCfg">OneManyPropSvcCfg</abbr></a></dt>
+                <dd>A property service configuration for a one to many relationship.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-OneOnePropertyService.html"><abbr title="\buffalokiwi\magicgraph\OneOnePropertyService">OneOnePropertyService</abbr></a></dt>
+                <dd>Contains some of the base programming for a property service backed by a single
+repository and model.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-OneOnePropSvcCfg.html"><abbr title="\buffalokiwi\magicgraph\OneOnePropSvcCfg">OneOnePropSvcCfg</abbr></a></dt>
+                <dd>Used for PropertyFactory config</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-OneOneROPropertyService.html"><abbr title="\buffalokiwi\magicgraph\OneOneROPropertyService">OneOneROPropertyService</abbr></a></dt>
+                <dd>A one to one read only property service.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-ProxyModel.html"><abbr title="\buffalokiwi\magicgraph\ProxyModel">ProxyModel</abbr></a></dt>
+                <dd>Delegates all method calls to the supplied model instance.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-QuickModel.html"><abbr title="\buffalokiwi\magicgraph\QuickModel">QuickModel</abbr></a></dt>
+                <dd>The default property bag model for storing stuff.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-ReadOnlyModelWrapper.html"><abbr title="\buffalokiwi\magicgraph\ReadOnlyModelWrapper">ReadOnlyModelWrapper</abbr></a></dt>
+                <dd>An IModel decorator that makes the model read only.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-ServiceableModel.html"><abbr title="\buffalokiwi\magicgraph\ServiceableModel">ServiceableModel</abbr></a></dt>
+                <dd>The default property bag model for storing stuff.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-ServiceableModelWrapper.html"><abbr title="\buffalokiwi\magicgraph\ServiceableModelWrapper">ServiceableModelWrapper</abbr></a></dt>
+                <dd>An IModel wrapper that can interact with service providers to add functionality.</dd>
+                            <dt><a href="../classes/buffalokiwi-magicgraph-ValidationException.html"><abbr title="\buffalokiwi\magicgraph\ValidationException">ValidationException</abbr></a></dt>
+                <dd>Thrown when some record fails to validate prior to save.</dd>
+            
+                    </dl>
+    
+    
+    
+                    <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

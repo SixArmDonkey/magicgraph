@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                        <li><a href="../namespaces/buffalokiwi.html">buffalokiwi</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph.html">magicgraph</a></li>
+            </ul>
+
+    <article class="phpdocumentor-element phpdocumentor-class">
+        <h2 class="phpdocumentor-content__title">
+            OneManyPropertyService
+                            <span class="phpdocumentor-class__extends">
+                    extends <a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html"><abbr title="\buffalokiwi\magicgraph\AbstractOneManyPropertyService">AbstractOneManyPropertyService</abbr></a>
+                </span>
+                                                        </h2>
+        <aside class="phpdocumentor-element-found-in">
+            <abbr class="phpdocumentor-element-found-in__file" title="src/onemanypropertyservice.inc.php"><a href="../files/src-onemanypropertyservice-inc.html"><abbr title="src/onemanypropertyservice.inc.php">onemanypropertyservice.inc.php</abbr></a></abbr>
+            :
+            <span class="phpdocumentor-element-found-in__line">28</span>
+        </aside>
+
+        <p class="phpdocumentor-class__summary">Contains some of the base programming for a property service backed by a single
+repository and an array property full of IModel instances.</p>
+        <section class="phpdocumentor-class__description"></section>
+                
+
+        <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                                        <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-OneManyPropertyService.html#property_repo">$repo</a></th>
+                    <td class="phpdocumentor-cell">Repo</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-IRepository.html"><abbr title="\buffalokiwi\magicgraph\persist\IRepository">IRepository</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-OneManyPropertyService.html#property_foreignKey">$foreignKey</a></th>
+                    <td class="phpdocumentor-cell">Property name from repo that this queries</td>
+                    <td class="phpdocumentor-cell">string</td>
+                </tr>
+                                                    <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#property_propCfg">$propCfg</a></th>
+                    <td class="phpdocumentor-cell">Property config for the service</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySvcConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySvcConfig">IPropertySvcConfig</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#property_lastId">$lastId</a></th>
+                    <td class="phpdocumentor-cell">Last id from getValue()</td>
+                    <td class="phpdocumentor-cell">int</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#property_init">$init</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell"><a href=""><abbr title=""></abbr></a></td>
+                </tr>
+                                        <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-OneManyPropertyService.html#method___construct">__construct()</a></th>
+                    <td class="phpdocumentor-cell">Create a new property service</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-OneManyPropertyService.html#method_loadModels">loadModels()</a></th>
+                    <td class="phpdocumentor-cell">Loads the models from some source</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                                                    <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method_loadModels">loadModels()</a></th>
+                    <td class="phpdocumentor-cell">Loads the models from some source</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method___construct">__construct()</a></th>
+                    <td class="phpdocumentor-cell">Create a new property service</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method_getModelServiceConfig">getModelServiceConfig()</a></th>
+                    <td class="phpdocumentor-cell">Get the property config for the main property set</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySvcConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySvcConfig">IPropertySvcConfig</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method_getSaveFunction">getSaveFunction()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the save function used for saving stuff from the provider.</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-IRunnable.html"><abbr title="\buffalokiwi\magicgraph\persist\IRunnable">IRunnable</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method_getValue">getValue()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the value of some property</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method_setValue">setValue()</a></th>
+                    <td class="phpdocumentor-cell">Sets the value of some property</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method_validate">validate()</a></th>
+                    <td class="phpdocumentor-cell">Test to see if this model is valid prior to save()</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method_init">init()</a></th>
+                    <td class="phpdocumentor-cell">Initialize the  model.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method_getPropertyConfig">getPropertyConfig()</a></th>
+                    <td class="phpdocumentor-cell">Get the property config for the main property set</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method_callLoadModels">callLoadModels()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-AbstractOneManyPropertyService.html#method_hasAllPriKeyValues">hasAllPriKeyValues()</a></th>
+                    <td class="phpdocumentor-cell">Test to see if some model has values for all primary keys</td>
+                    <td class="phpdocumentor-cell">bool</td>
+                </tr>
+                    </table>
+
+        
+                    <section>
+                <h3 class="phpdocumentor-properties__header">Properties</h3>
+                                    <a id="property_repo"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$repo</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/onemanypropertyservice.inc.php"><a href="../files/src-onemanypropertyservice-inc.html"><abbr title="src/onemanypropertyservice.inc.php">onemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">34</span>
+    </aside>
+            <p class="phpdocumentor-summary">Repo</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><a href="../classes/buffalokiwi-magicgraph-persist-IRepository.html"><abbr title="\buffalokiwi\magicgraph\persist\IRepository">IRepository</abbr></a></span>
+        <span class="phpdocumentor-signature__name">$repo</span>
+            </code>
+            
+</article>
+                                    <a id="property_foreignKey"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$foreignKey</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/onemanypropertyservice.inc.php"><a href="../files/src-onemanypropertyservice-inc.html"><abbr title="src/onemanypropertyservice.inc.php">onemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">40</span>
+    </aside>
+            <p class="phpdocumentor-summary">Property name from repo that this queries</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__name">$foreignKey</span>
+            </code>
+            
+</article>
+                                                                    <a id="property_propCfg"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$propCfg</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">35</span>
+    </aside>
+            <p class="phpdocumentor-summary">Property config for the service</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySvcConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySvcConfig">IPropertySvcConfig</abbr></a></span>
+        <span class="phpdocumentor-signature__name">$propCfg</span>
+            </code>
+            
+</article>
+                                    <a id="property_lastId"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$lastId</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">41</span>
+    </aside>
+            <p class="phpdocumentor-summary">Last id from getValue()</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__name">$lastId</span>
+         = <span class="phpdocumentor-signature__default-value">[]</span>    </code>
+            
+</article>
+                                    <a id="property_init"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$init</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">43</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__name">$init</span>
+         = <span class="phpdocumentor-signature__default-value">[]</span>    </code>
+            
+</article>
+                            </section>
+        
+                    <section>
+                <h3 class="phpdocumentor-methods__header">Methods</h3>
+                                    <a id="method___construct"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">__construct()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/onemanypropertyservice.inc.php"><a href="../files/src-onemanypropertyservice-inc.html"><abbr title="src/onemanypropertyservice.inc.php">onemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">52</span>
+    </aside>
+        <p class="phpdocumentor-summary">Create a new property service</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">__construct</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$cfg</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$repo</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IRepository.html"><abbr title="\buffalokiwi\magicgraph\persist\IRepository">IRepository</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$foreignKey</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$cfg</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$repo</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IRepository.html"><abbr title="\buffalokiwi\magicgraph\persist\IRepository">IRepository</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$foreignKey</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Property name from supplied IRepository that is
+queried against IPropertySvcConfig::getPropertyName();</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method_loadModels"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">loadModels()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/onemanypropertyservice.inc.php"><a href="../files/src-onemanypropertyservice-inc.html"><abbr title="src/onemanypropertyservice.inc.php">onemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">60</span>
+    </aside>
+        <p class="phpdocumentor-summary">Loads the models from some source</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">loadModels</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$parentId</span> :
+                <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$parentId</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+            
+</article>
+                                                                    <a id="method_loadModels"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                        phpdocumentor-element--abstract                                "
+>
+    <h4 class="phpdocumentor-method__name">loadModels()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">49</span>
+    </aside>
+        <p class="phpdocumentor-summary">Loads the models from some source</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__abstract">abstract</span>                        <span class="phpdocumentor-signature__name">loadModels</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$parentId</span> :
+                <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$parentId</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+            
+</article>
+                                    <a id="method___construct"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">__construct()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">61</span>
+    </aside>
+        <p class="phpdocumentor-summary">Create a new property service</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">__construct</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$cfg</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$cfg</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method_getModelServiceConfig"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getModelServiceConfig()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">71</span>
+    </aside>
+        <p class="phpdocumentor-summary">Get the property config for the main property set</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getModelServiceConfig</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySvcConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySvcConfig">IPropertySvcConfig</abbr></a></span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySvcConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySvcConfig">IPropertySvcConfig</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>config</p></span>
+            
+</article>
+                                    <a id="method_getSaveFunction"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getSaveFunction()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">82</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the save function used for saving stuff from the provider.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getSaveFunction</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$parent</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-persist-IRunnable.html"><abbr title="\buffalokiwi\magicgraph\persist\IRunnable">IRunnable</abbr></a></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$parent</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-persist-IRunnable.html"><abbr title="\buffalokiwi\magicgraph\persist\IRunnable">IRunnable</abbr></a></span>
+            
+</article>
+                                    <a id="method_getValue"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getValue()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">95</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the value of some property</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getValue</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$value</span> :
+                <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$context</span> :
+                <span class="phpdocumentor-signature__argument__return-type">array</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$value</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$context</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">array</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">[]</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\InvalidArgumentException">InvalidArgumentException</abbr></span>
+                                                                                <section class="phpdocumentor-description"><p>if the property is invalid</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+                    &mdash; <span class="phpdocumentor-description"><p>value</p></span>
+            
+</article>
+                                    <a id="method_setValue"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">setValue()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">188</span>
+    </aside>
+        <p class="phpdocumentor-summary">Sets the value of some property</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">setValue</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$value</span> :
+                <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$value</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>property value</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\InvalidArgumentException">InvalidArgumentException</abbr></span>
+                                                                                <section class="phpdocumentor-description"><p>if the property is invalid</p></section>
+                </dd>
+                        </dl>
+
+
+    
+</article>
+                                    <a id="method_validate"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">validate()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">205</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test to see if this model is valid prior to save()</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">validate</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-ValidationException.html"><abbr title="\buffalokiwi\magicgraph\ValidationException">ValidationException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"></section>
+                </dd>
+                        </dl>
+
+
+    
+</article>
+                                    <a id="method_init"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">init()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">238</span>
+    </aside>
+        <p class="phpdocumentor-summary">Initialize the  model.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">init</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Model instance</p></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                    <a id="method_getPropertyConfig"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getPropertyConfig()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">249</span>
+    </aside>
+        <p class="phpdocumentor-summary">Get the property config for the main property set</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getPropertyConfig</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>config</p></span>
+            
+</article>
+                                    <a id="method_callLoadModels"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--private
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">callLoadModels()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">255</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                                <span class="phpdocumentor-signature__name">callLoadModels</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$parentId</span> :
+                <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$parentId</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+            
+</article>
+                                    <a id="method_hasAllPriKeyValues"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--private
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">hasAllPriKeyValues()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/abstractonemanypropertyservice.inc.php"><a href="../files/src-abstractonemanypropertyservice-inc.html"><abbr title="src/abstractonemanypropertyservice.inc.php">abstractonemanypropertyservice.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">272</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test to see if some model has values for all primary keys</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                                <span class="phpdocumentor-signature__name">hasAllPriKeyValues</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">bool</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Model</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash; <span class="phpdocumentor-description"><p>has all keys</p></span>
+            
+</article>
+                            </section>
+            </article>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

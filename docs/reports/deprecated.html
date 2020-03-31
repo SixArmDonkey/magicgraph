@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>    Documentation &raquo; Deprecated elements
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+        <li><a href="../index.html">Home</a></li>
+    </ul>
+
+    <div class="phpdocumentor-row">
+        <h2 class="phpdocumentor-content__title">Deprecated</h2>
+
+                <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/modelfactory.inc.php">src/modelfactory.inc.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/esqloperator.enum.php">src/persist/esqloperator.enum.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/icondition.intf.php">src/persist/icondition.intf.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/ifilter.intf.php">src/persist/ifilter.intf.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/irepository.intf.php">src/persist/irepository.intf.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/irows.intf.php">src/persist/irows.intf.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/isqlcondition.intf.php">src/persist/isqlcondition.intf.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/isqlconditiongroup.intf.php">src/persist/isqlconditiongroup.intf.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/isqlfilter.intf.php">src/persist/isqlfilter.intf.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/isqlrepository.intf.php">src/persist/isqlrepository.intf.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/sqlcondition.inc.php">src/persist/sqlcondition.inc.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/sqlconditiongroup.inc.php">src/persist/sqlconditiongroup.inc.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/sqlfilter.inc.php">src/persist/sqlfilter.inc.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="#src/persist/sqlrows.inc.php">src/persist/sqlrows.inc.php</a></td>
+                </tr>
+                    </table>
+        
+                    <a id="src/modelfactory.inc.php"></a>
+            <h3><abbr title="src/modelfactory.inc.php">modelfactory.inc.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">35</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-ModelFactory.html"><abbr title="\buffalokiwi\magicgraph\ModelFactory">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Replaced by ServiceableRepository and ServiceableModel</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/esqloperator.enum.php"></a>
+            <h3><abbr title="src/persist/esqloperator.enum.php">esqloperator.enum.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">22</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-ESQLOperator.html"><abbr title="\buffalokiwi\magicgraph\persist\ESQLOperator">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/icondition.intf.php"></a>
+            <h3><abbr title="src/persist/icondition.intf.php">icondition.intf.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">17</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-ICondition.html"><abbr title="\buffalokiwi\magicgraph\persist\ICondition">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/ifilter.intf.php"></a>
+            <h3><abbr title="src/persist/ifilter.intf.php">ifilter.intf.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">25</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-IFilter.html"><abbr title="\buffalokiwi\magicgraph\persist\IFilter">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/irepository.intf.php"></a>
+            <h3><abbr title="src/persist/irepository.intf.php">irepository.intf.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">56</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-IRepository.html#method_stream"><abbr title="\buffalokiwi\magicgraph\persist\IRepository::stream()">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">This is stupid and very SQL-specific.  To be removed.</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/irows.intf.php"></a>
+            <h3><abbr title="src/persist/irows.intf.php">irows.intf.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">19</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-IRows.html"><abbr title="\buffalokiwi\magicgraph\persist\IRows">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/isqlcondition.intf.php"></a>
+            <h3><abbr title="src/persist/isqlcondition.intf.php">isqlcondition.intf.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">21</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-ISQLCondition.html"><abbr title="\buffalokiwi\magicgraph\persist\ISQLCondition">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/isqlconditiongroup.intf.php"></a>
+            <h3><abbr title="src/persist/isqlconditiongroup.intf.php">isqlconditiongroup.intf.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">21</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-ISQLConditionGroup.html"><abbr title="\buffalokiwi\magicgraph\persist\ISQLConditionGroup">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/isqlfilter.intf.php"></a>
+            <h3><abbr title="src/persist/isqlfilter.intf.php">isqlfilter.intf.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">19</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-ISQLFilter.html"><abbr title="\buffalokiwi\magicgraph\persist\ISQLFilter">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/isqlrepository.intf.php"></a>
+            <h3><abbr title="src/persist/isqlrepository.intf.php">isqlrepository.intf.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">31</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-ISQLRepository.html#method_query"><abbr title="\buffalokiwi\magicgraph\persist\ISQLRepository::query()">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Query builders suck.  SQL is a damn good query builder...  To be removed.</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/sqlcondition.inc.php"></a>
+            <h3><abbr title="src/persist/sqlcondition.inc.php">sqlcondition.inc.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">19</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-SQLCondition.html"><abbr title="\buffalokiwi\magicgraph\persist\SQLCondition">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/sqlconditiongroup.inc.php"></a>
+            <h3><abbr title="src/persist/sqlconditiongroup.inc.php">sqlconditiongroup.inc.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">19</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-SQLConditionGroup.html"><abbr title="\buffalokiwi\magicgraph\persist\SQLConditionGroup">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/sqlfilter.inc.php"></a>
+            <h3><abbr title="src/persist/sqlfilter.inc.php">sqlfilter.inc.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">19</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-SQLFilter.html"><abbr title="\buffalokiwi\magicgraph\persist\SQLFilter">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+                    <a id="src/persist/sqlrows.inc.php"></a>
+            <h3><abbr title="src/persist/sqlrows.inc.php">sqlrows.inc.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">21</td>
+                            <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRows.html"><abbr title="\buffalokiwi\magicgraph\persist\SQLRows">normal</abbr></a></td>
+                            <td class="phpdocumentor-cell">Stupid</td>
+                        </tr>
+                                                </table>
+            </div>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

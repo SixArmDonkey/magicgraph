@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                </ul>
+
+    <article class="phpdocumentor-element phpdocumentor-class">
+        <h2 class="phpdocumentor-content__title">
+            DefaultPropertySetTest
+                            <span class="phpdocumentor-class__extends">
+                    extends <abbr title="\PHPUnit\Framework\TestCase">TestCase</abbr>
+                </span>
+                                                        </h2>
+        <aside class="phpdocumentor-element-found-in">
+            <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+            :
+            <span class="phpdocumentor-element-found-in__line">56</span>
+        </aside>
+
+        <p class="phpdocumentor-class__summary">Tests the DefaultPropertySet class
+This is partially an integration test as DefaultPropertySet properties
+can&#039;t really be mocked.</p>
+        <section class="phpdocumentor-class__description"></section>
+                
+
+        <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                                        <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#property_instance">$instance</a></th>
+                    <td class="phpdocumentor-cell">Property set instance</td>
+                    <td class="phpdocumentor-cell"><abbr title="\IPropertySet">IPropertySet</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#property_props">$props</a></th>
+                    <td class="phpdocumentor-cell">Test property config array</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                                                                <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_setUp">setUp()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_createIPropertySet">createIPropertySet()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_testContructor">testContructor()</a></th>
+                    <td class="phpdocumentor-cell">Tests the DefaultPropertySet constructor.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_testUniqueId">testUniqueId()</a></th>
+                    <td class="phpdocumentor-cell">Tests that the unique id property for some property works.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_testMagicClone">testMagicClone()</a></th>
+                    <td class="phpdocumentor-cell">Test the DefaultPropertySet::__clone() magic method.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_testGetProperty">testGetProperty()</a></th>
+                    <td class="phpdocumentor-cell">Test IPropertySet::getProperty()
+When supplied with a property name that is a member of the property set,
+this will return an IProperty instance.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_testGetPrimaryKey">testGetPrimaryKey()</a></th>
+                    <td class="phpdocumentor-cell">Test IPropertySet::getPrimaryKey()
+Expects a single IProperty instance with the PRIMARY flag set on
+the IPropertyFlags instance.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_testGetPrimaryKeys">testGetPrimaryKeys()</a></th>
+                    <td class="phpdocumentor-cell">Test IPropertySet::getPrimaryKeys()
+If more than one IProperty instance in the set has the IPropertyFlags::PRIMARY flag
+set, this will return all of corresponding IProperty instances.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_testGetProperties">testGetProperties()</a></th>
+                    <td class="phpdocumentor-cell">Test IPropertySet::getProperties()
+Expects all IProperty instances to be returned that are contained in the
+set</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_testFindProperty">testFindProperty()</a></th>
+                    <td class="phpdocumentor-cell">Test IPropertySet::findProperty()
+Expects a list of IProperty instances to be returned that have
+any of the supplied IPropertyFlags bits enabled.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultPropertySetTest.html#method_testGetPropertiesByType">testGetPropertiesByType()</a></th>
+                    <td class="phpdocumentor-cell">Test IPropertySet::getPropertiesByType()
+Expects a list of IProperty instances to be returned that have
+the same type as the supplied argument.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                                            </table>
+
+        
+                    <section>
+                <h3 class="phpdocumentor-properties__header">Properties</h3>
+                                    <a id="property_instance"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$instance</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">62</span>
+    </aside>
+            <p class="phpdocumentor-summary">Property set instance</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\IPropertySet">IPropertySet</abbr></span>
+        <span class="phpdocumentor-signature__name">$instance</span>
+            </code>
+            
+</article>
+                                    <a id="property_props"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$props</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">68</span>
+    </aside>
+            <p class="phpdocumentor-summary">Test property config array</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">array</span>
+        <span class="phpdocumentor-signature__name">$props</span>
+            </code>
+            
+</article>
+                                                            </section>
+        
+                    <section>
+                <h3 class="phpdocumentor-methods__header">Methods</h3>
+                                    <a id="method_setUp"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">setUp()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">71</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">setUp</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_createIPropertySet"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">createIPropertySet()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">120</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">createIPropertySet</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$props</span> :
+                <span class="phpdocumentor-signature__argument__return-type">array</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$props</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">array</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+            
+</article>
+                                    <a id="method_testContructor"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testContructor()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">137</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests the DefaultPropertySet constructor.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testContructor</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This expects:
+1) The members of the set must match all property names in the config
+2) The set must have a value of zero (zero bits set)
+3) Supplying a factory that returns something other than IProperty instances MUST throw an \InvalidArgumentException</p>
+<p>This tests with PropertyFactory and QuickProperties</p></section>
+    
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">see</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                    <span class="phpdocumentor-tag-link"><a href="../\ISet"><abbr title="\ISet">ISet</abbr></a></span>
+                                                            <section class="phpdocumentor-description"></section>
+                </dd>
+                        </dl>
+
+
+    
+</article>
+                                    <a id="method_testUniqueId"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testUniqueId()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">161</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests that the unique id property for some property works.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testUniqueId</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>As per the config in this file, the name property is expected to have an id of 1, and
+all other properties have an id of zero.</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testMagicClone"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testMagicClone()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">180</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test the DefaultPropertySet::__clone() magic method.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testMagicClone</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This expects the clone operator to clone all of the internal IProperty
+instances.</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testGetProperty"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testGetProperty()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">205</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test IPropertySet::getProperty()
+When supplied with a property name that is a member of the property set,
+this will return an IProperty instance.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testGetProperty</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>If an invalid property name is supplied, this throws an InvalidArgumentException.</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testGetPrimaryKey"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testGetPrimaryKey()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">222</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test IPropertySet::getPrimaryKey()
+Expects a single IProperty instance with the PRIMARY flag set on
+the IPropertyFlags instance.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testGetPrimaryKey</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>If no primary key is defined, an Exception is expected</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testGetPrimaryKeys"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testGetPrimaryKeys()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">252</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test IPropertySet::getPrimaryKeys()
+If more than one IProperty instance in the set has the IPropertyFlags::PRIMARY flag
+set, this will return all of corresponding IProperty instances.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testGetPrimaryKeys</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testGetProperties"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testGetProperties()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">288</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test IPropertySet::getProperties()
+Expects all IProperty instances to be returned that are contained in the
+set</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testGetProperties</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testFindProperty"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testFindProperty()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">306</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test IPropertySet::findProperty()
+Expects a list of IProperty instances to be returned that have
+any of the supplied IPropertyFlags bits enabled.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testFindProperty</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testGetPropertiesByType"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testGetPropertiesByType()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/property/DefaultPropertySetTest.php"><a href="../files/tests-property-defaultpropertysettest.html"><abbr title="tests/property/DefaultPropertySetTest.php">DefaultPropertySetTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">320</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test IPropertySet::getPropertiesByType()
+Expects a list of IProperty instances to be returned that have
+the same type as the supplied argument.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testGetPropertiesByType</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                                            </section>
+            </article>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

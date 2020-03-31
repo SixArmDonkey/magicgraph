@@ -1,0 +1,2671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                        <li><a href="../namespaces/buffalokiwi.html">buffalokiwi</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph.html">magicgraph</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph-persist.html">persist</a></li>
+            </ul>
+
+    <article class="phpdocumentor-element phpdocumentor-class">
+        <h2 class="phpdocumentor-content__title">
+            InlineSQLRepo
+                            <span class="phpdocumentor-class__extends">
+                    extends <a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html"><abbr title="\buffalokiwi\magicgraph\persist\SQLRepository">SQLRepository</abbr></a>
+                </span>
+                                                        </h2>
+        <aside class="phpdocumentor-element-found-in">
+            <abbr class="phpdocumentor-element-found-in__file" title="src/persist/inlinesqlrepo.inc.php"><a href="../files/src-persist-inlinesqlrepo-inc.html"><abbr title="src/persist/inlinesqlrepo.inc.php">inlinesqlrepo.inc.php</abbr></a></abbr>
+            :
+            <span class="phpdocumentor-element-found-in__line">29</span>
+        </aside>
+
+        <p class="phpdocumentor-class__summary">Build a repo and associated models in a snazzy easy way, and only using
+this one object.  WEEEEEEEEFOOOOOOOOO!</p>
+        <section class="phpdocumentor-class__description"><p>This is meant for SIMPLE database operations on single tables.
+If you are joining tables, doing fancy things, etc then please create a
+new repository and write some beautifully hand-crafted sql.</p></section>
+                
+
+        <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                                                                <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#property_table">$table</a></th>
+                    <td class="phpdocumentor-cell">Table name</td>
+                    <td class="phpdocumentor-cell">string</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#property_dbc">$dbc</a></th>
+                    <td class="phpdocumentor-cell">Database connection</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-pdo-IDBConnection.html"><abbr title="\buffalokiwi\magicgraph\pdo\IDBConnection">IDBConnection</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#property_locked">$locked</a></th>
+                    <td class="phpdocumentor-cell">If the table is locked</td>
+                    <td class="phpdocumentor-cell">bool</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#property_hasMutexLock">$hasMutexLock</a></th>
+                    <td class="phpdocumentor-cell">If a lock has been obtained via GET_LOCK()</td>
+                    <td class="phpdocumentor-cell">bool</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#property_mapper">$mapper</a></th>
+                    <td class="phpdocumentor-cell">Data mapper</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-IModelMapper.html"><abbr title="\buffalokiwi\magicgraph\IModelMapper">IModelMapper</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#property_properties">$properties</a></th>
+                    <td class="phpdocumentor-cell">Properties</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#property_pNames">$pNames</a></th>
+                    <td class="phpdocumentor-cell">Property names</td>
+                    <td class="phpdocumentor-cell">string[]</td>
+                </tr>
+                                        <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-InlineSQLRepo.html#method___construct">__construct()</a></th>
+                    <td class="phpdocumentor-cell">Create a new SQLRepository instance</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                                                    <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method___construct">__construct()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_getTable">getTable()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the database table name backing this repository.</td>
+                    <td class="phpdocumentor-cell">string</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_lockTable">lockTable()</a></th>
+                    <td class="phpdocumentor-cell">Lock the table via &quot;lock tables&quot;.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_unlockTable">unlockTable()</a></th>
+                    <td class="phpdocumentor-cell">Unlock the tables obtained by lockTable()
+This also commits.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_getLock">getLock()</a></th>
+                    <td class="phpdocumentor-cell">Attempts to obtain a lock for this table via GET_LOCK().</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_releaseLock">releaseLock()</a></th>
+                    <td class="phpdocumentor-cell">Release the lock obtained by getLock()</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_isTableLocked">isTableLocked()</a></th>
+                    <td class="phpdocumentor-cell">If the table is locked via lock tables.</td>
+                    <td class="phpdocumentor-cell">bool</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_isLocked">isLocked()</a></th>
+                    <td class="phpdocumentor-cell">If there is a lock in effect via GET_LOCK()</td>
+                    <td class="phpdocumentor-cell">bool</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_getDatabaseConnection">getDatabaseConnection()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the database connection</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-pdo-IDBConnection.html"><abbr title="\buffalokiwi\magicgraph\pdo\IDBConnection">IDBConnection</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_getSaveFunction">getSaveFunction()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve an IRunnable instance to be used with some ITransaction instance.</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-IRunnable.html"><abbr title="\buffalokiwi\magicgraph\persist\IRunnable">IRunnable</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_createUnitOfWork">createUnitOfWork()</a></th>
+                    <td class="phpdocumentor-cell">Create a unit of work against the repo.</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-persist-IRunnable.html"><abbr title="\buffalokiwi\magicgraph\persist\IRunnable">IRunnable</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_stream">stream()</a></th>
+                    <td class="phpdocumentor-cell">Stream the data one record at a time from the data source.  This may not
+always be implemented.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Generator">Generator</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_query">query()</a></th>
+                    <td class="phpdocumentor-cell">Query the data source.</td>
+                    <td class="phpdocumentor-cell">\buffalokiwi\magicgraph\IModel[]</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_get">get()</a></th>
+                    <td class="phpdocumentor-cell">Load some record by primary key</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_getIdsForProperty">getIdsForProperty()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a list of id&#039;s for some property.</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_findByProperty">findByProperty()</a></th>
+                    <td class="phpdocumentor-cell">Perform a simple search by property name.</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_getForProperty">getForProperty()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a list of models where some property name matches some value.</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_exists">exists()</a></th>
+                    <td class="phpdocumentor-cell">Tests to see if some value exists by primary key</td>
+                    <td class="phpdocumentor-cell">bool</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_getAll">getAll()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a list of models by a list of primary key values.</td>
+                    <td class="phpdocumentor-cell">\buffalokiwi\magicgraph\IModel[]</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html#method_saveModel">saveModel()</a></th>
+                    <td class="phpdocumentor-cell">What to do when saving the model.</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html#method_saveAll">saveAll()</a></th>
+                    <td class="phpdocumentor-cell">Saves a batch of records.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_removeById">removeById()</a></th>
+                    <td class="phpdocumentor-cell">Remove an entry by id.  This does not work for compound keys.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_remove">remove()</a></th>
+                    <td class="phpdocumentor-cell">Removes a model.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_count">count()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the estimated record count.</td>
+                    <td class="phpdocumentor-cell">int</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_getPage">getPage()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve user records by page.</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_getStatement">getStatement()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell">string</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_isSafe">isSafe()</a></th>
+                    <td class="phpdocumentor-cell">Detect if a string is only [a-zA-Z0-9_]</td>
+                    <td class="phpdocumentor-cell">bool</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SQLRepository.html#method_doesRecordExistByCompoundPrimaryKey">doesRecordExistByCompoundPrimaryKey()</a></th>
+                    <td class="phpdocumentor-cell">Execute a query to locate rows by primary key.</td>
+                    <td class="phpdocumentor-cell">bool</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html#method_save">save()</a></th>
+                    <td class="phpdocumentor-cell">Save some record.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html#method_beforeSave">beforeSave()</a></th>
+                    <td class="phpdocumentor-cell">Called before the repo save call is made.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html#method_afterSave">afterSave()</a></th>
+                    <td class="phpdocumentor-cell">Called after the repo save call is made</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html#method_beforeValidate">beforeValidate()</a></th>
+                    <td class="phpdocumentor-cell">Called before the validate call is made</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html#method_getSaveClosure">getSaveClosure()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve an IRunnable instance to be used with some ITransaction instance.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html#method_runBeforeSave">runBeforeSave()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html#method_runAfterSave">runAfterSave()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method_addPropertyConfig">addPropertyConfig()</a></th>
+                    <td class="phpdocumentor-cell">Adds an additional property config to this repo.</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method_create">create()</a></th>
+                    <td class="phpdocumentor-cell">Create a new Model instance using the internal data mapper.</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method_createPropertySet">createPropertySet()</a></th>
+                    <td class="phpdocumentor-cell">Clones and returns the internal property set used to construct objects.</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method_createPropertyNameSet">createPropertyNameSet()</a></th>
+                    <td class="phpdocumentor-cell">Retrieves a set containing the property names.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method_test">test()</a></th>
+                    <td class="phpdocumentor-cell">Test that one or more models is the correct type.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method_mapper">mapper()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-IModelMapper.html"><abbr title="\buffalokiwi\magicgraph\IModelMapper">IModelMapper</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method_properties">properties()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method_getInsertProperties">getInsertProperties()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method_getModifiedProperties">getModifiedProperties()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html#method_filterPropertyNamesForSave">filterPropertyNamesForSave()</a></th>
+                    <td class="phpdocumentor-cell">Removes any properties flagged with SUBCONFIG from the list of property names</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                    </table>
+
+        
+                    <section>
+                <h3 class="phpdocumentor-properties__header">Properties</h3>
+                                                                    <a id="property_table"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$table</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">43</span>
+    </aside>
+            <p class="phpdocumentor-summary">Table name</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__name">$table</span>
+            </code>
+            
+</article>
+                                    <a id="property_dbc"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$dbc</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">49</span>
+    </aside>
+            <p class="phpdocumentor-summary">Database connection</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><a href="../classes/buffalokiwi-magicgraph-pdo-IDBConnection.html"><abbr title="\buffalokiwi\magicgraph\pdo\IDBConnection">IDBConnection</abbr></a></span>
+        <span class="phpdocumentor-signature__name">$dbc</span>
+            </code>
+            
+</article>
+                                    <a id="property_locked"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$locked</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">55</span>
+    </aside>
+            <p class="phpdocumentor-summary">If the table is locked</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">bool</span>
+        <span class="phpdocumentor-signature__name">$locked</span>
+         = <span class="phpdocumentor-signature__default-value">false</span>    </code>
+            
+</article>
+                                    <a id="property_hasMutexLock"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$hasMutexLock</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">61</span>
+    </aside>
+            <p class="phpdocumentor-summary">If a lock has been obtained via GET_LOCK()</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">bool</span>
+        <span class="phpdocumentor-signature__name">$hasMutexLock</span>
+         = <span class="phpdocumentor-signature__default-value">false</span>    </code>
+            
+</article>
+                                    <a id="property_mapper"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$mapper</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">31</span>
+    </aside>
+            <p class="phpdocumentor-summary">Data mapper</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><a href="../classes/buffalokiwi-magicgraph-IModelMapper.html"><abbr title="\buffalokiwi\magicgraph\IModelMapper">IModelMapper</abbr></a></span>
+        <span class="phpdocumentor-signature__name">$mapper</span>
+            </code>
+            
+</article>
+                                    <a id="property_properties"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$properties</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">37</span>
+    </aside>
+            <p class="phpdocumentor-summary">Properties</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+        <span class="phpdocumentor-signature__name">$properties</span>
+            </code>
+            
+</article>
+                                    <a id="property_pNames"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$pNames</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">43</span>
+    </aside>
+            <p class="phpdocumentor-summary">Property names</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">string[]</span>
+        <span class="phpdocumentor-signature__name">$pNames</span>
+            </code>
+            
+</article>
+                            </section>
+        
+                    <section>
+                <h3 class="phpdocumentor-methods__header">Methods</h3>
+                                    <a id="method___construct"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">__construct()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/inlinesqlrepo.inc.php"><a href="../files/src-persist-inlinesqlrepo-inc.html"><abbr title="src/persist/inlinesqlrepo.inc.php">inlinesqlrepo.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">31</span>
+    </aside>
+        <p class="phpdocumentor-summary">Create a new SQLRepository instance</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">__construct</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$table</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$dbc</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-pdo-IDBConnection.html"><abbr title="\buffalokiwi\magicgraph\pdo\IDBConnection">IDBConnection</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$properties</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IProperty.html"><abbr title="\buffalokiwi\magicgraph\property\IProperty">IProperty</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$table</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Table name</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$dbc</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-pdo-IDBConnection.html"><abbr title="\buffalokiwi\magicgraph\pdo\IDBConnection">IDBConnection</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Database connection</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$properties</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IProperty.html"><abbr title="\buffalokiwi\magicgraph\property\IProperty">IProperty</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                                                    <a id="method___construct"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">__construct()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">46</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">__construct</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$mapper</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModelMapper.html"><abbr title="\buffalokiwi\magicgraph\IModelMapper">IModelMapper</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$properties</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$mapper</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModelMapper.html"><abbr title="\buffalokiwi\magicgraph\IModelMapper">IModelMapper</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$properties</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method_getTable"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getTable()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">87</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the database table name backing this repository.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getTable</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">string</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+                    &mdash; <span class="phpdocumentor-description"><p>database table name</p></span>
+            
+</article>
+                                    <a id="method_lockTable"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">lockTable()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">98</span>
+    </aside>
+        <p class="phpdocumentor-summary">Lock the table via &quot;lock tables&quot;.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">lockTable</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>Disables autocommit.</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_unlockTable"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">unlockTable()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">116</span>
+    </aside>
+        <p class="phpdocumentor-summary">Unlock the tables obtained by lockTable()
+This also commits.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">unlockTable</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_getLock"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getLock()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">131</span>
+    </aside>
+        <p class="phpdocumentor-summary">Attempts to obtain a lock for this table via GET_LOCK().</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getLock</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This blocks until one can be obtained.</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_releaseLock"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">releaseLock()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">145</span>
+    </aside>
+        <p class="phpdocumentor-summary">Release the lock obtained by getLock()</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">releaseLock</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_isTableLocked"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">isTableLocked()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">159</span>
+    </aside>
+        <p class="phpdocumentor-summary">If the table is locked via lock tables.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">isTableLocked</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">bool</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash; <span class="phpdocumentor-description"><p>locked</p></span>
+            
+</article>
+                                    <a id="method_isLocked"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">isLocked()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">169</span>
+    </aside>
+        <p class="phpdocumentor-summary">If there is a lock in effect via GET_LOCK()</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">isLocked</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">bool</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash; <span class="phpdocumentor-description"><p>is locked</p></span>
+            
+</article>
+                                    <a id="method_getDatabaseConnection"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getDatabaseConnection()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">180</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the database connection</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getDatabaseConnection</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-pdo-IDBConnection.html"><abbr title="\buffalokiwi\magicgraph\pdo\IDBConnection">IDBConnection</abbr></a></span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-pdo-IDBConnection.html"><abbr title="\buffalokiwi\magicgraph\pdo\IDBConnection">IDBConnection</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>database connection</p></span>
+            
+</article>
+                                    <a id="method_getSaveFunction"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getSaveFunction()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">195</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve an IRunnable instance to be used with some ITransaction instance.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getSaveFunction</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$beforeSave</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$afterSave</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$models</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-persist-IRunnable.html"><abbr title="\buffalokiwi\magicgraph\persist\IRunnable">IRunnable</abbr></a></span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This runnable will execute the supplied function prior to saving the model.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$beforeSave</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>What to run prior to saving f( IRepository, ...IModel )</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$afterSave</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>What to run after saving f( IRepository, ...IModel )</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$models</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>One or more models to save</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-persist-IRunnable.html"><abbr title="\buffalokiwi\magicgraph\persist\IRunnable">IRunnable</abbr></a></span>
+            
+</article>
+                                    <a id="method_createUnitOfWork"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">createUnitOfWork()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">206</span>
+    </aside>
+        <p class="phpdocumentor-summary">Create a unit of work against the repo.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">createUnitOfWork</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$action</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-persist-IRunnable.html"><abbr title="\buffalokiwi\magicgraph\persist\IRunnable">IRunnable</abbr></a></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$action</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>f( IRepository $repo ) : void - What to do</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-persist-IRunnable.html"><abbr title="\buffalokiwi\magicgraph\persist\IRunnable">IRunnable</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>Runnable</p></span>
+            
+</article>
+                                    <a id="method_stream"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">stream()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">227</span>
+    </aside>
+        <p class="phpdocumentor-summary">Stream the data one record at a time from the data source.  This may not
+always be implemented.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">stream</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$properties</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$filter</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IFilter.html"><abbr title="\buffalokiwi\magicgraph\persist\IFilter">IFilter</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$rows</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IRows.html"><abbr title="\buffalokiwi\magicgraph\persist\IRows">IRows</abbr></a></span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Generator">Generator</abbr></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$properties</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$filter</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IFilter.html"><abbr title="\buffalokiwi\magicgraph\persist\IFilter">IFilter</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Filters to use</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$rows</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IRows.html"><abbr title="\buffalokiwi\magicgraph\persist\IRows">IRows</abbr></a></span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Sort order and limit</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>For db errors</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Generator">Generator</abbr></span>
+                    &mdash; <span class="phpdocumentor-description"><p>yielded results</p></span>
+            
+</article>
+                                    <a id="method_query"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">query()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">241</span>
+    </aside>
+        <p class="phpdocumentor-summary">Query the data source.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">query</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$properties</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$filter</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IFilter.html"><abbr title="\buffalokiwi\magicgraph\persist\IFilter">IFilter</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$rows</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IRows.html"><abbr title="\buffalokiwi\magicgraph\persist\IRows">IRows</abbr></a></span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">\buffalokiwi\magicgraph\IModel[]</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$properties</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Properties to return</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$filter</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IFilter.html"><abbr title="\buffalokiwi\magicgraph\persist\IFilter">IFilter</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Filters to use</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$rows</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IRows.html"><abbr title="\buffalokiwi\magicgraph\persist\IRows">IRows</abbr></a></span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Sort order and limit</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>For db errors</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">\buffalokiwi\magicgraph\IModel[]</span>
+                    &mdash; <span class="phpdocumentor-description"><p>model instances</p></span>
+            
+</article>
+                                    <a id="method_get"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">get()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">260</span>
+    </aside>
+        <p class="phpdocumentor-summary">Load some record by primary key</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">get</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$id</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$id</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>id</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>For db errors</p></section>
+                </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-persist-RecordNotFoundException.html"><abbr title="\buffalokiwi\magicgraph\persist\RecordNotFoundException">RecordNotFoundException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>if the record can't be found</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>model instance</p></span>
+            
+</article>
+                                    <a id="method_getIdsForProperty"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getIdsForProperty()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">302</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a list of id&#039;s for some property.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getIdsForProperty</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$propertyName</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$value</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>If primary key is compound, then each returned element will be an array (map) listing
+each key.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$propertyName</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Property Name</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$value</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>value</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                                    <section class="phpdocumentor-description"><p>Make this work with in and null values.</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+                    &mdash; <span class="phpdocumentor-description"><p>ids</p></span>
+            
+</article>
+                                    <a id="method_findByProperty"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">findByProperty()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">360</span>
+    </aside>
+        <p class="phpdocumentor-summary">Perform a simple search by property name.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">findByProperty</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$propertyName</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$value</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$limit</span> :
+                <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">100</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>If the engine supports simple searching, this can be used for that.
+For example: With SQL databases, this can simply be a wildcard search.
+Also possible to use full text indexes or whatever else the engine supports.</p>
+<p>Depending on the repo, this could connect to any number of things for searching.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$propertyName</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Property name</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$value</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Search value.  What this is depends on the engine.</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$limit</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">100</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\InvalidArgumentException">InvalidArgumentException</abbr></span>
+                                                                                <section class="phpdocumentor-description"></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+            
+</article>
+                                    <a id="method_getForProperty"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getForProperty()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">405</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a list of models where some property name matches some value.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getForProperty</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$propertyName</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$value</span> :
+                <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>If value is an array, this uses the &quot;in&quot; operator
+if the value is null, this tests for &quot;is null&quot;
+All other values use the &quot;=&quot; operator.</p>
+<p>As with everything in magic graph, NEVER feed user input into a property name argument.  ALWAYS use the whitelisted
+column names contained within a property set.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$propertyName</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Property name</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$value</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>value</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
+                                                                                <section class="phpdocumentor-description"></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+            
+</article>
+                                    <a id="method_exists"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">exists()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">447</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests to see if some value exists by primary key</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">exists</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$id</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">bool</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$id</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            
+</article>
+                                    <a id="method_getAll"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getAll()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">491</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a list of models by a list of primary key values.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getAll</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$idList</span> :
+                <span class="phpdocumentor-signature__argument__return-type">array</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">\buffalokiwi\magicgraph\IModel[]</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>If multiple primary key columns are defined, this simply uses the first one that
+was defined in the list of primary keys.  Use query() for compound keys.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$idList</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">array</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>id list</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>For DB Errors</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">\buffalokiwi\magicgraph\IModel[]</span>
+                    &mdash; <span class="phpdocumentor-description"><p>found models</p></span>
+            
+</article>
+                                    <a id="method_saveModel"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                        phpdocumentor-element--abstract                                "
+>
+    <h4 class="phpdocumentor-method__name">saveModel()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/saveablemappingobjectfactory.inc.php"><a href="../files/src-persist-saveablemappingobjectfactory-inc.html"><abbr title="src/persist/saveablemappingobjectfactory.inc.php">saveablemappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">28</span>
+    </aside>
+        <p class="phpdocumentor-summary">What to do when saving the model.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__abstract">abstract</span>                        <span class="phpdocumentor-signature__name">saveModel</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>ie: commit to some database or whatever.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Model to save</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method_saveAll"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">saveAll()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/saveablemappingobjectfactory.inc.php"><a href="../files/src-persist-saveablemappingobjectfactory-inc.html"><abbr title="src/persist/saveablemappingobjectfactory.inc.php">saveablemappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">82</span>
+    </aside>
+        <p class="phpdocumentor-summary">Saves a batch of records.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">saveAll</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>All records are first validated, then saved sequentially.
+Validation exceptions will be thrown prior to any saves happening.</p>
+<p>If the primary key value is specified, this is considered to be an update.
+Otherwise, this is considered to be an insert.</p>
+<p>This is split into 3 batches (iterations of supplied models):</p>
+<p>1) beforeValidate, validate and beforeSave
+2) saveModel
+3) afterSave</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Model to save</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>For DB errors</p></section>
+                </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-ValidationException.html"><abbr title="\buffalokiwi\magicgraph\ValidationException">ValidationException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>if the model fails to validate</p></section>
+                </dd>
+                        </dl>
+
+
+    
+</article>
+                                    <a id="method_removeById"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">removeById()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">693</span>
+    </aside>
+        <p class="phpdocumentor-summary">Remove an entry by id.  This does not work for compound keys.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">removeById</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$id</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$id</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>id</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"></section>
+                </dd>
+                        </dl>
+
+
+    
+</article>
+                                    <a id="method_remove"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">remove()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">715</span>
+    </aside>
+        <p class="phpdocumentor-summary">Removes a model.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">remove</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Model to remove</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>For db errors</p></section>
+                </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-persist-RecordNotFoundException.html"><abbr title="\buffalokiwi\magicgraph\persist\RecordNotFoundException">RecordNotFoundException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>if the primary key is missing or the record
+could not be found.</p></section>
+                </dd>
+                        </dl>
+
+
+    
+</article>
+                                    <a id="method_count"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">count()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">751</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the estimated record count.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">count</span>(
+                    <span class="phpdocumentor-signature__argument">
+            [                <span class="phpdocumentor-signature__argument__name">$full</span> :
+                <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">int</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$full</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">false</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Set to true to retrieve count(*), set to false for max(primary key)</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">int</span>
+                    &mdash; <span class="phpdocumentor-description"><p>estimated number of records</p></span>
+            
+</article>
+                                    <a id="method_getPage"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getPage()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">784</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve user records by page.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getPage</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$page</span> :
+                <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$size</span> :
+                <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">25</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$orderBy</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$page</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Page number</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$size</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">25</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>page size</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$orderBy</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+                    &mdash; <span class="phpdocumentor-description"><p>IModel[] Users</p></span>
+            
+</article>
+                                    <a id="method_getStatement"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--private
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getStatement()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">833</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                                <span class="phpdocumentor-signature__name">getStatement</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$properties</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$filter</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IFilter.html"><abbr title="\buffalokiwi\magicgraph\persist\IFilter">IFilter</abbr></a>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$rows</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IRows.html"><abbr title="\buffalokiwi\magicgraph\persist\IRows">IRows</abbr></a>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">string</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$properties</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$filter</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IFilter.html"><abbr title="\buffalokiwi\magicgraph\persist\IFilter">IFilter</abbr></a>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$rows</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-persist-IRows.html"><abbr title="\buffalokiwi\magicgraph\persist\IRows">IRows</abbr></a>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+            
+</article>
+                                    <a id="method_isSafe"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--private
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">isSafe()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">854</span>
+    </aside>
+        <p class="phpdocumentor-summary">Detect if a string is only [a-zA-Z0-9_]</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                                <span class="phpdocumentor-signature__name">isSafe</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$s</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">bool</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$s</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>String to check</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash; <span class="phpdocumentor-description"><p>is letters</p></span>
+            
+</article>
+                                    <a id="method_doesRecordExistByCompoundPrimaryKey"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--private
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">doesRecordExistByCompoundPrimaryKey()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/sqlrepository.inc.php"><a href="../files/src-persist-sqlrepository-inc.html"><abbr title="src/persist/sqlrepository.inc.php">sqlrepository.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">865</span>
+    </aside>
+        <p class="phpdocumentor-summary">Execute a query to locate rows by primary key.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                                <span class="phpdocumentor-signature__name">doesRecordExistByCompoundPrimaryKey</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\magicgraph\persist\IModel">IModel</abbr></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$priKeys</span> :
+                <span class="phpdocumentor-signature__argument__return-type">array</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">bool</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\magicgraph\persist\IModel">IModel</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$priKeys</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">array</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash; <span class="phpdocumentor-description"><p>exists</p></span>
+            
+</article>
+                                    <a id="method_save"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">save()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/saveablemappingobjectfactory.inc.php"><a href="../files/src-persist-saveablemappingobjectfactory-inc.html"><abbr title="src/persist/saveablemappingobjectfactory.inc.php">saveablemappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">41</span>
+    </aside>
+        <p class="phpdocumentor-summary">Save some record.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">save</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$validate</span> :
+                <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">true</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>If the primary key value is specified, this is considered to be an update.
+Otherwise, this is considered to be an insert.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Model to save</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$validate</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">true</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Validate the model prior to save</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>For DB errors</p></section>
+                </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-ValidationException.html"><abbr title="\buffalokiwi\magicgraph\ValidationException">ValidationException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>if the model fails to validate</p></section>
+                </dd>
+                        </dl>
+
+
+    
+</article>
+                                    <a id="method_beforeSave"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">beforeSave()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/saveablemappingobjectfactory.inc.php"><a href="../files/src-persist-saveablemappingobjectfactory-inc.html"><abbr title="src/persist/saveablemappingobjectfactory.inc.php">saveablemappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">113</span>
+    </aside>
+        <p class="phpdocumentor-summary">Called before the repo save call is made.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">beforeSave</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                    <a id="method_afterSave"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">afterSave()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/saveablemappingobjectfactory.inc.php"><a href="../files/src-persist-saveablemappingobjectfactory-inc.html"><abbr title="src/persist/saveablemappingobjectfactory.inc.php">saveablemappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">122</span>
+    </aside>
+        <p class="phpdocumentor-summary">Called after the repo save call is made</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">afterSave</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                    <a id="method_beforeValidate"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">beforeValidate()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/saveablemappingobjectfactory.inc.php"><a href="../files/src-persist-saveablemappingobjectfactory-inc.html"><abbr title="src/persist/saveablemappingobjectfactory.inc.php">saveablemappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">131</span>
+    </aside>
+        <p class="phpdocumentor-summary">Called before the validate call is made</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">beforeValidate</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                    <a id="method_getSaveClosure"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                phpdocumentor-element--final        "
+>
+    <h4 class="phpdocumentor-method__name">getSaveClosure()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/saveablemappingobjectfactory.inc.php"><a href="../files/src-persist-saveablemappingobjectfactory-inc.html"><abbr title="src/persist/saveablemappingobjectfactory.inc.php">saveablemappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">146</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve an IRunnable instance to be used with some ITransaction instance.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                <span class="phpdocumentor-signature__final">final</span>                <span class="phpdocumentor-signature__name">getSaveClosure</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$beforeSave</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$afterSave</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$models</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr></span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This runnable will execute the supplied function prior to saving the model.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$beforeSave</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>What to run prior to saving f( IRepository, ...IModel )</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$afterSave</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>What to run after saving f( IRepository, ...IModel )</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$models</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>One or more models to save</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr></span>
+                    &mdash; <span class="phpdocumentor-description"><p>Function</p></span>
+            
+</article>
+                                    <a id="method_runBeforeSave"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--private
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">runBeforeSave()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/saveablemappingobjectfactory.inc.php"><a href="../files/src-persist-saveablemappingobjectfactory-inc.html"><abbr title="src/persist/saveablemappingobjectfactory.inc.php">saveablemappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">165</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                                <span class="phpdocumentor-signature__name">runBeforeSave</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                    <a id="method_runAfterSave"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--private
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">runAfterSave()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/saveablemappingobjectfactory.inc.php"><a href="../files/src-persist-saveablemappingobjectfactory-inc.html"><abbr title="src/persist/saveablemappingobjectfactory.inc.php">saveablemappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">178</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                                <span class="phpdocumentor-signature__name">runAfterSave</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                    <a id="method_addPropertyConfig"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">addPropertyConfig()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">71</span>
+    </aside>
+        <p class="phpdocumentor-summary">Adds an additional property config to this repo.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">addPropertyConfig</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$config</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\magicgraph\persist\type">type</abbr></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>When models reference themselves, sometimes it's necessary for a property
+config to reference the repository (circular).</p>
+<p>Feels a bit like cheating to me...</p>
+<p>Warning: This method should only be caled from composition root.  This can
+obviously have some unintended side effects when used in other locations.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$config</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\magicgraph\persist\type">type</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method_create"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">create()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">86</span>
+    </aside>
+        <p class="phpdocumentor-summary">Create a new Model instance using the internal data mapper.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">create</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$data</span> :
+                <span class="phpdocumentor-signature__argument__return-type">array</span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$readOnly</span> :
+                <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$data</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">array</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Raw data to use</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$readOnly</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">false</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Set the produced model to read only</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="../classes/buffalokiwi-magicgraph-DBException.html"><abbr title="\buffalokiwi\magicgraph\DBException">DBException</abbr></a></span>
+                                                                                <section class="phpdocumentor-description"><p>For db errors</p></section>
+                </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                                    <section class="phpdocumentor-description"><p>Create some code that can disable or remove properties that are not
+fetched when the model is built.  Think about this a bit...</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>model instance</p></span>
+            
+</article>
+                                    <a id="method_createPropertySet"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">createPropertySet()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">97</span>
+    </aside>
+        <p class="phpdocumentor-summary">Clones and returns the internal property set used to construct objects.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">createPropertySet</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>property set</p></span>
+            
+</article>
+                                    <a id="method_createPropertyNameSet"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">createPropertyNameSet()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">103</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieves a set containing the property names.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">createPropertyNameSet</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></span>
+                    &mdash; <span class="phpdocumentor-description"><p>set</p></span>
+            
+</article>
+                                    <a id="method_test"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">test()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">113</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test that one or more models is the correct type.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">test</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$models</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$models</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Models</p></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                    <a id="method_mapper"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">mapper()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">119</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">mapper</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-IModelMapper.html"><abbr title="\buffalokiwi\magicgraph\IModelMapper">IModelMapper</abbr></a></span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-IModelMapper.html"><abbr title="\buffalokiwi\magicgraph\IModelMapper">IModelMapper</abbr></a></span>
+            
+</article>
+                                    <a id="method_properties"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">properties()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">125</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">properties</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a></span>
+            
+</article>
+                                    <a id="method_getInsertProperties"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getInsertProperties()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">132</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">getInsertProperties</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></span>
+            
+</article>
+                                    <a id="method_getModifiedProperties"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getModifiedProperties()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">138</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">getModifiedProperties</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr></span>
+            
+</article>
+                                    <a id="method_filterPropertyNamesForSave"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--private
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">filterPropertyNamesForSave()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/persist/mappingobjectfactory.inc.php"><a href="../files/src-persist-mappingobjectfactory-inc.html"><abbr title="src/persist/mappingobjectfactory.inc.php">mappingobjectfactory.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">150</span>
+    </aside>
+        <p class="phpdocumentor-summary">Removes any properties flagged with SUBCONFIG from the list of property names</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                                <span class="phpdocumentor-signature__name">filterPropertyNamesForSave</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$names</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string[]</span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$names</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string[]</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Property names</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\buffalokiwi\magicgraph\persist\Exception">Exception</abbr></span>
+                                                                                <section class="phpdocumentor-description"><p>if model is an incorrect type.</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+                    &mdash; <span class="phpdocumentor-description"><p>filtered names</p></span>
+            
+</article>
+                            </section>
+            </article>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

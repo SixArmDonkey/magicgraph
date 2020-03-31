@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                        <li><a href="../namespaces/buffalokiwi.html">buffalokiwi</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph.html">magicgraph</a></li>
+            </ul>
+
+    <article class="phpdocumentor-element phpdocumentor-class">
+        <h2 class="phpdocumentor-content__title">
+            DefaultModelMapper
+                                                    <span class="phpdocumentor-class__implements">
+                    implements
+                                            <a href="../classes/buffalokiwi-magicgraph-IModelMapper.html"><abbr title="\buffalokiwi\magicgraph\IModelMapper">IModelMapper</abbr></a>                                    </span>
+                                </h2>
+        <aside class="phpdocumentor-element-found-in">
+            <abbr class="phpdocumentor-element-found-in__file" title="src/defaultmodelmapper.inc.php"><a href="../files/src-defaultmodelmapper-inc.html"><abbr title="src/defaultmodelmapper.inc.php">defaultmodelmapper.inc.php</abbr></a></abbr>
+            :
+            <span class="phpdocumentor-element-found-in__line">26</span>
+        </aside>
+
+        <p class="phpdocumentor-class__summary">Used for setting model properties.</p>
+        <section class="phpdocumentor-class__description"><p>Maps property names and values to a model.</p>
+<p>This should only be used with a single object type.  ie: one mapper per repository.</p></section>
+                
+
+        <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                                        <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-DefaultModelMapper.html#property_createModel">$createModel</a></th>
+                    <td class="phpdocumentor-cell">Create model supplier</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-DefaultModelMapper.html#property_clazz">$clazz</a></th>
+                    <td class="phpdocumentor-cell">Class/interface name of models</td>
+                    <td class="phpdocumentor-cell">string</td>
+                </tr>
+                                                                <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-DefaultModelMapper.html#method___construct">__construct()</a></th>
+                    <td class="phpdocumentor-cell">Create a new DefaultModelMapper instance</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-DefaultModelMapper.html#method_getClass">getClass()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the class or interface name this mapper works with.</td>
+                    <td class="phpdocumentor-cell">string</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-DefaultModelMapper.html#method_test">test()</a></th>
+                    <td class="phpdocumentor-cell">Test that the supplied model implements the interface or class name returned
+by getClass().</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-DefaultModelMapper.html#method_createAndMap">createAndMap()</a></th>
+                    <td class="phpdocumentor-cell">Maps a map of raw data (attribute =&gt; value) to an IModel instance.</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-DefaultModelMapper.html#method_map">map()</a></th>
+                    <td class="phpdocumentor-cell">Map some data to properties in some model.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-DefaultModelMapper.html#method_createModel">createModel()</a></th>
+                    <td class="phpdocumentor-cell">Call the create model callback and return the results</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></td>
+                </tr>
+                                            </table>
+
+        
+                    <section>
+                <h3 class="phpdocumentor-properties__header">Properties</h3>
+                                    <a id="property_createModel"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$createModel</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/defaultmodelmapper.inc.php"><a href="../files/src-defaultmodelmapper-inc.html"><abbr title="src/defaultmodelmapper.inc.php">defaultmodelmapper.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">32</span>
+    </aside>
+            <p class="phpdocumentor-summary">Create model supplier</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\Closure">Closure</abbr></span>
+        <span class="phpdocumentor-signature__name">$createModel</span>
+            </code>
+            
+</article>
+                                    <a id="property_clazz"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$clazz</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/defaultmodelmapper.inc.php"><a href="../files/src-defaultmodelmapper-inc.html"><abbr title="src/defaultmodelmapper.inc.php">defaultmodelmapper.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">38</span>
+    </aside>
+            <p class="phpdocumentor-summary">Class/interface name of models</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__name">$clazz</span>
+            </code>
+            
+</article>
+                                                            </section>
+        
+                    <section>
+                <h3 class="phpdocumentor-methods__header">Methods</h3>
+                                    <a id="method___construct"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">__construct()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/defaultmodelmapper.inc.php"><a href="../files/src-defaultmodelmapper-inc.html"><abbr title="src/defaultmodelmapper.inc.php">defaultmodelmapper.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">48</span>
+    </aside>
+        <p class="phpdocumentor-summary">Create a new DefaultModelMapper instance</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">__construct</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$createModel</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$clazz</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$createModel</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>A supplier that returns an IModel instance.
+f( ?IPropertySet $propertySet, array $data ) : IModel</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$clazz</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>A fully qualified class or interface name.  All operations
+inside an IRepository will be locked to this type.</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\InvalidArgumentException">InvalidArgumentException</abbr></span>
+                                                                                <section class="phpdocumentor-description"><p>if createModel does not return an IModel instance</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method_getClass"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getClass()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/defaultmodelmapper.inc.php"><a href="../files/src-defaultmodelmapper-inc.html"><abbr title="src/defaultmodelmapper.inc.php">defaultmodelmapper.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">63</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the class or interface name this mapper works with.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getClass</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">string</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+                    &mdash; <span class="phpdocumentor-description"><p>name</p></span>
+            
+</article>
+                                    <a id="method_test"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                phpdocumentor-element--final        "
+>
+    <h4 class="phpdocumentor-method__name">test()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/defaultmodelmapper.inc.php"><a href="../files/src-defaultmodelmapper-inc.html"><abbr title="src/defaultmodelmapper.inc.php">defaultmodelmapper.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">77</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test that the supplied model implements the interface or class name returned
+by getClass().</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__final">final</span>                <span class="phpdocumentor-signature__name">test</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$models</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$models</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>One or more models to test</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
+                                                                                <section class="phpdocumentor-description"><p>if the model does not implement the interface.</p></section>
+                </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">final</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                                    <section class="phpdocumentor-description"></section>
+                </dd>
+                        </dl>
+
+
+    
+</article>
+                                    <a id="method_createAndMap"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">createAndMap()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/defaultmodelmapper.inc.php"><a href="../files/src-defaultmodelmapper-inc.html"><abbr title="src/defaultmodelmapper.inc.php">defaultmodelmapper.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">106</span>
+    </aside>
+        <p class="phpdocumentor-summary">Maps a map of raw data (attribute =&gt; value) to an IModel instance.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">createAndMap</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$data</span> :
+                <span class="phpdocumentor-signature__argument__return-type">array</span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$propertySet</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\magicgraph\IPropertySet">IPropertySet</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$data</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">array</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>data to map</p>
+<p>Optionally accepts an IPropertySet instance.  Supplied if passed to the IModelMapper
+constructor.
+f( ?IPropertySet $propertySet, array $data ) : IModel</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$propertySet</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\buffalokiwi\magicgraph\IPropertySet">IPropertySet</abbr>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>An optional property set.
+If this is passed, then the supplied IPropertySet is passed to the $createModel
+Closure as the first argument.</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
+                                                                                <section class="phpdocumentor-description"><p>if the create model callback does not return an instance of IModel</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>model instance</p></span>
+            
+</article>
+                                    <a id="method_map"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">map()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/defaultmodelmapper.inc.php"><a href="../files/src-defaultmodelmapper-inc.html"><abbr title="src/defaultmodelmapper.inc.php">defaultmodelmapper.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">125</span>
+    </aside>
+        <p class="phpdocumentor-summary">Map some data to properties in some model.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">map</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$model</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                            </span>
+                    <span class="phpdocumentor-signature__argument">
+            ,                 <span class="phpdocumentor-signature__argument__name">$data</span> :
+                <span class="phpdocumentor-signature__argument__return-type">array</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>Invalid properties are silently ignored.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$model</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Model to push data into</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$data</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">array</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>data to push</p></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                    <a id="method_createModel"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--private
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">createModel()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/defaultmodelmapper.inc.php"><a href="../files/src-defaultmodelmapper-inc.html"><abbr title="src/defaultmodelmapper.inc.php">defaultmodelmapper.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">159</span>
+    </aside>
+        <p class="phpdocumentor-summary">Call the create model callback and return the results</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                                <span class="phpdocumentor-signature__name">createModel</span>(
+                    <span class="phpdocumentor-signature__argument">
+            [                <span class="phpdocumentor-signature__argument__name">$propertySet</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$data</span> :
+                <span class="phpdocumentor-signature__argument__return-type">array</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>Optionally accepts an IPropertySet instance.  Supplied if passed to the IModelMapper
+constructor.
+$data is the raw data to be mapped to the model.
+f( ?IPropertySet $propertySet = null, array $data = [] ) : IModel</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$propertySet</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertySet">IPropertySet</abbr></a>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>An optional property set.
+If this is passed, then the supplied IPropertySet is passed to the $createModel
+Closure as the first argument.</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$data</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">array</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">[]</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
+                                                                                <section class="phpdocumentor-description"><p>if the create model callback does not return an instance of IModel</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-IModel.html"><abbr title="\buffalokiwi\magicgraph\IModel">IModel</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>new model instance</p></span>
+            
+</article>
+                                                            </section>
+            </article>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                        <li><a href="../namespaces/buffalokiwi.html">buffalokiwi</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph.html">magicgraph</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph-property.html">property</a></li>
+            </ul>
+    <article class="phpdocumentor-element phpdocumentor-interface">
+        <h2 class="phpdocumentor-content__title">
+            IPropertySet
+                            <span class="phpdocumentor-interface__extends">
+                    extends
+                                            <abbr title="\buffalokiwi\buffalotools\types\IBigSet">IBigSet</abbr>                                    </span>
+                                </h2>
+        <aside class="phpdocumentor-element-found-in">
+            <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+            :
+            <span class="phpdocumentor-element-found-in__line">28</span>
+        </aside>
+
+        <p class="phpdocumentor-interface__summary">Defines a set of properties that are used within some model.</p>
+        <section class="phpdocumentor-interface__description"><p>ie: table column definitions</p>
+<p>Note: Property sets MUST be clonable.  Be sure to implement __clone() and
+clone instances of each property in this set.</p></section>
+                    <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                                    <section class="phpdocumentor-description"><p>Write documentation</p></section>
+                </dd>
+                        </dl>
+
+
+        <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                                                                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_setReadOnly">setReadOnly()</a></th>
+                    <td class="phpdocumentor-cell">Sets the property set to read only.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getModelValidationArray">getModelValidationArray()</a></th>
+                    <td class="phpdocumentor-cell">An array of closures for model validation
+f( IModel )</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_addPropertyConfig">addPropertyConfig()</a></th>
+                    <td class="phpdocumentor-cell">Used to add properties to this property set.</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getPrimaryKeyNames">getPrimaryKeyNames()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the primary key property names.</td>
+                    <td class="phpdocumentor-cell">string[]</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getPrimaryKeys">getPrimaryKeys()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve an array of keys flagged as primary</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getPrimaryKey">getPrimaryKey()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the property that represents the primary key.</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-property-IProperty.html"><abbr title="\buffalokiwi\magicgraph\property\IProperty">IProperty</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getProperties">getProperties()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a list of all the properties</td>
+                    <td class="phpdocumentor-cell">\buffalokiwi\magicgraph\property\IProperty[]</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getProperty">getProperty()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a property by name</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-property-IProperty.html"><abbr title="\buffalokiwi\magicgraph\property\IProperty">IProperty</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_findProperty">findProperty()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a list of properties by flag.</td>
+                    <td class="phpdocumentor-cell">\buffalokiwi\magicgraph\property\IProperty[]</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getPropertiesByType">getPropertiesByType()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a list of properties by data type.</td>
+                    <td class="phpdocumentor-cell">\buffalokiwi\magicgraph\property\IProperty[]</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getPropertyConfig">getPropertyConfig()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the property configuration</td>
+                    <td class="phpdocumentor-cell"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_containsConfig">containsConfig()</a></th>
+                    <td class="phpdocumentor-cell">Determine if this property set was built using a specific interface.</td>
+                    <td class="phpdocumentor-cell">bool</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getPropertyConfigArray">getPropertyConfigArray()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the product property configuration array</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getConfigObjects">getConfigObjects()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a list of all of the currently enabled property config instances
+attached to this property set.</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getPropertiesByFlag">getPropertiesByFlag()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a list of properties by flag.</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_getNewMembers">getNewMembers()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a list of property names that have been added via addPropertyConfig().</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertySet.html#method_setOnAddMember">setOnAddMember()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                                            </table>
+
+        
+        
+                    <section>
+                <h3 class="phpdocumentor-methods__header">Methods</h3>
+                                    <a id="method_setReadOnly"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">setReadOnly()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">37</span>
+    </aside>
+        <p class="phpdocumentor-summary">Sets the property set to read only.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">setReadOnly</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This is a method because the model still needs to be written to when
+creating instances populated from persistent storage.  The idea is for the
+mapping object factory to call this method after filling the model, but
+before returning it.</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_getModelValidationArray"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getModelValidationArray()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">45</span>
+    </aside>
+        <p class="phpdocumentor-summary">An array of closures for model validation
+f( IModel )</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getModelValidationArray</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+                    &mdash; <span class="phpdocumentor-description"><p>Closures</p></span>
+            
+</article>
+                                    <a id="method_addPropertyConfig"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">addPropertyConfig()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">55</span>
+    </aside>
+        <p class="phpdocumentor-summary">Used to add properties to this property set.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">addPropertyConfig</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$config</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This MUST be marked as final in the implementing class if it is called
+by the constructor.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$config</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>config to add</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\InvalidArgumentException">InvalidArgumentException</abbr></span>
+                                                                                <section class="phpdocumentor-description"></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method_getPrimaryKeyNames"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getPrimaryKeyNames()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">62</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the primary key property names.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getPrimaryKeyNames</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">string[]</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string[]</span>
+                    &mdash; <span class="phpdocumentor-description"><p>names</p></span>
+            
+</article>
+                                    <a id="method_getPrimaryKeys"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getPrimaryKeys()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">69</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve an array of keys flagged as primary</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getPrimaryKeys</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+                    &mdash; <span class="phpdocumentor-description"><p>IProperty[] primary keys</p></span>
+            
+</article>
+                                    <a id="method_getPrimaryKey"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getPrimaryKey()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">78</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the property that represents the primary key.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getPrimaryKey</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IProperty.html"><abbr title="\buffalokiwi\magicgraph\property\IProperty">IProperty</abbr></a></span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>If multiple primary keys are used, this returns the first one in the list.
+Use getPrimaryKeys() if using compound primary keys.</p></section>
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IProperty.html"><abbr title="\buffalokiwi\magicgraph\property\IProperty">IProperty</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>property</p></span>
+            
+</article>
+                                    <a id="method_getProperties"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getProperties()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">85</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a list of all the properties</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getProperties</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">\buffalokiwi\magicgraph\property\IProperty[]</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">\buffalokiwi\magicgraph\property\IProperty[]</span>
+                    &mdash; <span class="phpdocumentor-description"><p>properties</p></span>
+            
+</article>
+                                    <a id="method_getProperty"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getProperty()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">93</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a property by name</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getProperty</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$name</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IProperty.html"><abbr title="\buffalokiwi\magicgraph\property\IProperty">IProperty</abbr></a></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$name</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>name</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IProperty.html"><abbr title="\buffalokiwi\magicgraph\property\IProperty">IProperty</abbr></a></span>
+                    &mdash; <span class="phpdocumentor-description"><p>property</p></span>
+            
+</article>
+                                    <a id="method_findProperty"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">findProperty()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">101</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a list of properties by flag.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">findProperty</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$flags</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyFlags.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyFlags">IPropertyFlags</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">\buffalokiwi\magicgraph\property\IProperty[]</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$flags</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyFlags.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyFlags">IPropertyFlags</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Flags to test</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">\buffalokiwi\magicgraph\property\IProperty[]</span>
+                    &mdash; <span class="phpdocumentor-description"><p>properties</p></span>
+            
+</article>
+                                    <a id="method_getPropertiesByType"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getPropertiesByType()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">109</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a list of properties by data type.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getPropertiesByType</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$type</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyType.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyType">IPropertyType</abbr></a></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">\buffalokiwi\magicgraph\property\IProperty[]</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$type</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyType.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyType">IPropertyType</abbr></a></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Type</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">\buffalokiwi\magicgraph\property\IProperty[]</span>
+                    &mdash; <span class="phpdocumentor-description"><p>properties</p></span>
+            
+</article>
+                                    <a id="method_getPropertyConfig"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getPropertyConfig()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">118</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the property configuration</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getPropertyConfig</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$interface</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$interface</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>The interface name of the desired property config.
+If the internal instance does not implement $interface, then an exception is thrown.</p></section></dd>
+                    </dl>
+    
+            <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
+                                                                                <section class="phpdocumentor-description"><p>if config does not implement $interface</p></section>
+                </dd>
+                        </dl>
+
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyConfig.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyConfig">IPropertyConfig</abbr></a></span>
+            
+</article>
+                                    <a id="method_containsConfig"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">containsConfig()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">126</span>
+    </aside>
+        <p class="phpdocumentor-summary">Determine if this property set was built using a specific interface.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">containsConfig</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$interface</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">bool</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$interface</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Interface to test.</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash; <span class="phpdocumentor-description"><p>Implements</p></span>
+            
+</article>
+                                    <a id="method_getPropertyConfigArray"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getPropertyConfigArray()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">133</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the product property configuration array</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getPropertyConfigArray</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+            
+</article>
+                                    <a id="method_getConfigObjects"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getConfigObjects()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">141</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a list of all of the currently enabled property config instances
+attached to this property set.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getConfigObjects</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+                    &mdash; <span class="phpdocumentor-description"><p>IPropertyConfig[] config instances</p></span>
+            
+</article>
+                                    <a id="method_getPropertiesByFlag"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getPropertiesByFlag()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">149</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a list of properties by flag.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getPropertiesByFlag</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__variadic-operator">...</span><span class="phpdocumentor-signature__argument__name">$flags</span> :
+                <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$flags</span>
+                    : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>flags</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+                    &mdash; <span class="phpdocumentor-description"><p>properties</p></span>
+            
+</article>
+                                    <a id="method_getNewMembers"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getNewMembers()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">156</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a list of property names that have been added via addPropertyConfig().</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getNewMembers</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">array</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array</span>
+                    &mdash; <span class="phpdocumentor-description"><p>names</p></span>
+            
+</article>
+                                    <a id="method_setOnAddMember"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">setOnAddMember()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyset.intf.php"><a href="../files/src-property-ipropertyset-intf.html"><abbr title="src/property/ipropertyset.intf.php">ipropertyset.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">159</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">setOnAddMember</span>(
+                    <span class="phpdocumentor-signature__argument">
+                            <span class="phpdocumentor-signature__argument__name">$callback</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$callback</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                                    </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"></section></dd>
+                    </dl>
+    
+        
+
+    
+</article>
+                                                            </section>
+            </article>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

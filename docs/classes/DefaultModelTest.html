@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                </ul>
+
+    <article class="phpdocumentor-element phpdocumentor-class">
+        <h2 class="phpdocumentor-content__title">
+            DefaultModelTest
+                            <span class="phpdocumentor-class__extends">
+                    extends <abbr title="\PHPUnit\Framework\TestCase">TestCase</abbr>
+                </span>
+                                                        </h2>
+        <aside class="phpdocumentor-element-found-in">
+            <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+            :
+            <span class="phpdocumentor-element-found-in__line">37</span>
+        </aside>
+
+        <p class="phpdocumentor-class__summary">Tests the DefaultModel class.</p>
+        <section class="phpdocumentor-class__description"><p>Due to how tightly coupled the IPropertySet instance is to the internal
+workings of IModel, this is more of an integration test than a unit test.
+This uses buffalokiwi\magicgraph\QuickPropertySet as the property set instance for
+testing.</p></section>
+                
+
+        <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                                        <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#property_instance">$instance</a></th>
+                    <td class="phpdocumentor-cell">Test model instance</td>
+                    <td class="phpdocumentor-cell"><abbr title="\IModel">IModel</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#property_props">$props</a></th>
+                    <td class="phpdocumentor-cell">Properties config used for the model</td>
+                    <td class="phpdocumentor-cell">array</td>
+                </tr>
+                                                                <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_createIModelInstance">createIModelInstance()</a></th>
+                    <td class="phpdocumentor-cell">Creates a DefaultModel instance used for testing.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\IModel">IModel</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_setUp">setUp()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testMagicIsset">testMagicIsset()</a></th>
+                    <td class="phpdocumentor-cell">Tests the __isset() magic method.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testMagicGetSet">testMagicGetSet()</a></th>
+                    <td class="phpdocumentor-cell">Tests the __get() and __set() magic methods.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testGetValue">testGetValue()</a></th>
+                    <td class="phpdocumentor-cell">Tests the IModel::getValue() method.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testGetValueThrowsInvalidArgumentException">testGetValueThrowsInvalidArgumentException()</a></th>
+                    <td class="phpdocumentor-cell">Test that retrieving a property value for an invalid property name
+throws an exception</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testInvalidSetValueSilentlyFails">testInvalidSetValueSilentlyFails()</a></th>
+                    <td class="phpdocumentor-cell">Test that setting a value of some non-existing property throws an exception</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testSetValueValidationException">testSetValueValidationException()</a></th>
+                    <td class="phpdocumentor-cell">Test that setting an invalid value for the &quot;validate&quot; test property
+If validation fails from a property closure, an error is triggered and false is returned by the validate function.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testSetterBehaviorCallback">testSetterBehaviorCallback()</a></th>
+                    <td class="phpdocumentor-cell">Test to ensure the setter behavior callback can modify the value
+prior to validation being called.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testSetValueAsArrayException">testSetValueAsArrayException()</a></th>
+                    <td class="phpdocumentor-cell">Test to ensure that setValue throws an InvalidArgumentException if the
+passed value is an array</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testSetValueAsObjectException">testSetValueAsObjectException()</a></th>
+                    <td class="phpdocumentor-cell">Tests passing an object to setValue for a property that does not accept
+object values.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_getSetValue">getSetValue()</a></th>
+                    <td class="phpdocumentor-cell">Tests the IModel::setValue() method.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testGetModifiedProperties">testGetModifiedProperties()</a></th>
+                    <td class="phpdocumentor-cell">Tests IModel::getModifiedProperties()
+Expected to return a cloned instance of the supplied IPropertySet instance with
+enabled bits matching the enabled bits of the internal edited bitset.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testGetPropertySet">testGetPropertySet()</a></th>
+                    <td class="phpdocumentor-cell">Tests IModel::getPropertySet()
+Expects the IPropertySet instance supplied to the constructor to be returned</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testToJSON">testToJSON()</a></th>
+                    <td class="phpdocumentor-cell">Tests IModel::toObject()
+Using the active bits in the IPropertySet instance supplied to the constructor,
+this expects a valid JSON object to be returned.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testToArray">testToArray()</a></th>
+                    <td class="phpdocumentor-cell">Tests IModel::toArray()
+Using the active bits in the IPropertySet instance supplied to the constructor,
+this expects an array to be returned containing key value pairs.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testEquals">testEquals()</a></th>
+                    <td class="phpdocumentor-cell">Tests IModel::equals()
+Let A and B being instances of IModel, and test the following:</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testValidate">testValidate()</a></th>
+                    <td class="phpdocumentor-cell">Tests IModel::validate()
+Expects IProperty::validate() to be called for each property listed within the
+IPropertySet instance supplied to the DefaultModel constructor</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testHash">testHash()</a></th>
+                    <td class="phpdocumentor-cell">Test IModel::hash()
+Expects hash() to return an md5 hash of:</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/DefaultModelTest.html#method_testGetInsertProperties">testGetInsertProperties()</a></th>
+                    <td class="phpdocumentor-cell">Tests IModel::getInsertProperties()
+Expects a clone of the supplied IPropertySet to be returned with the
+bits enabled that match any properties that DO NOT have the INSERT flag enabled.</td>
+                    <td class="phpdocumentor-cell">void</td>
+                </tr>
+                                            </table>
+
+        
+                    <section>
+                <h3 class="phpdocumentor-properties__header">Properties</h3>
+                                    <a id="property_instance"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$instance</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">43</span>
+    </aside>
+            <p class="phpdocumentor-summary">Test model instance</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\IModel">IModel</abbr></span>
+        <span class="phpdocumentor-signature__name">$instance</span>
+            </code>
+            
+</article>
+                                    <a id="property_props"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$props</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">49</span>
+    </aside>
+            <p class="phpdocumentor-summary">Properties config used for the model</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type">array</span>
+        <span class="phpdocumentor-signature__name">$props</span>
+            </code>
+            
+</article>
+                                                            </section>
+        
+                    <section>
+                <h3 class="phpdocumentor-methods__header">Methods</h3>
+                                    <a id="method_createIModelInstance"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--protected
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">createIModelInstance()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">57</span>
+    </aside>
+        <p class="phpdocumentor-summary">Creates a DefaultModel instance used for testing.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+                                <span class="phpdocumentor-signature__name">createIModelInstance</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\IModel">IModel</abbr></span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>Properties are contained in $this-&gt;props.</p></section>
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\IModel">IModel</abbr></span>
+            
+</article>
+                                    <a id="method_setUp"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">setUp()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">131</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">setUp</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testMagicIsset"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testMagicIsset()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">141</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests the __isset() magic method.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testMagicIsset</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This simply calls IPropertySet::isMember()</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testMagicGetSet"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testMagicGetSet()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">152</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests the __get() and __set() magic methods.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testMagicGetSet</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This calls IModel::getValue()</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testGetValue"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testGetValue()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">166</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests the IModel::getValue() method.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testGetValue</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>Expects an InvalidArgumentException if the supplied property name is not a member of the supplied IPropertySet
+If the IProperty::getGetterCallback() result is an instance of \Closure, the result of that Closure is expected to
+be returned. Otherwise the stored value for the property is expected.</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testGetValueThrowsInvalidArgumentException"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testGetValueThrowsInvalidArgumentException()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">179</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test that retrieving a property value for an invalid property name
+throws an exception</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testGetValueThrowsInvalidArgumentException</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method_testInvalidSetValueSilentlyFails"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testInvalidSetValueSilentlyFails()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">191</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test that setting a value of some non-existing property throws an exception</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testInvalidSetValueSilentlyFails</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testSetValueValidationException"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testSetValueValidationException()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">205</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test that setting an invalid value for the &quot;validate&quot; test property
+If validation fails from a property closure, an error is triggered and false is returned by the validate function.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testSetValueValidationException</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>The validate property has a behavior callback that will purposely
+fail for any non-empty value.</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testSetterBehaviorCallback"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testSetterBehaviorCallback()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">226</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test to ensure the setter behavior callback can modify the value
+prior to validation being called.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testSetterBehaviorCallback</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>The setter behavior callback on the &quot;testpreparevalidate&quot; test property
+will convert any value to a \stdClass, which will cause a ValidationException
+to be thrown.</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testSetValueAsArrayException"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testSetValueAsArrayException()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">240</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test to ensure that setValue throws an InvalidArgumentException if the
+passed value is an array</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testSetValueAsArrayException</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testSetValueAsObjectException"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testSetValueAsObjectException()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">253</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests passing an object to setValue for a property that does not accept
+object values.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testSetValueAsObjectException</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_getSetValue"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getSetValue()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">274</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests the IModel::setValue() method.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getSetValue</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>Expects an InvalidArgumentException if the supplied property name is not a member of the supplied IPropertySet
+if IProperty::getSetterCallback() returns a valid \Closure the result of that Closure is expected to be used as the value prior to validate being called
+IProperty::validate() is expected to be called
+If the value is an IEnum instance, it is expected to call IEnum::setValue() for the stored enum
+If the value is an ISet instance, it is expected to call the ISet::clear(), then ISet::add() methods for the stored set
+If the value is an object, it MUST match IProperty::getClass()
+If the value is an object or array and the setter callback and IProperty::getClass() are undefined, then an InvalidArgumentException is expected to be thrown
+The value is expected to be stored in the model</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testGetModifiedProperties"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testGetModifiedProperties()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">309</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests IModel::getModifiedProperties()
+Expected to return a cloned instance of the supplied IPropertySet instance with
+enabled bits matching the enabled bits of the internal edited bitset.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testGetModifiedProperties</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>Edited bits are expected to be enabled by calling setValue()</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testGetPropertySet"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testGetPropertySet()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">326</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests IModel::getPropertySet()
+Expects the IPropertySet instance supplied to the constructor to be returned</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testGetPropertySet</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testToJSON"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testToJSON()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">343</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests IModel::toObject()
+Using the active bits in the IPropertySet instance supplied to the constructor,
+this expects a valid JSON object to be returned.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testToJSON</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>The JSON object must be an object with properties matching the property
+names of the IPropertySet instance, and the values matching the stored
+values in the IModel instance for those properties.</p>
+<p>{&quot;property&quot;:&quot;value&quot;}</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testToArray"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testToArray()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">376</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests IModel::toArray()
+Using the active bits in the IPropertySet instance supplied to the constructor,
+this expects an array to be returned containing key value pairs.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testToArray</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>The array must have keys matching the property
+names of the IPropertySet instance, and the values matching the stored
+values in the IModel instance for those properties.</p>
+<p>[&quot;property&quot; =&gt; &quot;value&quot;]</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testEquals"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testEquals()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">406</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests IModel::equals()
+Let A and B being instances of IModel, and test the following:</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testEquals</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>get_class( A ) == get_class( B )
+get_class( A::getPropertySet()) == get_class( B::getPropertySet())
+A::hash() == B::hash()</p>
+<p>Expects the class name of A to match the class name of B
+Expects the IPropertySet instance passed to A to be the same class as The IPropertySet passed to B
+Expects the result of the hash methods to match.</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testValidate"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testValidate()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">418</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests IModel::validate()
+Expects IProperty::validate() to be called for each property listed within the
+IPropertySet instance supplied to the DefaultModel constructor</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testValidate</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testHash"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testHash()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">435</span>
+    </aside>
+        <p class="phpdocumentor-summary">Test IModel::hash()
+Expects hash() to return an md5 hash of:</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testHash</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>The Model's class name + The IPropertySet class name + a concatenated list of all included property names</p></section>
+    
+    
+        
+
+    
+</article>
+                                    <a id="method_testGetInsertProperties"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">testGetInsertProperties()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="tests/DefaultModelTest.php"><a href="../files/tests-defaultmodeltest.html"><abbr title="tests/DefaultModelTest.php">DefaultModelTest.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">448</span>
+    </aside>
+        <p class="phpdocumentor-summary">Tests IModel::getInsertProperties()
+Expects a clone of the supplied IPropertySet to be returned with the
+bits enabled that match any properties that DO NOT have the INSERT flag enabled.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">testGetInsertProperties</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">void</span>
+    </code>
+
+    
+    
+        
+
+    
+</article>
+                                                            </section>
+            </article>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                        <li><a href="../namespaces/buffalokiwi.html">buffalokiwi</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph.html">magicgraph</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph-property.html">property</a></li>
+            </ul>
+    <article class="phpdocumentor-element phpdocumentor-interface">
+        <h2 class="phpdocumentor-content__title">
+            IPropertyFlags
+                            <span class="phpdocumentor-interface__extends">
+                    extends
+                                            <abbr title="\buffalokiwi\buffalotools\types\ISet">ISet</abbr>                                    </span>
+                                </h2>
+        <aside class="phpdocumentor-element-found-in">
+            <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyflags.intf.php"><a href="../files/src-property-ipropertyflags-intf.html"><abbr title="src/property/ipropertyflags.intf.php">ipropertyflags.intf.php</abbr></a></abbr>
+            :
+            <span class="phpdocumentor-element-found-in__line">18</span>
+        </aside>
+
+        <p class="phpdocumentor-interface__summary"></p>
+        <section class="phpdocumentor-interface__description"></section>
+                
+
+        <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyFlags.html#constant_NO_INSERT">NO_INSERT</a></th>
+                    <td class="phpdocumentor-cell">This property may never be inserted</td>
+                    <td class="phpdocumentor-cell">&#039;noinsert&#039;</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyFlags.html#constant_NO_UPDATE">NO_UPDATE</a></th>
+                    <td class="phpdocumentor-cell">This property may never be updated.</td>
+                    <td class="phpdocumentor-cell">&#039;noupdate&#039;</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyFlags.html#constant_REQUIRED">REQUIRED</a></th>
+                    <td class="phpdocumentor-cell">This property requires a value</td>
+                    <td class="phpdocumentor-cell">&#039;required&#039;</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyFlags.html#constant_USE_NULL">USE_NULL</a></th>
+                    <td class="phpdocumentor-cell">Property value may include null</td>
+                    <td class="phpdocumentor-cell">&#039;null&#039;</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyFlags.html#constant_PRIMARY">PRIMARY</a></th>
+                    <td class="phpdocumentor-cell">Primary key (one per property set)</td>
+                    <td class="phpdocumentor-cell">&#039;primary&#039;</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyFlags.html#constant_SUBCONFIG">SUBCONFIG</a></th>
+                    <td class="phpdocumentor-cell">The default implementation does not use this flag, but it is here in case
+some property is loaded from some sub/third party config and you want to
+do something with those.</td>
+                    <td class="phpdocumentor-cell">&#039;subconfig&#039;</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyFlags.html#constant_WRITE_EMPTY">WRITE_EMPTY</a></th>
+                    <td class="phpdocumentor-cell">Calling setValue() on the model will throw a ValidationException if
+the stored value is not empty.</td>
+                    <td class="phpdocumentor-cell">&#039;writeempty&#039;</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-IPropertyFlags.html#constant_NO_ARRAY_OUTPUT">NO_ARRAY_OUTPUT</a></th>
+                    <td class="phpdocumentor-cell">Set this flag to prevent the property from being
+printed during a call to IModel::toArray().</td>
+                    <td class="phpdocumentor-cell">&#039;noarrayoutput&#039;</td>
+                </tr>
+                                                                                            </table>
+
+                    <section>
+                <h3 class="phpdocumentor-constants__header">Constants</h3>
+                                    <a id="constant_NO_INSERT"></a>
+<article
+        class="
+            phpdocumentor-element
+            phpdocumentor-constant
+            phpdocumentor-constant--public
+                    "
+>
+    <h4 class="phpdocumentor-constant__name">NO_INSERT</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyflags.intf.php"><a href="../files/src-property-ipropertyflags-intf.html"><abbr title="src/property/ipropertyflags.intf.php">ipropertyflags.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">23</span>
+    </aside>
+            <p class="phpdocumentor-summary">This property may never be inserted</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__name">$NO_INSERT</span>
+        = <span class="phpdocumentor-signature__default-value">&#039;noinsert&#039;</span>
+    </code>
+            
+</article>
+                                    <a id="constant_NO_UPDATE"></a>
+<article
+        class="
+            phpdocumentor-element
+            phpdocumentor-constant
+            phpdocumentor-constant--public
+                    "
+>
+    <h4 class="phpdocumentor-constant__name">NO_UPDATE</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyflags.intf.php"><a href="../files/src-property-ipropertyflags-intf.html"><abbr title="src/property/ipropertyflags.intf.php">ipropertyflags.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">30</span>
+    </aside>
+            <p class="phpdocumentor-summary">This property may never be updated.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__name">$NO_UPDATE</span>
+        = <span class="phpdocumentor-signature__default-value">&#039;noupdate&#039;</span>
+    </code>
+        <section class="phpdocumentor-description">This can also be considered as &quot;read only&quot;.</section>
+            
+</article>
+                                    <a id="constant_REQUIRED"></a>
+<article
+        class="
+            phpdocumentor-element
+            phpdocumentor-constant
+            phpdocumentor-constant--public
+                    "
+>
+    <h4 class="phpdocumentor-constant__name">REQUIRED</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyflags.intf.php"><a href="../files/src-property-ipropertyflags-intf.html"><abbr title="src/property/ipropertyflags.intf.php">ipropertyflags.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">36</span>
+    </aside>
+            <p class="phpdocumentor-summary">This property requires a value</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__name">$REQUIRED</span>
+        = <span class="phpdocumentor-signature__default-value">&#039;required&#039;</span>
+    </code>
+            
+</article>
+                                    <a id="constant_USE_NULL"></a>
+<article
+        class="
+            phpdocumentor-element
+            phpdocumentor-constant
+            phpdocumentor-constant--public
+                    "
+>
+    <h4 class="phpdocumentor-constant__name">USE_NULL</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyflags.intf.php"><a href="../files/src-property-ipropertyflags-intf.html"><abbr title="src/property/ipropertyflags.intf.php">ipropertyflags.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">42</span>
+    </aside>
+            <p class="phpdocumentor-summary">Property value may include null</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__name">$USE_NULL</span>
+        = <span class="phpdocumentor-signature__default-value">&#039;null&#039;</span>
+    </code>
+            
+</article>
+                                    <a id="constant_PRIMARY"></a>
+<article
+        class="
+            phpdocumentor-element
+            phpdocumentor-constant
+            phpdocumentor-constant--public
+                    "
+>
+    <h4 class="phpdocumentor-constant__name">PRIMARY</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyflags.intf.php"><a href="../files/src-property-ipropertyflags-intf.html"><abbr title="src/property/ipropertyflags.intf.php">ipropertyflags.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">48</span>
+    </aside>
+            <p class="phpdocumentor-summary">Primary key (one per property set)</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__name">$PRIMARY</span>
+        = <span class="phpdocumentor-signature__default-value">&#039;primary&#039;</span>
+    </code>
+            
+</article>
+                                    <a id="constant_SUBCONFIG"></a>
+<article
+        class="
+            phpdocumentor-element
+            phpdocumentor-constant
+            phpdocumentor-constant--public
+                    "
+>
+    <h4 class="phpdocumentor-constant__name">SUBCONFIG</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyflags.intf.php"><a href="../files/src-property-ipropertyflags-intf.html"><abbr title="src/property/ipropertyflags.intf.php">ipropertyflags.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">55</span>
+    </aside>
+            <p class="phpdocumentor-summary">The default implementation does not use this flag, but it is here in case
+some property is loaded from some sub/third party config and you want to
+do something with those.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__name">$SUBCONFIG</span>
+        = <span class="phpdocumentor-signature__default-value">&#039;subconfig&#039;</span>
+    </code>
+            
+</article>
+                                    <a id="constant_WRITE_EMPTY"></a>
+<article
+        class="
+            phpdocumentor-element
+            phpdocumentor-constant
+            phpdocumentor-constant--public
+                    "
+>
+    <h4 class="phpdocumentor-constant__name">WRITE_EMPTY</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyflags.intf.php"><a href="../files/src-property-ipropertyflags-intf.html"><abbr title="src/property/ipropertyflags.intf.php">ipropertyflags.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">62</span>
+    </aside>
+            <p class="phpdocumentor-summary">Calling setValue() on the model will throw a ValidationException if
+the stored value is not empty.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__name">$WRITE_EMPTY</span>
+        = <span class="phpdocumentor-signature__default-value">&#039;writeempty&#039;</span>
+    </code>
+            
+</article>
+                                    <a id="constant_NO_ARRAY_OUTPUT"></a>
+<article
+        class="
+            phpdocumentor-element
+            phpdocumentor-constant
+            phpdocumentor-constant--public
+                    "
+>
+    <h4 class="phpdocumentor-constant__name">NO_ARRAY_OUTPUT</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/ipropertyflags.intf.php"><a href="../files/src-property-ipropertyflags-intf.html"><abbr title="src/property/ipropertyflags.intf.php">ipropertyflags.intf.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">72</span>
+    </aside>
+            <p class="phpdocumentor-summary">Set this flag to prevent the property from being
+printed during a call to IModel::toArray().</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__name">$NO_ARRAY_OUTPUT</span>
+        = <span class="phpdocumentor-signature__default-value">&#039;noarrayoutput&#039;</span>
+    </code>
+        <section class="phpdocumentor-description">toArray() is used to copy and save models, and not all properties
+should be read.  ie: the property connects to some api on read and the
+returned value should not be saved anywhere.</section>
+            
+</article>
+                                            </section>
+        
+        
+            </article>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>

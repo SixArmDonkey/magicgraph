@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/base.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+        <link rel="stylesheet" href="../css/template.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <script src="../js/search.js"></script>
+        <script defer src="../js/searchIndex.js"></script>
+    </head>
+<body>
+    <header class="phpdocumentor-top-header"></header>
+    <header class="phpdocumentor-header">
+        <section class="phpdocumentor-section">
+            <h1 class="phpdocumentor-title">Documentation</h1>
+        </section>
+    </header>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <aside class="three phpdocumentor-columns phpdocumentor-sidebar">
+    <section data-search-form class="phpdocumentor-search">
+        <h2 class="phpdocumentor-sidebar__category-header">Search</h2>
+        <label class="phpdocumentor-label">
+            <span class="visually-hidden">Search for</span>
+            <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+        </label>
+    </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                    <h3 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                            <h4 class="phpdocumentor-sidebar__root-namespace"><a href="../namespaces/buffalokiwi.html"><abbr title="\buffalokiwi">buffalokiwi</abbr></a></h4>
+                <ul class="phpdocumentor-list">
+                                            <li><a href="../namespaces/buffalokiwi-magicgraph.html"><abbr title="\buffalokiwi\magicgraph">magicgraph</abbr></a></li>
+                                    </ul>
+                        </section>
+
+    
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="../indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="nine phpdocumentor-columns phpdocumentor-content">
+                <ul class="phpdocumentor-breadcrumbs">
+    <li><a href="../index.html">Home</a></li>
+                        <li><a href="../namespaces/buffalokiwi.html">buffalokiwi</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph.html">magicgraph</a></li>
+                    <li><a href="../namespaces/buffalokiwi-magicgraph-property.html">property</a></li>
+            </ul>
+
+    <article class="phpdocumentor-element phpdocumentor-class">
+        <h2 class="phpdocumentor-content__title">
+            PropertyBehavior
+                                                    <span class="phpdocumentor-class__implements">
+                    implements
+                                            <a href="../classes/buffalokiwi-magicgraph-property-IPropertyBehavior.html"><abbr title="\buffalokiwi\magicgraph\property\IPropertyBehavior">IPropertyBehavior</abbr></a>                                    </span>
+                                </h2>
+        <aside class="phpdocumentor-element-found-in">
+            <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+            :
+            <span class="phpdocumentor-element-found-in__line">18</span>
+        </aside>
+
+        <p class="phpdocumentor-class__summary"></p>
+        <section class="phpdocumentor-class__description"></section>
+                    <h5 class="phpdocumentor-tag-list__heading">Tags</h5>
+    <dl class="phpdocumentor-tag-list">
+                                                                                            </dl>
+
+
+        <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
+                                        <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#property_validate">$validate</a></th>
+                    <td class="phpdocumentor-cell">Validate data closure for save()
+[bool is valid] = function( IProperty, [input value] )</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#property_getter">$getter</a></th>
+                    <td class="phpdocumentor-cell">Get value callback</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#property_setter">$setter</a></th>
+                    <td class="phpdocumentor-cell">Set value callback</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#property_mgetter">$mgetter</a></th>
+                    <td class="phpdocumentor-cell">Get value callback</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#property_msetter">$msetter</a></th>
+                    <td class="phpdocumentor-cell">Set value callback</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#property_init">$init</a></th>
+                    <td class="phpdocumentor-cell">Initializer callback</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#property_onChange">$onChange</a></th>
+                    <td class="phpdocumentor-cell">On Change event</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#property_htmlInput">$htmlInput</a></th>
+                    <td class="phpdocumentor-cell">Get html input event</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#property_isEmpty">$isEmpty</a></th>
+                    <td class="phpdocumentor-cell">Is empty event</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                                                                <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method___construct">__construct()</a></th>
+                    <td class="phpdocumentor-cell">Create a new PropertyBehavior instance.</td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method___clone">__clone()</a></th>
+                    <td class="phpdocumentor-cell"></td>
+                    <td class="phpdocumentor-cell">mixed</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method_getOnChangeCallback">getOnChangeCallback()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the onChange callback
+f( IProperty, oldValue, newValue ) : void</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method_getIsEmptyCallback">getIsEmptyCallback()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve the closure that can test empty state.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method_getValidateCallback">getValidateCallback()</a></th>
+                    <td class="phpdocumentor-cell">Callback used to provide additional validation for some property.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method_getSetterCallback">getSetterCallback()</a></th>
+                    <td class="phpdocumentor-cell">Callback used to set a value.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method_getGetterCallback">getGetterCallback()</a></th>
+                    <td class="phpdocumentor-cell">Callback used when retrieving a value.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method_getModelSetterCallback">getModelSetterCallback()</a></th>
+                    <td class="phpdocumentor-cell">Callback used to set a value.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method_getModelGetterCallback">getModelGetterCallback()</a></th>
+                    <td class="phpdocumentor-cell">Callback used when retrieving a value.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method_getInitCallback">getInitCallback()</a></th>
+                    <td class="phpdocumentor-cell">Callback used for initializing some value when the model is loaded.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr></td>
+                </tr>
+                            <tr>
+                    <th class="phpdocumentor-heading"><a href="../classes/buffalokiwi-magicgraph-property-PropertyBehavior.html#method_getHTMLInputCallback">getHTMLInputCallback()</a></th>
+                    <td class="phpdocumentor-cell">Retrieve a callback that converts a property into an html form input.</td>
+                    <td class="phpdocumentor-cell"><abbr title="\Closure">Closure</abbr>|null</td>
+                </tr>
+                                            </table>
+
+        
+                    <section>
+                <h3 class="phpdocumentor-properties__header">Properties</h3>
+                                    <a id="property_validate"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$validate</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">25</span>
+    </aside>
+            <p class="phpdocumentor-summary">Validate data closure for save()
+[bool is valid] = function( IProperty, [input value] )</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\Closure">Closure</abbr>|null</span>
+        <span class="phpdocumentor-signature__name">$validate</span>
+            </code>
+            
+</article>
+                                    <a id="property_getter"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$getter</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">31</span>
+    </aside>
+            <p class="phpdocumentor-summary">Get value callback</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\Closure">Closure</abbr>|null</span>
+        <span class="phpdocumentor-signature__name">$getter</span>
+            </code>
+            
+</article>
+                                    <a id="property_setter"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$setter</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">38</span>
+    </aside>
+            <p class="phpdocumentor-summary">Set value callback</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\Closure">Closure</abbr>|null</span>
+        <span class="phpdocumentor-signature__name">$setter</span>
+            </code>
+            
+</article>
+                                    <a id="property_mgetter"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$mgetter</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">44</span>
+    </aside>
+            <p class="phpdocumentor-summary">Get value callback</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\Closure">Closure</abbr>|null</span>
+        <span class="phpdocumentor-signature__name">$mgetter</span>
+            </code>
+            
+</article>
+                                    <a id="property_msetter"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$msetter</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">51</span>
+    </aside>
+            <p class="phpdocumentor-summary">Set value callback</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\Closure">Closure</abbr>|null</span>
+        <span class="phpdocumentor-signature__name">$msetter</span>
+            </code>
+            
+</article>
+                                    <a id="property_init"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$init</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">58</span>
+    </aside>
+            <p class="phpdocumentor-summary">Initializer callback</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\Closure">Closure</abbr>|null</span>
+        <span class="phpdocumentor-signature__name">$init</span>
+            </code>
+            
+</article>
+                                    <a id="property_onChange"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$onChange</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">64</span>
+    </aside>
+            <p class="phpdocumentor-summary">On Change event</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\Closure">Closure</abbr>|null</span>
+        <span class="phpdocumentor-signature__name">$onChange</span>
+            </code>
+            
+</article>
+                                    <a id="property_htmlInput"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$htmlInput</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">70</span>
+    </aside>
+            <p class="phpdocumentor-summary">Get html input event</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\Closure">Closure</abbr>|null</span>
+        <span class="phpdocumentor-signature__name">$htmlInput</span>
+            </code>
+            
+</article>
+                                    <a id="property_isEmpty"></a>
+<article
+        class="
+            phpdocumentor-property
+            phpdocumentor-property--private
+                                "
+>
+    <h4 class="phpdocumentor-property__name">$isEmpty</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">76</span>
+    </aside>
+            <p class="phpdocumentor-summary">Is empty event</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__type"><abbr title="\Closure">Closure</abbr>|null</span>
+        <span class="phpdocumentor-signature__name">$isEmpty</span>
+            </code>
+            
+</article>
+                                                            </section>
+        
+                    <section>
+                <h3 class="phpdocumentor-methods__header">Methods</h3>
+                                    <a id="method___construct"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">__construct()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">100</span>
+    </aside>
+        <p class="phpdocumentor-summary">Create a new PropertyBehavior instance.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">__construct</span>(
+                    <span class="phpdocumentor-signature__argument">
+            [                <span class="phpdocumentor-signature__argument__name">$validate</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$init</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$setter</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$getter</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$msetter</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$mgetter</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$onChange</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$isEmpty</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                    <span class="phpdocumentor-signature__argument">
+            [,                 <span class="phpdocumentor-signature__argument__name">$htmlInput</span> :
+                <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span> ]            </span>
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+        <section class="phpdocumentor-description"><h1>WARNING: Possibility of shenanigans!</h1>
+<p>Closures attached to this object SHOULD reference some variable equal to
+$this (inside the closure), instead of accessing $this directly.</p></section>
+    
+            <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+        <dl class="phpdocumentor-argument-list">
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$validate</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>Validate closure f( IProperty, $value )
+Throw a ValidationException on error</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$init</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>f( value ) : mixed</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$setter</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>f( IProperty, value ) : mixed</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$getter</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>f( IProperty, value ) : mixed</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$msetter</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>f( IModel, IProperty, value ) : mixed</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$mgetter</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>f( IModel, IProperty, value ) : mixed</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$onChange</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>f( IProperty, oldValue, newValue ) : void</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$isEmpty</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>f( IProperty ) : bool</p></section></dd>
+                            <dt class="phpdocumentor-argument-list__entry">
+                    <span class="phpdocumentor-signature__argument__name">$htmlInput</span>
+                    : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>|null</span>
+                     = <span class="phpdocumentor-signature__argument__default-value">null</span>                </dt>
+                <dd class="phpdocumentor-argument-list__definition"><section class="phpdocumentor-description"><p>f( IModel $model, IProperty $property, string $name, string $id, string $value ) : IElement</p></section></dd>
+                    </dl>
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method___clone"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">__clone()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">116</span>
+    </aside>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">__clone</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type">mixed</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+            
+</article>
+                                    <a id="method_getOnChangeCallback"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getOnChangeCallback()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">148</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the onChange callback
+f( IProperty, oldValue, newValue ) : void</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getOnChangeCallback</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+            
+</article>
+                                    <a id="method_getIsEmptyCallback"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getIsEmptyCallback()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">158</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve the closure that can test empty state.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getIsEmptyCallback</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+    </code>
+
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+            
+</article>
+                                    <a id="method_getValidateCallback"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getValidateCallback()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">173</span>
+    </aside>
+        <p class="phpdocumentor-summary">Callback used to provide additional validation for some property.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getValidateCallback</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr></span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This is called prior to IProperty::validate()</p>
+<p>function( IProperty, [input value] ) : bool</p></section>
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr></span>
+                    &mdash; <span class="phpdocumentor-description"><p>callback</p></span>
+            
+</article>
+                                    <a id="method_getSetterCallback"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getSetterCallback()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">188</span>
+    </aside>
+        <p class="phpdocumentor-summary">Callback used to set a value.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getSetterCallback</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr></span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This is called prior to IProperty::validate() and the return value will
+replace the supplied value.</p>
+<p>f( IProperty, value ) : mixed</p></section>
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr></span>
+                    &mdash; <span class="phpdocumentor-description"><p>callback</p></span>
+            
+</article>
+                                    <a id="method_getGetterCallback"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getGetterCallback()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">202</span>
+    </aside>
+        <p class="phpdocumentor-summary">Callback used when retrieving a value.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getGetterCallback</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>Called during IProperty::getValue().  The return value will be used
+as the return value from getValue();
+f( IProperty, value ) : mixed</p></section>
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+            
+</article>
+                                    <a id="method_getModelSetterCallback"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getModelSetterCallback()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">217</span>
+    </aside>
+        <p class="phpdocumentor-summary">Callback used to set a value.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getModelSetterCallback</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr></span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>This is called prior to IProperty::validate() and the return value will
+replace the supplied value.</p>
+<p>f( IModel, IProperty, value ) : mixed</p></section>
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr></span>
+                    &mdash; <span class="phpdocumentor-description"><p>callback</p></span>
+            
+</article>
+                                    <a id="method_getModelGetterCallback"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getModelGetterCallback()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">231</span>
+    </aside>
+        <p class="phpdocumentor-summary">Callback used when retrieving a value.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getModelGetterCallback</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>Called during IProperty::getValue().  The return value will be used
+as the return value from getValue();
+f( IModel, IProperty, value ) : mixed</p></section>
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+            
+</article>
+                                    <a id="method_getInitCallback"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getInitCallback()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">244</span>
+    </aside>
+        <p class="phpdocumentor-summary">Callback used for initializing some value when the model is loaded.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getInitCallback</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr></span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>The return value will be used as the default value for the property.
+f( $value ) : mixed</p></section>
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr></span>
+                    &mdash; <span class="phpdocumentor-description"><p>callback</p></span>
+            
+</article>
+                                    <a id="method_getHTMLInputCallback"></a>
+<article
+        class="
+            phpdocumentor-method
+            phpdocumentor-method--public
+                                                        "
+>
+    <h4 class="phpdocumentor-method__name">getHTMLInputCallback()</h4>
+    <aside class="phpdocumentor-element-found-in">
+        <abbr class="phpdocumentor-element-found-in__file" title="src/property/propertybehavior.inc.php"><a href="../files/src-property-propertybehavior-inc.html"><abbr title="src/property/propertybehavior.inc.php">propertybehavior.inc.php</abbr></a></abbr>
+        :
+        <span class="phpdocumentor-element-found-in__line">257</span>
+    </aside>
+        <p class="phpdocumentor-summary">Retrieve a callback that converts a property into an html form input.</p>
+        <code class="phpdocumentor-signature phpdocumentor-code ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+                                <span class="phpdocumentor-signature__name">getHTMLInputCallback</span>(
+                )
+        : <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>f( IModel $model, IProperty $property, string $name, string $id, $value ) : IElement</p></section>
+    
+    
+        
+
+            <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+            
+</article>
+                                                            </section>
+            </article>
+                <div data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+
+                    <h2>Search results</h2>
+                    <ul class="phpdocumentor-search-results__entries">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        cssVars({});
+    </script>
+</body>
+</html>
