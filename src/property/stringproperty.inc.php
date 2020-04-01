@@ -73,8 +73,11 @@ class StringProperty extends BoundedProperty implements IStringProperty
     if ( $this->getFlags()->hasVal( SPropertyFlags::USE_NULL ) && $value === null )
       return; //..This is ok
     
-    if ( !is_string( $value ) || $value == null ) //..is_string returns true for null.
-      throw new ValidationException( sprintf( 'Value for property %s must be a string.  Got %s', $this->getName(), gettype( $value )));
+    if ( $value == null )
+      $value = '';
+    
+    if ( !is_string( $value )) //..is_string returns true for null.
+      throw new ValidationException( sprintf( 'Value for property %s must be a string.  Got %s', $this->getName(), ( $value == null ) ? 'null' : gettype( $value )));
     else if ( $this->getMin() > -1 && strlen( $value ) < $this->getMin())
       throw new ValidationException( sprintf( 'Value for property %s must be a string with a character length greater than %d', $this->getName(), $this->getMin()));
     else if ( $this->getMax() > -1 && strlen( $value ) > $this->getMax())

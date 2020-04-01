@@ -89,9 +89,21 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
       $c = $this->createClass;
       try {
         $instance = $c( $this->clazz );
+        if ( $instance == null )
+        {
+          //..Simply try to create it 
+          if ( interface_exists( $this->clazz ))
+            return null;
+          
+          $c = $this->clazz;
+          
+          return new $c();
+        }
       } catch( \Exception $e ) {
         throw new \Exception( $e->getMessage() . ' for property ' . $this->getName(), 0, $e );
       }
+      
+      
       
       if ( !is_a( $instance, $this->clazz ))
         throw new \Exception( 'Property backing object must be an instance of ' . $this->clazz . ' for property ' . $this->getName());

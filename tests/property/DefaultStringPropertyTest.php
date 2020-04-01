@@ -126,4 +126,20 @@ class DefaultStringPropertyTest extends AbstractPropertyTest
     $this->expectException( ValidationException::class );
     $prop->setValue( 'abcdefghij' );    
   }  
+  
+  
+  /**
+   * Test that validating null on a property that does not accept null
+   * throws a ValidationException 
+   * @return void
+   */
+  public function testValidateNullThrowsException() : void
+  {
+    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior(), $this->getValue());
+    //..Test invalid value 
+    $prop->setValue( null );
+    
+    //..Without the use_null flag, string properties convert null to an empty string.
+    $this->assertEquals( '', $prop->getValue());
+  }  
 }
