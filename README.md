@@ -14,7 +14,7 @@ MIT License
 2. [Installation](#installation)
 3. [Dependencies](#dependencies)
 4. [Definitions](#definitions)
-5. [Getting Started](#gettingstarted)
+5. [Getting Started](#getting-started)
 ---
   
 
@@ -282,4 +282,6 @@ Assuming the id of the newly created record was 1, we can retrieve the model:
 ```php
 $model = $repo->get('1');
 ```
+
+
 

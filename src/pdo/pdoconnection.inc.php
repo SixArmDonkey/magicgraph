@@ -130,12 +130,12 @@ abstract class PDOConnection extends PDO implements IPDOConnection
   /**
    * Create a new PDOConnection
    * @param IConnectionProperties $args properties
-   * @param Closure $onClose A function assigned by the connection manager
+   * @param Closure|null $onClose A function assigned by the connection manager
    * that will mark the connection as closed in the factory.
    * f( IDBConnection )
    * @throws PDOException if there is an issue
    */
-  public function __construct( IConnectionProperties $args, Closure $onClose )
+  public function __construct( IConnectionProperties $args, ?Closure $onClose = null )
   {
     parent::__construct(
       $args->dsn(),

@@ -39,7 +39,7 @@ class InlineSQLRepo extends SQLRepository
       $table, 
       new DefaultModelMapper( function( IPropertySet $props ) {
         return new DefaultModel( $props );
-      }),
+      }, \buffalokiwi\magicgraph\IModel::class ),
       $dbc,
       new PropertyListSet( ...$properties )
     );              
