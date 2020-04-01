@@ -191,7 +191,7 @@ class ModelFactory implements IModelFactory, IModelMapper
    * If this is included, the cached property set is not used.
    * @return IModel
    */
-  public function create( array $data, array $extraConfig = [], \buffalokiwi\magicgraph\property\IPropertyConfig ...$baseConfig ) : IModel
+  public function create( array $data = [], array $extraConfig = [], \buffalokiwi\magicgraph\property\IPropertyConfig ...$baseConfig ) : IModel
   {
     return $this->modelFactory->createAndMap( $data, $this->getNewPropertySet( $extraConfig, ...$baseConfig ));
   }

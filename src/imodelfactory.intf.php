@@ -45,5 +45,5 @@ interface IModelFactory
    * If this is included, the cached property set is not used.
    * @return IModel
    */
-  public function create( array $data, array $extraConfig = [] ) : IModel;
+  public function create( array $data = [], array $extraConfig = [] ) : IModel;
 }

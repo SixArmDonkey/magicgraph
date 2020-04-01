@@ -44,7 +44,7 @@ class CommonObjectRepo extends RepositoryProxy
    * @return IModel model instance 
    * @throws DBException For db errors 
    */
-  public function create( array $data, bool $readOnly = false ) : IModel
+  public function create( array $data = [], bool $readOnly = false ) : IModel
   {
     $model = $this->repo->create( $data, $readOnly );
     

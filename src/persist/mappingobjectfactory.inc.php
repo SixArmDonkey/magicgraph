@@ -83,7 +83,7 @@ class MappingObjectFactory implements IObjectFactory
    * @todo Create some code that can disable or remove properties that are not 
    * fetched when the model is built.  Think about this a bit...
    */
-  public function create( array $data, bool $readOnly = false ) : IModel
+  public function create( array $data = [], bool $readOnly = false ) : IModel
   {
     $props = clone $this->properties;
     $model = $this->mapper->createAndMap( $data, $props );

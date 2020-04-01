@@ -18,6 +18,10 @@ declare( strict_types=1 );
 
 require_once( __DIR__ . '/../vendor/autoload.php' );
 
+return;
+
+//..This is for other stuff.
+
 
 /*********************/
 /* IOC Container     */
@@ -60,7 +64,7 @@ $ioc->addInterface(buffalokiwi\magicgraph\pdo\IConnectionFactory::class, functio
       'localhost',              //..Host
       'root',      //..User
       '',      //..Pass
-      'retailrack' ), //..Database 
+      '' ), //..Database 
    function(\buffalokiwi\magicgraph\pdo\IConnectionProperties $args  ) {
      return new buffalokiwi\magicgraph\pdo\MariaDBConnection( $args, function(buffalokiwi\magicgraph\pdo\IDBConnection $c ) { $this->closeConnection($c); });
    });                

@@ -44,7 +44,7 @@ class ObjectFactoryProxy implements IObjectFactory
    * @return IModel model instance 
    * @throws DBException For db errors 
    */
-  public function create( array $data, bool $readOnly = false ) : IModel
+  public function create( array $data = [], bool $readOnly = false ) : IModel
   {
     return $this->factory->create( $data, $readOnly );
   }
