@@ -389,6 +389,8 @@ FINTEGER_PRIMARY will create an integer property, flagged as a primary key, with
 FSTRING_REQUIRED will create a string property, flagged as required, with a default value of an empty string.  
   
   
+  
+  
 ### Property Configuration Array Attributes  
   
 The BasePropertyConfig class contains a series of constants used within the array returned by createConfig() 
@@ -396,7 +398,7 @@ to create properties for models.
 
 Property caption/label for users to see.  
 ```
-BasePropertyConfig::CAPTION = 'caption'
+CAPTION = 'caption'
 ```   
   
 An optional unique identifier for some property 
@@ -529,9 +531,58 @@ TAG = 'tag'
 ```  
   
   
-
+  
+  
 ### Property Data Types
 
+
+This property may never be inserted
+```
+NO_INSERT = 'noinsert';
+```  
+  
+This property may never be updated.  
+This can also be considered as "read only".  
+```
+NO_UPDATE = 'noupdate'
+```  
+  
+This property requires a value  
+```
+REQUIRED = 'required'
+```  
+  
+Property value may include null  
+```
+USE_NULL = 'null'
+```  
+  
+Primary key (one per property set)  
+```
+PRIMARY = 'primary'
+```  
+  
+The default implementation does not use this flag, but it is here in case some property is loaded from some sub/third 
+party config and you want to do something with those.  
+```
+SUBCONFIG = 'subconfig'
+```  
+  
+Calling setValue() on the model will throw a ValidationException if the stored value is not empty.  
+```
+WRITE_EMPTY = 'writeempty'
+```  
+  
+Set this flag to prevent the property from being printed during a call to IModel::toArray().  toArray() is used 
+to copy and save models, and not all properties should be read.  ie: the property connects to some api on read and the 
+returned value should not be saved anywhere.  
+```
+NO_ARRAY_OUTPUT = 'noarrayoutput'
+```  
+  
+  
+  
+  
 ### Property Flags 
 
 
