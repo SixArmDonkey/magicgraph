@@ -16,6 +16,9 @@ MIT License
 4. [Definitions](#definitions)
 5. [Getting Started](#getting-started)
 6. [Property Configuration](#property-configuration)
+    1. [Property Configuration Array Attributes](#property-configuration-array-attributes)
+    2. [Property Data Types](#property-data-types)
+    3. [Property Flags](#property-flags)
 ---
   
 
@@ -363,11 +366,173 @@ IPropertyConfig instances can be passed to a StandardPropertySet.
 $model = new DefaultModel( new StandardPropertySet( new SamplePropertyConfig()));
 ```
   
+BasePropertyConfig contains a few helper constants, which can be used to simplify the creation of property configuration objects.
+For example, the previous example could be rewritten as:
+  
+```php
+class SamplePropertyConfig extends BasePropertyConfig
+{
+  //..Returns an array detailing the properties to add
+  protected function createConfig() : array
+  {
+    //..A map of property name to configuration 
+    return [
+      //..The Id Property 
+      'id' => self::FINTEGER_PRIMARY,
+      'name' => self::FSTRING_REQUIRED
+    ];
+  }
+}
+```
+  
+FINTEGER_PRIMARY will create an integer property, flagged as a primary key, with a default value of zero  
+FSTRING_REQUIRED will create a string property, flagged as required, with a default value of an empty string.  
+  
+  
+### Property Configuration Array Attributes  
+  
+The BasePropertyConfig class contains a series of constants used within the array returned by createConfig() 
+to create properties for models. 
 
+Property caption/label for users to see.  
+```
+BasePropertyConfig::CAPTION = 'caption'
+```   
+  
+An optional unique identifier for some property 
+```
+ID = 'id'
+```   
+  
+Default value   
+```
+VALUE = 'value'
+```  
+  
+Callback used for setting a properties value when it is an object.  
+f( IProperty, mixed $value ) : mixed  
+```
+SETTER = 'setter'
+```  
+  
+Callback used for setting a properties value when it is an object.  
+```
+f( IProperty, mixed $value ) : mixed   
+GETTER = 'getter'
+```  
+  
+Callback used for setting a properties value when it is an object.  
+```
+f( IModel, IProperty, mixed $value ) : mixed  
+MSETTER = 'msetter'
+```  
+  
+Callback used for setting a properties value when it is an object.  
+```
+f( IModel, IProperty, mixed $value ) : mixed   
+MGETTER = 'mgetter'
+```  
+  
+Data type.  
+This must map to a valid value of IPropertyType  
+```
+TYPE = "type"  
+```  
+    
+Property flags.  
+This must map to a comma-delimited list of valid IPropertyFlags values  
+```
+FLAGS = "flags"  
+```  
+  
+Class name used with object properties  
+```
+CLAZZ = "clazz"
+```  
+  
+A callback used to initialize the default value within the model.  
+This is called only once, when the model is first loaded.  
+Default value is supplied, and the returned value is used as the new default value.  
+```
+f( mixed $defaultValue ) : mixed  
+INIT = "initialize"
+```  
+  
+Minimum value/length  
+```
+MIN = "min"
+```    
+  
+Maximum value/length  
+```
+MAX = "max"
+```  
+  
+Closure for validating prior to save  
+```
+[bool is valid] = function( IProperty, [input value] )  
+VALIDATE = "validate"
+```  
+  
+Validation regex.  This is only available when using string properties.
+```
+PATTERN = "pattern"
+```  
+  
+A config array.  This is implementation specific, and is currently only used with Runtime Enum data types (IPropertyType::RTEnum). 
+This can be used for whatever you want within your application.
+```
+CONFIG = "config"
+```  
+  
+A prefix used by the default property set, which can proxy a get/set value call to a nested IModel instance.
+For example, say you had a customer model, and wanted to embed an address inside.  Instead of copy/pasting properties or 
+linking the customer to addresses, you can assign a prefix to a property named 'address' in the customer configuration, and
+add a CLAZZ property containing the class name of the address model.  The customer model will then embed the address model
+inside of the customer model, and all address model functionality will be included.  Furthermore, each address property 
+will appear to be a member of the customer model, and have the defined prefix.
+```
+PREFIX = 'prefix'
 
+//..Example configuration entry:
+'address' => [
+  'type' => IPropertyType::TMODEL,
+  'clazz' => Address::class,
+  'prefix' => 'address_'
+]  
+```  
+  
+On Change event  
+```
+f( IProperty, oldValue, newValue ) : void   
+CHANGE = 'onchange'
+```  
+  
+For a given property, create an [htmlproperty\IElement](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-htmlproperty-IElement.html) instance used as an html form input.
+Basically, generate an html input for a property and return that as a string, which can be embedded in some template.  
+```
+f( IModel $model, IProperty $property, string $name, string $id, string $value ) : IElement   
+HTMLINPUT = 'htmlinput'
+```  
+  
+Is empty check event.  
+Tests that the property value is empty  
+```
+f( IProperty, value ) : bool  
+IS_EMPTY = 'isempty'
+```
+  
+An optional tag for the attribute.  
+This can be any string, and is application specific.  Nothing in MagicGraph will operate on this value by default.  
+```
+TAG = 'tag'
+```  
+  
+  
 
+### Property Data Types
 
-
+### Property Flags 
 
 
 
