@@ -8,16 +8,23 @@
  * @author John Quinn
  */
 
-
+declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\property;
 
 
-
+/**
+ * The standard property set uses a PropertyFactory and DefaultConfigMapper, so IPropertyConfig
+ * instances can be assigned to IModel using the default MagicGraph implementation.
+ */
 class StandardPropertySet extends DefaultPropertySet implements IPropertySet
 {
-  public function __construct( IConfigMapper $mapper, IPropertyConfig ...$config )
+  /**
+   * Create a new StandardPropertySet 
+   * @param IPropertyConfig $config One or more property config instances 
+   */
+  public function __construct( IPropertyConfig ...$config )
   {
-    parent::__construct( new PropertyFactory( $mapper ), ...$config );
+    parent::__construct( new PropertyFactory( new DefaultConfigMapper()), ...$config );
   }
 }

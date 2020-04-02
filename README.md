@@ -15,6 +15,7 @@ MIT License
 3. [Dependencies](#dependencies)
 4. [Definitions](#definitions)
 5. [Getting Started](#getting-started)
+6. [Property Configuration](#property-configuration)
 ---
   
 
@@ -282,6 +283,92 @@ Assuming the id of the newly created record was 1, we can retrieve the model:
 ```php
 $model = $repo->get('1');
 ```
+
+The getting started section shows the most basic way of working with Magic Graph.  While that's nice and all, 
+it's pretty useless for anything other than a simple program.  The next several chapters will detail how to use Magic Graph
+in larger applications.
+
+---
+  
+## Property Configuration
+
+Property configuration files are a way to define properties and property-specific behavior, and must implement the [IPropertyConfig](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyConfig.html) interface.
+The configuration objects are similar to PHP traits, where we define partial objects.  These objects can be assigned to IModel
+instances to alter the property set and behavior of that model.
+
+In the following example, we will create a sample property set with two properties: "id" and "name".  
+
+Id will be an integer property, have a default value of zero, be flagged as a primary key, and will read only if the value is non-zero.  
+Name will be a string property, have a default value of an empty string and be flagged as required.
+
+In this example, these additional classes and interfaces are used:  
+  
+The base property configuration is the base class used when defining property configurations.  It provides
+constants, common property configurations and several methods for working with behaviors.
+[buffalokiwi\magicgraph\property\BasePropertyConfig](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-BasePropertyConfig.html)  
+  
+IPropertyFlags defines various flags available to properties.  This interface can be extended to add additional flags and functionality.
+[buffalokiwi\magicgraph\property\IPropertyFlags](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyFlags.html)  
+  
+IPropertyType defines the available property types.  Each type maps to a property object via the [IConfigMapper](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IConfigMapper.html) interface.  
+[buffalokiwi\magicgraph\property\IPropertyType](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyType.html)  
+  
+StandardPropertySet uses the default IConfigMapper and [IPropertyFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyFactory.html) implementations to provide an 
+easy way to instantiate IPropertySet instances when creating IModel instances.
+[buffalokiwi\magicgraph\property\StandardPropertySet](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-StandardPropertySet.html)  
+  
+  
+```php
+class SamplePropertyConfig extends BasePropertyConfig
+{
+  //..Returns an array detailing the properties to add
+  protected function createConfig() : array
+  {
+    //..A map of property name to configuration 
+    return [
+      //..The Id Property 
+      'id' => [
+        self::TYPE => IPropertyType::TINTEGER,     //..The data type
+        self::FLAGS => [IPropertyFlags::PRIMARY],  //..Flags 
+        self::VALUE => 0                           //..Default value 
+      ],
+        
+      'name' => [
+        self::TYPE => IPropertyType::TSTRING,
+        self::FLAGS => [IPropertyFlags::REQUIRED],
+        self::VALUE => ''
+      ]        
+    ];
+  }
+}
+```
+
+A property configuration object descends from BasePropertyConfig and/or implements the IPropertyConfig instance.
+Only a single method createConfig() is required to be implemented in the descending class, and must return an 
+array with zero or more property definitions.
+  
+createConfig() returns a map of property name to property configuration data.  When defining the property confuration, 
+'type' (BasePropertyConfig::TYPE) is the only required attribute.  
+  
+BasePropertyConfig::FLAGS maps to an array, which contains constants from IPropertyFlags.  Zero or more flags may be supplied, and each will
+modify how a property is validated.   
+
+Default values can be set with the BasePropertyConfig::VALUE attribute, and assigning the value as the desired default value.
+  
+  
+After creating the property definitions, we can then assign them to a property set, which is assigned to a model.  Multiple
+IPropertyConfig instances can be passed to a StandardPropertySet.
+  
+```php  
+$model = new DefaultModel( new StandardPropertySet( new SamplePropertyConfig()));
+```
+  
+
+
+
+
+
+
 
 
 
