@@ -711,44 +711,52 @@ will modify the validation strategy used within the associated model.  Each flag
   
   
   
+#### No Insert
 This property may never be inserted
 ```
 IPropertyFlags::NO_INSERT = 'noinsert';
 ```  
   
+#### No Update
 This property may never be updated.  
 This can also be considered as "read only".  
 ```
 IPropertyFlags::NO_UPDATE = 'noupdate'
 ```  
   
+#### Required 
 This property requires a value  
 ```
 IPropertyFlags::REQUIRED = 'required'
 ```  
   
+#### Allow Null
 Property value may include null  
 ```
 IPropertyFlags::USE_NULL = 'null'
 ```  
   
+#### Primary Key 
 Primary key (one per property set)  
 ```
 IPropertyFlags::PRIMARY = 'primary'
 ```  
   
+#### Sub config
 Magic Graph does not use this flag, but it is here in case some property is loaded from some sub/third 
 party config and you want to do something with those.  For example, this is used in Retail Rack to identify properties
 loaded from configurations stored within a database.
 ```
 IPropertyFlags::SUBCONFIG = 'subconfig'
 ```  
-  
+
+#### Write Empty   
 Calling setValue() on the model will throw a ValidationException if the stored value is not empty.  
 ```
 IPropertyFlags::WRITE_EMPTY = 'writeempty'
 ```  
   
+#### No Array Output
 Set this flag to prevent the property from being printed during a call to IModel::toArray().  toArray() is used 
 to copy and save models, and not all properties should be read.  ie: the property connects to some api on read and the 
 returned value should not be saved anywhere.  
