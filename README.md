@@ -397,26 +397,29 @@ The BasePropertyConfig class contains a series of constants used within the arra
 to create properties for models.  Certain attributes are for specific data types, and using them with other types will have no effect.
   
   
+#### Caption
 Property caption/label to be used at the application level.  
 Magic Graph does not read this value for any specific purpose.  
 ```
-CAPTION = 'caption'
+BasePropertyConfig::CAPTION = 'caption'
 ```   
   
+#### Id 
 An optional unique identifier for some property.  This is simply a tag, and is to be used at the application level.
 Magic Graph does not read this value for any specific purpose.
 ```
-ID = 'id'
+BasePropertyConfig::ID = 'id'
 ```   
   
+#### Default Value 
 Default value.  
 If no value is supplied during model construction, or if the IProperty::reset() method is called, property value will be 
 assigned to the default value listed in the property configuration object.
 ```
-VALUE = 'value'
+BasePropertyConfig::VALUE = 'value'
 ```  
   
-Setter Callback
+#### Setter Callback
 When a property value is set, any supplied setters will be called in the order in which they were defined.  
 Each property can define a single setter within the configuration array, but multiple setters can be added by 
 supplying property behavior objects to the property configuration object constructor.  
@@ -427,9 +430,10 @@ setter.
   
 ```
 f( IProperty, mixed $value ) : mixed  
-SETTER = 'setter'
+BasePropertyConfig::SETTER = 'setter'
 ```  
   
+#### Getter Callback
 When a property value is retrieved, any supplied getters will be called in the order in which they were defined. 
 Each property can define a single getter within the configuration array, but multiple getters can be added by 
 supplying property behavior objects to the property configuration object constructor.  
@@ -439,9 +443,10 @@ getValue().  When chaining getters, the result of the previous getter is used as
 getter.  
 ```
 f( IProperty, mixed $value ) : mixed   
-GETTER = 'getter'
+BasePropertyConfig::GETTER = 'getter'
 ```  
   
+#### Model Setter Callback 
 Model setters are the same as property setters, but they are called at the model level.  The difference
 between a model setter and a property setter is that model setters have access to other properties, and property 
 setters do not.  Since full model validation is only called on save, this can be used to validate state within an 
@@ -453,9 +458,10 @@ object, and prevent any modifications by throwing a ValidationException.
   
 ```
 f( IModel, IProperty, mixed $value ) : mixed  
-MSETTER = 'msetter'
+BasePropertyConfig::MSETTER = 'msetter'
 ```  
   
+#### Model Getter Callback 
 Model getters are the same as property getters, but they are called at the model level.  The difference
 between a model getter and a property getter is that model getters have access to other properties, and property 
 getters do not.  
@@ -466,27 +472,28 @@ getters do not.
   
 ```
 f( IModel, IProperty, mixed $value ) : mixed   
-MGETTER = 'mgetter'
+BasePropertyConfig::MGETTER = 'mgetter'
 ```  
   
-Data type.  
+#### Property Data Type
 This must map to a valid value of [IPropertyType](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyType.html).
 For more information see the [Property Data Types](#property-data-types) section.  
 ```
-TYPE = "type"  
+BasePropertyConfig::TYPE = "type"  
 ```  
     
-Property flags.  
+#### Property Flags 
 This must map to a comma-delimited list of valid [IPropertyFlags](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyFlags.html) values.  
 For more information see the [Property Flags](#property-flags) section.  
 ```
-FLAGS = "flags"  
+BasePropertyConfig::FLAGS = "flags"  
 ```  
   
+#### Class name for properties returning objects 
 When using properties backed by a descendant of ObjectProperty, the clazz attribute must be used.  The value should be a 
 fully namespaced class name.  
 ```
-CLAZZ = "clazz"
+BasePropertyConfig::CLAZZ = "clazz"
 ```  
 For example, when the property type is defined as Enum or Set, clazz would equal some enum class name.
 ```php
@@ -501,47 +508,51 @@ class SampleEnum extends Enum {}
 ```  
   
   
-Initialize Callback  
+#### Initialize Callback  
 When IProperty::reset() is called, this function is called with the default value.  This is a way to modify the default
 value prior to it being assigned as the initial property value.  The value returned by the init callback is the 
 new default value.  
 ```
 f( mixed $defaultValue ) : mixed  
-INIT = "initialize"
+BasePropertyConfig::INIT = "initialize"
 ```  
   
-Minimum value/length  
+#### Minimum value/length  
 This is used with both Integer and String properties, and is the minimum value or minimum string length.
 ```
-MIN = "min"
+BasePropertyConfig::MIN = "min"
 ```    
   
-Maximum value/length  
+#### Maximum value/length  
 This is used with both Integer and String properties, and is the maximum value or minimum string length.
 ```
-MAX = "max"
+BasePropertyConfig::MAX = "max"
 ```  
   
+#### Validation
 Validate callbacks are for validating individual property values prior to save or when IProperty::callback() is called. 
 Validate callbacks are called prior to the backing property object validation call, and can either return a boolean representing
 validity, or throw a ValidationException.  Returning false will automatically throw a ValidationException with an appropriate message.    
 ```
 [bool is valid] = function( IProperty, [input value] )  
-VALIDATE = "validate"
+BasePropertyConfig::VALIDATE = "validate"
 ```  
   
+#### Regular Expressions
 When using string properties, the "pattern" attribute can be used to supply a regular expression, which will be used during
 property validation.  Only values matching the supplied pattern can be committed to the property.
 ```
-PATTERN = "pattern"
+BasePropertyConfig::PATTERN = "pattern"
 ```  
   
+#### Custom configuration data
 A config array.  This is implementation specific, and is currently only used with Runtime Enum data types (IPropertyType::RTEnum). 
 This can be used for whatever you want within your application.
 ```
-CONFIG = "config"
+BasePropertyConfig::CONFIG = "config"
 ```  
   
+#### Embedded model prefix 
 A prefix used by the default property set, which can proxy a get/set value call to a nested IModel instance.
 For example, say you had a customer model, and wanted to embed an address inside.  Instead of copy/pasting properties or 
 linking the customer to addresses, you can assign a prefix to a property named 'address' in the customer configuration, and
@@ -549,7 +560,7 @@ add a CLAZZ property containing the class name of the address model.  The custom
 inside of the customer model, and all address model functionality will be included.  Furthermore, each address property 
 will appear to be a member of the customer model, and have the defined prefix.
 ```
-PREFIX = 'prefix'
+BasePropertyConfig::PREFIX = 'prefix'
 
 //..Example configuration entry:
 'address' => [
@@ -559,32 +570,33 @@ PREFIX = 'prefix'
 ]  
 ```  
   
-On change event  
+#### On change event  
 After a property value is successfully set, change events will be called in the order in which they were supplied. 
 ```
 f( IProperty, oldValue, newValue ) : void   
-CHANGE = 'onchange'
+BasePropertyConfig::CHANGE = 'onchange'
 ```  
   
 For a given property, create an [htmlproperty\IElement](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-htmlproperty-IElement.html) instance used as an html form input.
 Basically, generate an html input for a property and return that as a string, which can be embedded in some template.  
 ```
 f( IModel $model, IProperty $property, string $name, string $id, string $value ) : IElement   
-HTMLINPUT = 'htmlinput'
+BasePropertyConfig::HTMLINPUT = 'htmlinput'
 ```  
 
-Empty check  
+#### Empty check  
 This is an optional callback that can be used to determine if a property can be considered "empty".  The result 
 of the supplied function is the result of an empty check.
 ```
 f( IProperty, value ) : bool  
-IS_EMPTY = 'isempty'
+BasePropertyConfig::IS_EMPTY = 'isempty'
 ```
   
+#### Tagging 
 An optional tag for the attribute.  
 This can be any string, and is application specific.  Nothing in Magic Graph will operate on this value by default.  
 ```
-TAG = 'tag'
+BasePropertyConfig::TAG = 'tag'
 ```  
   
   
@@ -600,71 +612,71 @@ Boolean
 The 'bool' property type will be backed by an instance of [BooleanProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-BooleanProperty.html). 
 Unless specified as null, boolean properties will have a default value of false.
 ```
-TBOOLEAN = 'bool'
+IPropertyType::TBOOLEAN = 'bool'
 ```
   
 Integer  
 Integer properties are backed by an instance of [IntegerProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IIntegerProperty.html).
 
 ```
-TINTEGER = 'int'
+IPropertyType::TINTEGER = 'int'
 ```
   
 Decimal  
 ```
-TFLOAT = 'float'
+IPropertyType::TFLOAT = 'float'
 ```   
   
 String  
 ```
-TSTRING = 'string'
+IPropertyType::TSTRING = 'string'
 ```  
   
 Enum  
 Column must use a class implementing the IEnum interface  
 ```
-TENUM = 'enum'
+IPropertyType::TENUM = 'enum'
 ```  
   
 Runtime Enum  
 Enum members are configured via the "config" property and is backed by a RuntimeEnum instance.  
 ```
-TRTENUM = 'rtenum' 
+IPropertyType::TRTENUM = 'rtenum' 
 ```  
   
 Array  
 ```
-TARRAY = 'array'
+IPropertyType::TARRAY = 'array'
 ```  
   
 Set  
 Column must use a class implementing the ISet interface  
 ```
-TSET = 'set'
+IPropertyType::TSET = 'set'
 ```  
   
 Date/Time  
 ```
-TDATE = 'date'
+IPropertyType::TDATE = 'date'
 ```  
   
 Currency.
 Column must use a class implementing the IMoney interface.
 This property type requires use of an service locator and have the MoneyPHP/Money dependency installed.  
 ```
-TMONEY = 'money'
+IPropertyType::TMONEY = 'money'
 ```  
   
 IModel  
 ```
-TMODEL = 'model'
+IPropertyType::TMODEL = 'model'
 ```  
   
 A property that only accepts instances of a specified object type.  
 It is recommended to extend the ObjectProperty class to create properties that handle specific object types instead of
 using the generic ObjectProperty object.  In the future, I may mark ObjectProperty as abstract to prevent direct instantiation.  
 ```
-TOBJECT = 'object'
+IPropertyType::TOBJECT = 'object'
 ```  
   
   
@@ -680,46 +692,46 @@ will modify the validation strategy used within the associated model.  Each flag
   
 This property may never be inserted
 ```
-NO_INSERT = 'noinsert';
+IPropertyFlags::NO_INSERT = 'noinsert';
 ```  
   
 This property may never be updated.  
 This can also be considered as "read only".  
 ```
-NO_UPDATE = 'noupdate'
+IPropertyFlags::NO_UPDATE = 'noupdate'
 ```  
   
 This property requires a value  
 ```
-REQUIRED = 'required'
+IPropertyFlags::REQUIRED = 'required'
 ```  
   
 Property value may include null  
 ```
-USE_NULL = 'null'
+IPropertyFlags::USE_NULL = 'null'
 ```  
   
 Primary key (one per property set)  
 ```
-PRIMARY = 'primary'
+IPropertyFlags::PRIMARY = 'primary'
 ```  
   
 The default implementation does not use this flag, but it is here in case some property is loaded from some sub/third 
 party config and you want to do something with those.  
 ```
-SUBCONFIG = 'subconfig'
+IPropertyFlags::SUBCONFIG = 'subconfig'
 ```  
   
 Calling setValue() on the model will throw a ValidationException if the stored value is not empty.  
 ```
-WRITE_EMPTY = 'writeempty'
+IPropertyFlags::WRITE_EMPTY = 'writeempty'
 ```  
   
 Set this flag to prevent the property from being printed during a call to IModel::toArray().  toArray() is used 
 to copy and save models, and not all properties should be read.  ie: the property connects to some api on read and the 
 returned value should not be saved anywhere.  
 ```
-NO_ARRAY_OUTPUT = 'noarrayoutput'
+IPropertyFlags::NO_ARRAY_OUTPUT = 'noarrayoutput'
 ```  
   
   
