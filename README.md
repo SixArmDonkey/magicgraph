@@ -1,9 +1,9 @@
 # BuffaloKiwi Magic Graph
   
-**Magic Graph isn't your typical ORM library.**
-
+**Behavioral-based object modeling and persistence library for PHP 7.4**  
+  
 MIT License
-
+  
 ---
 
 ## Table of Contents
@@ -389,8 +389,9 @@ FINTEGER_PRIMARY will create an integer property, flagged as a primary key, with
 FSTRING_REQUIRED will create a string property, flagged as required, with a default value of an empty string.  
   
   
+---
   
-  
+    
 ### Property Configuration Array Attributes  
   
 The BasePropertyConfig class contains a series of constants used within the array returned by createConfig() 
@@ -599,79 +600,97 @@ This can be any string, and is application specific.  Nothing in Magic Graph wil
 BasePropertyConfig::TAG = 'tag'
 ```  
   
-  
+---
   
   
 ### Property Data Types
   
 Property data type definitions define which data type object a property is backed by.  All of the available definitions
-are within the the [buffalokiwi\magicgraph\property\IPropertyType](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyType.html) interface.  
+are within the the [buffalokiwi\magicgraph\property\IPropertyType](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyType.html) interface.   
+  
 Here is a list of the built in property types that ship with Magic Graph:
   
-Boolean  
-The 'bool' property type will be backed by an instance of [BooleanProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-BooleanProperty.html). 
+#### Boolean  
+The 'bool' property type will be backed by an instance of [IBooleanProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IBooleanProperty.html). 
 Unless specified as null, boolean properties will have a default value of false.
 ```
 IPropertyType::TBOOLEAN = 'bool'
 ```
   
-Integer  
-Integer properties are backed by an instance of [IntegerProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IIntegerProperty.html).
+#### Integer  
+Backed by [IIntegerProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IIntegerProperty.html)
 
 ```
 IPropertyType::TINTEGER = 'int'
 ```
   
-Decimal  
+#### Decimal  
+Backed by [IFloatProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IFloatProperty.html)
 ```
 IPropertyType::TFLOAT = 'float'
 ```   
   
-String  
+#### String  
+Backed by [IStringProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IStringProperty.html)
 ```
 IPropertyType::TSTRING = 'string'
 ```  
   
-Enum  
-Column must use a class implementing the IEnum interface  
+#### Enum  
+Backed by [IEnumProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IEnumProperty.html)
+Column must list a class name implementing the IEnum interface in the 'clazz' attribute.
 ```
 IPropertyType::TENUM = 'enum'
 ```  
   
-Runtime Enum  
-Enum members are configured via the "config" property and is backed by a RuntimeEnum instance.  
+#### Runtime Enum  
+Backed by [IEnumProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IEnumProperty.html)
+Enum members are configured via the "config" property and is backed by a RuntimeEnum instance.  Runtime Enum instances
+do not use the "clazz" attribute.
 ```
 IPropertyType::TRTENUM = 'rtenum' 
 ```  
   
-Array  
+#### Array  
+Backed by [ArrayProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-ArrayProperty.html)
+Array properties are mostly used by Magic Graph relationship providers.  While it's possible to define array properties for 
+arbitrary data, it is recommended to create a relationship or model service provider to manage the data contained within 
+array properties.  
+Array properties can read the "clazz" argument to restrict the array members to objects of the specified type.
 ```
 IPropertyType::TARRAY = 'array'
 ```  
   
-Set  
-Column must use a class implementing the ISet interface  
+#### Set  
+Set properties are backed by [ISetProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-ISetProperty.html), and 
+will read/write instances of ISet (or descendants of ISet as specified by the "clazz" attribute).  
 ```
 IPropertyType::TSET = 'set'
 ```  
   
-Date/Time  
+#### Date/Time  
+Backed by [IDateProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IDateProperty.html),
+ and can be used to represent a date and/or time.  This would commonly be used with timestamp or DateTime SQL column types.  
 ```
 IPropertyType::TDATE = 'date'
 ```  
   
-Currency.
-Column must use a class implementing the IMoney interface.
+#### Currency.
+A property backed by [IMoneyProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IMoneyProperty.html), 
+containing an object implementing the [IMoney](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-money-IMoney.html) interface.
 This property type requires use of an service locator and have the MoneyPHP/Money dependency installed.  
 ```
 IPropertyType::TMONEY = 'money'
 ```  
   
-IModel  
+#### IModel  
+Backed by [IModelProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-IModel.html) and contains an object
+implementing the IModel interface.  Model properties are commonly managed by a [OneOnePropertyService](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-OneOnePropertyService.html).
 ```
 IPropertyType::TMODEL = 'model'
 ```  
-  
+
+#### Object   
 A property that only accepts instances of a specified object type.  
 It is recommended to extend the ObjectProperty class to create properties that handle specific object types instead of
 using the generic ObjectProperty object.  In the future, I may mark ObjectProperty as abstract to prevent direct instantiation.  
