@@ -15,6 +15,8 @@ MIT License
 3. [Dependencies](#dependencies)
 4. [Definitions](#definitions)
 5. [Getting Started](#getting-started)
+    1. [Hello Model](#hello-model)
+    2. [Basic Database and Repository Setup](#basic-database-and-repository-setup)
 6. [Property Configuration](#property-configuration)
     1. [Property Configuration Array Attributes](#property-configuration-array-attributes)
     2. [Property Data Types](#property-data-types)
@@ -698,7 +700,7 @@ using the generic ObjectProperty object.  In the future, I may mark ObjectProper
 IPropertyType::TOBJECT = 'object'
 ```  
   
-  
+---
   
   
 ### Property Flags 
@@ -735,8 +737,9 @@ Primary key (one per property set)
 IPropertyFlags::PRIMARY = 'primary'
 ```  
   
-The default implementation does not use this flag, but it is here in case some property is loaded from some sub/third 
-party config and you want to do something with those.  
+Magic Graph does not use this flag, but it is here in case some property is loaded from some sub/third 
+party config and you want to do something with those.  For example, this is used in Retail Rack to identify properties
+loaded from configurations stored within a database.
 ```
 IPropertyFlags::SUBCONFIG = 'subconfig'
 ```  
