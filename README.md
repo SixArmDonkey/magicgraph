@@ -941,7 +941,7 @@ Then to use the strategy:
   
 ```php
 //..Create the property config object and attach the strategy for the "name" property
-$config = new SamplePropertyConfig( new DebugSetterStrategy( new LoggerInterfaceImpl()));
+$config = new SamplePropertyConfig( new DebugSetterStrategy( 'name', new LoggerInterfaceImpl()));
 
 //..Create a model using the configuration 
 $model = new DefaultModel( new StandardPropertySet( $config ));
