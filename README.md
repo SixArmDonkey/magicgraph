@@ -10,6 +10,8 @@ MIT License
 
 [Generated Documentation](https://sixarmdonkey.github.io/magicgraph/)
 
+Documentation is a work in progress.
+
 1. [Overview](#overview)
 2. [Installation](#installation)
 3. [Dependencies](#dependencies)
@@ -21,6 +23,49 @@ MIT License
     1. [Property Configuration Array Attributes](#property-configuration-array-attributes)
     2. [Property Data Types](#property-data-types)
     3. [Property Flags](#property-flags)
+    4. [Property Behavior](#property-behavior)
+    5. Quick Models 
+7. Repositories
+    1. Object Factory
+    2. Saveable Object Factory
+    3. SQL Repository 
+    4. Decorating Repositories
+    5. Serviceable Repository 
+8. Transactions 
+    1. Overview
+    2. Transaction Factory
+    3. Save Functions 
+    4. Chained Transaction Manager 
+9. Relationships
+    1. One to One 
+    2. One to Many
+    3. Many to Many 
+    4. Nested Relationship Providers 
+    5. Model property providers 
+10. Extensible Models
+    1. Overview
+    2. Property configuration interface
+    3. Property configuration implementation
+    4. Model interface
+    5. Model implementation 
+11. Behavioral Strategies 
+12. Property service providers
+13. Model service providers 
+14. Database Connections 
+    1. PDO 
+    2. Extending PDO 
+    3. Connection Factories 
+15. Working with Currency 
+    1. MoneyPHP/Money
+    2. Currency properties 
+16. Creating HTML elements
+17. Magic Graph Setup
+    1. The Config Mapper 
+    2. Property Factory
+    3. Property Set Factory
+18. Extending Magic Graph 
+19. Tutorial
+
 ---
   
 
@@ -764,10 +809,9 @@ returned value should not be saved anywhere.
 IPropertyFlags::NO_ARRAY_OUTPUT = 'noarrayoutput'
 ```  
   
+---
   
-9000 more chapters to go...
   
-
-
+The documentation is incomplete.  
 
 
