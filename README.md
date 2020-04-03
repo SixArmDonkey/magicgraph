@@ -31,6 +31,7 @@ Documentation is a work in progress.
     3. SQL Repository 
     4. Decorating Repositories
     5. Serviceable Repository 
+    6. Composite Primary Keys 
 8. Transactions 
     1. Overview
     2. Transaction Factory
@@ -42,6 +43,8 @@ Documentation is a work in progress.
     3. Many to Many 
     4. Nested Relationship Providers 
     5. Model property providers 
+    6. How Saving Works
+    7. Editing Nested Models
 10. Extensible Models
     1. Overview
     2. Property configuration interface
@@ -808,6 +811,86 @@ returned value should not be saved anywhere.
 ```
 IPropertyFlags::NO_ARRAY_OUTPUT = 'noarrayoutput'
 ```  
+  
+  
+---
+  
+  
+#### Property Behavior
+
+Each property has a series of callbacks as previously defined in [Property Configuration Array Attributes](#property-configuration-array-attributes). 
+When creating instances of objects descending from [BasePropertyConfig](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-BasePropertyConfig.html), 
+it is possible to pass instances of [INamedPropertyBehavior](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-INamedPropertyBehavior.html) 
+to the constructor.  
+  
+The purpose of this is to create different strategies for an object.  Strategies are independent, self-contained, and
+testable programs.  Zero or more strategies may be attached to a property configuration object, may modify 
+properties of the associated model, and may cause side effects.  
+  
+For example, say you wanted to add a debug message to a log file when a model was saved in your development environment. 
+We can create a class that extends [GenericNamedPropertyBehavior](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-GenericNamedPropertyBehavior.html), 
+and overrides the getAfterSaveCallback() method.  
+
+  
+```php
+/**
+ * Attach this strategy to any model to add a debug log message when the model is saved.
+ */
+class DebugLogSaveStrategy extends GenericNamedPropertyBehavior
+{
+  /**
+   * The log 
+   * @var LoggerInterface
+   */
+  private LoggerInterface $log;
+  
+  
+  /**
+   * @param string $name Property name 
+   * @param LoggerInterface $log
+   */
+  public function __construct( LoggerInterface $log )
+  {
+    //..Since this is a save event, we simply pass the name of the class as the property name.
+    //..Save events are called regardless of the supplied name.
+    parent::__construct( static::class );   
+    $this->log = $log;
+  }
+  
+  /**
+   * Retrieve the after save function  
+   * @return Closure|null function 
+   */
+  public function getAfterSaveCallback() : ?Closure
+  {
+    return function( IModel $model ) : void {
+      //..Get the primary key value from the model
+      $priKey = $model->getValue( $model->getPropertySet()->getPrimaryKey()->getName());
+      
+      //..Add the log message 
+      $log->debug( 'Model with primary key value: ' . $priKey . ' successfully saved.' );
+    };
+  }  
+}
+```
+  
+After creating our strategy, we can attach it to a model via it's property configuration object.  
+  
+```php
+//..Create the property config object and attach the strategy 
+$config = new SamplePropertyConfig( new DebugLogSaveStrategy( new LoggerInterfaceImpl()));
+
+//..Create a model using the configuration 
+$model = new DefaultModel( new StandardPropertySet( $config ));
+```
+  
+When the model is saved via some [IRepository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-IRepository.html) instance, the 
+after save callback will be executed in the strategy, and the log message will be added.
+  
+There are several callbacks, which together can be used to create rich models by using decoupled strategy objects.  
+See [Property Configuration Array Attributes](#property-configuration-array-attributes) for details.
+
+  
   
 ---
   
