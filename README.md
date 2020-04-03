@@ -930,7 +930,6 @@ class DebugSetterStrategy extends GenericNamedPropertyBehavior
   public function getSetterCallback() : ?Closure
   {
     return function( IProperty $prop, $value ) {
-      //..Since all IProperty instances must be castable to a string, we can do this
       $this->log->debug( $prop->getName() . ' changed to ' . (string)$value );
     };
   }  
