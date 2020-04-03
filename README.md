@@ -846,7 +846,6 @@ class DebugLogSaveStrategy extends GenericNamedPropertyBehavior
   
   
   /**
-   * @param string $name Property name 
    * @param LoggerInterface $log
    */
   public function __construct( LoggerInterface $log )
@@ -868,7 +867,7 @@ class DebugLogSaveStrategy extends GenericNamedPropertyBehavior
       $priKey = $model->getValue( $model->getPropertySet()->getPrimaryKey()->getName());
       
       //..Add the log message 
-      $log->debug( 'Model with primary key value: ' . $priKey . ' successfully saved.' );
+      $this->log->debug( 'Model with primary key value: ' . $priKey . ' successfully saved.' );
     };
   }  
 }
@@ -891,7 +890,67 @@ There are several callbacks, which together can be used to create rich models by
 See [Property Configuration Array Attributes](#property-configuration-array-attributes) for details.
 
   
+Adding behavioral strategies for individual properties is the same process as the above, except we would expose the 
+"name" argument from the GenericNamedPropertyBehavior constructor.  
   
+```php
+/**
+ * Attach this strategy to a model to print a log message when a value was set 
+ */
+class DebugSetterStrategy extends GenericNamedPropertyBehavior
+{
+  /**
+   * The log 
+   * @var LoggerInterface
+   */
+  private LoggerInterface $log;
+  
+  
+  /**
+   * @param string $name Property name 
+   * @param LoggerInterface $log
+   */
+  public function __construct( string $name, LoggerInterface $log )
+  {
+    //..Pass the property name 
+    parent::__construct( $name );   
+    $this->log = $log;
+  }
+  
+  
+  /**
+   * Callback used to set a value.
+   * This is called prior to IProperty::validate() and the return value will 
+   * replace the supplied value.
+   * 
+   * f( IProperty, value ) : mixed
+   * 
+   * @return Closure callback
+   */
+  public function getSetterCallback() : ?Closure
+  {
+    return function( IProperty $prop, $value ) {
+      //..Since all IProperty instances must be castable to a string, we can do this
+      $this->log->debug( $prop->getName() . ' changed to ' . (string)$value );
+    };
+  }  
+}
+```
+  
+Then to use the strategy:  
+  
+```php
+//..Create the property config object and attach the strategy for the "name" property
+$config = new SamplePropertyConfig( new DebugSetterStrategy( new LoggerInterfaceImpl()));
+
+//..Create a model using the configuration 
+$model = new DefaultModel( new StandardPropertySet( $config ));
+```
+  
+Now any time the "name" property is set, the debug log will show "[Property name] changed to [new value]"
+  
+  
+
 ---
   
   
