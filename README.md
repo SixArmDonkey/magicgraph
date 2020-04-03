@@ -24,7 +24,7 @@ Documentation is a work in progress.
     2. [Property Data Types](#property-data-types)
     3. [Property Flags](#property-flags)
     4. [Property Behavior](#property-behavior)
-    5. Quick Models 
+    5. [Quick Models](#quick-models)
 7. Repositories
     1. Object Factory
     2. Saveable Object Factory
@@ -958,6 +958,48 @@ Now any time the "name" property is set, the debug log will show "[Property name
 ---
   
   
+#### Quick Models
+  
+[Quick models](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-QuickModel.html) can be useful 
+when you need to create a temporary model, or if you need to quickly create a mock model.
+Quick models accept standard configuration arrays, and can do anything a standard model can do.  In the following example,
+we create a model with two properties: "id" and "name", and we add some behavior to the name property. 
+When setting the name property, "-bar" is appended to the incoming value.  When retrieving the name property, 
+"-baz" is appended to the outgoing value.  
+  
+
+```php
+//..Create a new quick model 
+$q = new \buffalokiwi\magicgraph\QuickModel([
+  //..Id property, integer, primary key
+  'id' => [
+    'type' => 'int',
+    'flags' => ['primary']
+  ],
+    
+  //..Name property, string 
+  'name' => [
+    'type' => 'string',
+      
+    //..Append -bar to the name property value when seting 
+    'setter' => function( IProperty $prop, string $value ) : string {
+      return $value . '-bar';
+    },
+            
+    //..Append -baz to the name property value when retrieving 
+    'getter' => function( IProperty $prop, string $value ) : string {
+      return $value . '-baz';
+    }
+  ]
+]);
+
+//..Set the name attribute
+$q->name = 'foo';
+
+echo $q->name; //..Outputs "foo-bar-baz"
+```
+
+
 The documentation is incomplete.  
 
 
