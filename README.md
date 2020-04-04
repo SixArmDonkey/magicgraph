@@ -1179,9 +1179,9 @@ Composite primary keys are assigned via the IPropertyFlags::PRIMARY attribute as
 ]
 ```
   
-
-
-
+Note: when supplying primary key values to repository methods, they are accepted in the order in which they were defined.
+I will create a way to not have to depend on the order of arguments in a future release.
+  
 
 The documentation is incomplete.  
 
