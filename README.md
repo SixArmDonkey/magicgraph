@@ -25,18 +25,19 @@ Documentation is a work in progress.
     3. [Property Flags](#property-flags)
     4. [Property Behavior](#property-behavior)
     5. [Quick Models](#quick-models)
-7. Repositories
-    1. Object Factory
-    2. Saveable Object Factory
-    3. SQL Repository 
-    4. Decorating Repositories
-    5. Serviceable Repository 
-    6. Composite Primary Keys 
+7. Repositories(#repositories)
+    1. Mapping Object Factory(#mapping-object-factory)
+    2. Saveable Mapping Object Factory(#saveable-mapping-object-factory)
+    3. SQL Repository(#sql-repository)
+    4. Decorating Repositories(#decorating-repositories)
+    5. Serviceable Repository(#serviceable-repository)
+    6. Composite Primary Keys(#composite-primary-keys)
 8. Transactions 
     1. Overview
     2. Transaction Factory
-    3. Save Functions 
+    3. Save Functions     
     4. Chained Transaction Manager 
+    5. Unit of Work 
 9. Relationships
     1. One to One 
     2. One to Many
@@ -347,7 +348,7 @@ in larger applications.
 
 Property configuration files are a way to define properties and property-specific behavior, and must implement the [IPropertyConfig](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyConfig.html) interface.
 The configuration objects are similar to PHP traits, where we define partial objects.  These objects can be assigned to IModel
-instances to alter the property set and behavior of that model.
+instances and define the property set (properties used within) and behavior of the associated model.
 
 In the following example, we will create a sample property set with two properties: "id" and "name".  
 
@@ -998,6 +999,120 @@ $q->name = 'foo';
 
 echo $q->name; //..Outputs "foo-bar-baz"
 ```
+  
+  
+### Repositories 
+  
+Magic Graph repositories are an implementation of the [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html).  
+Repositories are an abstraction that encapsulates the logic for accessing some persistence layer.  Similar to a collection, 
+repositories provide methods for creating, saving, removing and retrieving IModel instances.  Repositories are object factories, and are designed to 
+produce a single object type.  However, in a SQL setting, repositories may work with multiple tables from a database to produce a single model instance.
+When creating aggregate repositories, it's your choice if you wish to create a single repository per table, or a single 
+repository that access several tables.  It's worth noting that a repository may reference other repositories that access 
+different persistence layers.
+  
+Repositories implement the [IRepository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-IRepository.html) interface.
+  
+  
+#### Mapping Object Factory
+  
+Data mappers map data retrieved from some persistence layer to an IModel instance, and implement the [IModelMapper](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-IModelMapper.html) interface. 
+In Magic Graph, data mappers also double as object factories.  
+  
+The [MappingObjectFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-MappingObjectFactory.html) is normally the base class
+for all repositories, and implements the [IObjectFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-IObjectFactory.html) interface. 
+The mapping object factory is responsible for holding a reference to a data mapper and a property set defining some model, and using those references can create 
+instances of a single IModel implementation.  The create() method accepts raw data from the persistence layer, creates a new IModel instance, and maps the supplied
+data to the newly created model.  
+
+IObjectFactory implementations should not directly access any persistence layer.  Instead, extend this interface and define
+an abstraction for accessing a specific type of persistence layer.  For example, in Magic Graph, there is a SQLRepository for 
+working with a MySQL database.  
+  
+Note: If you simply want an object factory for creating models, MappingObjectFactory can be directly instantiated.  
+  
+  
+  
+#### Saveable Mapping Object Factory
+  
+[SaveableMappingObjectFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html) is an abstract class extending IObjectFactory, 
+implements [ISaveableObjectFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ISaveableObjectFactory.html), and 
+adds the ability to save an IModel instance.  All repositories in Magic Graph extend this class.  The saveable mapping 
+object factory adds the save() and saveAll() methods, which outlines the repository save event as follows:  
+  
+1. Test the supplied model matches the implementation of IModel managed by the repository.  This prevents a model of an incorrect type from being saved.
+2. Call the protected beforeValidate() method.  This can be used to prepare a model for validation in extending repositories.
+3. Validate the model by calling IModel::validate()
+4. Call the protected beforeSave() method.  This can be used to prepare a model for save.
+5. Call the protected saveModel() method.  This is required to be implemented in all extending repositories 
+6. Call the protected afterSave() method.  This can be used to clean up anything after a save.  This method should not have side effects.
+  
+  
+Calling saveAll() is a bit different than the save method.  After testing the model types, the save process is split into three parts:  
+  
+1. For each supplied model, call beforeValidate(), validate() and beforeSave().
+2. For each supplied model, call saveModel()
+3. For each supplied model, call afterSave()
+  
+  
+  
+#### SQL Repository
+  
+The [SQLRepository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-SQLRepository.html) is the 
+[IRepository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-IRepository.html), used for 
+working with MariaDB/MySQL databases.  The SQLRepository also extends the [ISQLRepository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ISQLRepository.html) 
+interface, which adds additional methods for working with SQL databases.
+  
+In the following example, we will be using the same table and database connection outlined in [Basic Database and Repository Setup](#basic-database-and-repository-setup).  
+  
+Instantiating a SQLRepository:  
+  
+```php
+$testSQLRepo = new SQLRepository(                            //..Create the SQL Repository
+  'inlinetest',                                              //..Table Name
+  new DefaultModelMapper( function( IPropertySet $props ) {  //..Create a data mapper 
+    return new DefaultModel( $props );                       //..Object factory 
+  }, IModel::class ),                                        //..Type of model being returned 
+  $dbFactory->getConnection(),                               //..SQL database connection 
+  new QuickPropertySet([                                     //..Property set defining properties added to the model 
+    //..Id property, integer, primary key      
+    'id' => [                                                //.."id" is a property
+      'type' => 'int',                                       //..Id is an integer
+      'flags' => ['primary']                                 //..Id is the primary key
+    ], 
+
+    //..Name property, string 
+    'name' => [                                              //.."name" is a property 
+      'type' => 'string',                                    //..Name is a string 
+    ]
+  ])
+);
+```
+  
+The above-setup is similar to the InlineSQLRepo, but it allows us much more fine-grained control over which components are 
+used.  Here, we are able to define which data mapper is used and how the property set is created.  For more information, please
+see [Extensible Models](#extensible-models).  
+  
+  
+  
+#### Decorating Repositories
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 The documentation is incomplete.  
