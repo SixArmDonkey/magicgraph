@@ -25,13 +25,13 @@ Documentation is a work in progress.
     3. [Property Flags](#property-flags)
     4. [Property Behavior](#property-behavior)
     5. [Quick Models](#quick-models)
-7. Repositories(#repositories)
-    1. Mapping Object Factory(#mapping-object-factory)
-    2. Saveable Mapping Object Factory(#saveable-mapping-object-factory)
-    3. SQL Repository(#sql-repository)
-    4. Decorating Repositories(#decorating-repositories)
-    5. Serviceable Repository(#serviceable-repository)
-    6. Composite Primary Keys(#composite-primary-keys)
+7. [Repositories](#repositories)
+    1. [Mapping Object Factory](#mapping-object-factory)
+    2. [Saveable Mapping Object Factory](#saveable-mapping-object-factory)
+    3. [SQL Repository](#sql-repository)
+    4. [Decorating Repositories](#decorating-repositories)
+    5. [Serviceable Repository](#serviceable-repository)
+    6. [Composite Primary Keys](#composite-primary-keys)
 8. Transactions 
     1. Overview
     2. Transaction Factory
