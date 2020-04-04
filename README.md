@@ -1096,21 +1096,89 @@ see [Extensible Models](#extensible-models).
   
   
 #### Decorating Repositories
+  
+Magic Graph provides several proxy classes, which can be used as base classes for repository decorators.  
+  
+1. [ObjectFactoryProxy](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ObjectFactoryProxy.html)
+2. [RepositoryProxy](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-RepositoryProxy.html)
+3. [SaveableMappingObjectFactoryProxy](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactoryProxy.html)
+4. [ServiceableRepository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ServiceableRepository.html)
+5. [SQLRepositoryProxy](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-SQLRepositoryProxy.html)
+6. [SQLServiceableRepository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-SQLServiceableRepository.html)
 
+Each of the above-listed proxy classes accept the an associated repository instance as a constructor argument, and will map the method
+calls to the supplied repository instance.  The proxy classes should be extended to provide additional functionality to a repository.  
+ServiceableRepository and SQLServiceableRepository are implementations of proxy classes, and provide ways to further extend functionality of 
+repositories.  These are discussed in the next section.  
+  
+I plan on adding more decorators in a future Magic Graph release, and currently there is a single decorator included in the 
+current version:
 
+[CommonObjectRepo](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-CommonObjectRepo.html) extends the 
+RepositoryProxy class, and is used to prevent multiple database lookups.  Each time a model is retrieved from the repository, it is cached in memory, and 
+any subsequent retrieval calls will return the cached version of the model.  
+  
+Here's an example of how to use a decorator:
 
+```php
+$testSQLRepo = new CommonObjectRepo( new SQLRepository(      //..Create the SQL Repository and add the caching decorator 
+  'inlinetest',                                              //..Table Name
+  new DefaultModelMapper( function( IPropertySet $props ) {  //..Create a data mapper 
+    return new DefaultModel( $props );                       //..Object factory 
+  }, IModel::class ),                                        //..Type of model being returned 
+  $dbFactory->getConnection(),                               //..SQL database connection 
+  new QuickPropertySet([                                     //..Property set defining properties added to the model 
+    //..Id property, integer, primary key      
+    'id' => [                                                //.."id" is a property
+      'type' => 'int',                                       //..Id is an integer
+      'flags' => ['primary']                                 //..Id is the primary key
+    ], 
 
+    //..Name property, string 
+    'name' => [                                              //.."name" is a property 
+      'type' => 'string',                                    //..Name is a string 
+    ]
+  ])
+));
+```  
+  
+Decorating repositories is easy and fun!
+  
+  
 
+#### Serviceable Repository 
+  
+The serviceable repositories are used for repository relationships, which are discussed in the [Relationships](#relationships) section.  
+  
+Essentially, serviceable repositories accept [ITransactionFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ITransactionFactory.html) 
+and zero or more IModelPropertyProvider instances, which are used to extend the functionality of certain properties.  
+  
+For example, say you have a model A with an IModel property B.  By default the repository for model A does not know 
+repository B or model B exists.  A IModelPropertyProvider instance could add a lazy loading scheme for retrieving 
+model B when the property is accessed from model A.  Additionally, the model property provider could provide a way to 
+save edits to model B when model A is saved.  
+  
+  
+#### Composite Primary Keys
+  
+Magic Graph fully supports composite primary keys, and certain methods of IRepository and ISQLRepository will contain variadic id arguments for passing multiple primary key values.
+Composite primary keys are assigned via the IPropertyFlags::PRIMARY attribute as follows:
 
+```php
+[                                                          
+  //..Id property, integer, primary key      
+  'id' => [                                                //.."id" is a property
+    'type' => 'int',                                       //..Id is an integer
+    'flags' => ['primary']                                 //..Id is the primary key
+  ], 
 
-
-
-
-
-
-
-
-
+  'id2' => [                                               //.."id2" is a property
+    'type' => 'int',                                       //..Id2 is an integer
+    'flags' => ['primary']                                 //..Id2 is the other primary key
+  ], 
+]
+```
+  
 
 
 
