@@ -40,9 +40,15 @@ class MariaConnectionProperties extends ConnectionProperties
   public function getOptions() : array 
   {
     return [
-      PDO::MYSQL_ATTR_INIT_COMMAND => 'SET SESSION time_zone="+00:00"',
-      PDO::ATTR_AUTOCOMMIT => false,
-      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+      //..Ensure that the time zone is set to UTC.  All local timezone conversions will happen at the application level.
+      PDO::MYSQL_ATTR_INIT_COMMAND => 'SET SESSION time_zone="+00:00"', 
+        
+      //..If this is set to false, then a transaction is automatically started.  It's dumb and confusing.  It should start no transaction and throw an exception for insert/update instead.  whatever.
+      PDO::ATTR_AUTOCOMMIT => true, 
+        
+      //..This is suppsed to use exceptions instead of errors, but doesn't appear to do anything since php8.
+      //..This worked in php7, so maybe it's a bug with the initial release of 8.
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION  
     ];
   }
 }

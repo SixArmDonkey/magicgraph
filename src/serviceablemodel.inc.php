@@ -19,6 +19,14 @@ use InvalidArgumentException;
 use stdClass;
 
 
+/**
+ * Adds ability to attach model service providers to models.
+ * Providers are for expressing relationships in the object graph.
+ * ie: You want to include an array of items linked to some object.  Pass the OneManyServiceProvider configured
+ * for the linked models.
+ * 
+ * Pretty much everything should descend from this model.
+ */
 class ServiceableModel extends DefaultModel implements IServiceableModel
 {
  /**
@@ -123,12 +131,12 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
   }  
 
 
-  public function toObject( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false ) : stdClass
+  public function toObject( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : stdClass
   {
     if ( $includeModels )
       $this->providerWarmup();
     
-    return parent::toObject( $properties, $includeArrays, $includeModels );
+    return parent::toObject( $properties, $includeArrays, $includeModels, $includeExtra );
   }
   
   
@@ -136,12 +144,12 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
    * Convert this model to an array.
    * @param IPropertySet $properties Properties to include 
    */
-  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false ) : array
+  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : array
   {
     if ( $includeModels )
       $this->providerWarmup();
     
-    return parent::toArray( $properties, $includeArrays, $includeModels );
+    return parent::toArray( $properties, $includeArrays, $includeModels, $includeExtra );
   }  
   
   

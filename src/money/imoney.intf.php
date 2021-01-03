@@ -37,6 +37,7 @@ interface IMoney extends JsonSerializable
     const ROUND_HALF_NEGATIVE_INFINITY = 8;  
   
     
+    
     /**
      * Retrieve the amount formatted as currency
      * @return string amount

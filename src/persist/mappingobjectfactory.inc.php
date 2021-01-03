@@ -20,6 +20,7 @@ use buffalokiwi\magicgraph\property\IProperty;
 use buffalokiwi\magicgraph\property\IPropertyConfig;
 use buffalokiwi\magicgraph\property\IPropertyFlags;
 use buffalokiwi\magicgraph\property\IPropertySet;
+use buffalokiwi\magicgraph\ReadOnlyModelWrapper;
 
 
 class MappingObjectFactory implements IObjectFactory
@@ -112,6 +113,15 @@ class MappingObjectFactory implements IObjectFactory
    */
   protected function test( IModel ...$models ) : void
   {
+    /**
+     * @todo This is a temporary hack.  It's horrible.
+     */
+    if ( $models instanceof ReadOnlyModelWrapper ) 
+    {
+      throw new \Exception( 'Read only models may not be saved' );
+    }
+    
+    
     $this->mapper->test( ...$models );
   }
   

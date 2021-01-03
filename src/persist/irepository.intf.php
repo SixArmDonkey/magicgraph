@@ -10,9 +10,11 @@
 
 namespace buffalokiwi\magicgraph\persist;
 
-use buffalokiwi\buffalotools\types\IBigSet;
 use buffalokiwi\magicgraph\DBException;
 use buffalokiwi\magicgraph\IModel;
+use buffalokiwi\magicgraph\search\ISearchQueryBuilder;
+use buffalokiwi\magicgraph\search\ISearchQueryGenerator;
+use buffalokiwi\magicgraph\search\ISearchResults;
 use Closure;
 use Generator;
 use InvalidArgumentException;
@@ -45,15 +47,11 @@ interface IRepository extends ISaveableObjectFactory
   
   /**
    * Stream the data one record at a time from the data source.  
-   * @param IBigSet $properties
-   * @param IFilter $filter Filters to use 
-   * @param Closure $callback function( IProperty, value ) For each record.
-   * @param IRows $rows Sort order and limit 
+   * @param ISearchQueryBuilder $builder Query Parameters
    * @return Generator yielded results 
    * @throws DBException For db errors 
-   * @deprecated This is stupid and very SQL-specific.  To be removed.
    */
-  public function stream( IBigSet $properties, ?IFilter $filter, ?IRows $rows = null );
+  public function stream( ISearchQueryBuilder $builder ) : \Generator;
   
     
   /**
@@ -116,12 +114,30 @@ interface IRepository extends ISaveableObjectFactory
    * 
    * @param string $propertyName Property name 
    * @param string $value Search value.  What this is depends on the engine.
-   * @param int $liimt Limit the number of results returned.
+   * @param int $limit Limit the number of results returned.
    * @return array
    * @throws InvalidArgumentException
    */
   public function findByProperty( string $propertyName, string $value, int $limit = 100 ) : array;  
   
+  
+  /**
+   * Only operating on properties available within this repository, 
+   * return any objects matching all of the supplied criteria.
+   * @param array $map Map of [property => val]
+   * @param int $limit Max results to return 
+   * @return array Results 
+   */
+  public function findByProperties( array $map, int $limit = 100 ) : array;
+  
+  
+  /**
+   * Search for something 
+   * @param ISearchQueryBuilder $builder Builder
+   * @return ISearchResults results 
+   */
+  public function search( ISearchQueryBuilder $builder ) : ISearchResults;
+      
   
   /**
    * Retrieve the estimated record count.  
@@ -137,4 +153,12 @@ interface IRepository extends ISaveableObjectFactory
    * @return bool
    */
   public function exists( string ...$id ) : bool;
+  
+  
+  
+  /**
+   * Retrieve the search query generator 
+   * @return ISearchQueryGenerator generator 
+   */
+  public function getSearchQueryGenerator() : ISearchQueryGenerator;     
 }

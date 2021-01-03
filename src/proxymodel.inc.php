@@ -237,9 +237,9 @@ class ProxyModel implements IModel
    * Convert the model to a json representation.
    * @return string JSON object 
    */
-  public function toObject( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false ) : stdClass
+  public function toObject( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : stdClass
   {
-    return $this->model->toObject( $properties, $includeArrays, $includeModels );
+    return $this->model->toObject( $properties, $includeArrays, $includeModels, $includeExtra );
   }
   
   
@@ -247,9 +247,9 @@ class ProxyModel implements IModel
    * Convert this model to an array.
    * @param IPropertySet $properties Properties to include 
    */
-  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false ) : array
+  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : array
   {
-    return $this->model->toArray( $properties, $includeArrays, $includeModels );
+    return $this->model->toArray( $properties, $includeArrays, $includeModels, $includeExtra );
   }
   
   

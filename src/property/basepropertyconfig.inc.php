@@ -155,7 +155,8 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
     self::MSETTER,
     self::MGETTER,
     self::CHANGE,
-    self::HTMLINPUT
+    self::HTMLINPUT,
+    self::TOARRAY
   ];
   
  
@@ -480,6 +481,7 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
       $this->addBehaviorToArray( $out, self::MGETTER, $b->getModelGetterCallback());
       $this->addBehaviorToArray( $out, self::CHANGE, $b->getOnChangeCallback());
       $this->addBehaviorToArray( $out, self::HTMLINPUT, $b->getHTMLInputCallback());
+      $this->addBehaviorToArray( $out, self::TOARRAY, $b->getToArrayCallback());
     }
     
     return $out;
@@ -743,6 +745,9 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
         
       case self::HTMLINPUT:
         return $this->getHTMLInputCallback( $value, ...$this->getFunctionList( 'getHTMLInputCallback', ...$behavior ));
+        
+      case self::TOARRAY:
+        return $this->getModelGetterSetterCallback( $value, ...$this->getFunctionList( 'getToArrayCallback', ...$behavior ));
         
       default:
         return $value;

@@ -12,12 +12,15 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\persist;
 
-use buffalokiwi\buffalotools\types\IBigSet;
 use buffalokiwi\magicgraph\DBException;
 use buffalokiwi\magicgraph\IModel;
+use buffalokiwi\magicgraph\search\ISearchQueryBuilder;
+use buffalokiwi\magicgraph\search\ISearchQueryGenerator;
+use buffalokiwi\magicgraph\search\ISearchResults;
 use Closure;
 use Exception;
-use \Generator;
+use Generator;
+use InvalidArgumentException;
 
 
 class RepositoryProxy extends SaveableMappingObjectFactoryProxy implements IRepository
@@ -56,7 +59,7 @@ class RepositoryProxy extends SaveableMappingObjectFactoryProxy implements IRepo
    * @param Closure $beforeSave What to run prior to saving f( IRepository, ...IModel )
    * @param Closure $afterSave What to run after saving f( IRepository, ...IModel )
    * @param IModel $models One or more models to save 
-   * @return \buffalokiwi\magicgraph\persist\IRunnable
+   * @return IRunnable
    */
   public function getSaveFunction( ?Closure $beforeSave, ?Closure $afterSave, IModel ...$models ) : array
   {
@@ -76,18 +79,14 @@ class RepositoryProxy extends SaveableMappingObjectFactoryProxy implements IRepo
   
   
   /**
-   * Stream the data one record at a time from the data source.  This may not
-   * always be implemented.
-   * @param IBigSet $properties
-   * @param IFilter $filter Filters to use 
-   * @param Closure $callback function( IProperty, value ) For each record.
-   * @param IRows $rows Sort order and limit 
+   * Stream the data one record at a time from the data source.  
+   * @param ISearchQueryBuilder $builder Query Parameters
    * @return Generator yielded results 
    * @throws DBException For db errors 
    */
-  public function stream( IBigSet $properties, ?IFilter $filter, ?IRows $rows = null )
+  public function stream( ISearchQueryBuilder $builder ) : \Generator
   {
-    return $this->repo->stream( $properties, $filter, $rows );
+    return $this->repo->stream( $builder );
   }
   
     
@@ -177,6 +176,19 @@ class RepositoryProxy extends SaveableMappingObjectFactoryProxy implements IRepo
   
   
   /**
+   * Only operating on properties available within this repository, 
+   * return any objects matching all of the supplied criteria.
+   * @param array $map Map of [property => val]
+   * @param int $limit Max results to return 
+   * @return array Results 
+   */
+  public function findByProperties( array $map, int $limit = 100 ) : array
+  {
+    return $this->repo->findByProperties( $map, $limit );
+  }
+  
+  
+  /**
    * Retrieve the estimated record count.  
    * @param bool $full Set to true to retrieve count(*), set to false for max(primary key)
    * @return int estimated number of records 
@@ -195,5 +207,26 @@ class RepositoryProxy extends SaveableMappingObjectFactoryProxy implements IRepo
   public function exists( string ...$id ) : bool
   {
     return $this->repo->exists( ...$id );
+  }
+  
+  
+  /**
+   * Search for something.
+   * @param ISearchQueryBuilder $query The search parameters 
+   * @return ISearchResults results 
+   */
+  public function search( ISearchQueryBuilder $query ) : ISearchResults
+  {
+    return $this->repo->search( $query );
+  }  
+  
+  
+  /**
+   * Retrieve the search query generator 
+   * @return ISearchQueryGenerator generator 
+   */
+  public function getSearchQueryGenerator() : ISearchQueryGenerator
+  {
+    return $this->repo->getSearchQueryGenerator();
   }
 }

@@ -59,15 +59,16 @@ class MySQLTransaction implements ITransaction
    * Begins a transaction
    */
   public function beginTransaction() : void
-  {
+  {    
     foreach( $this->units as &$data )
     {
       $context = $data[0];
       /* @var $context \buffalokiwi\magicgraph\pdo\IDBConnection */
-      
       $data[2] = !$context->inTransaction();
       if ( $data[2] )
+      {
         $context->beginTransaction();      
+      }
     }
   }
   
@@ -96,9 +97,12 @@ class MySQLTransaction implements ITransaction
     foreach( $this->units as $data )
     {
       $context = $data[0];
+      
       /* @var $context \buffalokiwi\magicgraph\pdo\IDBConnection */
       if ( $data[2] )
-        $context->commit();
+      {
+        $context->commit();        
+      }
     }    
   }
   

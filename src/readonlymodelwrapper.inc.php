@@ -47,6 +47,6 @@ class ReadOnlyModelWrapper extends ProxyModel
    */
   public function setValue( string $property, $value ) : void
   {
-    throw new \Exception( __CLASS__ . ' is read only.' );
+    throw new \Exception( get_class( $this->getModel()) . ' is read only.' );
   }  
 }

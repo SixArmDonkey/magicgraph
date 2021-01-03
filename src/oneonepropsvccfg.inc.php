@@ -39,14 +39,16 @@ class OneOnePropSvcCfg extends property\BasePropertyConfig implements IPropertyS
    */
   private $saveFunction;
   
+  private array $config;
   
   /**
    * 
    * @param string $propertyName Parent property containing the primary key value of the model property
    * @param string $modelPropertyName parent property containing the model loaded by the value of $propertyName
    * @param Closure|null $getSaveFunction An OPTIONAL save function.  This does not override the save function in the OneOnePropertyService
-   * @param array $config A config array for a property set 
-   * f( IModel $parent ) : array 
+   * @param array $config I FORGET WHY I PUT THIS HERE... A config array for a property set f( IModel $parent ) : array 
+   * Apparently additional configuration data can be returned via this argument.  There are no guarantees this data is 
+   * read anywhere.
    */
   public function __construct( string $propertyName, string $modelPropertyName, ?Closure $getSaveFunction = null, array $config = [] )
   {
@@ -58,6 +60,7 @@ class OneOnePropSvcCfg extends property\BasePropertyConfig implements IPropertyS
     $this->propertyName = $propertyName;
     $this->modelPropertyName = $modelPropertyName;
     $this->getSaveFunction = $getSaveFunction;
+    $this->config = $config;
   }
   
   

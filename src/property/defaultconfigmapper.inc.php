@@ -98,17 +98,17 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
     
       
     $factories = [
-        EPropertyType::TBOOLEAN => function( IPropertyBuilder $builder ) { return new BooleanProperty( $builder ); },
-        EPropertyType::TDATE    => function( IPropertyBuilder $builder ) use ($df,$dateFormat) { return new DateProperty( $builder, $df, $dateFormat ); },
-        EPropertyType::TFLOAT   => function( IPropertyBuilder $builder ) { return new FloatProperty( $builder ); },
-        EPropertyType::TENUM    => function( IPropertyBuilder $builder ) { return new EnumProperty( $builder ); },
-        EPropertyType::TRTENUM  => function( IPropertyBuilder $builder ) { return new RuntimeEnumProperty( $builder ); },
-        EPropertyType::TINTEGER => function( IPropertyBuilder $builder ) { return new IntegerProperty( $builder ); },
-        EPropertyType::TSET     => function( IPropertyBuilder $builder ) { return new SetProperty( $builder ); },
-        EPropertyType::TSTRING  => function( IPropertyBuilder $builder ) { return new StringProperty( $builder ); },
-        EPropertyType::TARRAY   => function( IPropertyBuilder $builder ) { return new ArrayProperty( $builder ); },
-        EPropertyType::TMODEL   => function( IPropertyBuilder $builder ) { return new ModelProperty( $builder ); },
-        EPropertyType::TOBJECT  => function( IPropertyBuilder $builder ) { return new ObjectProperty( $builder ); },
+      EPropertyType::TBOOLEAN => function( IPropertyBuilder $builder ) { return new BooleanProperty( $builder ); },
+      EPropertyType::TDATE    => function( IPropertyBuilder $builder ) use ($df,$dateFormat) { return new DateProperty( $builder, $df, $dateFormat ); },
+      EPropertyType::TFLOAT   => function( IPropertyBuilder $builder ) { return new FloatProperty( $builder ); },
+      EPropertyType::TENUM    => function( IPropertyBuilder $builder ) { return new EnumProperty( $builder ); },
+      EPropertyType::TRTENUM  => function( IPropertyBuilder $builder ) { return new RuntimeEnumProperty( $builder ); },
+      EPropertyType::TINTEGER => function( IPropertyBuilder $builder ) { return new IntegerProperty( $builder ); },
+      EPropertyType::TSET     => function( IPropertyBuilder $builder ) { return new SetProperty( $builder ); },
+      EPropertyType::TSTRING  => function( IPropertyBuilder $builder ) { return new StringProperty( $builder ); },
+      EPropertyType::TARRAY   => function( IPropertyBuilder $builder ) { return new ArrayProperty( $builder ); },
+      EPropertyType::TMODEL   => function( IPropertyBuilder $builder ) { return new ModelProperty( $builder ); },
+      EPropertyType::TOBJECT  => function( IPropertyBuilder $builder ) { return new ObjectProperty( $builder ); },
     ];
 
         

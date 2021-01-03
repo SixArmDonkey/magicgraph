@@ -17,22 +17,29 @@ use buffalokiwi\magicgraph\DBException;
 use buffalokiwi\magicgraph\IModel;
 use buffalokiwi\magicgraph\IModelMapper;
 use buffalokiwi\magicgraph\pdo\IDBConnection;
+use buffalokiwi\magicgraph\pdo\TransactionUnit;
 use buffalokiwi\magicgraph\property\IProperty;
 use buffalokiwi\magicgraph\property\IPropertyFlags;
 use buffalokiwi\magicgraph\property\IPropertySet;
 use buffalokiwi\magicgraph\property\IPropertyType;
+use buffalokiwi\magicgraph\search\ISearchQueryBuilder;
+use buffalokiwi\magicgraph\search\ISearchQueryGenerator;
+use buffalokiwi\magicgraph\search\ISearchResults;
+use buffalokiwi\magicgraph\search\MySQLSearchQueryGenerator;
+use buffalokiwi\magicgraph\search\MySQLSearchResults;
 use buffalokiwi\magicgraph\ValidationException;
 use Closure;
 use Generator;
 use InvalidArgumentException;
 use TypeError;
+use function json_encode;
 
 
 /**
  * A repository for a MySQL database table.
  * This is meant for SIMPLE database operations on single tables.
  * If you are joining tables, doing fancy things, etc then please create a 
- * new repository and write some beautifully hand-crafted sql.
+ * new repository and write some beautiful, hand-crafted, SQL.
  */ 
 class SQLRepository extends SaveableMappingObjectFactory implements ISQLRepository
 {
@@ -40,36 +47,48 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
    * Table name 
    * @var string
    */
-  private $table;
+  private string $table;
   
   /**
    * Database connection 
    * @var IDBConnection 
    */
-  private $dbc;
+  private IDBConnection $dbc;
   
   /**
    * If the table is locked 
    * @var bool 
    */
-  private $locked = false;
+  private bool $locked = false;
   
   /**
    * If a lock has been obtained via GET_LOCK()
    * @var bool 
    */
-  private $hasMutexLock = false;
+  private bool $hasMutexLock = false;
   
   /**
-   * Create a new SQLRepository instance 
+   * Search query generator 
+   * @var ISearchQueryGenerator
+   */
+  private ISearchQueryGenerator $searchQueryGenerator;
+  
+  
+  /**
+   * SQL Repository 
    * @param string $table Table name 
-   * @param IModelMapper $mapper Mapper 
+   * @param IModelMapper $mapper Model mapper 
    * @param IDBConnection $dbc Database connection 
+   * @param IPropertySet|null $properties Property set for models returned by this repo.  This SHOULD be supplied.
+   * @param ISearchQueryGenerator|null $searchQueryGenerator A search query generator.  If none is specified, then a 
+   * MySQLSearchQueryGenerator instance is used.
    * @throws InvalidArgumentException
    */
-  public function __construct( string $table, IModelMapper $mapper, IDBConnection $dbc, ?IPropertySet $properties = null )
+  public function __construct( string $table, IModelMapper $mapper, IDBConnection $dbc, 
+    ?IPropertySet $properties = null, ?ISearchQueryGenerator $searchQueryGenerator = null )
   {
     parent::__construct( $mapper, $properties );
+    
     if ( empty( $table ))
       throw new InvalidArgumentException( 'table must not be empty' );
     else if ( !preg_match('/^[A-Za-z0-9_]+/', $table ))
@@ -77,6 +96,24 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     
     $this->table = $table;
     $this->dbc = $dbc;
+    
+    if ( $properties == null )
+      $properties = $mapper->createAndMap([])->getPropertySet();    
+    
+    if ( $searchQueryGenerator == null )
+      $this->searchQueryGenerator = new MySQLSearchQueryGenerator( $table, $properties, $dbc );
+    else
+      $this->searchQueryGenerator = $searchQueryGenerator;
+  }
+  
+  
+  /**
+   * Retrieve the search query generator 
+   * @return ISearchQueryGenerator generator 
+   */
+  public function getSearchQueryGenerator() : ISearchQueryGenerator
+  {
+    return $this->searchQueryGenerator;
   }
   
   
@@ -215,41 +252,90 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   
   
   /**
-   * Stream the data one record at a time from the data source.  This may not
-   * always be implemented.
-   * @param IPropertySet $properties
-   * @param IFilter $filter Filters to use 
-   * @param Closure $callback function( IProperty, value ) For each record.
-   * @param IRows $rows Sort order and limit 
+   * Stream the data one record at a time from the data source.  
+   * @param ISearchQueryBuilder $builder Query Parameters
    * @return Generator yielded results 
    * @throws DBException For db errors 
    */
-  public function stream( IBigSet $properties, ?IFilter $filter, ?IRows $rows = null ) 
+  public function stream( ISearchQueryBuilder $builder ) : \Generator
   {    
-    return $this->dbc->forwardCursor( $this->getStatement( $properties, $filter, $rows ), $filter->getValues());
+    $builder->setLimitEnabled( false );
+    return $this->dbc->forwardCursor( $this->searchQueryGenerator->createQuery( $builder ));
   }
   
   
   /**
-   * Query the data source.
-   * @param IPropertySet $properties Properties to return 
-   * @param IFilter $filter Filters to use 
-   * @param IRows $rows Sort order and limit 
-   * @return IModel[] model instances
-   * @throws DBException For db errors   
+   * Search for something.
+   * @param ISearchQueryBuilder $query The search parameters 
+   * @return ISearchResults results 
    */
-  public function query( IBigSet $properties, ISQLFilter $filter, IRows $rows = null ) : array
+  public function search( ISearchQueryBuilder $query ) : ISearchResults
   {
-    $out = [];
-    foreach( $this->dbc->select( $this->getStatement( $properties, $filter, $rows ), ( $filter != null ) ? $filter->getValues() : [] ) as $row )
-    {
-      $out[] = $this->create( $row );
-    }
+    $f = function( ISearchQueryBuilder $query, bool $returnCount ) {
+      $statement = $this->searchQueryGenerator->createQuery( $query, $returnCount );
+
+      $build = [];
+      
+      $entityGroups = $query->getEntityGroups();
+      
+
+      foreach( $this->dbc->select( $statement->getQuery(), $statement->getValues()) as $row )
+      {
+        
+        $curGroup = '';
+        foreach( $entityGroups as $g )
+        {
+          if ( isset( $row[$g] ))
+            $curGroup .= $row[$g];
+        }        
+        
+        foreach( $row as $col => $val )
+        {
+          if ( $returnCount && $col == 'count' )
+            return (int)$val;
+          else if ( $returnCount )
+            continue;        
+          
+          //..This needs to be revised.
+          if ( $col == 'code' )
+          {
+            $col = $val;
+            $val = $row['value'];
+          }
+
+          //..This needs to be revised.
+          if ( empty( $col ) || $col === null || $col == 'caption' || $col == 'value' )
+            continue;
+
+          $build[$curGroup][$row[$statement->getUniqueId()]][$col] = $val;
+        }
+        
+        if ( $returnCount )
+          return 0;
+      }
+      
+      return $build;
+    };
     
-    return $out;
+    $out = [];
+    
+    $build = $f( $query, false );
+    
+        
+    foreach( $build as $group )
+    {
+      foreach( $group as $eid => $cols )
+      {
+        $out[] = $this->create( $cols );
+      }    
+    }
+        
+    return new MySQLSearchResults( $query->getPage(), $query->getResultSize(), function() use($f, $query) {
+      return $f( $query, true );
+    }, ...$out );         
   }
   
- 
+  
   /**
    * Load some record by primary key 
    * @param string $id id 
@@ -359,6 +445,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
    */
   public function findByProperty( string $propertyName, string $value, int $limit = 100 ) : array
   {
+    return $this->findByProperties([$propertyName => $value], $limit );
+    /*
     if ( !$this->properties()->isMember( $propertyName ))
     {
       $c = get_class( $this->mapper()->createAndMap( [], $this->properties()));
@@ -384,7 +472,70 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     }    
     
     return $out;    
+     */
   }
+  
+  
+  /**
+   * Only operating on properties available within this repository, 
+   * return any objects matching all of the supplied criteria.
+   * @param array $map Map of [property => val]
+   * @param int $limit Max results to return 
+   * @return array Results 
+   */
+  public function findByProperties( array $map, int $limit = 100 ) : array
+  {
+    if ( !$this->properties()->isMember( ...array_keys( $map )))
+    {
+      $c = get_class( $this->mapper()->createAndMap( [], $this->properties()));
+      throw new \InvalidArgumentException( 'A supplied property is not a valid member of ' . $c );
+    }
+
+    $conditions = [];
+    $values = [];
+    
+    foreach( $map as $col => $val )
+    {
+      if ( !is_scalar( $val ) && !is_array( $val ))
+        throw new \InvalidArgumentException( 'Values must be scalar or array' );
+      
+      //..Use equals if there are no wildcards.
+      if ( is_array( $val ))
+      {
+        $conditions[] = $col . ' in ' . $this->dbc->prepareIn( $val, $this->properties()->getProperty( $col )->getType()->is( IPropertyType::TINTEGER ));
+        $values = array_merge( $values, $val );
+      }
+      else if ( strpos( $val, '%' ) === false )
+      {
+        $conditions[] = $col . ' = ? ';
+        $values[] = $val;
+      }
+      else
+      {
+        $conditions[] = $col . ' like ? ';
+        $values[] = $val;
+      }            
+    }
+
+    if ( empty( $conditions ))
+      return [];
+    
+    $where = ' where ' . implode( ' and ', $conditions );
+    
+    if ( $limit > 0 )
+      $where .= ' limit ' . $limit;
+    
+
+    $out = [];
+    
+    foreach( $this->dbc->select( 'select * from ' . $this->table . $where, $values ) as $row )
+    {
+      $out[] = $this->create( $row );
+    }    
+    
+    return $out;        
+  }
+  
   
   
   /**
@@ -524,10 +675,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   {
     $this->test( $model );
     
-    $useTrans = !$this->dbc->inTransaction();
-    
-    if ( $useTrans )
-      $this->dbc->beginTransaction();
+    $trans = new TransactionUnit( $this->dbc );
     
     //..Get the primary key list 
     $priKeys = $model->getPropertySet()->getPrimaryKeys();
@@ -576,6 +724,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
         foreach( $insProps->getActiveMembers() as $member )
         {
           $prop = $model->getPropertySet()->getProperty( $member );
+          
+          //..Yep, this should be an adapter or something.
           if ( $prop->getType()->value() == IPropertyType::TARRAY 
             && !$prop->getFlags()->hasAny( IPropertyFlags::NO_INSERT, IPropertyFlags::NO_ARRAY_OUTPUT ))
           {
@@ -605,6 +755,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
         foreach( $props->getActiveMembers() as $member )
         {
           $prop = $model->getPropertySet()->getProperty( $member );
+          
+          //..This should be some type of adapter.
           if ( $prop->getType()->value() == IPropertyType::TARRAY 
             && !$prop->getFlags()->hasAny( IPropertyFlags::NO_UPDATE, IPropertyFlags::NO_ARRAY_OUTPUT ))
           {
@@ -624,15 +776,12 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
         }
       }
     } catch( \Exception | TypeError $e ) {
-      
-      if ( $useTrans )
-        $this->dbc->rollBack();
+      $trans->rollBack();
       
       throw $e;
     }
     
-    if ( $useTrans )
-      $this->dbc->commit();    
+    $trans->commit();
   }
   
   
@@ -667,18 +816,14 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   {
     $this->test( ...$model );
     
-    $useTrans = !$this->dbc->inTransaction();
-    if ( $useTrans )
-      $this->dbc->beginTransaction();
+    $trans = new TransactionUnit( $this->dbc );
     
     try {
       parent::saveAll( ...$model );
       
-      if ( $useTrans )
-        $this->dbc->commit();
+      $trans->commit();
     } catch ( \Exception | TypeError $e ) {
-      if ( $useTrans )
-        $this->dbc->rollBack();
+      $trans->rollBack();
       throw $e;
     }
   }

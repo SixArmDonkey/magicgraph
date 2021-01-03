@@ -61,6 +61,19 @@ abstract class PDOConnection extends PDO implements IPDOConnection
    */
   private $uniqueId;
   
+  /**
+   * The autocommit driver "feature" isn't really doing what I want here.
+   * 
+   * If PDO::ATTR_AUTOCOMMIT is false, then a transaction is automatically started.  This behavior is different in 
+   * php8 than it was in prior version.  Previously, setting autocommit to false required beginTransaction() to be called
+   * to start the initial tranaction.  In Retail Rack, there is the unit of work and transaction factory, which requires
+   * an accurate result from inTransaction().  When autocommit is false, inTransaction() returns true.  This is totally bullshit, and potentially untrue.
+   * 
+   * 
+   * @var type 
+   */
+  private $inTransaction = false;
+  
   
   /**
    * Select the current database
@@ -147,18 +160,9 @@ abstract class PDOConnection extends PDO implements IPDOConnection
     $this->onClose = $onClose;
     
     $this->props = $args;
-
-    
-    $this->setAttribute( PDO::ATTR_AUTOCOMMIT, false );
-    try {
-      
-    } catch( Exception $e ) {
-      //..Not supported
-    }
-    
-    //..This should be good enough. I hope.
-    $this->uniqueId = bin2hex( random_bytes( 16 ));
-
+   
+    //..This should be unique enough. I hope.
+    $this->uniqueId = bin2hex( random_bytes( 16 ));    
   }
   
   
@@ -174,7 +178,7 @@ abstract class PDOConnection extends PDO implements IPDOConnection
   
   
   
-/**
+  /**
 	 * Initiates a transaction
 	 * <p>Turns off autocommit mode. While autocommit mode is turned off, changes made to the database via the PDO object instance are not committed until you end the transaction by calling <code>PDO::commit()</code>. Calling <code>PDO::rollBack()</code> will roll back all changes to the database and return the connection to autocommit mode.</p><p>Some databases, including MySQL, automatically issue an implicit COMMIT when a database definition language (DDL) statement such as DROP TABLE or CREATE TABLE is issued within a transaction. The implicit COMMIT will prevent you from rolling back any other changes within the transaction boundary.</p>
 	 * @return bool <p>Returns <b><code>TRUE</code></b> on success or <b><code>FALSE</code></b> on failure.</p>
@@ -184,7 +188,11 @@ abstract class PDOConnection extends PDO implements IPDOConnection
 	 */
 	public function beginTransaction(): bool
   {
-    return parent::beginTransaction();
+    try {
+      return parent::beginTransaction();
+    } finally {
+      $this->inTransaction = true;
+    }
   }
   
   
@@ -198,7 +206,11 @@ abstract class PDOConnection extends PDO implements IPDOConnection
 	 */
 	public function commit(): bool
   {
-    return parent::commit();
+    try {
+      return parent::commit();
+    } finally {
+      $this->inTransaction = false;
+    }
   }
   
 
@@ -225,7 +237,10 @@ abstract class PDOConnection extends PDO implements IPDOConnection
 	 */
 	public function inTransaction(): bool
   {
-    return parent::inTransaction();
+    //..The behavior of inTransaction does not seem reliable.
+    //return parent::inTransaction();
+    
+    return $this->inTransaction;
   }
   
 
@@ -291,6 +306,9 @@ abstract class PDOConnection extends PDO implements IPDOConnection
    */
   public function setAutoCommit( bool $on ) : void
   {
+    if ( $this->inTransaction )
+      throw new \Exception( 'A transaction is currently in progress.  Please commit or rollback the current transaction prior to changing the autocommit value' );
+    
     $this->setAttribute( PDO::ATTR_AUTOCOMMIT, $on );
   }
 
@@ -321,7 +339,11 @@ abstract class PDOConnection extends PDO implements IPDOConnection
 	 */
 	public function rollBack(): bool
   {
-    return parent::rollBack();
+    try {
+      return parent::rollBack();
+    } finally {
+      $this->inTransaction = false;
+    }      
   }
   
 
@@ -669,7 +691,7 @@ abstract class PDOConnection extends PDO implements IPDOConnection
       {
         $o[$k] = $v;
       }
-      $options = $o;
+      return $o;
     }
     
     return $options;

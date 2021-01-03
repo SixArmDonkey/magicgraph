@@ -11,26 +11,12 @@
 
 namespace buffalokiwi\magicgraph\persist;
 
-use buffalokiwi\buffalotools\types\IBigSet;
-use buffalokiwi\magicgraph\DBException;
-use buffalokiwi\magicgraph\IModel;
 use buffalokiwi\magicgraph\pdo\IDBConnection;
+use buffalokiwi\magicgraph\search\ISearchQueryGenerator;
 
 
 interface ISQLRepository extends IRepository
 {
-  /**
-   * Query the data source.
-   * @param IBigSet $properties Properties to return 
-   * @param IFilter $filter Filters to use 
-   * @param IRows $rows Sort order and limit 
-   * @return IModel[] model instances
-   * @throws DBException For db errors
-   * @deprecated Query builders suck.  SQL is a damn good query builder...  To be removed.
-   */
-  public function query( IBigSet $properties, ISQLFilter $filter, IRows $rows = null ) : array;
-    
-  
   /**
    * Retrieve the database table name backing this repository.
    * @return string database table name
@@ -88,7 +74,4 @@ interface ISQLRepository extends IRepository
    * @return bool is locked 
    */
   public function isLocked() : bool;  
-  
-  
- 
 }

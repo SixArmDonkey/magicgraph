@@ -3,7 +3,7 @@
 	"description" : "Behavioral-based object modeling and persistence library for PHP 7.4",
 	"keywords"    : ["orm","persistence","repository","ddd","uow"],
   "homepage"    : "https://github.com/SixArmDonkey/magicgraph",
-	"license"     : "MIT",
+	"license"     : "OSL-3.0",
 	"type"        : "library",
   "authors"     : [
     {

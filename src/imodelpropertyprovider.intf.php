@@ -23,7 +23,9 @@ use \InvalidArgumentException;
  * This provider is normally coupled to a repository, and will pull one or more
  * records from that repo based on some property value within the model this 
  * property is attached.
- *  
+ * 
+ * This adds the ability to have a save function attached.  This is used with the various
+ * relationship providers.
  */
 interface IModelPropertyProvider extends IPropertyServiceProvider
 {
@@ -65,4 +67,12 @@ interface IModelPropertyProvider extends IPropertyServiceProvider
    * @return IPropertySvcConfig config 
    */  
   public function getModelServiceConfig() : IPropertySvcConfig;
+  
+  
+  /**
+   * Retrieve the save function used for saving stuff from the provider.
+   * @param \buffalokiwi\magicgraph\IModel $parent
+   * @return IRunnable
+   */
+  public function getSaveFunction( IModel $parent ) : array;  
 }

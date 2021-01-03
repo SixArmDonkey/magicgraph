@@ -45,6 +45,8 @@ class ElementFactory implements IElementFactory
   
   /**
    * Create an HTML Element from a property.
+   * @param IModel Model used when creating inputs.  This can be an empty model if you want.  It depends on the model implementation.  
+   * So, be careful, I guess?
    * @param IProperty $property Property 
    * @param string $name Element name attribute value 
    * @param string $id Element Id attribute value 
@@ -52,12 +54,13 @@ class ElementFactory implements IElementFactory
    * @return IElement Element 
    * @throws HTMLPropertyException If a matching supplier does not exist.
    */
-  public function createElement( IModel $model, IProperty $property, string $name, string $id, $value ) : IElement
+  public function createElement( IModel $model, IProperty $property, string $name, ?string $id, $value ) : IElement
   {
         
     $cb = [];
     foreach ( $property->getPropertyBehavior() as $b )
     {
+      /* @var $b \buffalokiwi\magicgraph\property\IPropertyBehavior */
       if ( $b->getHTMLInputCallback() != null )
       {
         $cb[] = $b->getHTMLInputCallback();

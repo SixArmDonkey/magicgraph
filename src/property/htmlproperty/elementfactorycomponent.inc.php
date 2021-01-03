@@ -67,7 +67,7 @@ class ElementFactoryComponent implements IElementFactoryComponent
    * @return IElement Element 
    * @throws HTMLPropertyException 
    */
-  public function createElement( IProperty $prop, string $name, string $id, string $value ) : IElement
+  public function createElement( IProperty $prop, string $name, ?string $id, string $value ) : IElement
   {
     $f = $this->elementSupplier;
     $res = $f( $prop, $name, $id, $value );

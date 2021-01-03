@@ -151,14 +151,4 @@ interface IDBConnection extends IPDOConnection
    * @return array columns
    */
   public function extractRow( array $prefixList, array $data ) : array;
-
-
-
-
-
-
-
 }
-
-
-

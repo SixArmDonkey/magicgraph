@@ -104,4 +104,14 @@ interface IPropertyBehavior
    */
   public function getHTMLInputCallback() : ?Closure;
   
+  
+  /**
+   * Callback used when retrieving a value within IModel::toArray().
+   * When the value used within the application differs from the persisted value, this can be used to 
+   * modify the persisted value.
+   * This will always be called after GETTER and MGETTER.
+   * f( IModel, IProperty, mixed $value ) : mixed 
+   * @return Closure|null
+   */  
+  public function getToArrayCallback() : ?Closure;    
 }

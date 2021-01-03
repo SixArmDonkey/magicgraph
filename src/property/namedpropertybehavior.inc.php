@@ -67,7 +67,11 @@ class NamedPropertyBehavior extends PropertyBehavior implements INamedPropertyBe
       $builder->getSetter(),
       $builder->getGetter(),
       $builder->getModelSetter(),
-      $builder->getModelGetter());
+      $builder->getModelGetter(),
+      $builder->getOnChange(),
+      $builder->getIsEmpty(),
+      $builder->getHtmlInput(),
+      $builder->getToArray());
     
     if ( empty( $builder->getName()))
       throw new InvalidArgumentException( 'name must not be empty' );

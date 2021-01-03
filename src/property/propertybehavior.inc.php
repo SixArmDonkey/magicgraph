@@ -75,6 +75,12 @@ class PropertyBehavior implements IPropertyBehavior
    */
   private $isEmpty;
   
+  /**
+   * Toarray event  
+   * @var Closure|null
+   */
+  private $toArray;
+  
   
   
   /**
@@ -96,10 +102,11 @@ class PropertyBehavior implements IPropertyBehavior
    * @param Closure|null $onChange f( IProperty, oldValue, newValue ) : void
    * @param Closure|null $isEmpty f( IProperty ) : bool
    * @param Closure|null $htmlInput f( IModel $model, IProperty $property, string $name, string $id, string $value ) : IElement
+   * @param Closure|null $toArray f( IModel, IProperty, value ) : mixed
    */
   public function __construct( ?Closure $validate = null, ?Closure $init = null, ?Closure $setter = null, 
     ?Closure $getter = null, ?Closure $msetter = null, ?Closure $mgetter = null, ?Closure $onChange = null,
-    ?Closure $isEmpty = null, ?Closure $htmlInput = null )
+    ?Closure $isEmpty = null, ?Closure $htmlInput = null, ?Closure $toArray = null )
   {
     $this->validate = $validate;
     $this->init = $init;    
@@ -110,6 +117,7 @@ class PropertyBehavior implements IPropertyBehavior
     $this->onChange = $onChange;
     $this->isEmpty = $isEmpty;
     $this->htmlInput = $htmlInput;
+    $this->toArray = $toArray;
   }
   
   
@@ -137,6 +145,8 @@ class PropertyBehavior implements IPropertyBehavior
       $this->isEmpty = $this->isEmpty->bindTo( $this );
     if ( $this->htmlInput != null )
       $this->htmlInput = $this->htmlInput->bindTo( $this );
+    if ( $this->toArray != null )
+      $this->toArray = $this->toArray->bindTo( $this );
   }
   
   
@@ -257,5 +267,19 @@ class PropertyBehavior implements IPropertyBehavior
   public function getHTMLInputCallback() : ?Closure
   {
     return $this->htmlInput;
+  }
+  
+  
+  /**
+   * Callback used when retrieving a value within IModel::toArray().
+   * When the value used within the application differs from the persisted value, this can be used to 
+   * modify the persisted value.
+   * This will always be called after GETTER and MGETTER.
+   * f( IModel, IProperty, mixed $value ) : mixed 
+   * @return Closure|null
+   */  
+  public function getToArrayCallback() : ?Closure
+  {
+    return $this->toArray;
   }
 }

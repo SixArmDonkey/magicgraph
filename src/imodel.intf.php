@@ -106,14 +106,14 @@ interface IModel extends IteratorAggregate
    * Convert the model to a json representation.
    * @return string JSON object 
    */
-  public function toObject( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false ) : stdClass;
+  public function toObject( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : stdClass;
   
   
   /**
    * Convert this model to an array.
    * @param IPropertySet $properties Properties to include 
    */
-  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false ) : array;
+  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : array;
   
   
   public function fromArray( array $data ) : void;  

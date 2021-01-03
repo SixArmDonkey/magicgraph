@@ -16,7 +16,7 @@ use InvalidArgumentException;
 
 class InputElement extends Element
 {
-  public function __construct( string $type, string $name, string $id, string $value, array $attributes = [] )
+  public function __construct( string $type, string $name, ?string $id, string $value, array $attributes = [] )
   {
     if ( empty( $type ))
       throw new InvalidArgumentException( 'type must not be empty' );

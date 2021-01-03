@@ -33,30 +33,40 @@ class DefaultPropertyConfig
   const VALUE = 'value';
   
   /**
-   * Callback used for setting a properties value when it is an object.
+   * Callback used for setting a properties value 
    * f( IProperty, mixed $value ) : mixed 
    */
   const SETTER = 'setter';
   
   /**
-   * Callback used for setting a properties value when it is an object.
+   * Callback used for setting a properties value 
    * f( IProperty, mixed $value ) : mixed 
    */
   const GETTER = 'getter';
   
   
   /**
-   * Callback used for setting a properties value when it is an object.
+   * Callback used for setting a properties value when a model reference is required
    * f( IModel, IProperty, mixed $value ) : mixed 
    */
   const MSETTER = 'msetter';
   
   
   /**
-   * Callback used for setting a properties value when it is an object.
+   * Callback used for getting a properties value when a model reference is required
    * f( IModel, IProperty, mixed $value ) : mixed 
    */
   const MGETTER = 'mgetter';
+  
+  
+  /**
+   * Callback used when retrieving a value within IModel::toArray().
+   * When the value used within the application differs from the persisted value, this can be used to 
+   * modify the persisted value.
+   * This will always be called after GETTER and MGETTER.
+   * f( IModel, IProperty, mixed $value ) : mixed 
+   */
+  const TOARRAY = 'toarray';
   
   /**
    * Data type.
@@ -149,4 +159,6 @@ class DefaultPropertyConfig
    * This can be any string, and can be used for whatever.
    */
   const TAG = 'tag';
+  
+  
 }

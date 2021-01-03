@@ -47,8 +47,9 @@ class ChainedTransactionManager implements IRunnable
    */
   public function run() : void
   {    
+    
     foreach( $this->trans as $t )
-    {
+    {      
       $t->beginTransaction();
     }
     
@@ -62,7 +63,7 @@ class ChainedTransactionManager implements IRunnable
         $this->rollBack();
         throw $e;
       }
-    }    
+    }
   }
   
   

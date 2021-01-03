@@ -89,6 +89,27 @@ class NamedPropertyBehaviorBuilder
    */
   private $mValidate = null;
   
+  /**
+   * To array callback 
+   * @var ?Closure 
+   */
+  private $toArray = null;
+  
+  
+  /**
+   * @param Closure|null $onChange f( IProperty, oldValue, newValue ) : void
+   */
+  private $onChange = null;
+   
+  /**
+   * @param Closure|null $isEmpty f( IProperty ) : bool
+   */
+  private $isEmpty = null;
+  
+  /**
+   * @param Closure|null $htmlInput f( IModel $model, IProperty $property, string $name, string $id, string $value ) : IElement
+   */
+  private $htmlInput = null;
   
   
   /**
@@ -116,7 +137,73 @@ class NamedPropertyBehaviorBuilder
   }
   
   
+  /**
+   * Property change event 
+   * @param Closure $f f( IProperty, oldValue, newValue ) : void
+   * @return \self this
+   */
+  public function withChange( Closure $f ) : self
+  {
+    $this->onChange = $f;
+    return $this;
+  }
   
+  
+  /**
+   * Get the property change event 
+   * @return Closure|null
+   */
+  public function getOnChange() : ?Closure
+  {
+    return $this->onChange;
+  }
+  
+  
+  /**
+   * Set the is empty check event 
+   * @param Closure $f f( IProperty ) : bool
+   * @return \self this
+   */
+  public function withIsEmpty( Closure $f ) : self
+  {
+    $this->isEmpty = $f;
+    return $this;
+  }
+  
+  
+  /**
+   * Get the empty change event 
+   * @return Closure|null
+   */
+  public function getIsEmpty() : ?Closure
+  {
+    return $this->isEmpty;
+  }
+  
+  
+  /**
+   * Set the html input generator callback.
+   * This is used to generate an html input for the property 
+   * @param Closure $f f( IModel $model, IProperty $property, string $name, string $id, string $value ) : IElement
+   * @return \self this
+   */
+  public function withHtmlInput( Closure $f ) : self
+  {
+    $this->htmlInput = $f;
+    return $this;
+  }
+  
+  
+  /**
+   * Get the html input generator callback 
+   * @return Closure|null
+   */
+  public function getHtmlInput() : ?Closure
+  {
+    return $this->htmlInput;
+  }
+  
+    
   /**
    * Validate some property value
    * IProperty $prop Property object
@@ -229,6 +316,31 @@ class NamedPropertyBehaviorBuilder
   public function getModelGetter() : ?Closure
   {
     return $this->mgetter;
+  }
+  
+  
+  /**
+   * Callback used when retrieving a value within IModel::toArray().
+   * When the value used within the application differs from the persisted value, this can be used to 
+   * modify the persisted value.
+   * This will always be called after GETTER and MGETTER.
+   * f( IModel, IProperty, mixed $value ) : mixed 
+   * @return \self this 
+   */    
+  public function withToArray( Closure $f ) : self 
+  {
+    $this->toArray = $f;
+    return $this;
+  }
+  
+  
+  /**
+   * Retrive to toArray callback
+   * @return Closure|null
+   */
+  public function getToArray() : ?Closure 
+  {
+    return $this->toArray;
   }
   
   

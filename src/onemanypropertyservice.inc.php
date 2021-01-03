@@ -24,6 +24,8 @@ use InvalidArgumentException;
 /**
  * Contains some of the base programming for a property service backed by a single 
  * repository and an array property full of IModel instances.
+ * 
+ * @todo Consider adding the ability to add search functionality to this.
  */
 class OneManyPropertyService extends AbstractOneManyPropertyService
 {  

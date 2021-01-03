@@ -120,7 +120,6 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
       {
         $this->lastId = $id;
 
-        //..No need to query for empty.
         if ( !empty( $id ))
           $newModel = $this->loadById( $id );
         else
@@ -130,11 +129,9 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
         return $value;
       
     } catch( RecordNotFoundException | InvalidArgumentException $e ) {
-      //..Initialize with an empty model.  I hate null.
       //..Maybe just throw an exception since we know this is invalid 
       //  and would result in bad links.
       throw $e;
-      //$newModel = $this->repo->create( [] ); 
     }
     
     $model->setValue( $this->propCfg->getModelPropertyName(), $newModel );

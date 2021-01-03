@@ -48,21 +48,8 @@ class MariaDBConnection extends PDOConnection implements IDBConnection
     //..Build the values
     $vstr = implode( ',', $vals );
 
-
-
     $sql = "insert into $table ($cstr) values($vstr)";
     $options = $this->prepareOptions( $params );
-    
-    
-    //..Check to see if this is a super batch 
-    /*
-    if ( $this->bindMode )
-    {
-      $this->bindSQL[] = [$sql,false, $options];
-      return 0;
-    }
-     * 
-     */
         
     //..execute    
     $this->prepareAndExec( $sql, $options );
@@ -119,70 +106,13 @@ class MariaDBConnection extends PDOConnection implements IDBConnection
     
     $sql = "update $table set " . implode( ',', $s ) . " where " . implode( ' and ', $pkCols ) . " order by `$col` limit $limit";
     $options = $this->prepareOptions( $params );
-    
-    //..Check to see if this is a super batch 
-    /*
-    if ( $this->bindMode )
-    {
-      $this->bindSQL[] = [$sql,false, $options];
-      return 0;
-    }    
-    */
+
     //..Query
     $stmt = $this->prepareAndExec( $sql, $options );
+    
     return $stmt->rowCount();
   }
 
-
-  /**
-   * Execute a delete query.
-   * This DOES NOT work with compound primary keys.  Write your own query.
-   * Shut up, John.  Make it work.  Yes, I'm talking to myself.
-   * @param string $table table name
-   * @param string $col column name
-   * @param mixed $id unique id
-   * @param int $limit limit
-   * @return int affected rows
-   * @throws InvalidArgumentExcepton if table or col or id are empty or if col
-   * contains invalid characters or if limit is not an integer or is less than
-   * one
-   * @throws DBException if there is a problem executing the query
-   */
-  /*
-  public function delete( string $table, string $col, string $id, int $limit = 1 ) : int
-  {
-    if ( empty( $table ) || empty( $col ) ||  empty( $id ))
-      throw new InvalidArgumentException( 'table and col and id can\'t be empty' );
-    else if ( !$this->isSafe( $col ))
-      throw new InvalidArgumentException( 'col contains invalid characters' );
-
-    $b = ' in ' . $this->prepareIn( $id );
-    if ( !is_array( $id ))
-    {
-      $id = [$id];
-      $b = ' = ?';
-    }
-
-    if ( $limit < 1 )
-      $limit = sizeof( $id );
-
-    
-    $sql = "delete from $table where `$col` $b limit $limit";
-    $options = $this->prepareOptions( $id );
-    
-    
-    //..Check to see if this is a super batch 
-    if ( $this->bindMode )
-    {
-      $this->bindSQL[] = [$sql,false, $options];
-      return 0;
-    }    
-        
-        
-    return $this->prepareAndExec( $sql, $options );
-  }
-  */
-  
   
   /**
    * Execute a delete query for a record using a compound key.
@@ -218,18 +148,9 @@ class MariaDBConnection extends PDOConnection implements IDBConnection
     
     $sql = "delete from $table where " . implode( ' and ', $pkCols ) . " limit " . $limit;
     $options = $this->prepareOptions( $params );
-    
-    
-    //..Check to see if this is a super batch 
-    /*
-    if ( $this->bindMode )
-    {
-      $this->bindSQL[] = [$sql,false, $options];
-      return 0;
-    }    
-      */  
-        
+
     $this->prepareAndExec( $sql, $options );
+    
     return 1;
   }  
   
@@ -362,6 +283,7 @@ class MariaDBConnection extends PDOConnection implements IDBConnection
     }
 
     ksort( $out );
+    
     //..return the data
     return $out;
   }

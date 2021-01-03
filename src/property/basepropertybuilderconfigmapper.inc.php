@@ -120,11 +120,11 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
    * @param Closure|null $getter
    */
   protected function createPropertyBehavior( ?Closure $validate = null, ?Closure $init = null, ?Closure $setter = null, ?Closure $getter = null,
-    ?Closure $msetter = null, ?Closure $mgetter = null, ?Closure $onChange = null, ?Closure $isEmpty = null, ?Closure $htmlInput = null ) : IPropertyBehavior
+    ?Closure $msetter = null, ?Closure $mgetter = null, ?Closure $onChange = null, ?Closure $isEmpty = null, ?Closure $htmlInput = null, ?Closure $toArray = null ) : IPropertyBehavior
   {
     //..I didn't think this was all that necessary to provide easy control over.
     //..Gonna have to subclass to override.  It's just a bucket...
-    return new PropertyBehavior( $validate, $init, $setter, $getter, $msetter, $mgetter, $onChange, $isEmpty, $htmlInput );
+    return new PropertyBehavior( $validate, $init, $setter, $getter, $msetter, $mgetter, $onChange, $isEmpty, $htmlInput, $toArray );
   }
   
     
@@ -198,6 +198,7 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
     $onChange = null;
     $isEmpty = null;
     $htmlInput = null;
+    $toArray = null;
     
     foreach( $data as $k => $v )
     {
@@ -261,13 +262,21 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
           $htmlInput = $v;
         break;
         
+        case self::TOARRAY:
+          if ( !( $v instanceof Closure ))
+            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
+
+          $toArray = $v;
+        break;
+          
+        
         default:
           $this->setProperty( $b, $name, $k, $v );
         break;
       }          
     }
     
-    $b->addBehavior( $this->createPropertyBehavior( $validate, $init, $setter, $getter, $msetter, $mgetter, $onChange, $isEmpty, $htmlInput ));
+    $b->addBehavior( $this->createPropertyBehavior( $validate, $init, $setter, $getter, $msetter, $mgetter, $onChange, $isEmpty, $htmlInput, $toArray ));
     
     return $b;
   }

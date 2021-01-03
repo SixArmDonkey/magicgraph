@@ -18,7 +18,7 @@ class TextAreaElement extends Element
 {
   private string $value;
   
-  public function __construct( string $name, string $id, string $value, array $attributes = [] )
+  public function __construct( string $name, ?string $id, string $value, array $attributes = [] )
   {
     if ( !empty( $value ))
       $attributes['value'] = $value;

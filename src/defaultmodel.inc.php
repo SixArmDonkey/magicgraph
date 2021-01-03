@@ -86,6 +86,14 @@ class DefaultModel implements IModel, JsonSerializable
   
   
   /**
+   * If setValue is called with a non-valid property, the property and value will appear in this array.
+   * getValue() and toArray() will look at the values in this array.
+   * @var array [key => value]
+   */
+  private array $extraData = [];
+  
+  
+  /**
    * Create a new DefaultModel instance.
    * 
    * The supplied property set is used to determine what properties are available
@@ -352,6 +360,9 @@ class DefaultModel implements IModel, JsonSerializable
    */
   public function & getValue( string $property, array $context = [] )
   {
+    if ( isset( $this->extraData[$property] ))
+      return $this->extraData[$property];
+    
     //..Get the property of a child model by prefix
     $res = $this->getPropertyByPrefix( $property );
     if ( !empty( $res ))
@@ -426,10 +437,11 @@ class DefaultModel implements IModel, JsonSerializable
         $this->edited->add( $prop );   
       
       return;
-    }    
+    }
     
     if ( !$this->properties->isMember( $property ))
     {
+      $this->extraData[$property] = $value;
       return;
     }
     
@@ -513,7 +525,7 @@ class DefaultModel implements IModel, JsonSerializable
     }
 
     
-    //..Any non-scalar, non-array, properties have potentially been modified 
+    //..Any non-scalar, non-array properties have potentially been modified 
     //  outside of DefaultModel::setValue().  This means that the edited array
     //  may not include the property names even though they were edited.
     //..This isn't the best way to do this.  There should be change events 
@@ -780,9 +792,9 @@ class DefaultModel implements IModel, JsonSerializable
    * This probably does not work with object properties.  Need to test.
    * @return string JSON object 
    */
-  public function toObject( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false ) : stdClass
+  public function toObject( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : stdClass
   {
-    $a = $this->toArray( $properties, $includeArrays, $includeModels );
+    $a = $this->toArray( $properties, $includeArrays, $includeModels, $includeExtra );
     return $this->arrayToObject( $a );
   }
   
@@ -791,7 +803,7 @@ class DefaultModel implements IModel, JsonSerializable
    * Convert this model to an array.
    * @param IPropertySet $properties Properties to include 
    */
-  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false ) : array
+  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : array
   {    
     $out = [];
     
@@ -809,6 +821,7 @@ class DefaultModel implements IModel, JsonSerializable
     {
       try {
         $prop = $this->getProperty( $p );
+        $prop->getPropertyBehavior();
       } catch( \InvalidArgumentException $e ) {
         //..Just skip it.  These are either orphaned attributes or attributes without values.
         /**
@@ -853,7 +866,8 @@ class DefaultModel implements IModel, JsonSerializable
             else
               $a[$k] = $v;
           }
-          $out[$prop->getName()] = $a;
+          
+          $out[$prop->getName()] = $this->modifyToArrayValue( $prop, $a );
         }
         //..Don't want to output invalid column names...
         //else 
@@ -866,6 +880,10 @@ class DefaultModel implements IModel, JsonSerializable
       }
       else 
       {
+        
+        //..Modify for toArray
+        $val = $this->modifyToArrayValue( $prop, $val );
+        
         //..Casting the property itself to a string bypasses model level 
         //  getter/setter methods attached to the property set.  
         //  That is no good, so we're using the value cast to a string.  Should be fine.
@@ -885,13 +903,37 @@ class DefaultModel implements IModel, JsonSerializable
           $out[$prop->getName()] = null;
         }
         else if ( is_bool( $val ))
+        {
           $out[$prop->getName()] = ( $val ) ? '1' : '0';
+        }
         else if ( $prop->getFlags()->hasVal( IPropertyFlags::USE_NULL ) && is_null( $val ))
+        {
           $out[$prop->getName()] = null;
+        }
+        else if ( is_null( $val ))
+        {
+          //..Use default instead of null (null is likely due to some left join, etc) since null is not allowed for this property.
+          $out[$prop->getName()] = $prop->getDefaultValue();
+        }
         else 
         {
           $out[$prop->getName()] = (string)$val; //$prop->__toString();//(string)$prop;
         }
+      }
+    }
+    
+    
+    //..Used for properties outside of the main property set 
+    //..For joined tables, etc, this may be used to provide those values.
+    //..This could be dangerous
+    /**
+     * @todo Consider validating these properties against model/array property sets embedded within this model.
+     */
+    if ( $includeExtra )
+    {      
+      foreach( $this->extraData as $k => $v )
+      {
+        $out[$k] = $v;
       }
     }
     
@@ -1034,7 +1076,7 @@ class DefaultModel implements IModel, JsonSerializable
    */
   public function jsonSerialize()
   {
-    return $this->toObject( $this->properties, false, false );
+    return $this->toObject( null, false, false );
   }
   
   
@@ -1165,4 +1207,26 @@ class DefaultModel implements IModel, JsonSerializable
       }
     }    
   }  
+  
+  
+  /**
+   * Used with toArray.  Modifies the value to be output via toArray property behavior callbacks.
+   * @param IProperty $prop
+   * @param type $value
+   */
+  private function modifyToArrayValue( IProperty $prop, $value ) 
+  {
+    foreach( $prop->getPropertyBehavior() as $b )
+    {
+      /* @var $b IPropertyBehavior */
+      $f = $b->getToArrayCallback();
+      if ( $f instanceof Closure )
+      {
+        $value = $f( $this, $prop, $value );
+      }
+    }
+    
+    return $value;
+  }
+  
 }

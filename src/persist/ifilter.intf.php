@@ -20,7 +20,7 @@ namespace buffalokiwi\magicgraph\persist;
  * 
  * @todo Figure out how to make IFilter make more sense.  There is no way to determine which type of filter to use when using IRepository::stream(), because we
  * have no idea what storage engine the repository represents (nor should we).
- * @deprecated Stupid
+ * @deprecated To be removed.
  */
 interface IFilter
 {

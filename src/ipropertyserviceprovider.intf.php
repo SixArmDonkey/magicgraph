@@ -21,15 +21,8 @@ use buffalokiwi\magicgraph\persist\IRunnable;
  * A property provider is used with a ModelFactory to add additional 
  * properties to a model in addition to the model's base configuration.
  * 
- * This is like a standard IPropertyConfig instance, but it adds the ability 
- * to have a save function attached.  This is used with the various
- * relationship providers.
- * 
  * This interface makes it possible to attach more interactive property configurations
  * to a ServicableModel instance.
- * 
- * This is NOT necessary to use unless you need custom save functions attached
- * to the model for whatever properties are defined by this.
  */
 interface IPropertyServiceProvider 
 {
@@ -38,12 +31,4 @@ interface IPropertyServiceProvider
    * @return IPropertyConfig config 
    */
   public function getPropertyConfig() : IPropertyConfig;
-  
-  
-  /**
-   * Retrieve the save function used for saving stuff from the provider.
-   * @param \buffalokiwi\magicgraph\IModel $parent
-   * @return IRunnable
-   */
-  public function getSaveFunction( IModel $parent ) : array;
 }

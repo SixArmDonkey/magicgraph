@@ -32,12 +32,14 @@ Documentation is a work in progress.
     4. [Decorating Repositories](#decorating-repositories)
     5. [Serviceable Repository](#serviceable-repository)
     6. [Composite Primary Keys](#composite-primary-keys)
-8. Transactions 
+8. Transactions
     1. Overview
-    2. Transaction Factory
-    3. Save Functions     
-    4. Chained Transaction Manager 
-    5. Unit of Work 
+    2. Creating a Transaction
+    3. Transaction Factory
+    4. Save Functions
+    5. Chained Transaction Manager
+    6. Unit of Work
+    7. Full Example
 9. Relationships
     1. One to One 
     2. One to Many
@@ -67,8 +69,10 @@ Documentation is a work in progress.
     1. The Config Mapper 
     2. Property Factory
     3. Property Set Factory
-18. Extending Magic Graph 
-19. Tutorial
+18. Entity-Attribute-Value (EAV)
+19. Searching
+20. Extending Magic Graph 
+21. Tutorial
 
 ---
   
@@ -80,14 +84,14 @@ The magic is how behavior is defined, how models are created and linked together
 at design time or run time.  Magic Graph makes it easy to design and use rich hierarchical domain models, 
 which can incorporate various independently designed and tested behavioral strategies.  
   
-Magic Graph is a convention based library, coded in pure PHP, with zero outside configuration.  XML, YAML or JSON will 
+Magic Graph is a convention based library, coded in pure PHP - with zero outside configuration.  XML, YAML or JSON will 
 not be found anywhere near Magic Graph.  
   
   
 
 **Why was this written?**
 
-Magento.  After using that monstrosity, I decided to write a better eCommerce engine (almost finished).  
+Magento.  After using that monstrosity, I decided to write a better eCommerce engine.  
 That meant I needed an ORM library that allowed me to create an EAV-ish style system, but without the insanity of EAV.  
 I realized that the persistence layer isn't really all that important at all, and should have zero impact on how an 
 application is designed.  Instead of storing information about the data in the database, everything is done by convention,
@@ -95,7 +99,7 @@ in code, where it belongs.  This is accomplished by backing model properties wit
 certain data type.  This allowed me to create models on the fly, with various self-validating data types, which can 
 also have various behaviors coupled to them.
 
-Magic Graph is quite stable, and is currently the foundation of the Retail Rack eCommerce engine.
+Magic Graph is stable, and is currently the foundation of the Retail Rack eCommerce engine.
   
   
 **Persistence**
@@ -1183,6 +1187,212 @@ Note: when supplying primary key values to repository methods, they are accepted
 I will create a way to not have to depend on the order of arguments in a future release.
   
 
-The documentation is incomplete.  
+### Transactions
+
+#### Overview 
+Transactions are used to execute save operations against some persistence layer.  Similar to a database transaction, 
+MagicGraph transactions will:
+
+1. Start a transaction in the persistence layer when available
+2. Execute arbitrary code against the persistence layer
+3. Commit the changes
+4. Roll back the changes on failure
+
+Transactions are based on a single interface [ITransaction](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ITransaction.html), 
+and can have multiple implementations used to support various persistence layers.  MagicGraph fully supports using 
+multiple, and different, persistence layers concurrently.  Transactions can be considered an adapter, which 
+executes persistence-specific commands used to implement the required commit and rollback functionality.
+
+Currently, MagicGraph ships with a single transaction type: [MySQLTransaction](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-MySQLTransaction.html)
 
 
+#### Creating a Transaction
+
+At the heart of any transaction is the code to be executed.  In MagicGraph, the interface [IRunnable](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-IRunnable.html)
+is used to define the code to be executed within a transaction.  This type exists, because each persistence type will require a subclass of IRunnable to be created.
+These types are used to group transactions by persistence type, and to expose persistence-specific methods that may be required
+when working with the transactions.  For example, [ISQLRunnable](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ISQLRunnable.html) is used 
+for persistence layers that utilize SQL.  ISQLRunnable adds a single method getConnection(), which can be used to access the underlying database connection.  
+
+In it's simplest form, a transaction is a function passed to a Transaction object.  The supplied function is executed 
+when Transaction::run() is called.  It is worth noting that Transaction can accept multiple functions.  Transaction::run()
+will call each of the supplied functions in the order in which they were received.
+
+
+```php
+
+//..Get some data, model, etc.
+$data = 'This represents a model or some other data being saved';
+
+//..Create a new transaction. and write the contents of $data to a file when Transaction::run() is executed.
+$transaction = new buffalokiwi\magicgraph\persist\Transaction( new buffalokiwi\magicgraph\persist\Runnable( function() use($data) {
+  file_put_contents( 'persistence.txt', $data );
+}));
+
+```
+
+
+Executing the transaction 
+
+```php
+
+//..Start a new transaction inside of the persistence layer 
+$transaction->beginTransaction();
+
+try {
+  //..Execute the code 
+  $transaction->run();
+
+  //..Commit any changes in the persistence layer 
+  $transaction->commit();
+
+} catch( \Exception $e ) {
+  //..OH NO!  An Error!
+  //..Revert any changes in the persistence layer
+  $transaction->rollBack();
+}
+
+```
+
+The default Transaction object shipped with MagicGraph does not connect to any specific persistence layer, and the implementations
+of beginTransaction, commit and rollBack do nothing.
+
+
+Since we want methods to actually do things, this is an example of how to run a transaction against MySQL/MariaDB.  A MySQL 
+transaction is passed an instance of [ISQLRunnable](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ISQLRunnable.html).  Currently, 
+there is a single implementation of ISQLRunnable, and that is [MySQLRunnable](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-MySQLRunnable.html).  
+MySQL runnable differs from the Transaction object used in the previous example by adding a constructor argument that accepts an instance of ISQLRepository.  The repository is used to 
+obtain an instance of [buffalokiwi\magicgraph\pdo\IDBConnection](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-pdo-IDBConnection.html), which is used to execute 
+the transaction.
+
+The following is a full example of how to execute a transaction against a SQLRepository instance:
+
+```php
+
+//..Create a repository
+$testSQLRepo = new SQLRepository(
+  'inlinetest',
+  new DefaultModelMapper( function( IPropertySet $props ) {
+    return new DefaultModel( $props );
+  }, IModel::class ),
+  $dbFactory->getConnection(),
+  new QuickPropertySet([
+    //..Id property, integer, primary key
+    'id' => [
+      'type' => 'int',
+      'flags' => ['primary']
+    ],
+
+    //..Name property, string 
+    'name' => [
+      'type' => 'string',
+    ]
+  ])
+);   
+   
+//..Create a new model and assign some property values
+$model = $testSQLRepo->create([]);
+$model->name = 'test';
+  
+//..Create a transaction 
+$transaction = new \buffalokiwi\magicgraph\persist\MySQLTransaction(
+  new \buffalokiwi\magicgraph\persist\MySQLRunnable(
+    $testSQLRepo,
+    function() use( $testSQLRepo, $model ) {
+      $testSQLRepo->save( $model );
+    }
+));
+
+
+//..Start a new transaction inside of the persistence layer
+$transaction->beginTransaction();
+
+try {
+  //..Execute the code 
+  $transaction->run();
+
+  //..Commit any changes in the persistence layer 
+  $transaction->commit();
+
+} catch( \Exception $e ) {
+  //..OH NO!  An Error!
+  //..Revert any changes in the persistence layer
+  $transaction->rollBack();
+}
+
+```
+
+While transactions against a single persistence engine could be more simply coded directly against the database, 
+the MagicGraph Transaction abstraction provides a way for us to run transactions against multiple database connections, 
+or even different persistence engines.  
+
+
+#### Transaction Factory
+
+The transaction factory generates instances of some subclass of ITransaction.  The idea is to pass ITransactionFactory::createTransactions() a list of 
+IRunnable instances.  The supplied IRunnable instances should be a subclass of IRunnable, and 
+
+
+
+
+
+```php
+
+//..Create a database connection factory for some MySQL database
+$dbFactory = new PDOConnectionFactory( 
+  new MariaConnectionProperties( 
+    'localhost',    //..Host
+    'root',         //..User
+    '',             //..Pass
+    'retailrack' ), //..Database 
+  function(IConnectionProperties $args  ) {
+    return new MariaDBConnection( $args );
+});
+
+
+//..Create a quick test repository for a table named "inlinetest", with two columns id (int,primary,autoincrement) and name(varchar).
+$repo = new InlineSQLRepo( 
+  'inlinetest', 
+  $dbFactory->getConnection(),
+  new PrimaryIntegerProperty( 'id' ),
+  new DefaultStringProperty( 'name' )
+);
+
+//..Create a new model and set the name property value to "test"
+$model = $repo->create([]);
+$model->name = 'test';
+
+
+//..Create a new transaction factory
+//..The supplied map is used within the TransactionFactory::createTransactions() method, and will generate ITransaction
+//  instances of the appropriate type based on a predefined subclass of IRunnable 
+//..Instances passed to TransactionFactory must be ordered so that the most generic IRunnable instances are last.
+$tf = new TransactionFactory([
+  //..Supplying ISQLRunnable instances will generate instaces of MySQLTransaction
+  ISQLRunnable::class => function( IRunnable ...$tasks ) { return new MySQLTransaction( ...$tasks ); },
+  //..Supplying instances of IRunnable will generate a Transaction instance
+  IRunnable::class => function( IRunnable ...$tasks ) { return new Transaction( ...$tasks ); }
+]);
+
+//..Execute a mysql transaction
+//..This will use a database transaction to save the model
+//..If any exceptions are thrown by the supplied closure, then rollback is called.  Otherwise, commit is called 
+//..upon successful completion of the closure
+$tf->execute( new MySQLRunnable( $repo, function() use($repo, $model) {
+  $repo->save( $model );  
+}));
+
+```
+
+
+If $repo->save() were to throw an exception in the previous example, then the transaction would have been rolled back.  If
+the following code is executed, then you will see how the row is never added to the database due to rollback being called
+when the exception is thrown.
+
+```php        
+$tf->execute( new MySQLRunnable( $repo, function() use($repo, $model) {
+  $repo->save( $model );  
+  throw new \Exception( 'No save for you' );
+}));
+
+```

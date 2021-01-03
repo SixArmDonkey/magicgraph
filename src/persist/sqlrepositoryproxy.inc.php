@@ -12,10 +12,8 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\persist;
 
-use buffalokiwi\buffalotools\types\IBigSet;
-use buffalokiwi\magicgraph\DBException;
-use buffalokiwi\magicgraph\IModel;
 use buffalokiwi\magicgraph\pdo\IDBConnection;
+use buffalokiwi\magicgraph\search\ISearchQueryGenerator;
 
 
 class SQLRepositoryProxy extends RepositoryProxy implements ISQLRepository
@@ -30,20 +28,6 @@ class SQLRepositoryProxy extends RepositoryProxy implements ISQLRepository
   {
     parent::__construct( $repo );
     $this->repo = $repo;
-  }
-
-  
-  /**
-   * Query the data source.
-   * @param IBigSet $properties Properties to return 
-   * @param IFilter $filter Filters to use 
-   * @param IRows $rows Sort order and limit 
-   * @return IModel[] model instances
-   * @throws DBException For db errors
-   */
-  public function query( IBigSet $properties, ISQLFilter $filter, IRows $rows = null ) : array
-  {
-    return $this->repo->query( $properties, $filter, $rows );
   }
     
   
@@ -150,5 +134,15 @@ class SQLRepositoryProxy extends RepositoryProxy implements ISQLRepository
   protected final function getRepo() : ISQLRepository
   {
     return $this->repo;
+  }
+  
+  
+  /**
+   * Retrieve the search query generator 
+   * @return ISearchQueryGenerator generator 
+   */
+  public function getSearchQueryGenerator() : ISearchQueryGenerator
+  {
+    return $this->repo->getSearchQueryGenerator();
   }
 }

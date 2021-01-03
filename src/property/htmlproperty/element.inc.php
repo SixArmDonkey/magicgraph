@@ -60,14 +60,18 @@ abstract class Element implements IElement
    * @param string $id element id attribute value 
    * @param array $attributes map of additional element attributes.  key => value.
    */
-  public function __construct( string $element, string $name, string $id, array $attributes = [] )
+  public function __construct( string $element, string $name, ?string $id, array $attributes = [] )
   {
     $this->element = $element;
     $this->name = $name;
-    $this->id = $id;
+    $this->id = $id ?? '';
+    
     
     if ( empty( $element ))
       throw new InvalidArgumentException( 'element must not be empty' );
+    
+    if ( empty( $name ) && empty( $id ))
+      $attributes['disabled'] = 'disabled';
     else if ( empty( $name ))
       throw new InvalidArgumentException( 'name must not be empty' );
     
@@ -87,7 +91,7 @@ abstract class Element implements IElement
     }
     
     $this->attributes['name'] = $name;
-    if ( empty( $id ))
+    if ( empty( $id ) && $id !== null )
       $this->attributes['id'] = $name;
     else
       $this->attributes['id'] = $id;

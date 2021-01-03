@@ -80,9 +80,10 @@ interface IPropertySet extends IBigSet
   
   /**
    * Retrieve a list of all the properties 
+   * @param string ...$name Optional list of properties to return by name 
    * @return IProperty[] properties
    */
-  public function getProperties() : array;
+  public function getProperties( string ...$name ) : array;
   
   
   /**
@@ -156,5 +157,25 @@ interface IPropertySet extends IBigSet
   public function getNewMembers() : array;  
   
   
+  /**
+   * Callback when a member is added 
+   * @param Closure $callback function 
+   * @return void
+   */
   public function setOnAddMember( Closure $callback ) : void;  
+  
+  
+  /**
+   * Retrieve a multi-dimensional array, which defines all properties in this object.
+   * @return array schema
+   */
+  public function getSchema() : array;  
+  
+  
+  /**
+   * Adds a property to the property set.  For a more robust solution, please use the preferred method: addPropertyConfig().
+   * @param \buffalokiwi\magicgraph\property\IProperty $prop Property to add
+   * @return void
+   */
+  public function addProperty( IProperty $prop ) : void;  
 }

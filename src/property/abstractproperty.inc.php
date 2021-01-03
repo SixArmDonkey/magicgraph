@@ -438,13 +438,14 @@ abstract class AbstractProperty implements IProperty
    * @param mixed $value Value to set
    * @return void
    * @throws ValidationException 
+   * @todo Figure out why readonly is commented out 
    * @final 
    */
   public final function setValue( $value ) : void
   {
-    if ( $this->readOnly )
-      throw new ValidationException( $this->name . ' is read only' );
-    else if ( $this->flags->WRITE_EMPTY() && !$this->testEmpty())
+//    if ( $this->readOnly )
+//      throw new ValidationException( $this->name . ' is read only' );
+    if ( $this->flags->WRITE_EMPTY() && !$this->testEmpty())
     {
       throw new ValidationException( $this->name . ' has already been assigned a value, and is now read only' );
     }

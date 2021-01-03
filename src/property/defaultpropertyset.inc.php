@@ -195,24 +195,49 @@ class DefaultPropertySet extends BigSet implements IPropertySet
       if ( isset( $this->properties[$property->getName()] ))
         continue;
       
-      //..THIS IS CRITICALLY IMPORTANT TO CALL PRIOR TO USING ANY NEW IPROPERTY INSTANCE
-      //  THIS CALL IS REQUIRED TO INTIALIZE ALL DEFAULT VALUES AND INSTANCES WITHIN THE PROPERTY
-      $property->reset();
-      
-      //..Add this to the members array for the parent Set instance
-      $this->members[] = $property->getName();
-      $newNames[] = $property->getName();
-       
-      //..Add the property to the local list 
-      $this->properties[$property->getName()] = $property;
-      
-      if ( empty( $this->primaryKey ) && $property->getFlags()->hasVal( IPropertyFlags::PRIMARY ))
-      {
-        //..Save the name 
-        $this->primaryKey = $property->getName();
-      }
-    }        
+      $newNames[] = $this->addAndInitializeNewProperty( $property );
+    }    
     
+    $this->addNewMembers( ...$newNames );
+  }
+  
+  
+  /**
+   * Given an IProperty, initialize the property by calling reset() and add that property to the
+   * DefaultPropertySet.  Call addNewMembers() after calling this method to add the property names to the underlying
+   * BigSet instance. 
+   * @param \buffalokiwi\magicgraph\property\IProperty $property Property 
+   * @return string New property name 
+   */
+  private function addAndInitializeNewProperty( IProperty $property ) : string
+  {
+    //..THIS IS CRITICALLY IMPORTANT TO CALL PRIOR TO USING ANY NEW IPROPERTY INSTANCE
+    //  THIS CALL IS REQUIRED TO INTIALIZE ALL DEFAULT VALUES AND INSTANCES WITHIN THE PROPERTY
+    $property->reset();
+
+    //..Add this to the members array for the parent Set instance
+    $this->members[] = $property->getName();
+
+    //..Add the property to the local list 
+    $this->properties[$property->getName()] = $property;
+
+    if ( empty( $this->primaryKey ) && $property->getFlags()->hasVal( IPropertyFlags::PRIMARY ))
+    {
+      //..Save the name 
+      $this->primaryKey = $property->getName();
+    }    
+
+    return $property->getName();
+  }
+  
+  
+  /**
+   * Modifies the parent BigSet instance and adds the newly created members.  
+   * @param string $newNames
+   * @return void
+   */
+  private function addNewMembers( string ...$newNames ) : void
+  {
     $this->addMember( ...$newNames );
     
     $args = [];
@@ -231,7 +256,19 @@ class DefaultPropertySet extends BigSet implements IPropertySet
       {
         $f( $args );
       }    
-    }
+    }    
+  }
+  
+  
+  /**
+   * Adds a property to the property set.  For a more robust solution, please use the preferred method: addPropertyConfig().
+   * @param \buffalokiwi\magicgraph\property\IProperty $prop Property to add
+   * @return void
+   * @final 
+   */
+  public final function addProperty( IProperty $prop ) : void
+  {
+    $this->addNewMembers( $this->addAndInitializeNewProperty( $prop ));    
   }
   
   
@@ -297,6 +334,32 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   {
     return $this->config;
   }
+  
+  
+  
+  /**
+   * Retrieve a multi-dimensional array, which defines all properties in this object.
+   * @return array schema
+   */
+  public function getSchema() : array
+  {
+    $out = [];
+    
+    foreach( $this->getProperties() as $prop )
+    {
+      /* @var $prop IProperty */
+      $out[$prop->getName()] = [
+        'name' => $prop->getName(),
+        'caption' => $prop->getCaption(),
+        'type' => $prop->getType()->value(),
+        'defaultValue' => $prop->getDefaultValue(),
+        'flags' => implode( ',', $prop->getFlags()->getActiveMembers())
+      ];
+    }
+    
+    return $out;
+  }
+  
   
   
   /**
@@ -386,11 +449,21 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   
   /**
    * Retrieve a list of all the properties 
+   * @param string ...$name Optional list of properties to return by name 
    * @return IProperty[] properties
    */
-  public function getProperties() : array
+  public function getProperties( string ...$name ) : array
   {
-    return $this->properties;
+    if ( empty( $name ))
+      return $this->properties;
+    
+    $out = [];
+    foreach( $name as $n )
+    {
+      $out[] = $this->getProperty( $n );
+    }
+    
+    return $out;
   }
   
   

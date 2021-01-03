@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
@@ -8,11 +7,7 @@
  * 
  * @author John Quinn
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 declare( strict_types=1 );
 
@@ -36,7 +31,7 @@ class SelectElement extends Element
   private array $selectedValue;
   
   
-  public function __construct( string $name, string $id, string $value, array $options, array $attributes = [] )
+  public function __construct( string $name, ?string $id, string $value, array $options, array $attributes = [] )
   {
     if ( empty( $options ))
       throw new InvalidArgumentException( 'Options must not be empty' );
@@ -52,7 +47,19 @@ class SelectElement extends Element
     }
     
     $this->options = $options;
-    $this->selectedValue = explode( ',', $value );
+    if ( !empty( $value ))
+      $this->selectedValue = explode( ',', $value );
+    else
+      $this->selectedValue = [];
+
+    
+    if ( empty( $this->selectedValue ) && !empty( $options ))
+    {
+      $keys = array_keys( $options );
+      $k = reset( $keys );
+      $this->selectedValue[$k] = $k;
+    }
+    
     
     parent::__construct( 'select', $name, $id, $attributes );
   }

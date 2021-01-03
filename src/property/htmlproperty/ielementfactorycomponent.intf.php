@@ -36,5 +36,5 @@ interface IElementFactoryComponent
    * @return IElement Element 
    * @throws HTMLPropertyException 
    */
-  public function createElement( IProperty $prop, string $name, string $id, string $value ) : IElement;
+  public function createElement( IProperty $prop, string $name, ?string $id, string $value ) : IElement;
 }

@@ -24,6 +24,14 @@ use buffalokiwi\magicgraph\property\ISetProperty;
 use buffalokiwi\magicgraph\property\IStringProperty;
 use InvalidArgumentException;
 
+
+/**
+ * A default set of IElement factories used to create IElementFactoryComponent instances used within the ElementFactory.
+ * 
+ * ie: Pass ( new DefaultComponentMap())->getMap() to ElementFactory::__construct() 
+ * 
+ * This is simply a default setup object for the html element generators.
+ */
 class DefaultComponentMap
 {
   private array $map;
@@ -31,7 +39,7 @@ class DefaultComponentMap
   public function __construct( array $map = [] )
   {
     $this->map = array_merge([
-      IBooleanProperty::class => function( IBooleanProperty $prop, string $name, string $id, string $value ) : IElement {
+      IBooleanProperty::class => function( IBooleanProperty $prop, string $name, ?string $id, string $value ) : IElement {
         $attrs = [];
         if ( in_array( strtolower( $value ), ['1','true'] ))
           $attrs['checked'] = 'checked';
@@ -39,7 +47,7 @@ class DefaultComponentMap
         return new FancyCheckboxElement( $name, $id, '', $attrs );
       },
       
-      IDateProperty::class => function( IProperty $prop, string $name, string $id, string $value ) : IElement {
+      IDateProperty::class => function( IProperty $prop, string $name, ?string $id, string $value ) : IElement {
         $attrs = [];
         if ( $prop->getFlags()->hasVal( IPropertyFlags::REQUIRED ))
           $attrs['required'] = 'required';
@@ -47,9 +55,9 @@ class DefaultComponentMap
         return new InputElement( 'date', $name, $id, $value, $attrs );
       },
               
-      IEnumProperty::class => function( IEnumProperty $prop, string $name, string $id, string $value ) : IElement {
+      IEnumProperty::class => function( IEnumProperty $prop, string $name, ?string $id, string $value ) : IElement {
         $enum = $prop->getValueAsEnum();
-        if ( !$enum->isValid( $value ))
+        if ( !empty( $value ) && !$enum->isValid( $value ))
           throw new InvalidArgumentException( 'Invalid enum value' );
         
         $stored = $enum->getStoredValues();
@@ -67,7 +75,7 @@ class DefaultComponentMap
       },
 
 
-      ISetProperty::class => function( ISetProperty $prop, string $name, string $id, $value ) : IElement {
+      ISetProperty::class => function( ISetProperty $prop, string $name, ?string $id, $value ) : IElement {
         $set = $prop->getValueAsSet();
         
         if ( empty( $value ))
@@ -98,7 +106,7 @@ class DefaultComponentMap
       },
                     
       
-      IFloatProperty::class => function( IFloatProperty $prop, string $name, string $id, string $value ) : IElement {
+      IFloatProperty::class => function( IFloatProperty $prop, string $name, ?string $id, string $value ) : IElement {
         if ( !is_numeric( $value ))
           throw new InvalidArgumentException( 'value must be numeric' );
         
@@ -125,8 +133,8 @@ class DefaultComponentMap
         return new InputElement( 'number', $name, $id, $value, $attrs );
       },
               
-      IIntegerProperty::class => function( IIntegerProperty $prop, string $name, string $id, string $value ) : IElement {
-        if ( !is_numeric( $value ))
+      IIntegerProperty::class => function( IIntegerProperty $prop, string $name, ?string $id, string $value ) : IElement {
+        if ( !empty( $value ) && !is_numeric( $value ))
           throw new InvalidArgumentException( 'value must be numeric' );
         
         
@@ -147,11 +155,13 @@ class DefaultComponentMap
         return new InputElement( 'number', $name, $id, $value, $attrs );
       },
               
-      IMoneyProperty::class => function( IMoneyProperty $prop, string $name, string $id, string $value ) : IElement {
+      IMoneyProperty::class => function( IMoneyProperty $prop, string $name, ?string $id, string $value ) : IElement {
         $value = str_replace( '$', '', $value );
         
-        if ( !is_numeric( $value ))
+        if ( !empty( $value ) && !is_numeric( $value ))
+        {
           throw new InvalidArgumentException( 'value must be numeric' );
+        }
         
         $attrs = [
           'step' => '0.001'
@@ -171,7 +181,7 @@ class DefaultComponentMap
         return new InputElement( 'number', $name, $id, $value, $attrs );
       },
               
-      IStringProperty::class => function( IStringProperty $prop, string $name, string $id, string $value ) : IElement {
+      IStringProperty::class => function( IStringProperty $prop, string $name, ?string $id, string $value ) : IElement {
         $attrs = [];
         
         if ( $prop->getMin() != -1 )

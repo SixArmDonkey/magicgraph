@@ -12,10 +12,11 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\misc\counter;
 
-use buffalokiwi\magicgraph\IModelMapper;
 use buffalokiwi\magicgraph\pdo\IDBConnection;
-use buffalokiwi\magicgraph\property\IPropertySet;
-use buffalokiwi\magicgraph\persist\SQLRepository;
+use buffalokiwi\magicgraph\pdo\TransactionUnit;
+use Exception;
+use InvalidArgumentException;
+use TypeError;
 
 
 /**
@@ -58,9 +59,7 @@ class MySQLCounter implements ICounter
    */
   public function increment( string $key ) : int
   {
-    $useTrans = !$this->dbc->inTransaction();
-    if ( $useTrans )
-      $this->dbc->beginTransaction();
+    $trans = new TransactionUnit( $this->dbc );
     
     try {
       $hasRes = false;
@@ -78,7 +77,7 @@ class MySQLCounter implements ICounter
           {
             break;
           }          
-        } catch( \Exception $e ) {
+        } catch( Exception $e ) {
           //..might be a dup key exception, nbd.
         }
       }
@@ -88,19 +87,15 @@ class MySQLCounter implements ICounter
       
       foreach( $this->dbc->select( 'select value from ' . $this->table . ' where akey=?', [$key] ) as $row )
       {
-        if ( $useTrans )
-          $this->dbc->commit();
-        
+        $trans->commit();
         return (int)$row['value'];
       }
       
-      throw new \Exception( 'Failed to increment variable ' . $key );
+      throw new Exception( 'Failed to increment variable ' . $key );
       
       
-    } catch( Exception | \TypeError $e ) {      
-      if ( $useTrans )
-        $this->dbc->rollBack();
-      
+    } catch( Exception | TypeError $e ) {      
+      $trans->rollBack();
       throw $e;
     }
   }
