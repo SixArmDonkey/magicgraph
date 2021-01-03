@@ -2,7 +2,7 @@
   
 **Behavioral-based object modeling and persistence library for PHP 7.4**  
   
-MIT License
+OSL 3.0 License
   
 ---
 
