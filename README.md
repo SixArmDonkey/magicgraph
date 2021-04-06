@@ -1,6 +1,6 @@
 # BuffaloKiwi Magic Graph
   
-**Behavioral-based object modeling and persistence library for PHP 7.4**  
+**Behavioral-based object modeling, mapping and persistence library for PHP 7.4**  
   
 OSL 3.0 License
   
@@ -32,15 +32,11 @@ Documentation is a work in progress.
     4. [Decorating Repositories](#decorating-repositories)
     5. [Serviceable Repository](#serviceable-repository)
     6. [Composite Primary Keys](#composite-primary-keys)
-8. Transactions
-    1. Overview
-    2. Creating a Transaction
-    3. Transaction Factory
-    4. Save Functions
-    5. Chained Transaction Manager
-    6. Unit of Work
-    7. Full Example
-9. Relationships
+8. [Transactions](#transactions)
+    1. [Overview](#transactions-overview)
+    2. [Creating a Transaction](#creating-a-transaction)
+    3. [Transaction Factory](#transaction-factory)
+9. [Relationships](#relationships)
     1. One to One 
     2. One to Many
     3. Many to Many 
@@ -79,27 +75,9 @@ Documentation is a work in progress.
 
 ## Overview
 
-The magic part of Magic Graph isn't building SQL queries using functions (SQL works great).  
-The magic is how behavior is defined, how models are created and linked together, and how all of this can be done 
-at design time or run time.  Magic Graph makes it easy to design and use rich hierarchical domain models, 
-which can incorporate various independently designed and tested behavioral strategies.  
-  
-Magic Graph is a convention based library, coded in pure PHP - with zero outside configuration.  XML, YAML or JSON will 
-not be found anywhere near Magic Graph.  
-  
-  
-
-**Why was this written?**
-
-Magento.  After using that monstrosity, I decided to write a better eCommerce engine.  
-That meant I needed an ORM library that allowed me to create an EAV-ish style system, but without the insanity of EAV.  
-I realized that the persistence layer isn't really all that important at all, and should have zero impact on how an 
-application is designed.  Instead of storing information about the data in the database, everything is done by convention,
-in code, where it belongs.  This is accomplished by backing model properties with independent objects that handle a 
-certain data type.  This allowed me to create models on the fly, with various self-validating data types, which can 
-also have various behaviors coupled to them.
-
-Magic Graph is stable, and is currently the foundation of the Retail Rack eCommerce engine.
+Magic graph is an object mapping and persistence library written in pure PHP.  Magic Graph makes it easy to design 
+and use rich hierarchical domain models, which may incorporate various independently designed and tested behavioral 
+strategies.  
   
   
 **Persistence**
@@ -1189,8 +1167,8 @@ I will create a way to not have to depend on the order of arguments in a future 
 
 ### Transactions
 
-#### Overview 
-Transactions are used to execute save operations against some persistence layer.  Similar to a database transaction, 
+#### Transactions Overview 
+Transactions represent some unit of work, and are typically used to execute save operations against some persistence layer.  Similar to a database transaction, 
 MagicGraph transactions will:
 
 1. Start a transaction in the persistence layer when available
@@ -1330,10 +1308,13 @@ or even different persistence engines.
 #### Transaction Factory
 
 The transaction factory generates instances of some subclass of ITransaction.  The idea is to pass ITransactionFactory::createTransactions() a list of 
-IRunnable instances.  The supplied IRunnable instances should be a subclass of IRunnable, and 
+IRunnable instances, and the transaction factory will then group them by persistence type (registered subclass).  
+Transactions are executed as follows:
 
-
-
+1. Begin transaction is executed for each ITransaction instance
+2. Run is called for each ITransaction instance
+3. Commit is called for each ITransaction Instance
+4. If an exception is thrown at any time, rollback is called for each ITransaction instance and the exception is rethrown.
 
 
 ```php
@@ -1396,3 +1377,8 @@ $tf->execute( new MySQLRunnable( $repo, function() use($repo, $model) {
 }));
 
 ```
+
+
+### Relationships
+
+
