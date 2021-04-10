@@ -36,7 +36,10 @@ Documentation is a work in progress.
     1. [Overview](#transactions-overview)
     2. [Creating a Transaction](#creating-a-transaction)
     3. [Transaction Factory](#transaction-factory)
-9. [Relationships](#relationships)
+9. [Model service providers](#model-relationship-providers)
+    1. [Serviceable Model](#serviceable-model)
+    2. [Serviceable Repository](#serviceable-repository)
+10. [Relationships](#relationships)
     1. One to One 
     2. One to Many
     3. Many to Many 
@@ -44,31 +47,29 @@ Documentation is a work in progress.
     5. Model property providers 
     6. How Saving Works
     7. Editing Nested Models
-10. Extensible Models
+11. Extensible Models
     1. Overview
     2. Property configuration interface
     3. Property configuration implementation
     4. Model interface
     5. Model implementation 
-11. Behavioral Strategies 
-12. Property service providers
-13. Model service providers 
-14. Database Connections 
+12. Behavioral Strategies 
+13. Database Connections 
     1. PDO 
     2. Extending PDO 
     3. Connection Factories 
-15. Working with Currency 
+14. Working with Currency 
     1. MoneyPHP/Money
     2. Currency properties 
-16. Creating HTML elements
-17. Magic Graph Setup
+15. Creating HTML elements
+16. Magic Graph Setup
     1. The Config Mapper 
     2. Property Factory
     3. Property Set Factory
-18. Entity-Attribute-Value (EAV)
-19. Searching
-20. Extending Magic Graph 
-21. Tutorial
+17. Entity-Attribute-Value (EAV)
+18. Searching
+19. Extending Magic Graph 
+20. Tutorial
 
 ---
   
@@ -1379,6 +1380,393 @@ $tf->execute( new MySQLRunnable( $repo, function() use($repo, $model) {
 ```
 
 
+### Model Relationship Providers 
+
+Similar to a foreign key in a relational database, relationships allow us to create associations between domain objects.
+In MagicGraph, a model (IModel) may contain zero or more properties that reference a single or list of associated IModel objects.
+The parent model may contain [IModelProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-IModel.html)
+and/or [ArrayProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-ArrayProperty.html) properties, 
+which can hold referenced model objects.
+
+For example, the following configuration array contains a model property and an array property.
+
+```php
+
+[
+  'one' => [
+      'type' => 'model',
+      'flags' => ['noinsert','noupdate'],
+      'clazz' => \buffalokiwi\magicgraph\DefaultModel::class
+  ]
+
+  'many' => [
+      'type' => 'array',
+      'flags' => ['noinsert','noupdate'],
+      'value' => [],
+      'clazz' => \buffalokiwi\magicgraph\DefaultModel::class
+  ]
+]
+
+```
+
+Both Model and Array properties must include the "clazz" configuration property, which must equal the class name of the 
+object or objects in the array.  This is used to determine which object to instantiate within the relationship provider, and to 
+ensure that only objects of the specified type are accepted when setting the property value.
+
+Notice that both properties are marked with "noinsert" and "noupdate".  This is required for both model and array properties, 
+and will prevent the properties from being used in insert and update database queries.  If these values are omitted, IModel 
+properties will persist as IModel::__toString() and ArrayProperty will be encoded as json.  
+
+Assigning the values to the parent model goes something like this:
+
+```php
+  //..Assuming $model was created using the above config and that $ref1 and $ref2 are both instances of DefaultModel
+
+  //..Ok
+  $model->one = $ref1;
+
+  //..Throws exception
+  $model->one = 'foo';
+
+  //..Multiple models can be added as an array
+  $model->many = [$ref1, $ref2];
+```
+
+
+Once we have some model or array of models property, we may want to automate the loading and saving of those models.  For example,
+when accessing a model property, we can load the model from the database and return it.  We could also save any edits to the referenced
+model when the parent model is saved.  This behavior is accomplished through implementing 
+the [IModelPropertyProvider](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-IModelPropertyProvider.html) interface.
+
+The IModelPropertyProvider defines several methods for initialization of a model, retrieving the value, setting the value and persisting the value.  
+Model property providers must be used with supporting models and repositories.  
+
+
+```php
+//..A sample child model.  This uses a unique class name instead of QuickModel because IModelProperty will attempt
+//  to instantiate an instance of the model when assigning the default value, and quick model is generic.
+class ChildModel extends buffalokiwi\magicgraph\QuickModel {
+  public function __construct() {
+    parent::__construct([
+      'name' => [
+         'type' => 'string',
+         'value' => 'child model'
+       ]
+    ]);    
+  }
+}
+  
+//..The parent model includes a property "child", which is backed by an IModelProperty, and will contain 
+//  an instance of ChildModel
+$parent = new buffalokiwi\magicgraph\QuickModel([
+   'name' => [
+       'type' => 'string',
+       'value' => 'parent model'
+   ],
+    
+   'child' =>  [
+       'type' => 'model',
+       'clazz' => ChildModel::class
+   ]
+]);
+
+
+//..Models are converted to arrays when using toArray()
+var_dump( $parent->toArray( null, true, true ));
+
+Outputs:
+array (size=2)
+  'name' => string 'parent model' (length=12)
+  'child' => 
+    array (size=1)
+      'name' => string 'child model' (length=11)
+
+
+```
+
+
+
+#### Serviceable Model
+
+A [Serviceable Model](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-ServiceableModel.html) extends the 
+[DefaultModel](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-DefaultModel.html), and modifies the DefaultModel constructor 
+to accept zero or more IModelPropertyProvider instances.  The passed providers are associated with properties defined within the parent model configuration, and 
+will handle loading and saving of the associated model(s).  
+
+
+#### Serviceable Repository
+
+
+[Serviceable Repository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ServiceableRepository.html) 
+and [SQL Serviceable Repository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-SQLServiceableRepository.html) (for SQL repositories)
+are repository decorators, which add support for IModelPropertyProviders.  When models are created in the repository object factory, the model property provider 
+instances are passed to the ServiceableModel constructor.  Additionally, when the repository save method is called, the model property providers save functions will be included 
+as part of the save transaction.
+
+
+
+The next section will describe the model property providers included with Magic Graph.
+
+
 ### Relationships
 
+See [Model service providers](#model-relationship-providers) for information about model properties and IModelPropertyProvider.
 
+The following tables are used in the One to One and One to Many example sections:
+
+```sql
+-- Parent Table
+create table table1 (
+  id int not null primary key auto_increment,
+  name varchar(20) not null,
+  childid int not null
+) engine=innodb;
+
+
+-- Child / linked table 
+create table table2 (
+  id int not null auto_increment,
+  link_table1 int not null,
+  name varchar(20) not null,
+  primary key (link_table1, id),
+  key id(id)
+) engine=innodb;
+
+--Insert the parent model record
+insert into table1 (name,childid) values ('Parent',1);
+
+--insert the child model records
+insert into table2 (link_table1, name) values(last_insert_id(),'Child 1'),(last_insert_id(),'Child 2');
+```
+
+
+
+#### One to One
+
+The [OneOnePropertyService](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-OneOnePropertyService.html) provides
+the ability to load, attach, edit and save a single associated model.  
+
+
+```php
+
+//..When using model property providers / relationships, models MUST extend ServiceableModel.  ServiceableModel 
+//  extends DefaultModel, and adds the required functionality for relationships.
+//..Table1 Model
+class Table1Model extends \buffalokiwi\magicgraph\ServiceableModel {};
+
+//..Table2 Model
+class Table2Model extends \buffalokiwi\magicgraph\ServiceableModel {};
+
+
+//..Create a SQL Database connection 
+$dbFactory = new buffalokiwi\magicgraph\pdo\PDOConnectionFactory( //..A factory for managing and sharing connection instances 
+  new buffalokiwi\magicgraph\pdo\MariaConnectionProperties(       //..Connection properties for MariaDB / MySQL
+    'localhost',                  //..Database server host name 
+    'root',                       //..User name
+    '',                           //..Password
+    'retailrack' ),               //..Database 
+  //..This is the factory method, which is used to create database connection instances
+  //..The above-defined connection arguments are passed to the closure.
+  function( buffalokiwi\magicgraph\pdo\IConnectionProperties $args  ) { 
+    //..Return a MariaDB connection 
+    return new buffalokiwi\magicgraph\pdo\MariaDBConnection( $args );
+  }
+);
+
+
+//..Create the transaction factory
+$tFact = new \buffalokiwi\magicgraph\persist\DefaultTransactionFactory();
+
+
+//..Table2 Repository
+//..This must be initialized prior to Table1Repo because Table1Repo depends on Table2Repo
+$table2Repo = new buffalokiwi\magicgraph\persist\DefaultSQLRepository(
+  'table2', 
+  $dbFactory->getConnection(),
+  Table2Model::class,
+  $table2Properties
+);
+
+//..Create properties for Table1Model
+$table1Properties = new buffalokiwi\magicgraph\property\QuickPropertySet([
+  //..Primary key
+  'id' => [
+      'type' => 'int',
+      'flags' => ['primary']
+  ],
+    
+  //..A name 
+  'name' => [
+      'type' => 'string'      
+  ],
+    
+   //..Property containing the primary key for a Table2Model 
+  'childid' => [
+      'type' => 'int',
+      'value' => 0
+  ],
+    
+  //..Child model property.
+  //..A model from Table2Repository is pulled by the id defined in the "childid" property
+  'child' => [
+    'type' => 'model',
+    'flags' => ['noinsert','noupdate','null'],  //..Since Table2Model requires constructor arguments, we'll pass null here.
+    'clazz' => Table2Model::class
+  ]
+]);
+
+
+$table1Repo = new \buffalokiwi\magicgraph\persist\DefaultSQLServiceableRepository(
+    'table1', //..SQL table name 
+    $dbFactory->getConnection(), //..SQL database connection 
+    Table1Model::class, //..The Table1Model class name used for the object factory 
+    $table1Properties,  //..Properties used to create Table1Model instances
+    $tFact, //..Transaction factory used to handle saving across multiple model property providers 
+    new \buffalokiwi\magicgraph\OneOnePropertyService( new \buffalokiwi\magicgraph\OneOnePropSvcCfg(
+      $table2Repo,
+      'childid',
+      'child'
+)));        
+
+//..Get the only record in table1
+$model = $table1Repo->get('1');
+
+//..Print the model contents with related child models 
+var_dump( $model->toArray( null, true, true ));
+
+
+Outputs:
+array (size=4)
+  'id' => string '1' (length=1)
+  'name' => string 'Parent' (length=6)
+  'childid' => string '1' (length=1)
+  'child' => 
+    array (size=3)
+      'id' => string '1' (length=1)
+      'link_table1' => string '1' (length=1)
+      'name' => string 'Child 1' (length=7)
+```
+
+
+
+#### One to Many
+
+```php
+
+//..When using model property providers / relationships, models MUST extend ServiceableModel.  ServiceableModel 
+//  extends DefaultModel, and adds the required functionality for relationships.
+//..Table1 Model
+class Table1Model extends \buffalokiwi\magicgraph\ServiceableModel {};
+
+//..Table2 Model
+class Table2Model extends \buffalokiwi\magicgraph\ServiceableModel {};
+
+
+//..Model properties for Table1
+$table1Properties = new buffalokiwi\magicgraph\property\QuickPropertySet([
+  'id' => [
+      'type' => 'int',
+      'flags' => ['primary']
+  ],
+    
+  'name' => [
+      'type' => 'string'      
+  ],
+    
+  'children' => [
+    'type' => 'array',
+    'flags' => ['noinsert','noupdate'],
+    'clazz' => Table2Model::class
+  ]
+]);
+
+
+//..Model properties for table 2 
+$table2Properties = new buffalokiwi\magicgraph\property\QuickPropertySet([
+  'id' => [
+      'type' => 'int',
+      'flags' => ['primary']
+  ],
+   
+  'link_table1' => [
+      'type' => 'int',
+      'value' => 0
+  ],
+    
+  'name' => [
+      'type' => 'string'      
+  ]
+]);
+
+//..Create a SQL Database connection 
+$dbFactory = new buffalokiwi\magicgraph\pdo\PDOConnectionFactory( //..A factory for managing and sharing connection instances 
+  new buffalokiwi\magicgraph\pdo\MariaConnectionProperties(       //..Connection properties for MariaDB / MySQL
+    'localhost',                  //..Database server host name 
+    'root',                       //..User name
+    '',                           //..Password
+    'retailrack' ),               //..Database 
+  //..This is the factory method, which is used to create database connection instances
+  //..The above-defined connection arguments are passed to the closure.
+  function( buffalokiwi\magicgraph\pdo\IConnectionProperties $args  ) { 
+    //..Return a MariaDB connection 
+    return new buffalokiwi\magicgraph\pdo\MariaDBConnection( $args );
+  }
+);
+
+
+//..Create the transaction factory
+$tFact = new \buffalokiwi\magicgraph\persist\DefaultTransactionFactory();
+
+
+//..Table2 Repository
+//..This must be initialized prior to Table1Repo because Table1Repo depends on Table2Repo
+$table2Repo = new buffalokiwi\magicgraph\persist\DefaultSQLRepository(
+  'table2', 
+  $dbFactory->getConnection(),
+  Table2Model::class,
+  $table2Properties
+);
+
+//..Table1 Repository
+//..A sql database repository that can include model property providers used for relationships
+$table1Repo = new \buffalokiwi\magicgraph\persist\DefaultSQLServiceableRepository( 
+    'table1', //..SQL table name 
+    $dbFactory->getConnection(), //..SQL database connection 
+    Table1Model::class, //..The Table1Model class name used for the object factory 
+    $table1Properties,  //..Properties used to create Table1Model instances
+    $tFact, //..Transaction factory used to handle saving across multiple model property providers 
+    new buffalokiwi\magicgraph\OneManyPropertyService( //..This handles loading and saving related models 
+      new buffalokiwi\magicgraph\OneManyPropSvcCfg( //..Configuration 
+        $table2Repo,    //..Linked model repository //$parentIdProperty, $arrayProperty, $linkEntityProperty, $idProperty)
+        'id',           //..The parent model primary key property name.
+        'children',     //..The parent model property name for the array of linked models
+        'link_table1',  //..A linked model property that contains the parent id
+        'id' )          //..A linked model property containing the unique id of the linked model
+));
+
+
+//..Get the only record in table1
+$model = $table1Repo->get('1');
+
+//..Print the model contents with related child models 
+var_dump( $model->toArray( null, true, true ));
+
+
+Outputs:
+
+array (size=3)
+  'id' => string '1' (length=1)
+  'name' => string 'Parent' (length=6)
+  'children' => 
+    array (size=2)
+      0 => 
+        array (size=3)
+          'id' => string '1' (length=1)
+          'link_table1' => string '1' (length=1)
+          'name' => string 'Child 1' (length=7)
+      1 => 
+        array (size=3)
+          'id' => string '2' (length=1)
+          'link_table1' => string '1' (length=1)
+          'name' => string 'Child 2' (length=7)
+```
