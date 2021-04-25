@@ -110,7 +110,8 @@ Magic Graph requires one third party and two BuffaloKiwi libraries.
 
 1. [BuffaloKiwi/buffalotools_ioc](https://github.com/SixArmDonkey/buffalotools_ioc) - A service locator 
 2. [BuffaloKiwi/buffalotools_types](https://github.com/SixArmDonkey/buffalotools_types) - Enum and Set support
-3. [MoneyPHP/Money](https://github.com/moneyphp/money) - PHP implementation of Fowler's Money pattern
+3. [BuffaloKiwi/buffalotools_date](https://github.com/SixArmDonkey/buffalotools_date) - DateTime factory/wrappers 
+4. [MoneyPHP/Money](https://github.com/moneyphp/money) - PHP implementation of Fowler's Money pattern
   
 
 ---
