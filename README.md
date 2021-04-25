@@ -25,6 +25,7 @@ Documentation is a work in progress.
     3. [Property Flags](#property-flags)
     4. [Property Behavior](#property-behavior)
     5. [Quick Models](#quick-models)
+    6. [Annotations](#annotations)
 7. [Repositories](#repositories)
     1. [Mapping Object Factory](#mapping-object-factory)
     2. [Saveable Mapping Object Factory](#saveable-mapping-object-factory)
@@ -40,9 +41,9 @@ Documentation is a work in progress.
     1. [Serviceable Model](#serviceable-model)
     2. [Serviceable Repository](#serviceable-repository)
 10. [Relationships](#relationships)
-    1. One to One 
-    2. One to Many
-    3. Many to Many 
+    1. [One to One](#one-to-one)
+    2. [One to Many](#one-to-many)
+    3. [Many to Many](#many-to-many)
     4. Nested Relationship Providers 
     5. Model property providers 
     6. How Saving Works
@@ -983,6 +984,124 @@ $q->name = 'foo';
 echo $q->name; //..Outputs "foo-bar-baz"
 ```
   
+
+#### Annotations
+
+PHP 8 added a wonderful new feature called attributes.  These snazzy things let us tag properties with things like the 
+backing object type, default values, flags, etc.  If you are willing to allow Magic Graph to make some assumptions, you can 
+skip making property sets and configuration arrays/files.  An annotated model would look something like this:
+
+
+```php
+
+
+use buffalokiwi\magicgraph\AnnotatedModel;
+use buffalokiwi\magicgraph\property\annotation\IntegerProperty;
+use buffalokiwi\magicgraph\property\annotation\BooleanProperty;
+use buffalokiwi\magicgraph\property\annotation\DateProperty;
+use buffalokiwi\magicgraph\property\annotation\ArrayProperty;
+use buffalokiwi\magicgraph\property\annotation\EnumProperty;
+use buffalokiwi\magicgraph\property\annotation\FloatProperty;
+use buffalokiwi\magicgraph\property\annotation\SetProperty;
+use buffalokiwi\magicgraph\property\annotation\StringProperty;
+use buffalokiwi\magicgraph\property\annotation\USDollarProperty;
+
+
+class Test extends AnnotatedModel
+{  
+  #[IntegerProperty]
+  private int $id;
+  
+  #[BooleanProperty]
+  private bool $b;
+  
+  #[DateProperty('d', '1/1/2020')]
+  private IDateTime $d;  
+  
+  #[ArrayProperty('a','\stdClass')]
+  private array $a;
+  
+  #[EnumProperty('e','\buffalokiwi\magicgraph\property\EPropertyType','int')]
+  private \buffalokiwi\magicgraph\property\EPropertyType $e;
+  
+  #[FloatProperty]
+  private float $f;
+  
+  #[SetProperty('set','\buffalokiwi\magicgraph\property\SPropertyFlags',['noinsert','noupdate'])]
+  private \buffalokiwi\buffalotools\types\ISet $set;
+  
+  #[USDollarProperty]
+  private buffalokiwi\magicgraph\money\IMoney $money;
+  
+  #[StringProperty]
+  private string $str;
+  
+  public \buffalokiwi\magicgraph\property\IIntegerProperty $pubProp;
+  
+  public function __construct()
+  {
+    $this->pubProp = new buffalokiwi\magicgraph\property\DefaultIntegerProperty( 'pubProp', 10 );    
+
+    parent::__construct( new \buffalokiwi\magicgraph\property\QuickPropertySet([
+       'name' => [
+           'type' => 'string',
+           'value' => 'qp string'
+       ]
+    ]));
+  }
+}
+
+
+$a = new Test();
+
+$aa = $a->a;
+$aa[] = new \stdClass();
+$a->a = $aa;
+
+$a->id = 22;
+$a->b = true;
+$a->d = '10/10/2020';
+$a->f = 1.123;
+$a->set->add( 'primary' );
+$a->str = 'foo';
+$a->e->setValue( 'string' );
+$a->pubProp->setValue( 11 );
+$a->money = '3.50';
+
+var_dump( $a->toArray(null, true, true));
+
+Outputs:
+
+array (size=11)
+  'name' => string 'qp string' (length=9)
+  'id' => int 22
+  'b' => int 1
+  'd' => 
+    object(DateTimeImmutable)[644]
+      public 'date' => string '2020-10-10 00:00:00.000000' (length=26)
+      public 'timezone_type' => int 3
+      public 'timezone' => string 'UTC' (length=3)
+  'a' => 
+    array (size=1)
+      0 => 
+        object(stdClass)[701]
+  'e' => string 'string' (length=6)
+  'f' => float 1.123
+  'set' => string 'primary,noupdate,noinsert' (length=25)
+  'money' => string '3.50' (length=4)
+  'str' => string 'foo' (length=3)
+  'pubProp' => int 11
+
+
+```
+
+The above example mixes php attributes, a configuration array and a public IProperty intance.  All three ways can be 
+used to create models if you extend the AnnotatedModel class.
+
+In a future release, the annotations package will be extended to include all available property configuration options and 
+to configure relationships.
+
+
   
 ### Repositories 
   
@@ -1651,6 +1770,10 @@ array (size=4)
 
 #### One to Many
 
+The [OneManyPropertyService](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-OneManyPropertyService.html) 
+provides the ability to load, attach, edit and save multiple associated models.  
+
+
 ```php
 
 //..When using model property providers / relationships, models MUST extend ServiceableModel.  ServiceableModel 
@@ -1769,4 +1892,266 @@ array (size=3)
           'id' => string '2' (length=1)
           'link_table1' => string '1' (length=1)
           'name' => string 'Child 2' (length=7)
+```
+
+
+### Many to Many 
+
+Sometimes we have lots of things that can map to lots of other things.  For example, in can ecommerce setting, 
+products may map to multiple categories, and categories may contain multiple products.  In this instance, we would 
+require a junction table to store those mappings.  Thankfully, this is fairly easy in Magic Graph.
+
+
+First, we start with a standard junction table.  If we use the following table definition, we can use the built in 
+models for a junction table.
+
+```sql
+
+CREATE TABLE `product_category_link` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `link_parent` int(11),
+  `link_target` int(11),
+  PRIMARY KEY (`link_parent`,`link_target`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB 
+
+```
+
+1. "id" contains the primary key
+2. "link_parent" is the id of the parent model.  ie: a product id
+3. "link_target" is the id of the target model.  ie: a category id
+
+
+Now we create two other tables.  One for parent and the other one for the target.  For fun, we'll add a name column to both.
+
+
+```sql 
+
+create table `product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) not null,
+  primary key (id)
+) ENGINE=InnoDB;
+
+
+insert into product (name) values ('product1');
+insert into product (name) values ('product2');
+
+```
+
+
+The category table 
+
+```sql 
+
+create table `product_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) not null,
+  primary key (id)
+) ENGINE=InnoDB;
+
+
+insert into product_category (name) values ('category1');
+insert into product_category (name) values ('category2');
+
+```
+
+Now we add product1 to category1, and product2 to category2
+
+```sql
+
+insert into product_category_link (link_parent,link_target) values (1,1),(2,2);
+
+```
+
+
+
+
+```php
+
+
+//..Define the category model
+class CategoryModel extends \buffalokiwi\magicgraph\ServiceableModel {}
+
+//..Create the category model property configuration 
+//..In this instance, we are using QuickJunctionPropertyConfig because we want to use this model as a junction table target
+//..QuickJunctionPropertyConfig implements IJunctionTargetProperties, which exposes the primary id property name and is used 
+//  to generate database queries.
+$cProps = new \buffalokiwi\magicgraph\property\QuickPropertySet( new \buffalokiwi\magicgraph\junctionprovider\QuickJunctionPropertyConfig([
+    'id' => [
+        'type' => 'int',
+        'flags' => ['primary']
+    ],
+
+    'name' => [
+        'type' => 'string'      
+    ],
+
+    //..This is the list of products contained within a category
+    'products' => [
+      'type' => 'array',
+      'flags' => ['noinsert','noupdate'],
+      'clazz' => ProductModel::class
+    ]        
+  ], 
+  'id' //..Primary key property name used as the junction link target 
+));
+
+
+//..Define the product model 
+class ProductModel extends \buffalokiwi\magicgraph\ServiceableModel {}
+
+
+
+//..Create the product model property configuration 
+$pProps =  new \buffalokiwi\magicgraph\property\QuickPropertySet( new \buffalokiwi\magicgraph\junctionprovider\QuickJunctionPropertyConfig([
+    'id' => [
+        'type' => 'int',
+        'flags' => ['primary']
+    ],
+
+    'name' => [
+        'type' => 'string'      
+    ],
+
+    //..The list of categories containing some product
+    'categories' => [
+      'type' => 'array',
+      'flags' => ['noinsert','noupdate'],
+      'clazz' => CategoryModel::class
+    ]        
+  ],
+  'id' //..Primary key property name used as the junction link target 
+));
+
+
+//..Create the transaction factory
+$tFact = new \buffalokiwi\magicgraph\persist\DefaultTransactionFactory();
+    
+
+//..Create a SQL Database connection 
+$dbFactory = new buffalokiwi\magicgraph\pdo\PDOConnectionFactory( //..A factory for managing and sharing connection instances 
+  new buffalokiwi\magicgraph\pdo\MariaConnectionProperties(       //..Connection properties for MariaDB / MySQL
+    'localhost',                  //..Database server host name 
+    'root',                       //..User name
+    '',                           //..Password
+    'retailrack' ),               //..Database 
+  //..This is the factory method, which is used to create database connection instances
+  //..The above-defined connection arguments are passed to the closure.
+  function( buffalokiwi\magicgraph\pdo\IConnectionProperties $args  ) { 
+    //..Return a MariaDB connection 
+    return new buffalokiwi\magicgraph\pdo\MariaDBConnection( $args );
+  }
+);
+
+
+//..Create the repository for the junction table 
+$jRepo = new buffalokiwi\magicgraph\junctionprovider\DefaultMySQLJunctionRepo(
+  'product_category_link',
+  $dbFactory->getConnection()
+);
+  
+
+//..Create the product repository 
+$pRepo = new buffalokiwi\magicgraph\persist\DefaultSQLServiceableRepository(
+  'product',
+  $dbFactory->getConnection(),
+  ProductModel::class,
+  $pProps,
+  $tFact
+);
+
+
+//..Create the category repository 
+$cRepo = new buffalokiwi\magicgraph\persist\DefaultSQLServiceableRepository(
+  'product_category',
+  $dbFactory->getConnection(),
+  CategoryModel::class,
+  $cProps,
+  $tFact
+);
+
+
+//..Since we want both models to reference each other, we cannot instantiate the junction providers until
+//  both parent and target repositories have been created.
+//..There is a handy method for adding these: addModelPropertyProvider()
+//
+//..If we were only referencing the target models in the parent repository or vice versa, we would have passed the junction
+//..model instance directly to the serviceable repository constructor 
+
+
+//..Add the junction model property provider 
+$pRepo->addModelPropertyProvider(
+  new buffalokiwi\magicgraph\junctionprovider\MySQLJunctionPropertyService( 
+    new buffalokiwi\magicgraph\junctionprovider\JunctionModelPropSvcCfg(
+      'id',
+      'categories' ),
+    $jRepo,
+    $cRepo
+));
+
+
+$cRepo->addModelPropertyProvider(
+  new buffalokiwi\magicgraph\junctionprovider\MySQLJunctionPropertyService( 
+    new buffalokiwi\magicgraph\junctionprovider\JunctionModelPropSvcCfg(
+      'id',
+      'products' ),
+    $jRepo,
+    $pRepo
+));
+
+
+//..Get and print the product model 
+$p1 = $pRepo->get('1');
+var_dump( $p1->toArray(null,true,true));
+
+Outputs:
+
+array (size=3)
+  'id' => int 1
+  'name' => string 'product1' (length=8)
+  'categories' => 
+    array (size=1)
+      0 => 
+        array (size=3)
+          'id' => int 1
+          'name' => string 'category1' (length=9)
+          'products' => 
+            array (size=1)
+              0 => 
+                array (size=3)
+                  'id' => int 1
+                  'name' => string 'product1' (length=8)
+                  'categories' => 
+                    array (size=1)
+                      ...
+
+
+//..Get and print the category model
+$c1 = $cRepo->get('1');
+var_dump( $p1->toArray(null,true,true));
+
+
+Outputs:
+
+array (size=3)
+  'id' => int 1
+  'name' => string 'category1' (length=9)
+  'products' => 
+    array (size=1)
+      0 => 
+        array (size=3)
+          'id' => int 1
+          'name' => string 'product1' (length=8)
+          'categories' => 
+            array (size=1)
+              0 => 
+                array (size=3)
+                  'id' => int 1
+                  'name' => string 'category1' (length=9)
+                  'products' => 
+                    array (size=1)
+                      ...
+
+
 ```
