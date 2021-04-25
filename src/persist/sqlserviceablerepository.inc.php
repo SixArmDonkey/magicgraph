@@ -26,19 +26,19 @@ class SQLServiceableRepository extends SQLRepositoryProxy
    * Transaction factory 
    * @var ITransactionFactory
    */
-  private $tfact;
+  private ITransactionFactory $tfact;
   
   /**
    * Property providers 
    * @var IModelPropertyProvider[]
    */
-  private $providers;
+  private array $providers = [];
   
   /**
    * Repo 
    * @var IRepository
    */
-  private $repo;
+  private IRepository $repo;
   
   
   public function __construct( IRepository $repo, ITransactionFactory $tfact, IModelPropertyProvider ...$providers )
@@ -46,8 +46,33 @@ class SQLServiceableRepository extends SQLRepositoryProxy
     parent::__construct( $repo );
     
     $this->repo = $repo;
-    $this->tfact = $tfact;
-    $this->providers = $providers;
+    $this->tfact = $tfact;    
+    $this->addModelPropertyProvider( ...$providers );
+  }
+  
+  
+  protected final function & getProviders() : array
+  {
+    return $this->providers;
+  }
+  
+  
+  /**
+   * Adds model property providers to the serviceable repository.
+   * Limited to one provider per property name and based on getModelPropertyName() 
+   * @param IModelPropertyProvider $providers Providers to add
+   * @throws \InvalidArgumentException if the provider already exists
+   * @final
+   */
+  public final function addModelPropertyProvider( IModelPropertyProvider ...$providers )
+  {
+    foreach( $providers as $p )
+    {
+      if ( isset( $this->providers[$p->getModelServiceConfig()->getModelPropertyName()] ))
+        throw new \InvalidArgumentException( 'The list of providers may only contain a single provider per model property.  Model property ' . $p->getModelServiceConfig()->getModelPropertyName() . ' is already defined' );
+      
+      $this->providers[$p->getModelServiceConfig()->getModelPropertyName()] = $p;
+    }
   }
   
   

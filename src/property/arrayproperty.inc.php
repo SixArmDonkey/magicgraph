@@ -48,14 +48,49 @@ class ArrayProperty extends AbstractProperty
     if ( $this->getFlags()->hasVal( SPropertyFlags::USE_NULL ) && $value === null )
       return; //..This is ok       
     
-    $cond = ( !empty( $this->clazz )) ? !is_subclass_of( $value, $this->clazz ) : true;
-    
-
-
-    
-    if ( !empty( $value ) && !is_array( $value ) && $cond )
-    {
+    if ( !is_array( $value ))
       throw new ValidationException( sprintf( 'Value "%s" for property %s must be an array.  Got %s', (string)$value, $this->getName(), gettype( $value )));
+    
+    if ( !empty( $this->clazz ))
+    {
+      foreach( $value as $k => &$v )
+      {
+        switch( $this->clazz )
+        {
+          case 'int':
+            if ( !is_int( $v ))
+              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be an int.  Got %s', (string)$k, $this->getName(), gettype( $v )));
+
+          case 'long':
+            if ( !is_long( $v ))
+              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be a long.  Got %s', (string)$k, $this->getName(), gettype( $v )));
+            
+          case 'float':
+            if ( !is_float( $v ))
+              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be a float.  Got %s', (string)$k, $this->getName(), gettype( $v )));
+
+          case 'double':
+            if ( !is_double( $v ))
+              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be a double.  Got %s', (string)$k, $this->getName(), gettype( $v )));
+            
+          case 'bool':            
+            if ( !is_bool( $v ))
+              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be a bool.  Got %s', (string)$k, $this->getName(), gettype( $v )));
+
+          case 'string':
+            if ( !is_string( $v ))
+              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be a string.  Got %s', (string)$k, $this->getName(), gettype( $v )));
+          break;
+
+          default:
+            if ( !is_a( $v, $this->clazz, false ) && !is_subclass_of( $v, $this->clazz, false ))
+            {
+              $cls = is_object( $v ) ? ' (' . get_class( $v ) . ')' : '';
+              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be an instance of %s.  Got %s', (string)$k, $this->getName(), $this->clazz, gettype( $v ) . $cls ));
+            }
+          break;            
+        }
+      }
     }
   }
   
@@ -70,7 +105,7 @@ class ArrayProperty extends AbstractProperty
    */
   protected function setPropertyValue( $value )
   {
-    if ( is_subclass_of( $value, $this->clazz ))
+    if ( is_a( $value, $this->clazz ))
     {
       $cur = $this->getValue();
       $cur[] = $value;

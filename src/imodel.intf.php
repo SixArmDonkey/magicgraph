@@ -113,7 +113,7 @@ interface IModel extends IteratorAggregate
    * Convert this model to an array.
    * @param IPropertySet $properties Properties to include 
    */
-  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : array;
+  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false, int $_depth = 0 ) : array;
   
   
   public function fromArray( array $data ) : void;  
@@ -155,6 +155,15 @@ interface IModel extends IteratorAggregate
    * @return IBigSet insert properties
    */
   public function getInsertProperties() : IBigSet;
+  
+  
+  /**
+   * Validation without exceptions.  This will
+   * simply call validate() and return false if validate() throws an exception.
+   * @return bool is valid
+   */
+  public function isValid() : bool;
+  
   
   /**
    * Test to see if this model is valid prior to save()

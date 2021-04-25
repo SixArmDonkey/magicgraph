@@ -206,7 +206,7 @@ class DefaultPropertySet extends BigSet implements IPropertySet
    * Given an IProperty, initialize the property by calling reset() and add that property to the
    * DefaultPropertySet.  Call addNewMembers() after calling this method to add the property names to the underlying
    * BigSet instance. 
-   * @param \buffalokiwi\magicgraph\property\IProperty $property Property 
+   * @param IProperty $property Property 
    * @return string New property name 
    */
   private function addAndInitializeNewProperty( IProperty $property ) : string
@@ -262,7 +262,7 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   
   /**
    * Adds a property to the property set.  For a more robust solution, please use the preferred method: addPropertyConfig().
-   * @param \buffalokiwi\magicgraph\property\IProperty $prop Property to add
+   * @param IProperty $prop Property to add
    * @return void
    * @final 
    */
@@ -294,11 +294,12 @@ class DefaultPropertySet extends BigSet implements IPropertySet
    */
   public function getPropertyConfig( string $interface ) : IPropertyConfig
   {
+    
     $tested = [];
     foreach( $this->config as $c )
     {
 
-      if ( is_subclass_of( $c, $interface )) 
+      if ( is_a( $c, $interface, false )) 
         return $c;
       else
         $tested[] = get_class( $c );
@@ -317,7 +318,7 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   {
     foreach( $this->config as $c )
     {
-      if ( is_subclass_of( $c, $interface )) 
+      if ( is_a( $c, $interface, false )) 
         return true;
     }
 

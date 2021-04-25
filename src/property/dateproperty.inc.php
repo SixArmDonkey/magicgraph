@@ -58,6 +58,10 @@ class DateProperty extends AbstractProperty implements IDateProperty
   public function __construct( IPropertyBuilder $builder, IDateFactory $dateFactory, string $toStringFormat = 'Y-m-d H:i:s' )
   {
     parent::__construct( $builder );
+    
+    if ( empty( $toStringFormat ))
+      throw new \InvalidArgumentException( 'toStringFormat must not be empty' );
+    
     $this->dateFactory = $dateFactory;
     $this->toStringFormat = $toStringFormat;
   }

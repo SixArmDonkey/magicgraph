@@ -77,13 +77,6 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
    */
   protected function initValue()
   {
-    //..This should never return null.
-    /*
-    if ( $this->getFlags()->hasVal( IPropertyFlags::USE_NULL ))
-    {
-      return null;
-    }
-    */
     if ( $this->createClass instanceof Closure )
     {
       $c = $this->createClass;
@@ -92,9 +85,12 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
         if ( $instance == null )
         {
           //..Simply try to create it 
+          
+          //..If clazz is an interface, then always return null since we can't instantiate an interface.
           if ( interface_exists( $this->clazz ))
             return null;
           
+          //..Try for a default constructor
           $c = $this->clazz;
           
           return new $c();
@@ -110,10 +106,18 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
       
       return $instance;
     }
+    else if ( $this->getFlags()->hasVal( IPropertyFlags::USE_NULL ))
+    {
+      return null;
+    }
     else
     {
-      $c = $this->clazz;
-      return new $c();
+      try {
+        $c = $this->clazz;
+        return new $c();
+      } catch( \Error $e ) {
+        throw new \Exception( 'Failed to create instance of ' . $this->clazz . '.  This is most likely because the model requires constructor arguments.  Try adding "null" to the property flags array for the property "' . $this->getName() . '"', $e->getCode(), $e );
+      }
     }
   }  
   

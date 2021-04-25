@@ -33,6 +33,28 @@ class OneOnePropertyService extends AbstractOneOnePropertyService implements IMo
    */
   private $repo;
   
+  
+  public function __construct()
+  {
+    $args = func_get_args();
+    $num = func_num_args();
+    
+    if ( $num == 1 )
+      $this->__constructnew( ...$args );
+    else if ( $num == 2 )
+      $this->__constructold( ...$args );
+    else
+      throw new InvalidArgumentException( 'Constructor accepts one or two arguments' );
+  }
+  
+  
+  public function __constructnew( IOneOnePropSvcCfg $cfg )
+  {
+    parent::__construct( $cfg );
+    $this->repo = $cfg->getRepository();
+  }
+  
+  
   /**
    * Create a new property service 
    * @param IPropertyConfig $cfg
@@ -40,7 +62,7 @@ class OneOnePropertyService extends AbstractOneOnePropertyService implements IMo
    * @param IRepository $repo
    * @param string $modelPropertyName Optional model property name. 
    */
-  public function __construct( IPropertySvcConfig $cfg, IRepository $repo )
+  public function __constructold( IPropertySvcConfig $cfg, IRepository $repo )
   {
     parent::__construct( $cfg );
     $this->repo = $repo;

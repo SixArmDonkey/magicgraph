@@ -38,7 +38,7 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
   
   /**
    * Create a model wrapper that can interact with service providers.
-   * @param IModel $model Model instance 
+   * @param IPropertySet $model Model properties 
    * @param IModelPropertyProvider $providers A list of service providers for this model
    */
   public function __construct( IPropertySet $properties, IModelPropertyProvider ...$providers )
@@ -144,12 +144,12 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
    * Convert this model to an array.
    * @param IPropertySet $properties Properties to include 
    */
-  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : array
+  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false, int $_depth = 0  ) : array
   {
     if ( $includeModels )
       $this->providerWarmup();
     
-    return parent::toArray( $properties, $includeArrays, $includeModels, $includeExtra );
+    return parent::toArray( $properties, $includeArrays, $includeModels, $includeExtra, $_depth );
   }  
   
   

@@ -337,7 +337,6 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
           else
             throw new SearchException( 'Invalid property name' );
                       
-          
           if ( is_bool( $value ))
             $value = ( $value ) ? '1' : '';
           
@@ -360,14 +359,19 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
                 $leftJoins[$code] = true;
                 $filterJoin[$code] = $filter->getJoin( $this->entityProps->getPrimaryKey()->getName(), $entityAlias, ( $value === null ) ? ESQLJoinType::LEFT() : ESQLJoinType::INNER());              
               }
+              
+              /*
               else
-              {
+              {                
                 //..Switch any "and" conditions to "or" for left joins.
+                //$andOr = 'or';
                 //..Weird.
                 //..Maybe continue instead.
-                continue;
-                //$andOr = 'or';
+                //continue;
+                
+                //..DUMBASS.  DON'T DO ANYTHING.  WHAT THE F...
               }
+               */
             }
             
             $cond = $filter->prepareColumn( $name ) . $this->buildConditionOperand( $operator, $value, $varIndex, $values );
@@ -386,37 +390,7 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
 
               default:
                 throw new SearchException( 'Operator must equal "and" or "or".' );
-            }               
-            
-            
-            /*
-            //..THIS CODE ONLY WORKS WITH THE ID JOIN FILTER...
-            if ( !is_array( $value ))
-              $value = [$value];
-            
-            $outVals = [];
-            
-            $w = explode( '?', $filter->getWhere( $name, $value ));
-            
-            
-            $params = sizeof( $w );
-            
-            
-            for( $i = 0; $i < $params - 1; $i++ )
-            {
-              $k =  ':VAR' . (++$varIndex);
-              $outVals[$k] = $value[$i]; //..This should work, I think.
-              $w[$i] .= $k;
             }
-            
-            $filterWhere[] = implode( ' ', $w );
-            
-
-            foreach( $outVals as $k => $v )
-            {
-              $values[$k] = $v;
-            }           
-            */
           }
           else if ( $prop->getFlags()->hasVal( IPropertyFlags::SUBCONFIG ))
           {
@@ -618,8 +592,13 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
       //$prop = $this->entityProps->getProperty( $key );
       list( $prop, $isEntity ) = $this->getProperty( $key );
       
-      if ( $prop->getType()->is( IPropertyType::TARRAY, IPropertyType::TMODEL, IPropertyType::TOBJECT ))
+      /* @var $prop IProperty */
+      
+      if ( $prop->getType()->is( IPropertyType::TARRAY, IPropertyType::TMODEL, IPropertyType::TOBJECT )
+       || $prop->getFlags()->hasVal( IPropertyFlags::NO_INSERT )) //..The NO_INSERT means the property IS NOT REAL.
+      {
         return;
+      }
       
       if ( $prop->getFlags()->hasVal( IPropertyFlags::SUBCONFIG ))
       {

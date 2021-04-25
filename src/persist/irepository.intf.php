@@ -74,7 +74,7 @@ interface IRepository extends ISaveableObjectFactory
   
   
   /**
-   * Retrieve user records by page.
+   * Retrieve records by page.
    * @param int $page Page number  
    * @param int $size page size 
    * @return array IModel[] Model
@@ -99,6 +99,7 @@ interface IRepository extends ISaveableObjectFactory
    * @param mixed $value value  iF value is an array, then this will perform an in query.
    * @return array
    * @throws \Exception 
+   * @deprecated use findByProperty 
    */
   public function getForProperty( string $propertyName, $value ) : array;
   
@@ -117,6 +118,7 @@ interface IRepository extends ISaveableObjectFactory
    * @param int $limit Limit the number of results returned.
    * @return array
    * @throws InvalidArgumentException
+   * @todo Add offset argument 
    */
   public function findByProperty( string $propertyName, string $value, int $limit = 100 ) : array;  
   

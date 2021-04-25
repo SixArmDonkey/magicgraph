@@ -44,7 +44,7 @@ class DefaultComponentMap
         if ( in_array( strtolower( $value ), ['1','true'] ))
           $attrs['checked'] = 'checked';
       
-        return new FancyCheckboxElement( $name, $id, '', $attrs );
+        return new FancyCheckboxElement( $name, $id ?? '', '', $attrs );
       },
       
       IDateProperty::class => function( IProperty $prop, string $name, ?string $id, string $value ) : IElement {
@@ -52,7 +52,7 @@ class DefaultComponentMap
         if ( $prop->getFlags()->hasVal( IPropertyFlags::REQUIRED ))
           $attrs['required'] = 'required';
         
-        return new InputElement( 'date', $name, $id, $value, $attrs );
+        return new InputElement( 'date', $name, $id ?? '', $value, $attrs );
       },
               
       IEnumProperty::class => function( IEnumProperty $prop, string $name, ?string $id, string $value ) : IElement {
@@ -71,7 +71,7 @@ class DefaultComponentMap
         if ( $prop->getFlags()->hasVal( IPropertyFlags::REQUIRED ))
           $attrs['required'] = 'required';
         
-        return new SelectElement( $name, $id, $value, $options, $attrs );
+        return new SelectElement( $name, $id ?? '', $value, $options, $attrs );
       },
 
 
@@ -102,7 +102,7 @@ class DefaultComponentMap
         
 
         
-        return new SelectElement( $name . '[]', $id, implode(',', $value), $options, $attrs );
+        return new SelectElement( $name . '[]', $id ?? '', implode(',', $value), $options, $attrs );
       },
                     
       
@@ -130,7 +130,7 @@ class DefaultComponentMap
         if ( $prop->getFlags()->hasVal( IPropertyFlags::REQUIRED ))
           $attrs['required'] = 'required';
         
-        return new InputElement( 'number', $name, $id, $value, $attrs );
+        return new InputElement( 'number', $name, $id ?? '', $value, $attrs );
       },
               
       IIntegerProperty::class => function( IIntegerProperty $prop, string $name, ?string $id, string $value ) : IElement {
@@ -152,7 +152,7 @@ class DefaultComponentMap
         if ( $prop->getFlags()->hasVal( IPropertyFlags::REQUIRED ))
           $attrs['required'] = 'required';
         
-        return new InputElement( 'number', $name, $id, $value, $attrs );
+        return new InputElement( 'number', $name, $id ?? '', $value, $attrs );
       },
               
       IMoneyProperty::class => function( IMoneyProperty $prop, string $name, ?string $id, string $value ) : IElement {
@@ -178,7 +178,7 @@ class DefaultComponentMap
         if ( $prop->getFlags()->hasVal( IPropertyFlags::REQUIRED ))
           $attrs['required'] = 'required';
         
-        return new InputElement( 'number', $name, $id, $value, $attrs );
+        return new InputElement( 'number', $name, $id ?? '', $value, $attrs );
       },
               
       IStringProperty::class => function( IStringProperty $prop, string $name, ?string $id, string $value ) : IElement {
@@ -199,7 +199,7 @@ class DefaultComponentMap
         if ( $prop->getMax() != -1 && $prop->getMax() > 255 )
           return new TextAreaElement( $name, $id, $value, $attrs );
         else
-          return new InputElement( 'text', $name, $id, $value, $attrs );
+          return new InputElement( 'text', $name, $id ?? '', $value, $attrs );
       }
     ], $map );
   }

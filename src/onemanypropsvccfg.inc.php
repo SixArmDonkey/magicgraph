@@ -13,12 +13,12 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph;
 
-use buffalokiwi\magicgraph\property\BasePropSvcCfg;
 use buffalokiwi\magicgraph\persist\IRepository;
-use buffalokiwi\magicgraph\persist\ISaveFunction;
+use buffalokiwi\magicgraph\property\BasePropSvcCfg;
+use buffalokiwi\magicgraph\property\INamedPropertyBehavior;
 use Closure;
 use Exception;
-use UI\Exception\InvalidArgumentException;
+use \InvalidArgumentException;
 
 
 /**
@@ -33,7 +33,7 @@ use UI\Exception\InvalidArgumentException;
  * 
  * 
  */
-class OneManyPropSvcCfg extends BasePropSvcCfg 
+class OneManyPropSvcCfg extends BasePropSvcCfg implements IOneManyPropSvcCfg
 {
   /**
    * Parent Id property name
@@ -90,7 +90,7 @@ class OneManyPropSvcCfg extends BasePropSvcCfg
    * @param string $idProperty A linked model property containing the unique id of the linked model
    * @throws InvalidArgumentException
    */
-  public function __construct( IRepository $repo, string $parentIdProperty, string $arrayProperty, string $linkEntityProperty, string $idProperty, ?\Closure $beforeSave = null, ?\Closure $afterSave = null, \buffalokiwi\magicgraph\property\INamedPropertyBehavior ...$behavior  )
+  public function __construct( IRepository $repo, string $parentIdProperty, string $arrayProperty, string $linkEntityProperty, string $idProperty, ?\Closure $beforeSave = null, ?\Closure $afterSave = null, INamedPropertyBehavior ...$behavior  )
   {
     parent::__construct( ...$behavior );
     if ( empty( $arrayProperty ))
@@ -107,6 +107,27 @@ class OneManyPropSvcCfg extends BasePropSvcCfg
     $this->idProperty = $idProperty;
     $this->beforeSave = $beforeSave;
     $this->afterSave = $afterSave;
+  }
+  
+  
+  /**
+   * Retrieve the linked model repository 
+   * @return IRepository Repo 
+   */
+  public function getRepository() : IRepository
+  {
+    return $this->repo;
+  }
+
+
+  /**
+   * retrieve the (idproperty argument in constructor) foreign key property name.  This will be the property name 
+   * that contains the id of the parent model, and is used for lookups.
+   * @return string property name 
+   */
+  public function getForeignKey() : string
+  {
+    return $this->entityProperty;
   }
   
   

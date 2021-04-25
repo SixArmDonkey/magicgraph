@@ -46,7 +46,7 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
   /**
    * Loads the models from some source 
    */
-  protected abstract function loadModels( int $parentId ) : array;
+  protected abstract function loadModels( int $parentId, IModel $parent ) : array;
   
   
   /**
@@ -93,7 +93,7 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
    * @throws InvalidArgumentException if the property is invalid 
    */
   public function getValue( IModel $model, $value, array $context = [] )
-  {
+  {    
     //..This service is shared between different model instances that may or may
     //  not use the attached repo.
     //  
@@ -114,7 +114,6 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
     //..spl_object_id may cause shenanigans if the garbage collector destroys an object with an id that is in this list.
     //..We shall see as we go...  
     
-
     
     /**
      * @todo Write tests for this.
@@ -130,13 +129,14 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
     $newData = [];
     try {
       $id = $model->getValue( $this->propCfg->getPropertyName());
+      
       if (( !empty( $id ) && ( $id != $this->lastId[$c] || !is_array( $value ))) || ( empty( $value ) && $this->init[$c] ))
       {
         $this->init[$c] = false;
         $this->lastId[$c] = $id;
 
         //..No need to query for empty.
-        $newData = $this->callLoadModels( $id );
+        $newData = $this->callLoadModels( $id, $model );
       }
       else
       {
@@ -252,9 +252,9 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
   }
   
   
-  private function callLoadModels( int $parentId ) : array
+  private function callLoadModels( int $parentId, IModel $parent ) : array
   {
-    $data = $this->loadModels( $parentId );
+    $data = $this->loadModels( $parentId, $parent );
     foreach( $data as $m )
     {
       if ( !( $m instanceof IModel ))

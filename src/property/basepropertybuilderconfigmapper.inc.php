@@ -186,6 +186,12 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
   
   private function createBuilder( string $name, array $data ) : IPropertyBuilder
   {
+
+    
+    if ( !is_string( $data[self::TYPE] ))
+      throw new \InvalidArgumentException( self::TYPE . ' configuration property of ' . $name . ' must be a string,  ' . gettype( $data[self::TYPE] ) . ' given.' );
+    
+    
     $b = $this->pbIoc->create( $name, $data[self::TYPE] );
     $b->setName( $name );
     

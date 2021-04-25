@@ -24,7 +24,7 @@ class DefaultTransactionFactory extends TransactionFactory
   {
     //..Sort reverse of nested level in the object hierarchy.  Top level goes last.
     parent::__construct([
-      ISQLRunnable::class => function( IRunnable ...$tasks ) { return new MySQLTransaction( ...$tasks ); },
+      ISQLRunnable::class => function( ISQLRunnable ...$tasks ) { return new MySQLTransaction( ...$tasks ); },
       IRunnable::class => function( IRunnable ...$tasks ) { return new Transaction( ...$tasks ); }
     ]);
   }

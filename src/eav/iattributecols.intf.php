@@ -11,11 +11,13 @@
 
 namespace buffalokiwi\magicgraph\eav;
 
+use buffalokiwi\magicgraph\junctionprovider\IJunctionTargetProperties;
+
 
 /**
  * Column/property names for the attribute model storage.
  */
-interface IAttributeCols
+interface IAttributeCols extends IJunctionTargetProperties
 {
   /**
    * Retrieve the attribute id column name 

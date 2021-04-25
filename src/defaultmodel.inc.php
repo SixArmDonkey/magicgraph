@@ -43,6 +43,12 @@ use Traversable;
 class DefaultModel implements IModel, JsonSerializable
 {
   /**
+   * Maximum depth for toArray
+   * @var int
+   */
+  private int $maxDepth = 5;
+  
+  /**
    * Properties 
    * @var IPropertySet 
    */
@@ -92,6 +98,7 @@ class DefaultModel implements IModel, JsonSerializable
    */
   private array $extraData = [];
   
+  private static int $ref = 0;
   
   /**
    * Create a new DefaultModel instance.
@@ -179,6 +186,8 @@ class DefaultModel implements IModel, JsonSerializable
       return ( $a < $b ) ? 1 : -1;
     });    
   }
+  
+  
   
   
   /**
@@ -372,7 +381,7 @@ class DefaultModel implements IModel, JsonSerializable
       list( $modelProp, $prop ) = $res;
       
       //..Returns the property value of a child model 
-      return $this->getValue( $modelProp )->$prop;
+      return $this->getValue( $modelProp )->getValue( $prop, $context );
     }
     
     
@@ -380,7 +389,7 @@ class DefaultModel implements IModel, JsonSerializable
     //..Get the property entity 
     $prop = $this->getProperty( $property );    
     
-    $value = $prop->getValue();
+    $value = $prop->getValue( $context );
     
     foreach( $prop->getPropertyBehavior() as $b )
     {
@@ -474,17 +483,7 @@ class DefaultModel implements IModel, JsonSerializable
       try {
         $this->edited->add( $property );
       } catch( \InvalidArgumentException $e ) {
-        return;
-        /*
-        //..This should no longer be necessary
-        foreach( $this->properties->getNewMembers() as $name )
-        {
-          if ( !$this->edited->isMember( $name ))
-          {
-            $this->edited->addMember( $name );
-          }
-        }
-         */
+        return;        
       }
     }
   }
@@ -507,7 +506,7 @@ class DefaultModel implements IModel, JsonSerializable
     {
       /* @var $p IProperty */
       
-      //..This is a fucked up hack to ensure that changes to enum and set 
+      //..This is a messed up hack to ensure that changes to enum and set 
       //  properties are properly committed...
       //..This should be implemented as part of some on change event in the enum/set object
       //..and the associated properties.
@@ -600,14 +599,6 @@ class DefaultModel implements IModel, JsonSerializable
   
   private function testEdited( string $prop = '' ) : bool
   {
-    /*
-    if ( !$this->hasPrimaryKeyValues())
-    {
-      var_dump( 'NO PRI KEYS' );
-      return true;
-    }
-    else 
-      */
     if ( !empty( $prop ))
     {
       return $this->edited->hasVal( $prop );
@@ -651,25 +642,15 @@ class DefaultModel implements IModel, JsonSerializable
   public final function getPropertySet() : IPropertySet
   {
     return $this->properties;
-    
-    /*
-    if ( $this->cloneProps == null )
-      $this->cloneProps = clone $this->properties;
-    
-    return $this->cloneProps;
-     * 
-     */
   }
   
   
   /**
    * Retrieve property names as an IBigSet instance.
    * This will return a set containing all of the property names, and have 
-   * zero members active.  This is available due to how expensive cloning 
-   * the backing IPropertySet instance can be.  Use this for simple operations
-   * such as determining if a property name is valid.
+   * zero members active.  
    * 
-   * This returns a SHARED instance.  Either clone or don't store this anywhere.
+   * This returns a cloned instance.
    * 
    * @return IBigSet property names 
    */
@@ -803,7 +784,7 @@ class DefaultModel implements IModel, JsonSerializable
    * Convert this model to an array.
    * @param IPropertySet $properties Properties to include 
    */
-  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : array
+  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false, int $_depth = 0 ) : array
   {    
     $out = [];
     
@@ -836,12 +817,25 @@ class DefaultModel implements IModel, JsonSerializable
       }
       
       //..This logic blows, but it's late and I'll fix it later.
-      $val = $this->getValue( $p );
       $prefix = $prop->getPrefix();
       
-      if ( !empty( $prefix ) && ( $val instanceof IModel ))
+      if ( empty( $prefix ) && !$includeModels && $prop->getType()->is( IPropertyType::TMODEL, IPropertyType::TOBJECT ))
       {
-        foreach( $val->toArray( null ) as $k => $v )
+        //..Without this, extra db queries can happen.
+        continue;
+      }
+      else if ( empty( $prefix ) && !$includeArrays && $prop->getType()->is( IPropertyType::TARRAY ))
+      {
+        //..No arrays.
+        continue;
+      }        
+      
+      //..getValue() must be used instead of IProperty::__toString() due to model-level getter and setters.
+      $val = $this->getValue( $p );
+      
+      if ( $_depth < $this->maxDepth && !empty( $prefix ) && ( $val instanceof IModel ))
+      {
+        foreach( $val->toArray( null, $includeArrays, $includeModels, $includeExtra, $_depth + 1 ) as $k => $v )
         {
           $out[$prefix . $k] = $v;
         }
@@ -857,9 +851,9 @@ class DefaultModel implements IModel, JsonSerializable
           $a = [];
           foreach( $val as $k => $v )
           {
-            if (( $v instanceof IModel ) && $v !== $this )
+            if ( $_depth < $this->maxDepth && ( $v instanceof IModel ) && $v !== $this )
             {
-              $a[$k] = $v->toArray( null, true, true );
+              $a[$k] = $v->toArray( null, $includeArrays, $includeModels, $includeExtra, $_depth + 1 );
             }
             else if (( $v instanceof IModel ) && $v === $this )
               $a[$k] = 'this';
@@ -875,8 +869,8 @@ class DefaultModel implements IModel, JsonSerializable
       }
       else if ( empty( $prefix ) && ( $val instanceof IModel ))
       {
-        if ( $includeModels )
-          $out[$prop->getName()] = $val->toArray( null );
+        if ( $_depth < $this->maxDepth && $includeModels )
+          $out[$prop->getName()] = $val->toArray( null, $includeArrays, $includeModels, $includeExtra, $_depth + 1 );
       }
       else 
       {
@@ -896,15 +890,18 @@ class DefaultModel implements IModel, JsonSerializable
         //..Consider changing DateTimeWrapper::__toString() to simply output a sql timestamp        
         if ( $val instanceof IDateTime )
         {
+          //..We want the timezone and stuff as separate properties when dumping to an array
+          //..The pdo library has code to handle IDateTimeInterface
           $out[$prop->getName()] = $val->getUTC();
         }
         else if ( $prop->getType()->value() == IPropertyType::TDATE )
         {
+          //..Special handling for null dates.
           $out[$prop->getName()] = null;
         }
         else if ( is_bool( $val ))
         {
-          $out[$prop->getName()] = ( $val ) ? '1' : '0';
+          $out[$prop->getName()] = ( $val ) ? 1 : 0;
         }
         else if ( $prop->getFlags()->hasVal( IPropertyFlags::USE_NULL ) && is_null( $val ))
         {
@@ -915,13 +912,16 @@ class DefaultModel implements IModel, JsonSerializable
           //..Use default instead of null (null is likely due to some left join, etc) since null is not allowed for this property.
           $out[$prop->getName()] = $prop->getDefaultValue();
         }
+        else if ( is_scalar( $val ))
+        {
+          $out[$prop->getName()] = $val;
+        }
         else 
         {
           $out[$prop->getName()] = (string)$val; //$prop->__toString();//(string)$prop;
         }
       }
     }
-    
     
     //..Used for properties outside of the main property set 
     //..For joined tables, etc, this may be used to provide those values.
@@ -955,7 +955,17 @@ class DefaultModel implements IModel, JsonSerializable
   
   
   /**
-   * Test to see if this model is valid prior to save()
+   * Test to see if this model is valid prior to save().
+   * There is an order of operations to validate.
+   * It starts at the top of the list of properties and works its way down the list.  The first property listed in 
+   * the property set is the first property to be validated.
+   * When nesting models, validation will walk down the tree and return to the parent to continue processing the list 
+   * of properties.
+   * 
+   * Model (behaviors) are validated last.  
+   * 
+   * 
+   * 
    * @throws ValidationException 
    */
   public function validate() : void
@@ -972,6 +982,24 @@ class DefaultModel implements IModel, JsonSerializable
       $f( $this );
     }
   }
+  
+  
+  /**
+   * Validation without exceptions.  This will
+   * simply call validate() and return false if validate() throws an exception.
+   * @return bool is valid
+   */
+  public function isValid() : bool
+  {
+    try {
+      $this->validate();
+    } catch (Exception $ex) {
+      return false;
+    }
+    
+    return true;
+  }
+  
   
   
   private function validateProperties( bool $throw = true ) : array 

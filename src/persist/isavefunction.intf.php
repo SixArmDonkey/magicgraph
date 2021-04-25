@@ -25,7 +25,7 @@ interface ISaveFunction
 {
   /**
    * Retrieve a list of IRunnable that contain code for saving things.
-   * @return array
+   * @return array IRunnable[]
    */
   public function getSaveFunction() : array;
 }

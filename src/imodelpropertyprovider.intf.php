@@ -12,8 +12,9 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph;
 
+use buffalokiwi\magicgraph\persist\IRunnable;
 use buffalokiwi\magicgraph\property\IPropertySvcConfig;
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 
 /**
@@ -71,7 +72,7 @@ interface IModelPropertyProvider extends IPropertyServiceProvider
   
   /**
    * Retrieve the save function used for saving stuff from the provider.
-   * @param \buffalokiwi\magicgraph\IModel $parent
+   * @param IModel $parent
    * @return IRunnable
    */
   public function getSaveFunction( IModel $parent ) : array;  

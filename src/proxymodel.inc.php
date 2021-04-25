@@ -247,9 +247,9 @@ class ProxyModel implements IModel
    * Convert this model to an array.
    * @param IPropertySet $properties Properties to include 
    */
-  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : array
+  public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false, int $_depth = 0 ) : array
   {
-    return $this->model->toArray( $properties, $includeArrays, $includeModels, $includeExtra );
+    return $this->model->toArray( $properties, $includeArrays, $includeModels, $includeExtra, $_depth );
   }
   
   
@@ -315,6 +315,17 @@ class ProxyModel implements IModel
   {
     $this->model->validate();
   }
+  
+  
+  /**
+   * Validation without exceptions.  This will
+   * simply call validate() and return false if validate() throws an exception.
+   * @return bool is valid
+   */
+  public function isValid() : bool
+  {
+    return $this->model->isValid();
+  }  
   
   
   /**

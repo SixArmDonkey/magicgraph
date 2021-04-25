@@ -90,6 +90,7 @@ interface IPropertyBehavior
   
   /**
    * Retrieve the closure that can test empty state.
+   * f( IProperty, value, defaultValue ) : bool
    * @return Closure|null 
    */
   public function getIsEmptyCallback() : ?Closure;

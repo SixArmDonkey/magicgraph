@@ -273,7 +273,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   {
     $f = function( ISearchQueryBuilder $query, bool $returnCount ) {
       $statement = $this->searchQueryGenerator->createQuery( $query, $returnCount );
-
+      
       $build = [];
       
       $entityGroups = $query->getEntityGroups();
@@ -552,6 +552,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
    * @param mixed $value value
    * @return array
    * @throws \Exception 
+   * @deprecated use findByProperty 
    */
   public function getForProperty( string $propertyName, $value ) : array
   {

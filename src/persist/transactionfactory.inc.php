@@ -76,7 +76,7 @@ class TransactionFactory implements ITransactionFactory
         if ( !isset( $groups[$key] ))
           $groups[$key] = [];
         
-        if ( is_subclass_of( $task, $key ))
+        if ( is_a( $task, $key ))
         {
           $groups[$key][] = $task;
           break;
@@ -105,7 +105,7 @@ class TransactionFactory implements ITransactionFactory
   
   /**
    * Execute a bunch of transactions directly.
-   * This wraps then with something like the ChainedTransactionManager and calls 
+   * This wraps them with something like the ChainedTransactionManager and calls 
    * run().
    * @param IRunnable $tasks Tasks to run
    * @return void

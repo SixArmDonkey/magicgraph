@@ -110,6 +110,10 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
     if ( $enum == null )
       return $enum;
     
+    $dv = $this->getDefaultValue();
+    if ( is_string( $dv ) && $enum->isValid( $dv ))
+      $enum->setValue( $dv );
+    
     /* @var $enum IEnum */
     $behavior = $this->getPropertyBehavior();
     

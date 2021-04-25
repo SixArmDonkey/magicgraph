@@ -58,11 +58,20 @@ class ChainedTransactionManager implements IRunnable
     {
       try {
         $t->run();
-        $t->commit();
       } catch( \Exception | \TypeError $e ) {
         $this->rollBack();
         throw $e;
       }
+    }
+    
+    try {
+      foreach( $this->trans as $t )
+      {
+        $t->commit();
+      }    
+    } catch( \Exception | \TypeError $e ) {
+      $this->rollBack();
+      throw $e;
     }
   }
   

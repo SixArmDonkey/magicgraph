@@ -31,7 +31,7 @@ interface INamedPropertyBehavior extends IPropertyBehavior
   /**
    * Retrieve the model validation callback.
    * f( IModel $model ) throws ValidationException
-   * @return \buffalokiwi\magicgraph\property\Closure|null
+   * @return Closure|null
    */
   public function getModelValidationCallback() : ?Closure;  
   

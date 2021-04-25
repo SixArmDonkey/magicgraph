@@ -12,14 +12,14 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph;
 
-use buffalokiwi\magicgraph\property\IPropertySvcConfig;
+use buffalokiwi\magicgraph\persist\IRepository;
+use buffalokiwi\magicgraph\property\BasePropertyConfig;
 use Closure;
 use Exception;
 use InvalidArgumentException;
-use Ups\Entity\Exception as Exception2;
 
 
-class OneOnePropSvcCfg extends property\BasePropertyConfig implements IPropertySvcConfig
+class OneOnePropSvcCfg extends BasePropertyConfig implements IOneOnePropSvcCfg
 {
   /**
    * id prop name 
@@ -39,7 +39,10 @@ class OneOnePropSvcCfg extends property\BasePropertyConfig implements IPropertyS
    */
   private $saveFunction;
   
+  private IRepository $repo;
+  
   private array $config;
+  
   
   /**
    * 
@@ -50,18 +53,30 @@ class OneOnePropSvcCfg extends property\BasePropertyConfig implements IPropertyS
    * Apparently additional configuration data can be returned via this argument.  There are no guarantees this data is 
    * read anywhere.
    */
-  public function __construct( string $propertyName, string $modelPropertyName, ?Closure $getSaveFunction = null, array $config = [] )
+  public function __construct( IRepository $repo, string $propertyName, string $modelPropertyName, ?Closure $getSaveFunction = null, array $config = [] )
   {
     if ( empty( $propertyName ))
       throw new InvalidArgumentException( 'propertyName must not be empty' );
     else if ( empty( $modelPropertyName ))
       throw new InvalidArgumentException( 'modelPropertyName must not be empty' );
     
+    $this->repo = $repo;
     $this->propertyName = $propertyName;
     $this->modelPropertyName = $modelPropertyName;
-    $this->getSaveFunction = $getSaveFunction;
+    $this->saveFunction = $getSaveFunction;
     $this->config = $config;
   }
+  
+  
+  /**
+   * Retrieve the linked repo 
+   * @return IRepository Repo 
+   */
+  public function getRepository() : IRepository
+  {
+    return $this->repo;
+  }
+
   
   
   /**
@@ -92,7 +107,7 @@ class OneOnePropSvcCfg extends property\BasePropertyConfig implements IPropertyS
    * Retrieve a save function to be used with some transaction.
    * @param IModel $parent Model this provider is linked to 
    * @return \buffalokiwi\retailrack\address\IRunnable Something the saves data 
-   * @throws Exception2
+   * @throws Exception
    */
   public function getSaveFunction( IModel $parent ) : array
   {
@@ -105,7 +120,7 @@ class OneOnePropSvcCfg extends property\BasePropertyConfig implements IPropertyS
         throw new Exception( 'getSaveFunction callback for ' . static::class . ' did not return an array' );
       return $res;
     }
-    
+  
     return [];
   }
   

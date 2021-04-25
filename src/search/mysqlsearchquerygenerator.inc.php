@@ -224,6 +224,9 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
               $leftJoins[$code] = true;
               $filterJoin[$code] = $filter->getJoin( $this->entityProps->getPrimaryKey()->getName(), $entityAlias, ( $value === null ) ? ESQLJoinType::LEFT() : ESQLJoinType::INNER());              
             }
+            
+            /*
+             //..This will prevent additional conditions from appearing in the query.  That's bad.
             else
             {
               //..Switch any "and" conditions to "or" for left joins.
@@ -232,7 +235,7 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
               continue;
               //$andOr = 'or';
             }
-                        
+              */          
             
             
             //..This is a search on a joined table 
@@ -513,8 +516,7 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
       $orderBy,
       $offset,
     );
-    
-    
+
     
     return $this->createQueryBuilderOutput( $builder, $this->entityProps->getPrimaryKey()->getName(), $sql, $values );
   }

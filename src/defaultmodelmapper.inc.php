@@ -162,7 +162,7 @@ class DefaultModelMapper implements IModelMapper
     $model = $cb( $propertySet, $data );
     
     //..is_subclass_of is for interfaces, and is_a is for classes.
-    if (( !( $model instanceof IModel )) || ( !is_subclass_of( $model, $this->clazz, false ) && !is_a( $model, $this->clazz, false )))
+    if (( !( $model instanceof IModel )) || ( !is_a( $model, $this->clazz, false ) && !is_a( $model, $this->clazz, false )))
     {
       throw new Exception( "createModel supplier must return an instance of " . $this->clazz . '.  Got ' . (( is_object( $model )) ? get_class( $model ) : gettype( $model )));
     }

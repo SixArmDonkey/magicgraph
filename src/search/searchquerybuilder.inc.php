@@ -35,6 +35,7 @@ class SearchQueryBuilder implements ISearchQueryBuilder
   const LESS_THAN_EQUAL = '<=';
   const LIKE = 'like';
   const IN = 'in';
+  const WILDCARD = '%';
   
   const VALID_OPERATORS = [
     self::EQUALS,
@@ -580,5 +581,16 @@ class SearchQueryBuilder implements ISearchQueryBuilder
     
     $this->order = $order;
     return $this;
+  }
+  
+  
+  /**
+   * Return the character used as a wildcard.
+   * This may change depending on the persistence layer
+   * @return string character
+   */
+  public function getWildcardChar() : string
+  {
+    return self::WILDCARD;
   }
 }

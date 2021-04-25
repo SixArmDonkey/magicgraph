@@ -261,4 +261,12 @@ interface ISearchQueryBuilder
    * @return void
    */
   public function addEntityGroups( string ...$columnNames ) : void;  
+  
+  
+  /**
+   * Return the character used as a wildcard.
+   * This may change depending on the persistence layer
+   * @return string character
+   */
+  public function getWildcardChar() : string;
 }

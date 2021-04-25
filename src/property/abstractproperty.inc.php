@@ -207,17 +207,6 @@ abstract class AbstractProperty implements IProperty
         $val = $init( $val );
     }
     
-    //..Behavior modifications 
-    //..Not sure if the behavior should be used here...  Maybe?
-    /*
-    foreach( $this->behavior as $b )
-    {
-      $cb = $b->getSetterCallback();
-      if ( $cb instanceof Closure )
-        $val = $cb( $this, $val );      
-    }
-    */
-    
     //..Set the property value
     $this->value = $this->setPropertyValue( $this->preparePropertyValue( $val ));    
     //$this->setValue( $val );        
@@ -414,7 +403,7 @@ abstract class AbstractProperty implements IProperty
       if ( $f instanceof Closure )
       {
         $hasBehavior = true;
-        if ( !$f( $this, $this->value ))
+        if ( !$f( $this, $this->value, $this->defaultValue ))
         {
           return false;
         }
@@ -425,8 +414,27 @@ abstract class AbstractProperty implements IProperty
       return true;  
     else
     {
-      return empty( $this->value ) && (( is_string( $this->value ) ? $this->value != '0000-00-00 00:00:00' : true ));
+      return $this->isPropertyEmpty( $this->value );
     }
+  }
+  
+  
+  /**
+   * When the property behavior empty callback is not used, this 
+   * method will determine if the property is empty.
+   * 
+   * This returns empty(value) || $value == 0000-00-00 00:00:00 || $value === $this->defaultValue;
+   * 
+   * Override as necessary.
+   * 
+   * @param type $value
+   * @return bool
+   */
+  protected function isPropertyEmpty( $value ) : bool
+  {
+    return empty( $value ) 
+      || ( is_string( $value ) && $value == '0000-00-00 00:00:00' ) 
+      || $value === $this->defaultValue;
   }
   
   

@@ -106,7 +106,7 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
     self::FLAGS => [IPropertyFlags::REQUIRED],
     self::VALUE => '0'
   ];
-  
+
   
   const FARRAY = [
     self::TYPE => IPropertyType::TARRAY,
@@ -156,7 +156,8 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
     self::MGETTER,
     self::CHANGE,
     self::HTMLINPUT,
-    self::TOARRAY
+    self::TOARRAY,
+    self::IS_EMPTY
   ];
   
  
@@ -226,6 +227,8 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
    * would be based on the controlling service.  All IModelPropertyProvider
    * implementations can take advantage of beforeSave() and afterSave().
    * 
+   * UPDATE: The before/after save functionality is baked into the SaveableMappingObjectFactory.  Assuming persistence 
+   * is based on that implementation, before/after save are guaranteed to be called.
    * 
    */
   public function __construct( INamedPropertyBehavior ...$behavior )
@@ -482,6 +485,7 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
       $this->addBehaviorToArray( $out, self::CHANGE, $b->getOnChangeCallback());
       $this->addBehaviorToArray( $out, self::HTMLINPUT, $b->getHTMLInputCallback());
       $this->addBehaviorToArray( $out, self::TOARRAY, $b->getToArrayCallback());
+      $this->addBehaviorToArray( $out, self::IS_EMPTY, $b->getIsEmptyCallback());
     }
     
     return $out;
@@ -623,6 +627,37 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   
   
   
+  /**
+   * @param ?Closure $value Closure|null from property config array
+   * @param Closure ...$functions A list of additional functions 
+   * @return Closure|null Combined function
+   */
+  private function getIsEmptyCallback( ?Closure $value, Closure ...$functions ) : ?Closure 
+  {
+    if ( empty( $functions ))
+      return $value;
+    
+    $dv = $this->defaultValue;
+    
+    return function( IProperty $prop, $propValue ) use($value,$functions,$dv) {
+      if ( $value != null 
+        && $value( $prop, $propValue, $dv ))
+      {
+        return true;
+      }
+        
+      
+      foreach( $functions as $f )
+      {
+        if ( $f( $prop, $propValue, $dv ))
+          return true;
+      }
+      
+      return false;
+    };    
+  }    
+  
+  
   
   
   /**
@@ -714,6 +749,8 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
    * @param mixed $value Config entry property value 
    * @param INamedPropertyBehavior $behavior Behavior for this property 
    * @return mixed value 
+   * 
+   * @todo This is not maintainable.
    */
   private function processEntry( string $prop, $value, INamedPropertyBehavior ...$behavior )
   {
@@ -748,6 +785,9 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
         
       case self::TOARRAY:
         return $this->getModelGetterSetterCallback( $value, ...$this->getFunctionList( 'getToArrayCallback', ...$behavior ));
+        
+      case self::IS_EMPTY:
+        return $this->getIsEmptyCallback( $value, ...$this->getFunctionList( 'getIsEmptyCallback', ...$behavior ));
         
       default:
         return $value;

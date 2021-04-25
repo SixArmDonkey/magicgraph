@@ -13,11 +13,9 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph;
 
+use buffalokiwi\magicgraph\persist\IRepository;
 use buffalokiwi\magicgraph\property\IPropertyConfig;
 use buffalokiwi\magicgraph\property\IPropertySvcConfig;
-use buffalokiwi\magicgraph\persist\IRepository;
-use buffalokiwi\magicgraph\persist\IRunnable;
-use buffalokiwi\magicgraph\persist\RecordNotFoundException;
 use InvalidArgumentException;
 
 
@@ -43,15 +41,40 @@ class OneManyPropertyService extends AbstractOneManyPropertyService
   
   
   /**
+   * @param IOneManyPropSvcCfg Property Service config 
+   */
+  public function __construct() {
+    $args = func_get_args();
+    $num = func_num_args();
+    
+    if ( $num == 1 )
+      $this->__constructnew( ...$args );
+    else if ( $num == 3 )
+      $this->__constructold( ...$args );
+    else
+      throw new InvalidArgumentException( 'Constructor accepts one or three arguments' );
+  }
+  
+  
+  public function __constructnew( IOneManyPropSvcCfg $cfg )
+  {
+    parent::__construct( $cfg );
+    
+    $this->repo = $cfg->getRepository();
+    $this->foreignKey = $cfg->getForeignKey();
+  }
+  
+  
+  /**
    * Create a new property service 
    * @param IPropertyConfig $cfg
-   * @param string $name
-   * @param IRepository $repo
+   * @param string $name property name containing the model
+   * @param IRepository $repo Linked model repository
    * @param string $foreignKey Property name from supplied IRepository that is 
    * queried against IPropertySvcConfig::getPropertyName();
    * @param string $modelPropertyName Optional model property name. 
    */
-  public function __construct( IPropertySvcConfig $cfg, IRepository $repo, string $foreignKey )
+  public function __constructold( IPropertySvcConfig $cfg, IRepository $repo, string $foreignKey )
   {
     parent::__construct( $cfg );
     $this->repo = $repo;
@@ -59,7 +82,7 @@ class OneManyPropertyService extends AbstractOneManyPropertyService
   }
   
   
-  protected function loadModels( int $parentId ) : array
+  protected function loadModels( int $parentId, IModel $parent ) : array
   {
     return $this->repo->getForProperty( $this->foreignKey, (string)$parentId );
   }

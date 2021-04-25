@@ -133,15 +133,20 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
   }
   
   
+  
   private function createModelIOCClosure() : ?Closure
   {
     if ( $this->ioc == null )
       return null;
     
-    return function( string $clazz ) : IModel {
-      return $this->ioc->newInstance( $clazz );
+    $ioc = $this->ioc;
+    return function( string $clazz ) use($ioc) : ?IModel {
+      if ( !$ioc->hasInterface( $clazz ))
+        return null;
+      
+      return $ioc->newInstance( $clazz );
     };
-  }
+  }  
   
   
   private function getMoneyFactory() : IMoneyFactory 
