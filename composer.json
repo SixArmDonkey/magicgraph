@@ -19,10 +19,11 @@
     "classmap": ["tests/"]
   },
   "require" : {
-    "php" : ">=7.4.0",
+    "php" : "^7.4 || ^8.0",
     "moneyphp/money" : "~3.2",
 		"buffalokiwi/buffalotools_types": "~1.0",
-		"buffalokiwi/buffalotools_ioc": "~1.0"
+		"buffalokiwi/buffalotools_ioc": "~1.0",
+    "buffalokiwi/buffalotools_date": "~1.0"
   },
   "require-dev" : {
     "phpunit/phpunit": "^9.3"
