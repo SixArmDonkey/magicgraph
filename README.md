@@ -45,8 +45,7 @@ Documentation is a work in progress.
     2. [One to Many](#one-to-many)
     3. [Many to Many](#many-to-many)
     4. [Nested Relationship Providers](#nested-relationship-providers)
-    5. How Saving Works
-    6. Editing Nested Models
+    5. [How Editing and Saving Works](#how-editing-and-saving-works)
 11. Extensible Models
     1. Overview
     2. Property configuration interface
@@ -2294,5 +2293,49 @@ array (size=2)
 
 ```
 
-Any relationship providers will work in exactly the same way as the one to one provider.
+Any relationship provider will work in exactly the same way as the one to one provider.
+
+
+
+### How Editing and Saving Works
+
+
+As detailed in the [Saveable Mapping Object Factory](#saveable-mapping-object-factory) section, models can be saved 
+somewhere by calling the [ISaveableObjectFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ISaveableObjectFactory.html) 
+save method.  This section will deal with how editing and saving works when using relationship providers.
+
+Editing and saving is controlled both by the relationship provider and the edited property tracking system built into 
+[ServiceableModel](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-DefaultModel.html#method_hasEdits).  
+When a serviceable model is saved by some serviceable repository, calling the save method causes the serviceable repository to 
+fetch save functions from the relationship providers.  
+
+Relationship providers must implement the [IModelPropertyProvider](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-IModelPropertyProvider.html)
+interface.  The method IModelPropertyProvider::getSaveFunction will return a function which is passed to a [ITransactionFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ITransactionFactory.html) 
+where the save function is called, and the related model is persisted.
+
+The [One to One](#one-to-one) relationship provider is relatively straightforward.  Any model properties backed by a
+[OneOnePropertyService](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-OneOnePropertyService.html) 
+will be automatically saved when the parent model is saved via some repository.  This will work with new models and also existing 
+models loaded by the provider.
+
+The [One to Many](#one-to-many) and [Many to Many](#many-to-many) relationship providers will manage array properties 
+containing IModel instances.  This is slightly more complicated than the one to one provider.  In addition to saving 
+edited models, the one to many and many to many providers will also manage inserts and deletes.  If new models are added to the 
+array property, they will be inserted into the database.  If an existing model is removed from the array property, it 
+will be deleted from the database.  If any filters or limits are used when loading related models, the delete functionality 
+is disabled, and models must be manually unlinked via the repository controlling that model type.
+
+Saves will automatically cascade when using nested relationship providers.  Any nested model at any position in the object 
+graph can be edited, and when the top-most model is saved, it will 
+
+
+### Extensible Models
+
+We're finally through the foundational concepts, woohoo!  
+
+
+
+
+
+
 
