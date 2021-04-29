@@ -44,16 +44,16 @@ Documentation is a work in progress.
     1. [One to One](#one-to-one)
     2. [One to Many](#one-to-many)
     3. [Many to Many](#many-to-many)
-    4. Nested Relationship Providers 
-    5. Model property providers 
-    6. How Saving Works
-    7. Editing Nested Models
+    4. [Nested Relationship Providers](#nested-relationship-providers)
+    5. How Saving Works
+    6. Editing Nested Models
 11. Extensible Models
     1. Overview
     2. Property configuration interface
     3. Property configuration implementation
-    4. Model interface
-    5. Model implementation 
+    4. Model property providers 
+    5. Model interface
+    6. Model implementation 
 12. Behavioral Strategies 
 13. Database Connections 
     1. PDO 
@@ -106,7 +106,7 @@ composer require buffalokiwi/magicgraph
   
 ## Dependencies
 
-Magic Graph requires one third party and two BuffaloKiwi libraries.
+Magic Graph requires one third party and three BuffaloKiwi libraries.
 
 1. [BuffaloKiwi/buffalotools_ioc](https://github.com/SixArmDonkey/buffalotools_ioc) - A service locator 
 2. [BuffaloKiwi/buffalotools_types](https://github.com/SixArmDonkey/buffalotools_types) - Enum and Set support
@@ -2156,3 +2156,143 @@ array (size=3)
 
 
 ```
+
+
+
+### Nested Relationship Providers
+
+Nesting is accomplished by using the same methods outlined in the [Relationships](#relationships) chapter.  
+
+As I'm sure you've noticed in the above many to many example, relationship providers can be used to create a series of nested
+objects.  Relationship providers can be plugged into any property in any model, which means we can use them to create a 
+snazzy tree of objects.  Relationship providers can be used to back any model property 
+
+First, we start by creating 3 simple tables.  For this example, the tables will only contain an id column.
+
+Create some tables and insert a few values.  To keep this simple, we will use an id of "1" for everything.
+
+```sql
+
+  
+create table tablea( id int, primary key(id) ) engine=innodb;
+create table tableb( id int, primary key(id) ) engine=innodb;
+create table tablec( id int, primary key(id) ) engine=innodb;
+
+insert into tablea values(1);
+insert into tableb values(1);
+insert into tablec values(1);
+
+```
+
+
+Next, we create a serviceable model and corresponding property set for each of the tables.  We are going to assume that 
+we have a variable $dbFactory, which is an instance of IConnectionFactory.  There is also a variable $tfact,which is an 
+instance of ITransactionFactory.  These are detailed in examples from previous chapters.
+
+
+```php
+
+class Table1Model extends buffalokiwi\magicgraph\ServiceableModel {}
+class Table2Model extends buffalokiwi\magicgraph\ServiceableModel {}
+class Table3Model extends buffalokiwi\magicgraph\DefaultModel {}
+
+$t1Props = new buffalokiwi\magicgraph\property\QuickPropertySet([
+   'id' => [
+       'type' => 'int',
+       'flags' => ['primary']
+   ],
+    
+   'table2model' => [
+       'type' => 'model',
+       'clazz' => Table2Model::class,
+       'flags' => ['noinsert','noupdate','null'], //..Table2Model requires constructor arguments. Use null here.
+   ]
+]);
+
+
+$t2Props = new buffalokiwi\magicgraph\property\QuickPropertySet([
+   'id' => [
+       'type' => 'int',
+       'flags' => ['primary']
+   ],
+    
+   'table3model' => [
+       'type' => 'model',
+       'clazz' => Table3Model::class,
+       'flags' => ['noinsert','noupdate','null'], //..Table3Model requires constructor arguments. Use null here.
+   ]
+]);
+
+$t3Props = new buffalokiwi\magicgraph\property\QuickPropertySet([
+   'id' => [
+       'type' => 'int',
+       'flags' => ['primary']
+   ]
+]);
+
+```
+
+After creating the models, we will need to create a repository for each type of model.  For this, we will use the DefaultSQLServiceableRepository, 
+which along with ServiceableModel, allows us to use relationship providers.  Repositories controlling models located at the 
+edges of the object graph will need to be created first.  ie: TableC, then TableB, then TableA.
+
+
+```php
+
+//..There are no relationships in tableC
+$t3Repo = new buffalokiwi\magicgraph\persist\DefaultSQLRepository(
+  'tablec',
+  $dbFactory->getConnection(),
+  Table3Model::class,
+  $t3Props,
+);
+
+$t2Repo = new buffalokiwi\magicgraph\persist\DefaultSQLServiceableRepository(
+  'tableb',
+  $dbFactory->getConnection(),
+  Table2Model::class,
+  $t2Props,
+  $tfact,
+  new buffalokiwi\magicgraph\OneOnePropertyService( new \buffalokiwi\magicgraph\OneOnePropSvcCfg(
+    $t3Repo,
+    'id',
+    'table3model'
+)));
+
+$t1Repo = new buffalokiwi\magicgraph\persist\DefaultSQLServiceableRepository(
+  'tablea',
+  $dbFactory->getConnection(),
+  Table1Model::class,
+  $t1Props,
+  $tfact,
+  new buffalokiwi\magicgraph\OneOnePropertyService( new \buffalokiwi\magicgraph\OneOnePropSvcCfg(
+    $t2Repo,
+    'id',
+    'table2model'
+)));
+
+```
+
+Finally, we get the model from tablea, and we print the graph:
+
+```php
+
+$model1 = $t1Repo->get("1");
+
+var_dump( $model1->toArray( null, true, true ));
+
+Outputs:
+
+array (size=2)
+  'id' => int 1
+  'table2model' => 
+    array (size=2)
+      'id' => int 1
+      'table3model' => 
+        array (size=1)
+          'id' => int 1
+
+```
+
+Any relationship providers will work in exactly the same way as the one to one provider.
+

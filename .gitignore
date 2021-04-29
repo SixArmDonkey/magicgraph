@@ -11,3 +11,4 @@ dist/
 nbdist/
 .nb-gradle/
 nbproject/
+.phpdoc/
