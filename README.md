@@ -1,6 +1,6 @@
 # BuffaloKiwi Magic Graph
   
-**Behavioral-based object modeling, mapping and persistence library for PHP 7.4**  
+**Behavioral-based object modeling, mapping and persistence library for PHP 8**  
   
 OSL 3.0 License
   
@@ -46,13 +46,12 @@ Documentation is a work in progress.
     3. [Many to Many](#many-to-many)
     4. [Nested Relationship Providers](#nested-relationship-providers)
     5. [How Editing and Saving Works](#how-editing-and-saving-works)
-11. Extensible Models
-    1. Overview
-    2. Property configuration interface
-    3. Property configuration implementation
-    4. Model property providers 
-    5. Model interface
-    6. Model implementation 
+11. [Extensible Models](#extensible-models)
+    1. [Property configuration interface](#property-configuration-interface)
+    2. Property configuration implementation
+    3. Model property providers 
+    4. Model interface
+    5. Model implementation 
 12. Behavioral Strategies 
 13. Database Connections 
     1. PDO 
@@ -673,7 +672,7 @@ IPropertyType::TSTRING = 'string'
   
 #### Enum  
 Backed by [IEnumProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IEnumProperty.html)
-Column must list a class name implementing the IEnum interface in the 'clazz' attribute.
+Column must list a class name implementing the IEnum interface in the 'clazz' attribute.  For more information see [BuffaloKiwi Types](https://github.com/SixArmDonkey/buffalotools_types).
 ```
 IPropertyType::TENUM = 'enum'
 ```  
@@ -681,7 +680,7 @@ IPropertyType::TENUM = 'enum'
 #### Runtime Enum  
 Backed by [IEnumProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IEnumProperty.html)
 Enum members are configured via the "config" property and is backed by a RuntimeEnum instance.  Runtime Enum instances
-do not use the "clazz" attribute.
+do not use the "clazz" attribute. For more information see [BuffaloKiwi Types](https://github.com/SixArmDonkey/buffalotools_types).
 ```
 IPropertyType::TRTENUM = 'rtenum' 
 ```  
@@ -698,7 +697,7 @@ IPropertyType::TARRAY = 'array'
   
 #### Set  
 Set properties are backed by [ISetProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-ISetProperty.html), and 
-will read/write instances of ISet (or descendants of ISet as specified by the "clazz" attribute).  
+will read/write instances of ISet (or descendants of ISet as specified by the "clazz" attribute).  For more information see [BuffaloKiwi Types](https://github.com/SixArmDonkey/buffalotools_types).
 ```
 IPropertyType::TSET = 'set'
 ```  
@@ -2333,7 +2332,482 @@ graph can be edited, and when the top-most model is saved, it will
 
 We're finally through the foundational concepts, woohoo!  
 
+Magic Graph models are designed to be as flexible as possible.  As I'm sure you've noticed, there are several ways to 
+configure models, and each of those ways have different levels of extensibility.  For example, models can be created by 
+using simple property annotations, or they can be created at runtime by using property configuration objects.  While using
+the annotated properties is quick and easy, it is nowhere near as scalable as using property configuration objects.  
 
+
+Through the use of property configuration objects we can:
+
+1. Define the properties that will existing within a given model
+2. Provide run time type information for properties.  For example, config objects can implement methods to return property names, which 
+can be used to query property meta data in a model's property set.
+3. Add additional meta data to properties 
+4. Provide the ability to swap out the list of properties used for persistence.  For example, if we want to share a model 
+between multiple persistence types that have different property names, we can swap out the configuration object.
+5. Attach simple behaviors to individual properties.  ie: get, set, change, etc.
+6. Extend save functionality through functions like: before save, after save, on save, save function, etc.
+7. Property configuration can be dynamically generated at runtime, which allows us to implement patterns such as EAV.
+8. Multiple property configuration objects can be used to create a single model.  This allows developers to create 
+model extensions or to separate concerns into different packages.
+
+
+#### Property Configuration Interface
+
+For configuration array definitions, please see [Property Configuration](#property-configuration).  
+
+Property configuration objects must all implement the [IPropertyConfig](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyConfig.html) 
+interface.  This interface is used by implementations of [IPropertySetFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertySetFactory.html) 
+to create [IPropertySet](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertySet.html) instances, 
+which contain all of the relevant properties, meta data, and behaviors used by [IModel](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-IModel.html) instances.
+
+The IPropertyConfig interface currently contains four methods:
+
+
+```php
+getConfig(): array
+```
+getConfig() is called by IPropertySetFactory, and returns the property configuration array.  This array contains 
+all of the property definitions, meta data, and optional event handlers.
+
+
+```php
+getPropertyNames(): array
+```
+getPropertyNames() will return a list of strings containing each property name defined by this configuration object.
+
+
+```php
+beforeSave( IModel $model ) : void;
+```
+beforeSave() is called by an IRepository prior to a model being persisted.  This is an opportunity to modify the model's 
+state or add additional validation prior to save.  When creating the beforeSave() handler, the IPropertyConfig implementation
+SHOULD iterate over the properties defined in the configuration array, and call each property-level beforeSave handler.
+
+
+```php
+afterSave( IModel $model ) : void;
+```
+afterSave() is called by an IRepository after a model has been persisted, but before commit().  This can be used to clean 
+up after a save, check the results of a save, etc.  When creating the afterSave() handler, the IPropertyConfig implementation
+SHOULD iterate over the properties defined in the configuration array, and call each property-level afterSave handler.
+
+
+
+#### Property Configuration Implementation
+
+Now that we know how a property configuration object, and the configuration array is defined, let's build out a complete
+implementation.  Magic Graph ships with a abstract base class 
+[BasePropertyConfig](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-BasePropertyConfig.html), 
+which contains constants for commonly used property configurations and adds the ability to incorporate behavioral strategies by 
+passing [INamedPropertyBehavior](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-INamedPropertyBehavior.html) instances to the constructor.
+
+
+Let's make a basic rectangle model.  In this example, we will create two classes: Rectangle and RectangleProperties.  
+Rectangle is the value object, and RectangleProperties defines the properties contained within the Rectangle value object.
+
+
+```php
+/**
+ * Property configuration for a rectangle value object
+ */
+class RectangleProperties extends buffalokiwi\magicgraph\property\BasePropertyConfig
+{
+  /**
+   * Height property name 
+   */
+  const HEIGHT = 'height';
+  
+  /**
+   * Width property name 
+   */
+  const WIDTH = 'width';
+  
+  
+  /**
+   * Returns the property configuration array 
+   * @return array 
+   */
+  protected function createConfig() : array
+  {
+    return [
+      self::HEIGHT => self::FINTEGER_REQUIRED,
+      self::WIDTH => self::FINTEGER_REQUIRED
+    ];
+  }
+}
+
+
+/**
+ * Rectangle Value Object
+ */
+class Rectangle extends buffalokiwi\magicgraph\GenericModel {}
+
+//..Create the rectangle model instance 
+$rectangle = new Rectangle( new RectangleProperties());
+
+
+/**
+ * Outputs:
+ * array (size=2)
+ *   'height' => int 0
+ *   'width' => int 0
+ */
+var_dump( $rectangle->toArray());
+
+/**
+ * Throws Exception with message: 
+ * "height" property of class "Rectangle" of type "int" is REQUIRED and must not be empty.
+ */
+$rectangle->validate();
+
+```
+
+The above example is fairly straightforward.  A configuration object defines two required properties, height and width.
+When the model is instantiated, height and width are both zero.  This is because the default value each property is zero, and 
+default values will bypass property validation.  When IModel::validate() is called, both properties are validated and will 
+throw a [ValidationException](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-ValidationException.html).
+
+That's great and all, but properties should validate when they are set, right?  The required property flag will only validate
+when IModel::validate() is called, so if we want to validate when the property is set, we must add a validation callback.
+
+We can rewrite the createConfig function like this:
+
+```php
+protected function createConfig() : array
+{
+  //..Validation callback that will throw an exception when setting an integer property value to zero
+  $vInt = fn( buffalokiwi\magicgraph\property\IProperty $prop, int $value ) : bool => !empty( $value );
+
+  return [
+    self::HEIGHT => self::FINTEGER_REQUIRED + [self::VALIDATE => $vInt],
+    self::WIDTH => self::FINTEGER_REQUIRED + [self::VALIDATE => $vInt]
+  ];
+}
+```
+
+After the model as been created using the above change, setting height or width equal to zero will throw an exception.
+This does not affect the default property value of zero.  Default values will bypass validation when a property instance is created.
+
+```php
+//..Set height to zero
+$rectangle->height = 0;
+
+//..Throws an exception like:
+//  Behavior validation failure in closure: RectangleProperties in file test.php on line 71
+```
+
+
+What if we wanted to make a rectangle behave as a square?  Since square is a specialization of a rectangle, we can 
+create a behavioral strategy which will be used to enforce the height must equal width rule.  When height is set, width 
+will automatically be set to the value of height and vise versa.  
+
+
+First we will want to create an interface for RectangleProperties.  This will define two methods getHeight() and getWidth(), which 
+will return the model property names for height and width.  This interface is how we will ensure that only rectangles 
+are used with the behavioral strategy, and it's also a great way to decouple property names from the database column names.
+
+
+```php
+/**
+ * This interface defines a property configuration object for a Rectangle.
+ */
+interface IRectangleProperties extends \buffalokiwi\magicgraph\property\IPropertyConfig
+{
+  /**
+   * Get the height property name 
+   * @return string
+   */
+  public function getHeight() : string;
+  
+  
+  /**
+   * Get the width property name 
+   * @return string
+   */
+  public function getWidth() : string;
+}
+```
+
+
+And our modified RectangleProperties class now looks like this:
+
+```php
+/**
+ * Property configuration for a rectangle value object
+ */
+class RectangleProperties extends buffalokiwi\magicgraph\property\BasePropertyConfig implements IRectangleProperties
+{
+  /**
+   * Height property name in the database
+   */
+  const HEIGHT = 'height';
+  
+  /**
+   * Width property name in the database 
+   */
+  const WIDTH = 'width';
+  
+  
+  /**
+   * Get the height property name 
+   * @return string
+   */
+  public function getHeight() : string
+  {
+    return self::HEIGHT;
+  }
+  
+  
+  /**
+   * Get the width property name 
+   * @return string
+   */
+  public function getWidth() : string
+  {
+    return self::WIDTH;
+  }
+  
+  
+  /**
+   * Returns the property configuration array 
+   * @return array 
+   */
+  protected function createConfig() : array
+  {
+    //..Zero is no longer allowed
+    $vInt = fn( buffalokiwi\magicgraph\property\IProperty $prop, int $value ) : bool => !empty( $value );
+    
+    return [
+      self::HEIGHT => self::FINTEGER_REQUIRED + [self::VALIDATE => $vInt],
+      self::WIDTH => self::FINTEGER_REQUIRED + [self::VALIDATE => $vInt]
+    ];
+  }
+}
+```
+
+
+Now that the property configuration is properly configured, we can create a behavioral strategy that will make 
+height always equal to width in any model that uses IRectangleProperties.  To accomplish this, we will create a class
+called BehaveAsSquare, which descends from GenericNamedPropertyBehavior.  GenericNamedPropertyBehavior is normally 
+used to attach behavior to a single property.  
+
+For our square behavior, we want to use the model setter callback 
+(called any time a property value is set by IModel::setValue()).  This means we need to pass static::class to 
+the GenericNamedPropertyBehavior constructor.  When the property name is equal to the class name, the behavior will 
+be applied to every property in a model.  This will allow us to write a single handler for multiple properties.
+
+
+```php
+/**
+ * Causes rectangles to behave as squares.
+ * This uses the model setter callback to force height and width to always be equal.
+ */
+class BehaveAsSquare extends buffalokiwi\magicgraph\property\GenericNamedPropertyBehavior
+{
+  /**
+   * Model setter callback 
+   * @var \Closure
+   */
+  private \Closure $mSetter;
+  
+  
+  public function __construct()
+  {
+    parent::__construct( static::class );
+    $this->mSetter = $this->createModelSetterCallback();
+  }
+  
+  
+  /**
+   * Return the model setter callback
+   * @return \Closure|null
+   */
+  public function getModelSetterCallback(): ?\Closure
+  {
+    return $this->mSetter;
+  }
+  
+  
+  /**
+   * Creates the model setter callback.  
+   * No need to create this every time the setter is called.
+   * @return \Closure
+   */
+  private function createModelSetterCallback() : \Closure 
+  {
+    //..This setter is a circular reference, so we want to know if we're already in the closure
+    $inClosure = false;
+    
+    return function( 
+      \buffalokiwi\magicgraph\IModel $model, 
+      \buffalokiwi\magicgraph\property\IProperty $prop, 
+      $value ) use(&$inClosure) : mixed 
+    { 
+      //..Return if already in closure 
+      if ( $inClosure )
+        return $value;      
+      
+      //..Set the state
+      $inClosure = true;
+      
+      //..Get the rectangle property config 
+      //..This will throw an exception if rectangleproperties are not used in the model.
+      /* @var $props IRectangleProperties */
+      $props = $model->getPropertyConfig( IRectangleProperties::class );
+      
+      //..Set the other dimension 
+      switch( $prop->getName())
+      {
+        case $props->getHeight():
+          $model->setValue( $props->getWidth(), $value );
+        break;
+
+        case $props->getWidth():
+          $model->setValue( $props->getHeight(), $value );
+        break;
+      }
+
+      try {
+        return $value;
+      } finally {
+        //..Reset state
+        $inClosure = false;
+      }
+    };    
+  }
+}
+```
+
+To make our rectangle behave as a square, we can initialize it like this:
+
+```php
+//..Create the rectangle model instance and make it a square 
+$rectangle = new Rectangle( new RectangleProperties( new BehaveAsSquare()));
+
+//..Set one dimension
+$rectangle->height = 10;
+
+/**
+ * Outputs:
+ * array (size=2)
+ *   'height' => int 10
+ *   'width' => int 10
+ */
+var_dump( $rectangle->toArray());
+```
+
+Since we all know a rectangle and a square aren't the same thing, we can use the same property configuration, and our new behavioral 
+strategy to create two new models: Rectangle and Square.
+
+```php
+
+/**
+ * Rectangle Value Object
+ */
+class Rectangle extends buffalokiwi\magicgraph\GenericModel 
+{
+  private IRectangleProperties $props;
+         
+  public function __construct( \buffalokiwi\magicgraph\property\IPropertyConfig ...$config )
+  {
+    parent::__construct( ...$config );
+    //..Here we ensure that the model is actually a rectangle, and we get the property names.
+    $this->props = $this->getPropertyConfig( IRectangleProperties::class );
+  }
+  
+
+  /**
+   * Sets the rectangle dimensions 
+   * @param int $height Height 
+   * @param int $width Width 
+   * @return void
+   */      
+  public function setDimensions( int $height, int $width ) : void
+  {
+    $this->setValue( $this->props->getHeight(), $height );
+    $this->setValue( $this->props->getWidth(), $width );
+  }
+  
+  
+  /**
+   * Gets the height 
+   * @return int
+   */
+  public function getHeight() : int
+  {
+    return $this->getValue( $this->props->getHeight());
+  }
+  
+  
+  /**
+   * Gets the width 
+   * @return int
+   */
+  public function getWidth() : int
+  {
+    return $this->getValue( $this->props->getWidth());
+  }
+}
+
+
+/**
+ * Square value object
+ * Height and width are always equal 
+ */
+class Square extends buffalokiwi\magicgraph\GenericModel 
+{
+  private IRectangleProperties $props;
+         
+  public function __construct( \buffalokiwi\magicgraph\property\IPropertyConfig ...$config )
+  {
+    parent::__construct( ...$config );
+    //..Here we ensure that the model is actually a rectangle, and we get the property names.
+    $this->props = $this->getPropertyConfig( IRectangleProperties::class );
+  }
+  
+
+  /**
+   * Sets the rectangle dimensions 
+   * @param int $height Height 
+   * @param int $width Width 
+   * @return void
+   */      
+  public function setDimension( int $heightAndWidth ) : void
+  {
+    //..Our BehaveAsSquare will handle this 
+    //..We could have just as easily set both properties here, but this is an example of how strategies work.
+    $this->setValue( $this->props->getHeight(), $heightAndWidth );
+  }
+  
+  
+  /**
+   * Gets the height 
+   * @return int
+   */
+  public function getHeight() : int
+  {
+    return $this->getValue( $this->props->getHeight());
+  }  
+}
+```
+
+And finally, we can create an instance of a square:
+
+```php
+$square = new Square( new RectangleProperties( new BehaveAsSquare()));
+
+$square->setDimension( 10 );
+
+/**
+ * Outputs:
+ * array (size=2)
+ *   'height' => int 10
+ *   'width' => int 10
+ */
+var_dump( $square->toArray());
+```
 
 
 

@@ -21,12 +21,18 @@ use Exception;
 
 abstract class BasePropertyConfig extends DefaultPropertyConfig implements IPropertyConfig
 {  
+   /**
+   * Primary key integer property 
+   */
   const FINTEGER_PRIMARY = [
     self::TYPE => IPropertyType::TINTEGER,
     self::FLAGS => [IPropertyFlags::PRIMARY],
     self::VALUE => 0
   ];  
 
+  /**
+   * Unsigned integer property
+   */
   const FINTEGER = [
     self::TYPE => IPropertyType::TINTEGER,
     self::FLAGS => [],
@@ -34,6 +40,10 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
     self::MIN => 0 //..Pretty much every integer in the entire system is unsigned.  
   ];  
   
+    
+  /**
+   * Signed integer property
+   */
   const FINTEGER_SIGNED = [
     self::TYPE => IPropertyType::TINTEGER,
     self::FLAGS => [],
@@ -41,6 +51,9 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   ];
 
   
+  /**
+   * Required unsigned integer 
+   */
   const FINTEGER_REQUIRED = [
     self::TYPE => IPropertyType::TINTEGER,
     self::FLAGS => [IPropertyFlags::REQUIRED],
@@ -48,59 +61,101 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   ];  
   
   
+  /**
+   * Required Unsigned integer property.
+   * Value can only be assigned if equal to default value 
+   */
   const FINTEGER_REQ_WE = [
     self::TYPE => IPropertyType::TINTEGER,
     self::FLAGS => [IPropertyFlags::REQUIRED, IPropertyFlags::WRITE_EMPTY],
     self::VALUE => 0    
   ];
   
+  /**
+   * Unsigned integer property.
+   * Value can only be assigned if equal to default value 
+   */
   const FINTEGER_WE = [
     self::TYPE => IPropertyType::TINTEGER,
     self::FLAGS => [IPropertyFlags::WRITE_EMPTY],
     self::VALUE => 0    
   ];
 
+  
+  /**
+   * String property
+   */
   const FSTRING = [
     self::TYPE => IPropertyType::TSTRING,
     self::FLAGS => [],
     self::VALUE => ''
   ];
   
+  
+  /**
+   * Required string property
+   */
   const FSTRING_REQUIRED = [
     self::TYPE => IPropertyType::TSTRING,
     self::FLAGS => [IPropertyFlags::REQUIRED],
     self::VALUE => ''
   ];  
 
+  
+  /**
+   * Required string property 
+   * Value can only be assigned if equal to default value 
+   */
   const FSTRING_REQ_WE = [
     self::TYPE => IPropertyType::TSTRING,
     self::FLAGS => [IPropertyFlags::REQUIRED, IPropertyFlags::WRITE_EMPTY],
     self::VALUE => ''
   ];  
   
+  
+  /**
+   * Date time property 
+   */
   const FDATE = [
     self::TYPE => IPropertyType::TDATE,
     self::FLAGS => [IPropertyFlags::USE_NULL],
     self::VALUE => null
   ];
   
+  
+  /**
+   * Date time property 
+   * Value can only be assigned if equal to default value 
+   */
   const FDATE_ONCE = [
     self::TYPE => IPropertyType::TDATE,
     self::FLAGS => [IPropertyFlags::WRITE_EMPTY, IPropertyFlags::USE_NULL],
     self::VALUE => null
   ];
   
+  
+  /**
+   * Enum property
+   */
   const FENUM = [
     self::TYPE => IPropertyType::TENUM,
     self::FLAGS => [IPropertyFlags::REQUIRED]
   ];
     
+  
+  /**
+   * Money property
+   */
   const FMONEY = [
     self::TYPE => IPropertyType::TMONEY,
     self::FLAGS => [],
     self::VALUE => '0'
   ];
   
+  
+  /**
+   * Required money property
+   */
   const FMONEY_REQUIRED = [
     self::TYPE => IPropertyType::TMONEY,
     self::FLAGS => [IPropertyFlags::REQUIRED],
@@ -108,6 +163,9 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   ];
 
   
+  /**
+   * Array property
+   */
   const FARRAY = [
     self::TYPE => IPropertyType::TARRAY,
     self::FLAGS => [IPropertyFlags::NO_INSERT, IPropertyFlags::NO_UPDATE],
@@ -115,6 +173,9 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   ];
   
   
+  /**
+   * Required array property
+   */
   const FARRAY_REQUIRED = [
     self::TYPE => IPropertyType::TARRAY,
     self::FLAGS => [IPropertyFlags::REQUIRED,IPropertyFlags::NO_INSERT, IPropertyFlags::NO_UPDATE],
@@ -122,18 +183,30 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   ];
   
   
+  /**
+   * Required decimal property
+   */
   const FDECIMAL_REQUIRED = [
     self::TYPE => IPropertyType::TFLOAT,
     self::FLAGS => [IPropertyFlags::REQUIRED],
     self::VALUE => 0
   ];
   
+  
+  /**
+   * Decimal property
+   */
   const FDECIMAL = [
     self::TYPE => IPropertyType::TFLOAT,
     self::FLAGS => [],
     self::VALUE => 0
   ];
   
+  
+  /**
+   * Boolean property
+   * default false
+   */
   const FBOOLEAN = [
     self::TYPE => IPropertyType::TBOOLEAN,
     self::FLAGS => [],
@@ -141,12 +214,20 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   ];
   
   
+  /**
+   * Boolean property 
+   * default true 
+   */
   const FBOOLEAN_TRUE = [
     self::TYPE => IPropertyType::TBOOLEAN,
     self::FLAGS => [],
     self::VALUE => true
   ];  
   
+  
+  /**
+   * List of available callbacks 
+   */
   const CALLBACKS = [
     self::INIT,
     self::VALIDATE,
@@ -160,6 +241,7 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
     self::IS_EMPTY
   ];
   
+
  
   
   
@@ -211,6 +293,13 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
    */
   private $afterSave = [];
   
+  /**
+   * Generic INamedPropertyBehavior instances.
+   * These have a property name equal to their class name 
+   * @var array
+   */
+  private array $genericBehavior = [];
+  
   
   /**
    * Retrieve the configuration array for generating model properties.
@@ -233,8 +322,21 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
    */
   public function __construct( INamedPropertyBehavior ...$behavior )
   {
+    $bList = [];
+    
+    if ( !empty( $behavior ))
+    {
+      foreach( $behavior as $b )
+      {
+        if ( $b->getPropertyName() == get_class( $b ))
+          $this->genericBehavior[] = $b;
+        else
+          $bList[] = $b;
+      }
+    }
+    
     $mValidate = [];
-    foreach( $behavior as $b )
+    foreach( $bList as $b )
     {
       /* @var $b INamedPropertyBehavior */
       if ( !isset( $this->behavior[$b->getPropertyName()] ))
@@ -256,7 +358,7 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
     $this->mValidateData = $mValidate;
     $this->isConstructed = true;
   }
-  
+
   
   /**
    * Called via SaveableMappingObjectFactory, and happens as part of the 
@@ -503,6 +605,11 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
     {
       //..Get the behavior 
       $behavior = $this->getBehavior( $propName );
+      foreach( $this->genericBehavior as $b )
+      {
+        $behavior[] = $b;
+      }
+      
       
       //..Skip entries that have no additional behavior 
       if ( empty( $behavior ))

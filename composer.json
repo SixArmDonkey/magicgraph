@@ -1,6 +1,6 @@
 {
 	"name"        : "buffalokiwi/magicgraph",
-	"description" : "Behavioral-based object modeling and persistence library for PHP 7.4",
+	"description" : "Behavioral-based object modeling and persistence library for PHP 8",
 	"keywords"    : ["orm","persistence","repository","ddd","uow"],
   "homepage"    : "https://github.com/SixArmDonkey/magicgraph",
 	"license"     : "OSL-3.0",
@@ -19,7 +19,7 @@
     "classmap": ["tests/"]
   },
   "require" : {
-    "php" : "^7.4 || ^8.0",
+    "php" : "~8.0",
     "moneyphp/money" : "~3.2",
 		"buffalokiwi/buffalotools_types": "~1.0",
 		"buffalokiwi/buffalotools_ioc": "~1.0",
