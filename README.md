@@ -2937,12 +2937,12 @@ is recommended to extend all models from DefaultModel.
 At the time of writing, Magic Graph ships with 7 IModel implementations and two decorators:
 
 1. **DefaultModel** - The base model.  Every model should extend from this class.  
-    2. **ServiceableModel** - Extends DefaultModel and adds the necessary functionality required to support relationship providers.
-    3. **AnnotatedModel** - Can use attributes in php8 to configure and initialize model properties.  
-    4. **GenericModel** - Quick way to create a model using IPropertyConfig.
-    5. **QuickModel** - Quick way to create a model with nothing other than the property configuration array.
-    6. **QuickServiceableModel** 
-    7. **ProxyModel** - Used to decorate IModel instances 
+    1. **ServiceableModel** - Extends DefaultModel and adds the necessary functionality required to support relationship providers.
+    2. **AnnotatedModel** - Can use attributes in php8 to configure and initialize model properties.  
+    3. **GenericModel** - Quick way to create a model using IPropertyConfig.
+    4. **QuickModel** - Quick way to create a model with nothing other than the property configuration array.
+    5. **QuickServiceableModel** 
+    6. **ProxyModel** - Used to decorate IModel instances 
         1. **ReadOnlyModelWrapper** - A decorator for IModel that disables setting property values
         2. **ServiceableModelWrapper** - A decorator for IModel that can add relationship providers to model instances.
 
