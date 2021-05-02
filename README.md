@@ -48,8 +48,8 @@ Documentation is a work in progress.
     5. [How Editing and Saving Works](#how-editing-and-saving-works)
 11. [Extensible Models](#extensible-models)
     1. [Property configuration interface](#property-configuration-interface)
-    2. Property configuration implementation
-    3. Model property providers 
+    2. [Property configuration implementation](#property-configuration-implementation)
+    3. [Using multiple property configurations](#using-multiple-property-configurations)
     4. Model interface
     5. Model implementation 
 12. Behavioral Strategies 
@@ -2810,6 +2810,82 @@ var_dump( $square->toArray());
 ```
 
 
+#### Using multiple property configurations
 
 
+It's possible to use multiple IPropertyConfig objects to create a single model.  This is one of the more useful features
+of property configuration objects. It's possible for one package to define a model, and have other packages extend that 
+model by adding properties and behavior.  Each property configuration can also incorporate any inline event handlers and
+zero or more behavioral strategies.  Think of this as a sort of plugin system.  Here's an example:
 
+First we create two property configurations:
+
+```php
+class FooProps extends buffalokiwi\magicgraph\property\BasePropertyConfig
+{
+  protected function createConfig(): array
+  {
+    return [
+      'foo' => self::FSTRING
+    ];
+  }
+}
+
+
+class BarProps extends buffalokiwi\magicgraph\property\BasePropertyConfig
+{
+  protected function createConfig(): array
+  {
+    return [
+      'bar' => self::FSTRING
+    ];
+  }  
+}
+```
+
+Now we can pass an instance of each configuration object to a model (or property set) constructor.
+
+```php
+//..Create the model instance with both property configuration objects 
+$model = new buffalokiwi\magicgraph\GenericModel( new FooProps(), new BarProps());
+
+
+/**
+ * Outputs:
+ * array (size=2)
+ *   'foo' => string '' (length=0)
+ *   'bar' => string '' (length=0)
+ */
+var_dump( $model->toArray());
+```
+
+Properties from both configurations will appear in the model.
+
+We can also add properties at runtime.  Here's a third configuration we'll add to the model.
+
+```php
+class BazProps extends buffalokiwi\magicgraph\property\BasePropertyConfig
+{
+  protected function createConfig(): array
+  {
+    return [
+      'baz' => self::FSTRING
+    ];
+  }  
+}
+```
+
+Adding a configuration object at runtime is done through the property set:
+
+```php
+$model->getPropertySet()->addPropertyConfig( new BazProps());
+
+/**
+ * Outputs:
+ * array (size=2)
+ *   'foo' => string '' (length=0)
+ *   'bar' => string '' (length=0)
+ *   'baz' => string '' (length=0)
+ */
+var_dump( $model->toArray());
+```
