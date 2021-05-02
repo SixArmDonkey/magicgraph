@@ -377,4 +377,10 @@ class ProxyModel implements IModel
   {
     return $this->model->hasPrimaryKeyValues();
   }
+  
+  
+  public function jsonSerialize() 
+  {
+    return $this->model->jsonSerialize();
+  }  
 }

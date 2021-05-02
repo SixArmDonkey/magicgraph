@@ -2912,8 +2912,8 @@ IBigSet containing active bits for each of the desired properties.
     1. **validate()** - Individually validates each property, and the first property to test as invalid will throw a ValidationException
     2. **validateAll()** - Validates each property in the model and stores the results in a list.  Properties with failed validation are returned as a map.
 3. **State**
-    1. **getModifiedProperties() **- Retrieve an instance of IBigSet with the bits for any edited properties enabled 
-    2. **getInsertProperties() **- Retrieve an instance of IBigSet with the bits for any properties required for a database "insert".
+    1. **getModifiedProperties()** - Retrieve an instance of IBigSet with the bits for any edited properties enabled 
+    2. **getInsertProperties()** - Retrieve an instance of IBigSet with the bits for any properties required for a database "insert".
     3. **hasEdits()** - Tests if any properties have been edited since initialization 
 4. **Serialization**
     1. **toArray()** - Used for persistence, debugging and other fun things.  Converts the IModel instance into a multi-dimensional array.
@@ -2929,4 +2929,22 @@ IBigSet containing active bits for each of the desired properties.
 
 Models are composed of a few components, a property set containing all various object property instances and the model
 implementation.  Currently, every property set extends [DefaultPropertySet](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-DefaultPropertySet.html) 
-and every model extends [DefaultModel](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-DefaultModel.html)
+and every model extends [DefaultModel](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-DefaultModel.html).
+
+It is worth noting that DefaultModel contains quite a bit of functionality.  Instead of directly implementing IModel, it 
+is recommended to extend all models from DefaultModel.  
+
+At the time of writing, Magic Graph ships with 7 IModel implementations and two decorators:
+
+1. **DefaultModel** - The base model.  Every model should extend from this class.  
+    2. **ServiceableModel** - Extends DefaultModel and adds the necessary functionality required to support relationship providers.
+    3. **AnnotatedModel** - Can use attributes in php8 to configure and initialize model properties.  
+    4. **GenericModel** - Quick way to create a model using IPropertyConfig.
+    5. **QuickModel** - Quick way to create a model with nothing other than the property configuration array.
+    6. **QuickServiceableModel** 
+    7. **ProxyModel** - Used to decorate IModel instances 
+        1. **ReadOnlyModelWrapper** - A decorator for IModel that disables setting property values
+        2. **ServiceableModelWrapper** - A decorator for IModel that can add relationship providers to model instances.
+
+The quick and generic model variants are easier to instantiate, but using these models prevents you from selecting the 
+property set, config mapper and property factory.  Internally, quick and generic models all use instances of DefaultPropertySet, DefaultConfigMapper and PropertyFactory.
