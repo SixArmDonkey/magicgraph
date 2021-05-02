@@ -40,7 +40,7 @@ use Traversable;
  * It's worth noting that you DO NOT have to descend from this class.  You can 
  * simply pass a property set to the default model, and go to town.
  */
-class DefaultModel implements IModel, JsonSerializable
+class DefaultModel implements IModel
 {
   /**
    * Maximum depth for toArray

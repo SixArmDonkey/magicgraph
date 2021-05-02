@@ -17,6 +17,7 @@ use buffalokiwi\magicgraph\property\IPropertyConfig;
 use buffalokiwi\magicgraph\property\IPropertySet;
 use InvalidArgumentException;
 use IteratorAggregate;
+use JsonSerializable;
 use stdClass;
 
 
@@ -24,7 +25,7 @@ use stdClass;
  * Defines a model.  
  * @todo Write documentation
  */
-interface IModel extends IteratorAggregate
+interface IModel extends IteratorAggregate, JsonSerializable
 {
   /**
    * Create a copy/clone of the model and all properties.

@@ -50,8 +50,8 @@ Documentation is a work in progress.
     1. [Property configuration interface](#property-configuration-interface)
     2. [Property configuration implementation](#property-configuration-implementation)
     3. [Using multiple property configurations](#using-multiple-property-configurations)
-    4. Model interface
-    5. Model implementation 
+    4. [Model interface](#model-interface)
+    5. [Model implementation](#model-implementation)
 12. Behavioral Strategies 
 13. Database Connections 
     1. PDO 
@@ -2889,3 +2889,44 @@ $model->getPropertySet()->addPropertyConfig( new BazProps());
  */
 var_dump( $model->toArray());
 ```
+
+
+
+### Model Interface 
+
+All models in Magic Graph must implement the [IModel](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-IModel.html) interface. 
+The interface itself is fairly simple and straightforward.  
+
+IModel focuses on a few key areas, Properties, Validation, State, Serialization and Cloning:
+
+1. Properties
+  1. instanceOf() - Tests that a IPropertyConfig instance is a or implements the supplied class or interface name.  This is used to test if a model is "of some type".
+  2. getPropertySet() - Retrieve the internal IPropertySet instance containing the properties used in the model
+  3. getPropertyNameSet() - Retrieve an instance of [IBigSet](https://github.com/SixArmDonkey/buffalotools_types#bigset) containing a list of property names in the property set.  This is used for 
+methods that utilize model property names.  ie: toArray() can return a limited list of properties by supplying an instance of 
+IBigSet containing active bits for each of the desired properties.
+  4. getPropertyNameSetByFlags() - The same as getPropertyNameSet() and includes the ability to filter by enabled property flags.
+  5. getPropertyConfig() - Retrieve an array containing the property configuration used to create the model properties
+  6. getIterator() - Retrieve an iterator used to iterate over any non-array and non-model properties and values contained in the model.
+2. Validation 
+  1. validate() - Individually validates each property, and the first property to test as invalid will throw a ValidationException
+  2. validateAll() - Validates each property in the model and stores the results in a list.  Properties with failed validation are returned as a map.
+3. State
+  1. getModifiedProperties() - Retrieve an instance of IBigSet with the bits for any edited properties enabled 
+  2. getInsertProperties() - Retrieve an instance of IBigSet with the bits for any properties required for a database "insert".
+  3. hasEdits() - Tests if any properties have been edited since initialization 
+4. Serialization
+  1. toArray() - Used for persistence, debugging and other fun things.  Converts the IModel instance into a multi-dimensional array.
+  2. toObject() - Used for JSON Serialization, converts IModel to an object graph.
+  3. fromArray() - Used to initialize the model with data from the persistence layer.  Populates any matching IModel properties with the supplied values.
+  4. jsonSerialize() - Usually calls toObject().
+5. Cloning
+  1. __clone() - IModel instances are cloneable.
+  2. createCopy() - Preferred over __clone, this can be used to clone or copy (without primary keys) models and also cause them to be read only.
+
+
+### Model Implementation 
+
+Models are composed of a few components, a property set containing all various object property instances and the model
+implementation.  Currently, every property set extends [DefaultPropertySet](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-DefaultPropertySet.html) 
+and every model extends [DefaultModel](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-DefaultModel.html)
