@@ -37,9 +37,11 @@ use function json_encode;
 
 /**
  * A repository for a MySQL database table.
- * This is meant for SIMPLE database operations on single tables.
+ * This is meant for SIMPLE database operations on single tables (relationship providers can provide join functionality).
  * If you are joining tables, doing fancy things, etc then please create a 
  * new repository and write some beautiful, hand-crafted, SQL.
+ * 
+ * @todo Refactor this and make this a SQL base class.  Create a engine specific implementations containing sql statements.
  */ 
 class SQLRepository extends SaveableMappingObjectFactory implements ISQLRepository
 {
@@ -373,8 +375,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     
     throw new RecordNotFoundException( 'Record with id: ' . implode( ',', $id ) . ' does not exist' );
   }
-  
-  
+    
   
   /**
    * Retrieve a list of id's for some property.
@@ -716,6 +717,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     
     
     
+    
     try {
       if ( !$hasPriValue )
       {
@@ -737,7 +739,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
         //..Insert if there are no valid pri key values 
         $id = $this->dbc->insert( 
           $this->table, 
-          $toSave
+          $this->mapper()->convertArrayKeys( $toSave, false )
         );
 
         if ( sizeof( $priKeys ) == 1 )
@@ -771,8 +773,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
           //..Update if there are.
           $this->dbc->update( 
             $this->table, 
-            $updKeys,
-            $toSave
+            $this->mapper()->convertArrayKeys( $updKeys, false ),
+            $this->mapper()->convertArrayKeys( $toSave, false )
           );
         }
       }

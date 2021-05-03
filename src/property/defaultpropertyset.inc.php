@@ -192,6 +192,7 @@ class DefaultPropertySet extends BigSet implements IPropertySet
       if ( !( $property instanceof IProperty ))
         throw new InvalidArgumentException( "All properties must be an instance of IProperty" );
       
+      
       if ( isset( $this->properties[$property->getName()] ))
         continue;
       
@@ -208,9 +209,19 @@ class DefaultPropertySet extends BigSet implements IPropertySet
    * BigSet instance. 
    * @param IProperty $property Property 
    * @return string New property name 
+   * @todo watch out for the preg_match call in the profiler.  Optimize if necessary.
    */
   private function addAndInitializeNewProperty( IProperty $property ) : string
   {
+    //..Adding an alphanumeric check for property names.  Since these are directly inserted into queries,
+    //  this should at least provides some basic protection against sql injection via column names
+    //..The idea is for property sets/configurations to whitelist column names, but since we can allow properties
+    //  to be added at runtime, from the database, etc AND custom IProperty implementations without name checking may be 
+    //  used, we need to at least have minimal sanity checking.    
+    if ( !preg_match( '/^[a-zA-Z0-9_]+$/', $property->getName()))
+      throw new \InvalidArgumentException( 'Property names must match the pattern "/^[a-zA-Z0-9_]+$/"' );
+        
+    
     //..THIS IS CRITICALLY IMPORTANT TO CALL PRIOR TO USING ANY NEW IPROPERTY INSTANCE
     //  THIS CALL IS REQUIRED TO INTIALIZE ALL DEFAULT VALUES AND INSTANCES WITHIN THE PROPERTY
     $property->reset();

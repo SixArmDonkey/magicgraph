@@ -52,6 +52,26 @@ interface IModelMapper
   
   
   /**
+   * Using the supplied IModelMap instances, this will convert
+   * a model to an array, then convert the array property names based on the supplied mapping.
+   * If no mappings are supplied, this simply returns IModel::toArray()
+   * @param IModel $model
+   * @return array
+   */
+  public function mapToArray( IModel $model ) : array;
+  
+  
+  /**
+   * Convert array keys from model to persistence or from persistence to model.
+   * @param array $data
+   * @param bool $isFromDB Set to true if keys in $data are from the persistence layer.  If keys are from the model, 
+   * set to false.
+   * @return array $data with converted keys 
+   */
+  public function convertArrayKeys( array $data, bool $isFromDB ) : array;
+  
+  
+  /**
    * Retrieve the class or interface name this mapper works with.
    * @return string name 
    */

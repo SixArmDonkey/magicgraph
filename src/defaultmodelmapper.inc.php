@@ -38,6 +38,13 @@ class DefaultModelMapper implements IModelMapper
   private $clazz;
   
   /**
+   * IModelMap instances
+   * @var ?IModelMap
+   */
+  private ?IModelMap $maps = null;
+  
+  
+  /**
    * Create a new DefaultModelMapper instance 
    * @param Closure $createModel A supplier that returns an IModel instance.
    * f( ?IPropertySet $propertySet, array $data ) : IModel
@@ -45,7 +52,7 @@ class DefaultModelMapper implements IModelMapper
    * inside an IRepository will be locked to this type.
    * @throws InvalidArgumentException if createModel does not return an IModel instance 
    */
-  public function __construct( Closure $createModel, string $clazz )
+  public function __construct( Closure $createModel, string $clazz, ?IModelMap $maps = null )
   {
     $this->createModel = $createModel;
     
@@ -53,6 +60,10 @@ class DefaultModelMapper implements IModelMapper
       throw new InvalidArgumentException( 'clazz must not be empty.  Please specify a class or interface name, which is used to limit the type of objects used within this mapper and associated repositories.' );
     
     $this->clazz = $clazz;
+    
+    
+    if ( $maps != null )
+      $this->maps = $map;
   }
   
   
@@ -117,28 +128,52 @@ class DefaultModelMapper implements IModelMapper
   
   
   /**
-   * Map some data to properties in some model.
+   * Map some data from the database to properties in some model.
    * Invalid properties are silently ignored.
    * @param IModel $model Model to push data into
    * @param array $data data to push
    */
   public function map( IModel $model, array $data ) : void
   {
-//    $names = $model->getPropertyNameSet();
     $this->test( $model );
-    foreach( $data as $k => $v )
+    
+    foreach( $this->mapData( $data, true ) as $k => $v )
     {
       //..Simply ignore any non-member properties.
       //..The extra properties may be used with service providers
       try {
-        //..Don't ignore anything...
-//        if ( $names->isMember( $k ))
-          $model->setValue( $k, $v );
+        $model->setValue( $k, $v );
       } catch( \InvalidArgumentException $e ) {
         //..Do nothing.
       }
     }
     $model->clearEditFlags();
+  }
+  
+  
+  /**
+   * Using the supplied IModelMap instances, this will convert
+   * a model to an array, then convert the array property names based on the supplied mapping.
+   * If no mappings are supplied, this simply returns IModel::toArray()
+   * @param IModel $model
+   * @return array
+   */
+  public function mapToArray( IModel $model ) : array
+  {
+    return $this->mapData( $model->toArray(), false );
+  }
+  
+  
+  /**
+   * Convert array keys from model to persistence or from persistence to model.
+   * @param array $data
+   * @param bool $isFromDB Set to true if keys in $data are from the persistence layer.  If keys are from the model, 
+   * set to false.
+   * @return array $data with converted keys 
+   */
+  public function convertArrayKeys( array $data, bool $isFromDB ) : array
+  {
+    return $this->mapData( $data, $isFromDB );
   }
   
   
@@ -170,5 +205,28 @@ class DefaultModelMapper implements IModelMapper
     $model->clearEditFlags();
     
     return $model;
+  }
+  
+  
+  private function mapData( array $data, bool $dataFromDB ) : array
+  {
+    if ( $this->maps == null )
+      return $data;
+    
+    if ( $dataFromDB )
+      $map = array_flip( $this->maps->getMap());
+    else
+      $map = $this->maps->getMap();
+    
+    $out = [];
+    
+    foreach( $data as $k => $v )
+    {
+      if ( isset( $map[$k] ))
+        $out[$map[$k]] = $v;
+    }
+    
+    return $out;
+    
   }
 }

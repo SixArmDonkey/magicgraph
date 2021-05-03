@@ -130,16 +130,13 @@ abstract class AbstractProperty implements IProperty
       throw new InvalidArgumentException( "name must be a non-empty alphanumeric string with optional underscores" );
     else if ( !isset( self::$NAME_CACHE[$name] ))
     {
-      self::$NAME_CACHE[$name] = preg_match( '/([a-z0-9_]+)/', $name );
+      self::$NAME_CACHE[$name] = preg_match( '/([a-zA-Z0-9_]+)/', $name );
       if ( !self::$NAME_CACHE[$name] )
         throw new InvalidArgumentException( "name must be a non-empty alphanumeric string with optional underscores" );
     }
     
     $this->type = $builder->getType();
-    //$this->type->setValue( $builder->getType()->value());
-    
     $this->flags = $builder->getFlags();
-    //$this->flags->add( ...$builder->getFlags()->getActiveMembers());
     
     foreach( $builder->getBehavior() as $b )
     {
@@ -148,11 +145,6 @@ abstract class AbstractProperty implements IProperty
         $this->behavior[] = $b;
       }
     }
-    
-
-    
-    //if ( $this->behavior == null )
-//      $this->behavior = new PropertyBehavior();
     
     $this->name = $name;
     
@@ -167,8 +159,7 @@ abstract class AbstractProperty implements IProperty
     
     $this->prefix = $builder->getPrefix();
     
-    //$t = $this->type->value();        
-    if ( !empty( $this->prefix ) && $this->type->value() != IPropertyType::TMODEL ) //$t != IPropertyType::TARRAY && $t != IPropertyType::TMODEL && $t != IPropertyType::TOBJECT )
+    if ( !empty( $this->prefix ) && $this->type->value() != IPropertyType::TMODEL )
     {
       throw new \InvalidArgumentException( 'Property ' . $this->name . ' cannot implement a prefix unless the property type is an IModel' );    
     }
@@ -209,7 +200,6 @@ abstract class AbstractProperty implements IProperty
     
     //..Set the property value
     $this->value = $this->setPropertyValue( $this->preparePropertyValue( $val ));    
-    //$this->setValue( $val );        
     
     return $this;
   }

@@ -126,13 +126,13 @@ class MappingObjectFactory implements IObjectFactory
   }
   
   
-  protected function mapper() : IModelMapper
+  protected final function mapper() : IModelMapper
   {
     return $this->mapper;
   }
   
   
-  protected function properties() : IPropertySet
+  protected final function properties() : IPropertySet
   {
     return $this->properties;
   }
