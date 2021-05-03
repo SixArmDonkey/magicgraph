@@ -52,7 +52,7 @@ Documentation is a work in progress.
     3. [Using multiple property configurations](#using-multiple-property-configurations)
     4. [Model interface](#model-interface)
     5. [Model implementation](#model-implementation)
-12. Behavioral Strategies 
+12. [Behavioral Strategies ](#behavioral-strategies)
 13. Database Connections 
     1. PDO 
     2. Extending PDO 
@@ -170,7 +170,11 @@ events as necessary.
   
 ### Hello Model
 
-Let's take a look at some code.
+This is one of many ways to write models in Magic Graph.  As you read through the documentation, we will gradually 
+shift towards writing more robust and extensible models.  The following model example is used to illustrate the internal 
+structure of models.
+
+For now, let's take a look at some basic model creation code.
 
 In this example, the following objects are used:  
 [buffalokiwi\magicgraph\DefaultModel](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-DefaultModel.html)  
@@ -2948,3 +2952,160 @@ At the time of writing, Magic Graph ships with 7 IModel implementations and two 
 
 The quick and generic model variants are easier to instantiate, but using these models prevents you from selecting the 
 property set, config mapper and property factory.  Internally, quick and generic models all use instances of DefaultPropertySet, DefaultConfigMapper and PropertyFactory.
+
+
+
+### Behavioral Strategies
+
+This has already been detailed in the [Property Behavior](#property-behavior) section, but since this might be the 
+most important topic in all of Magic Graph, we're going to go over it again.
+
+The goals of behavioral strategies are the following:
+
+1. Reduce the complexity of models
+2. Increase the ease of writing tests
+3. Introduce or replace functionality without extending or modifying the model 
+
+
+We've all seen models that try to do it all.  The messy code, or the stinky code.  Things like support for third party packages 
+hacked into models, ignoring separation of concerns, or referencing objects the model should know nothing about.  There are many
+solutions to these problems, but most of the time I see developers write a service used to join several packages together.  This is great and all, 
+but it still tightly couples packages and adds complexity.  If repositories are in use, and there's a separate service on top of 
+said repository, which one should the developer use to save the model?  What happens if some code is written that doesn't know 
+about the service?  Shenanigans ensue.
+
+Behavioral Strategies are an attempt to simplify inter-package relationships.  Think of a strategy like an adapter.  We 
+can write a program with tests, then attach the program to a model.  The model and/or repository will then dispatch events, 
+which the strategy program will use to either change the model's state and/or introduce side effects.  
+
+In this context, side effects may not be a bad thing.  For example, say we have an ecommerce platform, and we want to generate a shipping
+label when an order has been packaged and is ready to ship.  We could write a strategy that monitors an order's status, knows how to interact with some 
+shipping api, and generates a shipping label when the order's state moves to "ready to ship".  This strategy is simply attached
+to the repository and model during object creation in composition root.  We now have an independently-testable program, which 
+adds support for shipping api's to the order model without needing to modify the order model, repository or create a service layer.
+
+Behavioral strategy programs are basically event handlers for various events fired by IProperty, IModel and IRepository.  Currently, there
+are a few behavior interfaces.
+
+[IPropertyBehavior]() is primarily used by the property configuration array, and contains several callbacks related to a single property.
+All callbacks will include an argument IProperty, which is the property that triggered the callback.  
+
+
+**Validation Callback**
+The validation callback is called any time IProperty::validate() is invoked.  
+
+```php
+function getValidationCallback() : ?Closure
+{
+  /**
+   * Validate some property value 
+   * @param buffalokiwi\magicgraph\property\IProperty $prop Property being validated
+   * @param mixed $value Value to validate
+   * @return bool is valid
+   */
+  return function( IProperty $prop, mixed $value ) : bool {
+    //..Validate $value 
+    return false; //..Not valid, throws an exception 
+  };
+}
+```
+
+**Setter Callback**
+The setter callback is called before IProperty::validate().  The purpose of this callback is to modify the value prior to 
+it being written to the backing property object.  Think of this as serializing a property value.
+```php
+function getSetterCallback() : ?Closure
+{
+  /**
+   * Modify a property value prior to being written to the backing property
+   * @param buffalokiwi\magicgraph\property\IProperty $prop Property being set 
+   * @param mixed $value Value to set 
+   * @return mixed modified value 
+   */  
+  return function( buffalokiwi\magicgraph\property\IProperty $prop, mixed $value ) : mixed {
+    //..Ensure that any incoming value is a string, then append 'bar'
+    return (string)$value . 'bar';
+  };
+}
+```
+
+
+**Getter Callback**
+The getter callback is called prior to returning a value from IProperty::getValue().  This is to modify the value 
+stored in the backing property object prior to using it.  Think of this as deserializing a property value.
+Notice the $context argument on the getter callback.  IModel::setValue() contains a context argument, and this can be used
+to set some arbitrary context/meta data/state/etc used in the getter callbacks.  
+```php
+function getGetterCallback() : ?Closure
+{
+  /**
+   * Modify a property value prior to being written to the backing property
+   * @param buffalokiwi\magicgraph\property\IProperty $prop Property being set 
+   * @param mixed $value Value to set 
+   * @param array $context The context 
+   * @return mixed modified value 
+   */  
+  return function( buffalokiwi\magicgraph\property\IProperty $prop, mixed $value, array $context ) : mixed {
+    //..Ensure that any incoming value is a string, then append 'bar'
+    return (string)$value . 'bar';
+  };
+}
+```
+
+
+**Init Callback**
+The init callback is used to modify the default value prior to it being written to the backing object.  This is called
+when IProperty::reset() is called.  This is never run through IProperty::validate(), so be careful with default values.
+```php
+function getInitCallback() : ?Closure
+{
+  /**
+   * Modify the default value 
+   * @param mixed $value The default value 
+   */
+  return function ( mixed $value ) : mixed {
+    return $value;
+  };
+}
+```
+
+
+**Empty Callback**
+The empty callback is useful in situations where empty() does not return true, but whatever the value is should still be considered empty.
+For example, if the property is a object representing a primitive, then empty() would return false even if the objects internal value 
+was actually empty.  
+```php
+function getIsEmptyCallback() : ?Closure
+{
+  /**
+   * Basic empty check that returns true if the value is empty or the value is equal to the default property value.
+   * @param buffalokiwi\magicgraph\property\IProperty $prop Property being tested
+   * @param mixed $value The value to test
+   * @param mixed $defaultValue The default value for the property. 
+   */
+  return function ( buffalokiwi\magicgraph\property\IProperty $prop, mixed $value, mixed $defaultValue ) : bool {
+    return empty( $value ) || $value === $defaultValue;
+  };
+}
+```
+
+**Change Callback**
+When a property value changes, this callback is fired.  It is worth noting, that this happens at the property level, 
+not inside of any models.  Therefore, this event will have no access to other properties in the model.  Due to this restriction, 
+there may be limited uses for this callback.  If you need access to other properties in a model, use the model level getter/setter callbacks.
+```php
+function getOnChangeCallback() : ?Closure
+{
+  /**
+   * @param buffalokiwi\magicgraph\property\IProperty $prop The property being changed
+   * @param mixed $oldValue The value prior to the change
+   * @param mixed $newValue The value after the change
+   */
+  return function ( buffalokiwi\magicgraph\property\IProperty $prop, mixed $oldValue, mixed $newValue ) : void {
+    //..Do something interesting 
+  };
+}
+```
+
+
+** 

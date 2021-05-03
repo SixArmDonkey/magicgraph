@@ -31,6 +31,7 @@ use \InvalidArgumentException;
  * 
  * Use this with a OneManyPropertyService 
  * 
+ * @todo extending BasePropSvcCfg might not make sense.  Consider changing this into some sort of relationship provider configuration or something.
  * 
  */
 class OneManyPropSvcCfg extends BasePropSvcCfg implements IOneManyPropSvcCfg
