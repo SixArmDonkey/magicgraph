@@ -60,12 +60,10 @@ Documentation is a work in progress.
 14. [Working with Currency](#working-with-currency)
 15. [Creating HTML elements](#creating-html-elements)
 16. [Magic Graph Setup](#magic-graph-setup)
-    1. [The Config Mapper](#the-config-mapper)
-    2. Property Factory
-    3. Property Set Factory
-17. Entity-Attribute-Value (EAV)
+17. [Entity-Attribute-Value (EAV)](#entity-attribute-value)
 18. Searching
 19. Extending Magic Graph 
+    1. [The Config Mapper](#the-config-mapper)
 20. Tutorial
 
 ---
@@ -3773,7 +3771,7 @@ $propertyFactory = new \buffalokiwi\magicgraph\property\PropertyFactory( $config
 
 ## Creating HTML Elements
 
-This package probably should not have been a part of Magic Graph, and released as a separate extension.  However, the package is here and it
+This package should not have been part of Magic Graph, and instead should have been released as a separate extension.  However, the package is here and it
 is fully integrated with properties, and therefore it's not going anywhere.
 
 By using [IElementFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-htmlproperty-IElementFactory.html) implementations, it is possible
@@ -3886,17 +3884,18 @@ function( \buffalokiwi\magicgraph\property\IProperty $prop, string $name,
 
 Magic Graph was designed to support the [composition root pattern](https://medium.com/@cfryerdev/dependency-injection-composition-root-418a1bb19130). 
 The idea is to have every call to "new object" in a single file called composition root.  While Magic Graph object instantiation may look complicated, 
-you only have to write that code once, and all of it is in once place.  Instances of various Magic Graph components are then injected into other classes as a dependency. 
+you only have to write that code once, and all of it ends up in one place.  Instances of various Magic Graph components are then injected into other classes as a dependency. 
 
 Here's what the composition root section for magic graph may look like.
 
 1. Create the service locator container.  This is used to provide various factories (like DateFactory and MoneyFactory) to the config mapper.
 2. Create a database connection factory.  This will be used by repositories.
-3. Add DateFactory to the service locator.  This is used within IDateProperty.
-4. Add MoneyFactory to the service locator.  This is used within IMoneyProperty.
+3. Add DateFactory to the container.  This is used within IDateProperty.
+4. Add MoneyFactory to the container.  This is used within IMoneyProperty.
 5. Create the config mapper.  This is an instance of IConfigMapper, and is responsible for creating instances of IProperty based on types listed in the property configuration arrays.
 6. Create the PropertyFactory instance.  This creates IPropertySet instances with the appropriate IConfigMapper.  Property sets contain the properties used by IModel instances.
-7. 
+7. Add ITransactionFactory to the container.  This will be used by various relationship providers and things that need to unify saves across multiple repositories.
+8. Optionally create local variables for IDBConnection and IDBFactory.  This can make writing composition root a little easier and reduce calls to the container.
 
 
 ```php
@@ -3970,11 +3969,10 @@ $configMapper = new buffalokiwi\magicgraph\property\DefaultConfigMapper( $ioc );
 //  Uses the config mapper to produce properties.
 $propertyFactory = new \buffalokiwi\magicgraph\property\PropertyFactory( $configMapper );
 
-//..The property set factory is required for product model instances.
-//  This is due to how service providers can augment the model configuration.
+//..The property set factory is required when service providers augment the model configuration.  This is used for 
+//  things like the EAV system.
 //..The closure is provided with a list of IPropertyConfig instances which are
 //  supplied by the various service providers and base config.
-//..This may or may not be removed in the future.
 $ioc->addInterface( \buffalokiwi\magicgraph\property\IPropertySetFactory::class, function() use ($propertyFactory) {
   return new \buffalokiwi\magicgraph\property\PropertySetFactory(
     $propertyFactory, 
@@ -4054,3 +4052,9 @@ $testRepo->save( $testModel );
 //..Outputs "1" 
 echo $testModel->id;
 ```
+
+
+---
+
+
+## Entity Attribute Value
