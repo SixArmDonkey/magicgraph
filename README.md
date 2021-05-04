@@ -2984,7 +2984,7 @@ The goals of behavioral strategies are the following:
 3. Introduce or replace functionality without extending or modifying the model 
 
 
-We've all seen models that try to do it all.  The messy code, or the stinky code.  Things like support for third party packages 
+We've all seen models that try to do it all.  The messy code, the stinky code.  Things like support for third party packages 
 hacked into models, ignoring separation of concerns, or referencing objects the model should know nothing about.  There are many
 solutions to these problems, but most of the time I see developers write a service used to join several packages together.  This is great and all, 
 but it still tightly couples packages and adds complexity.  If repositories are in use, and there's a separate service on top of 
@@ -3423,11 +3423,252 @@ var_dump( $model->toArray());
 $model->setName( 'baz' );
 ```
 
-When using any of the behavior callbacks, you can replace IModel and mixed types with any derived type.  
+When using any of the behavior callbacks, you can replace IModel and mixed types with any derived type.  It is also worth 
+noting that if you wanted a behavior to work with all properties, you can pass static::class as the property name to the 
+PropertyBehavior constructor from GenericNamedPropertyBehavior.  This will only work for model level callbacks, and when
+the strategy class name matches the supplied property name, the strategy is applied to every property in the model.
+
+
+---
 
 
 ## Database Connections
 
+Magic Graph provides a simple abstraction over the [PHP PDO library](https://www.php.net/manual/en/book.pdo.php).  First, 
+lets go over the four interfaces, then we'll go over the MySQL implementation.
+
+
+**[IConnectionProperties](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-pdo-IConnectionProperties.html)** 
+
+The connection properties interface is used to define the criteria used to connect to some database engine.  You'll find 
+super fancy methods like getHost() and getDSN().  Truly mind-blowing stuff here.  It has everything you'd expect in a property bag 
+for a database connection.  
+
+
+**[IConnectionFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-pdo-IConnectionFactory.html)**
+
+The connection factory is exactly what seems.  This interface may go through a revision in the near future.  The concept is to
+have a factory that creates database connections.  In it's current form, it is probably best that one factory provides
+connections for one persistence type.  In the future, this interface will be revised to more easily support multiple persistence
+types in a single factory.  Note: This does support multiple types in a single factory, but it's not easy to work with.  For now, keep it one to one and it works nice.
+
+
+**[IDBConnection](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-pdo-IDBConnection.html)**
+
+This is an interface for the PDO object that ships with PHP, but with one additional method: 
+```php
+executeQuery( string $statement ) : Generator
+```
+executeQuery() is a simple way to execute a simple statement without parameters.  
+
+
+**[IPDOConnection](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-pdo-IPDOConnection.html)**
+
+IPDOConnection extends IDBConnection and it adds several methods to make it easier to work with common query types.  Let's take a look.
+
+
+**Delete**
+
+The delete method is used to delete rows.  This method will only delete by primary key, and composite primary keys are supported.
+
+```php
+/**
+ * Execute a delete query for a record using a compound key.
+ * @param string $table table name
+ * @param array $pkPairs primary key to value pairs 
+ * @param int $limit limit
+ * @return int affected rows
+ * @throws InvalidArgumentExcepton if table or col or id are empty or if col
+ * contains invalid characters or if limit is not an integer or is less than
+ * one
+ * @throws DBException if there is a problem executing the query
+ */
+function delete( string $table, array $pkCols, int $limit = 1 ) : int;
+
+//..Example:
+
+$affectedRows = delete( 'mytable', ['pkcol1' => 'value1', 'pkcol2' => 'value2'], 1 );
+
+//..Generates the statement:
+// delete from mytable where pkcol1=? and pkcol2=? limit 1;  
+```
+
+
+**Update**  
+
+Update updates matching rows in some table.  This is also matched by primary key, and composite keys are supported.
+
+```php
+/**
+ * Build an update query using a prepared statement.
+ * @param string $table Table name
+ * @param array $pkPairs list of [primary key => value] for locating records to update.
+ * @param array $pairs Column names and values map
+ * @param int $limit Limit to this number
+ * @return int the number of affected rows
+ * @throws InvalidArgumentException
+ * @throws DBException
+ */
+function update( string $table, array $pkPairs, array $pairs, int $limit = 1 ) : int;
+
+//..Example
+
+$affectedRows = update( 'mytable', ['id' => 1], ['name' => 'foo', 'md5name:md5' => 'foo'], 1 );
+
+//..Generates the statement:
+// update mytable set name=?, md5name=md5(?) where id=? limit 1;
+```
+Functions can be added to columns by appending ':func' to any column name.   Multiple functions can be chained like this: ':func1:func2'
+
+
+**Insert**
+
+Insert is similar to update except that it inserts new records!  Wooooooo! 
+  
+```php
+/**
+ * Build an insert query using a prepared statement.
+ * This will work for most queries, but if you need to do something
+ * super complicated, write your own sql...
+ *
+ *
+ * @param string $table Table name
+ * @param array $pairs Column names and values map
+ * @return int last insert id for updates
+ * @throws InvalidArgumentException
+ * @throws DBException
+ */
+function insert( string $table, array $pairs ) : string;    
+
+//..Example:
+$lastInsertId = insert( 'mytable', ['col1' => 'value1', 'col2:md5' => 'value2'] );
+
+//..generates statement:
+// insert into mytable (col1, col2) values(?,md5(?)); 
+```  
+
+
+**Cursors**
+
+Have you ever wanted to iterate over each row in some table?  You're in luck! 
+
+```php  
+/**
+ * Creates a cursor over some result set 
+ * @param string $statement Statement 
+ * @param type $options Parameters
+ * @param type $scroll Enable Scroll 
+ * @return Generator Results 
+ */
+function forwardCursor( string $statement, $options = null, $scroll = false ) : Generator;  
+
+//..Use it like this:
+
+foreach( forwardCursor( 'select * from mytable where col=?', ['foo'] ) as $row )
+{
+  //..Do something with $row
+  //..$row is an associative array containing column names and values.
+}
+```  
+
+Note: The $scroll argument is deprecated and will be removed in a future release.  Scroll was supposed to allow bidirectional 
+cursor movement, but not all drivers support scrollable cursors (mysql does not) and therefore $scroll should not be 
+included in a generic interface.
+
+
+**Select**
+
+Surprise!  We can select things too!  Pass your statement and bindings to the select method, and BAM! you get results.
+  
+```php
+/**
+ * Select some stuff from some database
+ * @param string $statement sql statement
+ * @param type $opt Bindings for prepared statement.  This can be an object or an array 
+ */ 
+function select( string $statement, $opt = null ) : \Generator;  
+
+//..Use like this:
+
+foreach( select( 'select * from mytable where col=?', ['foo'] ) as $row )
+{
+  //..Do something with $row
+  //..$row is an associative array containing column names and values.
+}
+
+//..Generates the statement:
+//  select * from mytable where col=?
+```
+
+
+**Select Multiple Result Sets**
+
+Queries that return multiple result sets are also fully supported.  This can be a stored procedure that returns multiple
+result sets or simply adding semicolons between the statements.  Be careful with this one.  Semicolons can do nasty things.
+```php
+/**
+ * Execute a sql statement that has multiple result sets
+ * ie: a stored procedure that has multiple selects, or one of those snazzy
+ * subquery statements
+ * @param string $sql SQL statement to execute
+ * @param array $bindings Column bindings 
+ * @return Generator array results
+ * @throws DBException if there is one
+ */
+public function multiSelect( string $sql, array $bindings = [] ) : Generator
+//..Example:
+
+foreach( multiSelect( 'select * from mytable where id=?; select * from mytable where id=?', [1,2] ) as $rowSet )
+{
+  //..Each $rowSet entry contains a set of rows to iterate over.
+  foreach( $rowSet as $row )
+  {
+    //..$row is an associative array of column => value 
+  }
+}
+```
+
+
+**Execute**
+
+Executes some arbitrary statement without a result set.  
+```php
+/**
+ * Executes a query with no result set.
+ * @param string $statement Statement to execute 
+ * @param array $opt Map of bindings 
+ * @return int
+ */
+function execute( string $statement, $opt = null ) : int;
+```
+
+
 ### MySQL PDO 
 
+Magic Graph currently ships with a single database adapter for MySQL, [MariaDBConnection](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-pdo-MariaDBConnection.html), which 
+extends the abstract base class PDOConnection, implements IPDOConnection, and adds the necessary driver-specific sql statements.  This is the PDO implementation to 
+use for all things MySQL/MariaDB.
+
+
 ### Connection Factories
+
+Connection factories generate database connections for use with some driver.  I'm sure you've seen the examples throughout this readme, but in case you haven't, here it is:
+```php
+$dbFactory = new buffalokiwi\magicgraph\pdo\PDOConnectionFactory( //..A factory for managing and sharing connection instances 
+  new buffalokiwi\magicgraph\pdo\MariaConnectionProperties(       //..Connection properties for MariaDB / MySQL
+    'localhost',                  //..Database server host name 
+    'root',                       //..User name
+    '',                           //..Password
+    'fancydatabase' ),            //..Database 
+  //..This is the factory method, which is used to create database connection instances
+  //..The above-defined connection arguments are passed to the closure.
+  function( buffalokiwi\magicgraph\pdo\IConnectionProperties $args  ) { 
+    //..Return a MariaDB connection 
+    return new buffalokiwi\magicgraph\pdo\MariaDBConnection( $args );
+  }
+);
+```
+
+The idea is to create a factory using some connection properties, and have that generic factory return a PDO implementation of the correct type.  Nothing ground breaking here.
+
+

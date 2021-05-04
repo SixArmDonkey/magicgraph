@@ -121,7 +121,7 @@ interface IPDO
 	
   
   /**
-   * Used to execute a insert, update or delete query or any other type of query that has no result set
+   * Used to execute a query that returns a result set
    * @param $statement SQL statement to use
    * @return Generator yielded results 
    * @throws DBException if there is one

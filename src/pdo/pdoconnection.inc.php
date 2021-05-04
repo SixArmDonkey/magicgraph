@@ -371,7 +371,7 @@ abstract class PDOConnection extends PDO implements IPDOConnection
 
 
   /**
-   * Used to execute a insert, update or delete query or any other type of query that has no result set
+   * Used to execute a query that returns a result set
    * @param $statement SQL statement to use
    * @return Generator yielded results 
    * @throws DBException if there is one
@@ -407,11 +407,13 @@ abstract class PDOConnection extends PDO implements IPDOConnection
    * @return Generator array results
    * @throws DBException if there is one
    */
-  public function multiSelect( string $sql ) : Generator
+  public function multiSelect( string $sql, array $bindings = [] ) : Generator
   {
     try {
-      $stmt = parent::query( $sql );
-
+      if ( !empty( $bindings ))
+        $stmt = $this->prepareAndExec( $sql, $this->prepareOptions( $bindings ));
+      else
+        $stmt = parent::query( $sql );
 
       $out = array();
       do
