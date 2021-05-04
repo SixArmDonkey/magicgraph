@@ -61,7 +61,7 @@ Documentation is a work in progress.
 15. [Creating HTML elements](#creating-html-elements)
 16. [Magic Graph Setup](#magic-graph-setup)
 17. [Entity-Attribute-Value (EAV)](#entity-attribute-value)
-18. Searching
+18. [Searching](#searching)
 19. Extending Magic Graph 
     1. [The Config Mapper](#the-config-mapper)
 20. Tutorial
@@ -4058,3 +4058,17 @@ echo $testModel->id;
 
 
 ## Entity Attribute Value
+
+This is the buffalokiwi\magicgraph\eav package.  
+
+
+## Searching
+
+This is the buffalokiwi\magicgraph\search and buffalokiwi\magicgraph\eav\search packages.  
+
+Searching works with relationships, etc.  It's baked into IRepository implementations and the query builders can be swapped
+out when the repo is constructed.
+
+
+
+
