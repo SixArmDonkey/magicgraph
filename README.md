@@ -58,8 +58,6 @@ Documentation is a work in progress.
     2. [MySQL PDO](#mysql-pdo)
     3. [Connection Factories](#connection-factories)
 14. Working with Currency 
-    1. MoneyPHP/Money
-    2. Currency properties 
 15. Creating HTML elements
 16. Magic Graph Setup
     1. The Config Mapper 
@@ -217,7 +215,7 @@ $model->id = 'foo'; //..id is not a string.
 ```
 
 Models are self-validating, and ValidationException will be thrown immediately when attempting to set an invalid value.  There are many validation 
-options attached to the various default properties included with MagicGraph, which we will cover in the [Validation](#) chapter.
+options attached to the various default properties included with Magic Graph, which we will cover in the [Validation](#) chapter.
   
 ---
 
@@ -1296,7 +1294,7 @@ I will create a way to not have to depend on the order of arguments in a future 
 
 ### Transactions Overview 
 Transactions represent some unit of work, and are typically used to execute save operations against some persistence layer.  Similar to a database transaction, 
-MagicGraph transactions will:
+Magic Graph transactions will:
 
 1. Start a transaction in the persistence layer when available
 2. Execute arbitrary code against the persistence layer
@@ -1304,16 +1302,16 @@ MagicGraph transactions will:
 4. Roll back the changes on failure
 
 Transactions are based on a single interface [ITransaction](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ITransaction.html), 
-and can have multiple implementations used to support various persistence layers.  MagicGraph fully supports using 
+and can have multiple implementations used to support various persistence layers.  Magic Graph fully supports using 
 multiple, and different, persistence layers concurrently.  Transactions can be considered an adapter, which 
 executes persistence-specific commands used to implement the required commit and rollback functionality.
 
-Currently, MagicGraph ships with a single transaction type: [MySQLTransaction](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-MySQLTransaction.html)
+Currently, Magic Graph ships with a single transaction type: [MySQLTransaction](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-MySQLTransaction.html)
 
 
 ### Creating a Transaction
 
-At the heart of any transaction is the code to be executed.  In MagicGraph, the interface [IRunnable](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-IRunnable.html)
+At the heart of any transaction is the code to be executed.  In Magic Graph, the interface [IRunnable](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-IRunnable.html)
 is used to define the code to be executed within a transaction.  This type exists, because each persistence type will require a subclass of IRunnable to be created.
 These types are used to group transactions by persistence type, and to expose persistence-specific methods that may be required
 when working with the transactions.  For example, [ISQLRunnable](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ISQLRunnable.html) is used 
@@ -1359,7 +1357,7 @@ try {
 
 ```
 
-The default Transaction object shipped with MagicGraph does not connect to any specific persistence layer, and the implementations
+The default Transaction object shipped with Magic Graph does not connect to any specific persistence layer, and the implementations
 of beginTransaction, commit and rollBack do nothing.
 
 
@@ -1428,7 +1426,7 @@ try {
 ```
 
 While transactions against a single persistence engine could be more simply coded directly against the database, 
-the MagicGraph Transaction abstraction provides a way for us to run transactions against multiple database connections, 
+the Magic Graph Transaction abstraction provides a way for us to run transactions against multiple database connections, 
 or even different persistence engines.  
 
 
@@ -1512,7 +1510,7 @@ $tf->execute( new MySQLRunnable( $repo, function() use($repo, $model) {
 ## Model Relationship Providers 
 
 Similar to a foreign key in a relational database, relationships allow us to create associations between domain objects.
-In MagicGraph, a model (IModel) may contain zero or more properties that reference a single or list of associated IModel objects.
+In Magic Graph, a model (IModel) may contain zero or more properties that reference a single or list of associated IModel objects.
 The parent model may contain [IModelProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-IModel.html)
 and/or [ArrayProperty](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-ArrayProperty.html) properties, 
 which can hold referenced model objects.
@@ -3670,5 +3668,103 @@ $dbFactory = new buffalokiwi\magicgraph\pdo\PDOConnectionFactory( //..A factory 
 ```
 
 The idea is to create a factory using some connection properties, and have that generic factory return a PDO implementation of the correct type.  Nothing ground breaking here.
+
+
+---
+
+
+## Working with Currency
+
+Currency is something that doesn't always work properly.  There are many ways to solve the currency problem (which we will not discuss here) 
+Fortunately we have this awesome library [MoneyPHP](https://github.com/moneyphp/money),which is based on [Martin Fowler's money pattern](https://martinfowler.com/eaaCatalog/money.html), uses
+strings internally to represent currency, and the best part is that money objects are immutable.  
+
+One downside to MoneyPHP is that it does not have any type of interface.  It is simply the Money object.  In Magic Graph, 
+there is an interface for Money [IMoney](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-money-IMoney.html), which is implemented by [MoneyProxy](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-money-MoneyProxy.html), which accepts an instance of [Money](https://github.com/moneyphp/money/blob/master/src/Money.php) and 
+proxies all calls to the underlying Money object.  This is because at some point we may want to swap out MoneyPHP for some other library, and we can't do that without a proper abstraction.
+
+Since MoneyPHP handles different currencies and formats, we need a money factory to have an easy way of generating money instances of the same currency.  In Magic Graph, we have a factory
+[MoneyFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-money-MoneyFactory.html), which implements [IMoneyFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-money-IMoneyFactory.html).
+
+Here's an example of how to set up a money factory for US Dollars
+
+```php
+$currencies = new \Money\Currencies\ISOCurrencies();
+
+//..Money formatter 
+$intlFmt = new Money\Formatter\IntlMoneyFormatter( 
+  new \NumberFormatter( 'en_US', \NumberFormatter::CURRENCY ), 
+  $currencies 
+);
+
+$decFmt = new Money\Formatter\DecimalMoneyFormatter( $currencies );
+
+//..Money factory 
+//..This is used to lock the system down to a certain type of currency, 
+// and to provide an abstract wrapper for the underlying money implementation.
+$dollarFactory = new \buffalokiwi\magicgraph\money\MoneyFactory( 
+  function( string $amount ) use($intlFmt,$decFmt) : buffalokiwi\magicgraph\money\IMoney {
+    return new buffalokiwi\magicgraph\money\MoneyProxy( 
+      Money::USD( $amount ), 
+      $intlFmt, 
+      $decFmt );
+  }
+);   
+```
+
+Now we can create money and format it for the configured currency:
+
+```php
+$treeFiddy = $dollarFactory->getMoney( '3.50' );
+
+/**
+ * Outputs:
+ * object(buffalokiwi\magicgraph\money\MoneyProxy)[600]
+ *  private 'money' => 
+ *    object(Money\Money)[601]
+ *      private 'amount' => string '350' (length=3)
+ *      private 'currency' => 
+ *        object(Money\Currency)[602]
+ *          private 'code' => string 'USD' (length=3)
+ *  private 'formatter' => 
+ *    object(Money\Formatter\IntlMoneyFormatter)[595]
+ *      private 'formatter' => 
+ *        object(NumberFormatter)[596]
+ *      private 'currencies' => 
+ *        object(Money\Currencies\ISOCurrencies)[594]
+ *  private 'decFmt' => 
+ *    object(Money\Formatter\DecimalMoneyFormatter)[597]
+ *      private 'currencies' => 
+ *        object(Money\Currencies\ISOCurrencies)[594]
+ */
+var_dump( $treeFiddy );
+
+//..Outputs: 3.50
+echo (string)$treeFiddy;
+
+//..Outputs: $3.50
+echo $treeFiddy->getFormattedAmount();
+```
+
+Using currency properties in Magic Graph is easy.  Simply use the 'money' property type in your property configuration arrays.
+
+Note: Due to the use of MoneyFactory, a service locator will need to be passed to the config mapper.  This will allow the config mapper
+to find the money factory (and other things) when creating property objects.  See [Magic Graph Setup](#the-config-mapper) for more information.  Here's a 
+quick example for reference:
+
+```php
+//..Service locator 
+$ioc = new buffalokiwi\buffalotools\ioc\IOC();
+
+//..Default Magic Graph Configuration Mapper. 
+//..This creates the property objects.
+$configMapper = new buffalokiwi\magicgraph\property\DefaultConfigMapper( $ioc );
+
+//..Factory wraps the config mapper and can combine config arrays.  
+//  Uses the config mapper to produce properties.
+$propertyFactory = new \buffalokiwi\magicgraph\property\PropertyFactory( $configMapper );
+
+//..Use $propertyFactory to create instances of IPropertySet
+```
 
 
