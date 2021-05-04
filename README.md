@@ -3826,24 +3826,44 @@ The above-example will generate five html inputs:
 </select>
 <br />
 ```
-<input step="1" type="number" value="0" name="numberinput" id="numberinput" />
-<br />
-<input type="text" name="stringinput" id="stringinput" />
-<br />
-<input type="date" name="dateinput" id="dateinput" />
-<br />
-<label><input type="checkbox" class=" checkbox" name="boolinput" id="boolinput" /><span></span></label>
-<br />
-<select name="enuminput" id="enuminput" >
-  <option value="test1" selected="selected" >Test1</option>
-  <option value="test2" >Test2</option>
-  <option value="test3" >Test3</option>
-</select>
-<br />
 
 
+If you want to add element factory components for any custom properties, or if you want to override the default 
+components, you can pass this to the constructor of DefaultComponentMap.  Any matching properties are internally overridden.
 
-The element factory reads a configuration map with keys equal to a subclass of IProperty, and values equal to a Closure: 
+For example, while this is the default handler for IStringProperty, it could be overridden if passed to the constructor.
+```php
+new buffalokiwi\magicgraph\property\htmlproperty\DefaultComponentMap([
+  buffalokiwi\magicgraph\property\IStringProperty::class => function( 
+    buffalokiwi\magicgraph\property\IStringProperty $prop, 
+    string $name, 
+    ?string $id, 
+    string $value 
+  ) : buffalokiwi\magicgraph\property\htmlproperty\IElement {
+    $attrs = [];
+
+    if ( $prop->getMin() != -1 )
+      $attrs['minlength'] = $prop->getMin();
+
+    if ( $prop->getMax() != -1 )
+      $attrs['maxlength'] = $prop->getMax();
+
+    if ( !empty( $prop->getPattern()))
+      $attrs['pattern'] = $prop->getPattern();
+
+    if ( $prop->getFlags()->hasVal( \buffalokiwi\magicgraph\property\IPropertyFlags::REQUIRED ))
+      $attrs['required'] = 'required';
+
+    if ( $prop->getMax() != -1 && $prop->getMax() > 255 )
+      return new buffalokiwi\magicgraph\property\htmlproperty\TextAreaElement( $name, $id, $value, $attrs );
+    else
+      return new \buffalokiwi\magicgraph\property\htmlproperty\InputElement( 'text', $name, $id ?? '', $value, $attrs );
+  }
+]);
+```
+
+The definition for the callbacks is as follows:
+
 ```php
 /**
  * Converts IProperty to IElement 
