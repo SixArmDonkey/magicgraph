@@ -362,7 +362,7 @@ abstract class AbstractProperty implements IProperty
         $value = implode( ',', $value );
       
       throw new ValidationException( '"' . $value . '" of type "' . static::class .'" is not a valid value for the "' . $this->getName() 
-         . '" property.  Check any behavior callbacks, and ensure that the property is set to the correct type.  IPropertyBehavior::getValidateCallback() failed.  Closure in: ' . $inObj );    
+         . '" property.  Check any behavior callbacks, and ensure that the property is set to the correct type.  IPropertyBehavior::getValidateCallback() failed.' );    
     }
     else if ( !$this->flags->hasVal( IPropertyFlags::USE_NULL ) && $value === null )
     {

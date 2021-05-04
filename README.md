@@ -84,9 +84,8 @@ strategies.
 
 Persistence is optional, and it's possible to create object factories without using the persistence package.
 
-Magic Graph persistence uses the repository and unit of work patterns.  Any type of persistence layer can be used, and it 
-is not limited to SQL.  Transactions can occur across different database connections and storage types (with obvious limitations).  
-Currently Magic Graph includes MySQL/MariaDB adapters out of the box, and additional adapters added in future releases.
+Magic Graph persistence uses the repository and unit of work patterns.  Currently Magic Graph includes MySQL/MariaDB adapters 
+out of the box, and additional adapters will be added in future releases.
 
 All examples in this documentation will assume that you want to use the persistence package.  
 
@@ -1105,8 +1104,10 @@ In a future release, the annotations package will be extended to include all ava
 to configure relationships.
 
 
+---
+ 
   
-### Repositories 
+## Repositories 
   
 Magic Graph repositories are an implementation of the [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html).  
 Repositories are an abstraction that encapsulates the logic for accessing some persistence layer.  Similar to a collection, 
@@ -1119,7 +1120,7 @@ different persistence layers.
 Repositories implement the [IRepository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-IRepository.html) interface.
   
   
-#### Mapping Object Factory
+### Mapping Object Factory
   
 Data mappers map data retrieved from some persistence layer to an IModel instance, and implement the [IModelMapper](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-IModelMapper.html) interface. 
 In Magic Graph, data mappers also double as object factories.  
@@ -1138,7 +1139,7 @@ Note: If you simply want an object factory for creating models, MappingObjectFac
   
   
   
-#### Saveable Mapping Object Factory
+### Saveable Mapping Object Factory
   
 [SaveableMappingObjectFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-SaveableMappingObjectFactory.html) is an abstract class extending IObjectFactory, 
 implements [ISaveableObjectFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ISaveableObjectFactory.html), and 
@@ -1161,7 +1162,7 @@ Calling saveAll() is a bit different than the save method.  After testing the mo
   
   
   
-#### SQL Repository
+### SQL Repository
   
 The [SQLRepository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-SQLRepository.html) is the 
 [IRepository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-IRepository.html), used for 
@@ -1200,7 +1201,7 @@ see [Extensible Models](#extensible-models).
   
   
   
-#### Decorating Repositories
+### Decorating Repositories
   
 Magic Graph provides several proxy classes, which can be used as base classes for repository decorators.  
   
@@ -1251,7 +1252,7 @@ Decorating repositories is easy and fun!
   
   
 
-#### Serviceable Repository 
+### Serviceable Repository 
   
 The serviceable repositories are used for repository relationships, which are discussed in the [Relationships](#relationships) section.  
   
@@ -1264,7 +1265,7 @@ model B when the property is accessed from model A.  Additionally, the model pro
 save edits to model B when model A is saved.  
   
   
-#### Composite Primary Keys
+### Composite Primary Keys
   
 Magic Graph fully supports composite primary keys, and certain methods of IRepository and ISQLRepository will contain variadic id arguments for passing multiple primary key values.
 Composite primary keys are assigned via the IPropertyFlags::PRIMARY attribute as follows:
@@ -1287,10 +1288,13 @@ Composite primary keys are assigned via the IPropertyFlags::PRIMARY attribute as
 Note: when supplying primary key values to repository methods, they are accepted in the order in which they were defined.
 I will create a way to not have to depend on the order of arguments in a future release.
   
+  
+---
+  
 
-### Transactions
+## Transactions
 
-#### Transactions Overview 
+### Transactions Overview 
 Transactions represent some unit of work, and are typically used to execute save operations against some persistence layer.  Similar to a database transaction, 
 MagicGraph transactions will:
 
@@ -1307,7 +1311,7 @@ executes persistence-specific commands used to implement the required commit and
 Currently, MagicGraph ships with a single transaction type: [MySQLTransaction](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-MySQLTransaction.html)
 
 
-#### Creating a Transaction
+### Creating a Transaction
 
 At the heart of any transaction is the code to be executed.  In MagicGraph, the interface [IRunnable](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-IRunnable.html)
 is used to define the code to be executed within a transaction.  This type exists, because each persistence type will require a subclass of IRunnable to be created.
@@ -1428,7 +1432,7 @@ the MagicGraph Transaction abstraction provides a way for us to run transactions
 or even different persistence engines.  
 
 
-#### Transaction Factory
+### Transaction Factory
 
 The transaction factory generates instances of some subclass of ITransaction.  The idea is to pass ITransactionFactory::createTransactions() a list of 
 IRunnable instances, and the transaction factory will then group them by persistence type (registered subclass).  
@@ -1502,7 +1506,10 @@ $tf->execute( new MySQLRunnable( $repo, function() use($repo, $model) {
 ```
 
 
-### Model Relationship Providers 
+---
+
+
+## Model Relationship Providers 
 
 Similar to a foreign key in a relational database, relationships allow us to create associations between domain objects.
 In MagicGraph, a model (IModel) may contain zero or more properties that reference a single or list of associated IModel objects.
@@ -1608,7 +1615,7 @@ array (size=2)
 
 
 
-#### Serviceable Model
+### Serviceable Model
 
 A [Serviceable Model](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-ServiceableModel.html) extends the 
 [DefaultModel](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-DefaultModel.html), and modifies the DefaultModel constructor 
@@ -1616,7 +1623,7 @@ to accept zero or more IModelPropertyProvider instances.  The passed providers a
 will handle loading and saving of the associated model(s).  
 
 
-#### Serviceable Repository
+### Serviceable Repository
 
 
 [Serviceable Repository](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ServiceableRepository.html) 
@@ -1630,7 +1637,10 @@ as part of the save transaction.
 The next section will describe the model property providers included with Magic Graph.
 
 
-### Relationships
+---
+
+
+## Relationships
 
 See [Model service providers](#model-relationship-providers) for information about model properties and IModelPropertyProvider.
 
@@ -1663,7 +1673,7 @@ insert into table2 (link_table1, name) values(last_insert_id(),'Child 1'),(last_
 
 
 
-#### One to One
+### One to One
 
 The [OneOnePropertyService](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-OneOnePropertyService.html) provides
 the ability to load, attach, edit and save a single associated model.  
@@ -1771,7 +1781,7 @@ array (size=4)
 
 
 
-#### One to Many
+### One to Many
 
 The [OneManyPropertyService](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-OneManyPropertyService.html) 
 provides the ability to load, attach, edit and save multiple associated models.  
@@ -2332,7 +2342,10 @@ Saves will automatically cascade when using nested relationship providers.  Any 
 graph can be edited, and when the top-most model is saved, it will 
 
 
-### Extensible Models
+---
+
+
+## Extensible Models
 
 We're finally through the foundational concepts, woohoo!  
 
@@ -2357,7 +2370,7 @@ between multiple persistence types that have different property names, we can sw
 model extensions or to separate concerns into different packages.
 
 
-#### Property Configuration Interface
+### Property Configuration Interface
 
 For configuration array definitions, please see [Property Configuration](#property-configuration).  
 
@@ -2399,7 +2412,7 @@ SHOULD iterate over the properties defined in the configuration array, and call 
 
 
 
-#### Property Configuration Implementation
+### Property Configuration Implementation
 
 Now that we know how a property configuration object, and the configuration array is defined, let's build out a complete
 implementation.  Magic Graph ships with a abstract base class 
@@ -2814,7 +2827,7 @@ var_dump( $square->toArray());
 ```
 
 
-#### Using multiple property configurations
+### Using multiple property configurations
 
 
 It's possible to use multiple IPropertyConfig objects to create a single model.  This is one of the more useful features
@@ -2895,6 +2908,8 @@ var_dump( $model->toArray());
 ```
 
 
+---
+
 
 ### Model Interface 
 
@@ -2954,8 +2969,10 @@ The quick and generic model variants are easier to instantiate, but using these 
 property set, config mapper and property factory.  Internally, quick and generic models all use instances of DefaultPropertySet, DefaultConfigMapper and PropertyFactory.
 
 
+---
 
-### Behavioral Strategies
+
+## Behavioral Strategies
 
 This has already been detailed in the [Property Behavior](#property-behavior) section, but since this might be the 
 most important topic in all of Magic Graph, we're going to go over it again.
@@ -2987,11 +3004,12 @@ adds support for shipping api's to the order model without needing to modify the
 Behavioral strategy programs are basically event handlers for various events fired by IProperty, IModel and IRepository.  Currently, there
 are a few behavior interfaces.
 
-[IPropertyBehavior]() is primarily used by the property configuration array, and contains several callbacks related to a single property.
+[IPropertyBehavior](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyBehavior.html) is primarily used by the property configuration array, and contains several callbacks related to a single property.
 All callbacks will include an argument IProperty, which is the property that triggered the callback.  
 
 
 **Validation Callback**
+
 The validation callback is called any time IProperty::validate() is invoked.  
 
 ```php
@@ -3010,7 +3028,9 @@ function getValidationCallback() : ?Closure
 }
 ```
 
+
 **Setter Callback**
+
 The setter callback is called before IProperty::validate().  The purpose of this callback is to modify the value prior to 
 it being written to the backing property object.  Think of this as serializing a property value.
 ```php
@@ -3031,6 +3051,7 @@ function getSetterCallback() : ?Closure
 
 
 **Getter Callback**
+
 The getter callback is called prior to returning a value from IProperty::getValue().  This is to modify the value 
 stored in the backing property object prior to using it.  Think of this as deserializing a property value.
 Notice the $context argument on the getter callback.  IModel::setValue() contains a context argument, and this can be used
@@ -3054,6 +3075,7 @@ function getGetterCallback() : ?Closure
 
 
 **Init Callback**
+
 The init callback is used to modify the default value prior to it being written to the backing object.  This is called
 when IProperty::reset() is called.  This is never run through IProperty::validate(), so be careful with default values.
 ```php
@@ -3062,6 +3084,7 @@ function getInitCallback() : ?Closure
   /**
    * Modify the default value 
    * @param mixed $value The default value 
+   * @return mixed default value 
    */
   return function ( mixed $value ) : mixed {
     return $value;
@@ -3071,6 +3094,7 @@ function getInitCallback() : ?Closure
 
 
 **Empty Callback**
+
 The empty callback is useful in situations where empty() does not return true, but whatever the value is should still be considered empty.
 For example, if the property is a object representing a primitive, then empty() would return false even if the objects internal value 
 was actually empty.  
@@ -3082,6 +3106,7 @@ function getIsEmptyCallback() : ?Closure
    * @param buffalokiwi\magicgraph\property\IProperty $prop Property being tested
    * @param mixed $value The value to test
    * @param mixed $defaultValue The default value for the property. 
+   * @return bool is empty 
    */
   return function ( buffalokiwi\magicgraph\property\IProperty $prop, mixed $value, mixed $defaultValue ) : bool {
     return empty( $value ) || $value === $defaultValue;
@@ -3089,7 +3114,9 @@ function getIsEmptyCallback() : ?Closure
 }
 ```
 
+
 **Change Callback**
+
 When a property value changes, this callback is fired.  It is worth noting, that this happens at the property level, 
 not inside of any models.  Therefore, this event will have no access to other properties in the model.  Due to this restriction, 
 there may be limited uses for this callback.  If you need access to other properties in a model, use the model level getter/setter callbacks.
@@ -3108,4 +3135,290 @@ function getOnChangeCallback() : ?Closure
 ```
 
 
-** 
+### HTML Property Package Callbacks
+
+
+** HTML Input Callback**
+
+As part of a fun little bonus to Magic Graph, all IProperty instances can be converted into their HTML counterparts.  When 
+using [IElementFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-htmlproperty-IElementFactory.html) to generate HTML inputs, this callback will be used to override the default html generated by 
+the element factory.  We will go over this further in the [Creating HTML elements](#creating-html-elements] chhapter.
+```php
+function getHTMLInputCallback() : ?Closure
+{
+  /**
+   * Convert IProperty to IElement for HTML output
+   * @param \buffalokiwi\magicgraph\IModel $model Model property belongs to
+   * @param buffalokiwi\magicgraph\property\IProperty $prop Property to convert
+   * @param string $name HTML element name attribute value
+   * @param string $id HTML element id attribute value 
+   * @param mixed $value Property value
+   * @return \buffalokiwi\magicgraph\property\htmlproperty\IElement The HTML element 
+   */
+  return function (
+    \buffalokiwi\magicgraph\IModel $model,
+    \buffalokiwi\magicgraph\property\IProperty $prop,
+    string $name,
+    string $id,
+    mixed $value ) : \buffalokiwi\magicgraph\property\htmlproperty\IElement {
+    return new buffalokiwi\magicgraph\property\htmlproperty\TextAreaElement( $name, $id, $value );
+  };
+}
+```
+
+
+### Model-level callbacks
+
+
+The following callbacks are invoked by IModel implementations.
+
+**To Array Callback**
+
+IModel::toArray() is used for persistence and serialization.  The toArray callback is invoted when converting property values to their persisted state.
+```php
+function getToArrayCallback() : ?Closure
+{
+  /**
+   * @param \buffalokiwi\magicgraph\IModel $model Model being converted to an array
+   * @param buffalokiwi\magicgraph\property\IProperty $prop Property the value belongs to
+   * @param mixed $value Value to modify 
+   * @return mixed modified value 
+   */
+  return function( 
+    \buffalokiwi\magicgraph\IModel $model, 
+    buffalokiwi\magicgraph\property\IProperty $prop, 
+    mixed $value ) : mixed {
+    //..Return the modified value 
+    return $value;
+  };
+}
+```
+
+
+**Model Setter Callback**
+
+The model setter callback is the same as the property setter callback, except it adds access to the model and it is invoked by DefaultModel instead of AbstractProperty.
+```php
+function getModelSetterCallback() : ?Closure
+{
+  /**
+   * @param \buffalokiwi\magicgraph\IModel $model The model the property belongs to
+   * @param buffalokiwi\magicgraph\property\IProperty $prop The property being set 
+   * @param mixed $value The value being written
+   * @return mixed The modified value to write to the backing property
+   */
+  return function( 
+    \buffalokiwi\magicgraph\IModel $model, 
+    \buffalokiwi\magicgraph\property\IProperty $prop, 
+    mixed $value ) : mixed {
+    //..Return modified value 
+    return $value;
+  };
+}
+```
+
+
+**Model Getter Callback**
+
+The model getter callback is the same as the property getter callback, except it adds access to the model and it is invoked by DefaultModel instead of AbstractProperty.
+```php
+function getModelGetterCallback() : ?Closure
+{
+  /**
+   * @param \buffalokiwi\magicgraph\IModel $model The model the property belongs to
+   * @param buffalokiwi\magicgraph\property\IProperty $prop The property being retrieved
+   * @param mixed $value The value being retrieved
+   * @return mixed The modified value to retrieve
+   */
+  return function( 
+    \buffalokiwi\magicgraph\IModel $model, 
+    \buffalokiwi\magicgraph\property\IProperty $prop, 
+    mixed $value ) : mixed {
+    //..Return modified value 
+    return $value;
+  };
+}
+```
+
+
+### Named Property Behavior 
+
+The [INamedPropertyBehavior](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-INamedPropertyBehavior.html) interface 
+extends [IPropertyBehavior](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-IPropertyBehavior.html), adds additional model-level callbacks.
+
+The following callbacks are invoked by [ISaveableMappingObjectFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ISaveableObjectFactory.html) implementations.
+
+**Model Validation Callback**
+
+This is called when IModel::validate() is invoked, and is an opportunity to validate the state of a model.  Any validation 
+errors must throw a [ValidationException](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-ValidationException.html) 
+```php
+function getModelValidationCallback() : ?Closure 
+{
+  /**
+   * @param \buffalokiwi\magicgraph\IModel $model The model to validate 
+   */
+  return function( \buffalokiwi\magicgraph\IModel $model ) : void {
+    if ( !$valid )
+      throw new \buffalokiwi\magicgraph\ValidationException( 'Model is invalid' );
+  };
+}
+```
+
+
+**Before Save Callback**
+
+This is what it sounds like.  When a model is saved by some [ISaveableMappingObjectFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-persist-ISaveableObjectFactory.html) implementation,
+before save is called prior to the model being persisted.  
+Note: In the default repository implementations, save is part of a transaction and any exceptions thrown will trigger a rollback.
+```php
+function getBeforeSaveCallback() : ?Closure
+{
+  /**
+   * @param \buffalokiwi\magicgraph\IModel $model The model to save
+   */
+  return function( \buffalokiwi\magicgraph\IModel $model ) : void {
+    //..Do something with the model before it's saved
+  };
+}
+```
+
+
+**After Save Callback**
+
+This is the same thing as before save, but it happens after the model is saved.
+```php
+function getAfterSaveCallback() : ?Closure
+{
+  /**
+   * @param \buffalokiwi\magicgraph\IModel $model The model to save
+   */
+  return function( \buffalokiwi\magicgraph\IModel $model ) : void {
+    //..Do something with the model after it's saved
+  };
+}
+```
+
+There are a few ways of implementing INamedPropertyBehavior:
+
+1. Extend [buffalokiwi\magicgraph\property\GenericNamedPropertyBehavior](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-GenericNamedPropertyBehavior.html)
+2. Create an anonymous strategy with the [NamedPropertyBehaviorBuilder](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-NamedPropertyBehaviorBuilder.html)
+3. Write your own implementation 
+
+
+Extending GenericNamedPropertyBehavior is the preferred method of creating behavioral strategies.  By default, every callback 
+will return null.  Override any of the methods in some subclass and return the callback closures.  In the following example, we will 
+create a model called Test with a property name.  We'll create a strategy that will set name equal to "bar" if name is set to "foo", and if 
+name is set to "baz" and exception is thrown.
+
+```php
+/**
+ * Property definition for TestModel 
+ */
+class TestProperties extends buffalokiwi\magicgraph\property\BasePropertyConfig
+{
+  const NAME = 'name';
+  
+  public function getName() : string
+  {
+    return self::NAME;
+  }
+  
+  protected function createConfig() : array
+  {
+    return [
+      self::NAME => self::FSTRING
+    ];
+  }
+}
+
+
+/**
+ * Test model
+ */
+class TestModel extends \buffalokiwi\magicgraph\GenericModel 
+{
+  /**
+   * Property definitions 
+   * @var TestProperties
+   */
+  private TestProperties $props;
+  
+  
+  public function __construct( \buffalokiwi\magicgraph\property\IPropertyConfig ...$config )
+  {
+    parent::__construct( ...$config );
+    $this->props = $this->getPropertyConfig( TestProperties::class );
+  }
+  
+    
+  public function getName() : string
+  {
+    return $this->getValue( $this->props->getName());
+  }
+  
+  
+  public function setName( string $name ) : void
+  {
+    $this->setValue( $this->props->getName(), $name );
+  }
+}
+
+
+/**
+ * If the name property equals "foo", it is set to "bar".
+ * If theh name property equals "baz", a ValidationException is thrown 
+ */
+class TestModelBehavior extends buffalokiwi\magicgraph\property\GenericNamedPropertyBehavior
+{
+  public function getValidateCallback(): ?\Closure
+  {
+    return function( buffalokiwi\magicgraph\property\IProperty $prop, string $name ) : bool {
+      //..If $name equals baz, then an exception is thrown
+      return $name != 'baz';        
+    };
+  }
+  
+  
+  public function getSetterCallback(): ?\Closure
+  {
+    return function( buffalokiwi\magicgraph\property\IProperty $prop, string $name ) : string {
+      //..Returns bar if name equals foo.
+      return ( $name == 'foo' ) ? 'bar' : $name;
+    };
+  }
+}
+
+
+
+//..Create an instance of test model with the test behavior. 
+//..The behavior is wired to the name property.
+$model = new TestModel( new TestProperties( new TestModelBehavior( TestProperties::NAME )));
+
+//..Set the name 
+$model->setName( 'The name' );
+
+/**
+ * Outputs:
+ * array (size=1)
+ *   'name' => string 'The name' (length=8)
+ */
+var_dump( $model->toArray());
+
+
+//..Set the name to "foo"
+$model->setName( 'foo' );
+
+/**
+ * Outputs:
+ * array (size=1)
+ *   'name' => string 'bar' (length=3)
+ */
+var_dump( $model->toArray());
+
+//..Set to baz and an exception will be thrown 
+//..Throws: "baz" of type "buffalokiwi\magicgraph\property\StringProperty" is not a valid value for the "name" property.  
+//  Check any behavior callbacks, and ensure that the property is set to the correct type.  IPropertyBehavior::getValidateCallback() failed.
+//..This will also generate an error "Behavior validation failure in closure: TestProperties in file XXX"
+$model->setName( 'baz' );
+```
