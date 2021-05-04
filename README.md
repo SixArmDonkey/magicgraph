@@ -59,8 +59,8 @@ Documentation is a work in progress.
     3. [Connection Factories](#connection-factories)
 14. [Working with Currency](#working-with-currency)
 15. [Creating HTML elements](#creating-html-elements)
-16. Magic Graph Setup
-    1. The Config Mapper 
+16. [Magic Graph Setup](#magic-graph-setup)
+    1. [The Config Mapper](#the-config-mapper)
     2. Property Factory
     3. Property Set Factory
 17. Entity-Attribute-Value (EAV)
@@ -3878,5 +3878,179 @@ function( \buffalokiwi\magicgraph\property\IProperty $prop, string $name,
 ```
 
 
+---
 
 
+
+## Magic Graph Setup
+
+Magic Graph was designed to support the [composition root pattern](https://medium.com/@cfryerdev/dependency-injection-composition-root-418a1bb19130). 
+The idea is to have every call to "new object" in a single file called composition root.  While Magic Graph object instantiation may look complicated, 
+you only have to write that code once, and all of it is in once place.  Instances of various Magic Graph components are then injected into other classes as a dependency. 
+
+Here's what the composition root section for magic graph may look like.
+
+1. Create the service locator container.  This is used to provide various factories (like DateFactory and MoneyFactory) to the config mapper.
+2. Create a database connection factory.  This will be used by repositories.
+3. Add DateFactory to the service locator.  This is used within IDateProperty.
+4. Add MoneyFactory to the service locator.  This is used within IMoneyProperty.
+5. Create the config mapper.  This is an instance of IConfigMapper, and is responsible for creating instances of IProperty based on types listed in the property configuration arrays.
+6. Create the PropertyFactory instance.  This creates IPropertySet instances with the appropriate IConfigMapper.  Property sets contain the properties used by IModel instances.
+7. 
+
+
+```php
+
+/*********************/
+/* IoC Container     */
+/*********************/
+
+$ioc = new \buffalokiwi\buffalotools\ioc\IOC();
+
+
+/**********************/
+/* Database           */
+/**********************/
+
+$ioc->addInterface(buffalokiwi\magicgraph\pdo\IConnectionFactory::class, function() {
+  return new \buffalokiwi\magicgraph\pdo\PDOConnectionFactory( 
+    new buffalokiwi\magicgraph\pdo\MariaConnectionProperties( 
+      'localhost',    //..Host
+      'root',         //..User
+      '',             //..Pass
+      'magicgraph' ), //..Database 
+   function(\buffalokiwi\magicgraph\pdo\IConnectionProperties $args  ) {
+     return new buffalokiwi\magicgraph\pdo\MariaDBConnection( $args, function(buffalokiwi\magicgraph\pdo\IDBConnection $c ) { $this->closeConnection($c); });
+   });                
+});
+
+
+/**********************/
+/* Dates              */
+/**********************/
+
+$ioc->addInterface( \buffalokiwi\buffalotools\date\IDateFactory::class, function() { 
+  return new \buffalokiwi\buffalotools\date\DateFactory();   
+});
+
+
+
+/*********************/
+/* Money Factory     */
+/*********************/
+
+$ioc->addInterface( \buffalokiwi\magicgraph\money\IMoneyFactory::class, function() {
+  
+  $currencies = new Money\Currencies\ISOCurrencies();
+  //..Money formatter 
+  $intlFmt = new \Money\Formatter\IntlMoneyFormatter( 
+    new \NumberFormatter( 'en_US', \NumberFormatter::CURRENCY ), 
+    $currencies );
+
+  $decFmt = new \Money\Formatter\DecimalMoneyFormatter( $currencies );
+
+  //..Money factory 
+  //..This is used to lock the system down to a certain type of currency, 
+  // and to provide an abstract wrapper for the underlying money implementation.
+  return new \buffalokiwi\magicgraph\money\MoneyFactory( function( string $amount ) use($intlFmt,$decFmt) : \buffalokiwi\magicgraph\money\IMoney {
+    return new \buffalokiwi\magicgraph\money\MoneyProxy( \Money\Money::USD( $amount ), $intlFmt, $decFmt );
+  });
+});
+
+
+/*********************/
+/* Magic Graph Setup */
+/*********************/
+
+//..Converts IPropertyConfig config arrays into properties
+//..If creating custom propeties, this must be replaced with a custom implementation.
+$configMapper = new buffalokiwi\magicgraph\property\DefaultConfigMapper( $ioc );
+
+//..Factory wraps the config mapper and can combine config arrays.  
+//  Uses the config mapper to produce properties.
+$propertyFactory = new \buffalokiwi\magicgraph\property\PropertyFactory( $configMapper );
+
+//..The property set factory is required for product model instances.
+//  This is due to how service providers can augment the model configuration.
+//..The closure is provided with a list of IPropertyConfig instances which are
+//  supplied by the various service providers and base config.
+//..This may or may not be removed in the future.
+$ioc->addInterface( \buffalokiwi\magicgraph\property\IPropertySetFactory::class, function() use ($propertyFactory) {
+  return new \buffalokiwi\magicgraph\property\PropertySetFactory(
+    $propertyFactory, 
+    function(\buffalokiwi\magicgraph\property\IPropertyFactory $factory, \buffalokiwi\magicgraph\property\IPropertyConfig ...$config ) {
+      return new DefaultPropertySet( $factory, ...$config );
+  });
+});
+
+//..Transaction factory is used to handle saving multiple things at one time
+$ioc->addInterface( \buffalokiwi\magicgraph\persist\ITransactionFactory::class, function() {
+  return new \buffalokiwi\magicgraph\persist\DefaultTransactionFactory();
+});
+
+//..I like to set up a few shared variables to use in composition root for the database factory and default connection.
+//..Database connection factory 
+$db = $ioc->getInstance( \buffalokiwi\magicgraph\pdo\IConnectionFactory::class );    
+/* @var $db \buffalokiwi\magicgraph\pdo\IConnectionFactory */
+
+//..Default shared db connection 
+$dbc = $db->getConnection();
+/* @var $dbc \buffalokiwi\magicgraph\pdo\IDBConnection */
+
+
+```
+
+Once Magic Graph has been initialized, you can start adding repositories to the container. 
+
+The following example is based on this table:
+```sql
+create table testtable ( id int auto_increment primary key, name varchar(50)) engine=innodb;
+```
+
+```php
+
+//..Test repository interface
+//..We always need a unique name for the service locator
+interface ITestRepo extends \buffalokiwi\magicgraph\persist\IRepository {}
+
+//..Test repository implementation 
+class TestRepo extends \buffalokiwi\magicgraph\persist\SQLRepository implements ITestRepo {};
+
+//..Test model 
+class TestModel extends buffalokiwi\magicgraph\DefaultModel {}
+
+
+//..Add ITestRepo to the container 
+$ioc->addInterface( ITestRepo::class, function() use ($dbc,$propertyFactory) {
+  return new TestRepo(
+    'testtable',
+    new \buffalokiwi\magicgraph\DefaultModelMapper( function( buffalokiwi\magicgraph\property\IPropertySet $props ) {
+      return new TestModel( $props );
+    }, TestModel::class ),
+    $dbc,
+    new buffalokiwi\magicgraph\property\DefaultPropertySet( 
+      $propertyFactory, 
+      new buffalokiwi\magicgraph\property\QuickPropertyConfig([
+        'id' => ['type' => 'int', 'flags' => ['primary']], 
+        'name' => ['type' => 'string']]))
+  );
+});
+
+
+//..And now if we wanted to use this
+$testRepo = $ioc->getInstance( ITestRepo::class );
+/* @var $testRepo \buffalokiwi\magicgraph\persist\IRepository */
+
+//..Create a new model
+$testModel = $testRepo->create();
+
+//..Set the name property
+$testModel->name = 'test';
+
+//..Save the model 
+$testRepo->save( $testModel );
+
+//..Get the id of the new model
+//..Outputs "1" 
+echo $testModel->id;
+```
