@@ -55,14 +55,15 @@ class DateProperty extends AbstractProperty implements IDateProperty
    * @param IDateFactory $dateFactory Factory for parsing date strings 
    * @param string $toStringFormat Format to use when converting this property to a string.  ie: to write to a database.
    */
-  public function __construct( IPropertyBuilder $builder, IDateFactory $dateFactory, string $toStringFormat = 'Y-m-d H:i:s' )
+  public function __construct( IPropertyBuilder $builder, ?IDateFactory $dateFactory = null, string $toStringFormat = 'Y-m-d H:i:s' )
   {
     parent::__construct( $builder );
     
     if ( empty( $toStringFormat ))
       throw new \InvalidArgumentException( 'toStringFormat must not be empty' );
     
-    $this->dateFactory = $dateFactory;
+    
+    $this->dateFactory = $dateFactory ?? \buffalokiwi\buffalotools\date\DateFactory::getInstance();
     $this->toStringFormat = $toStringFormat;
   }
   

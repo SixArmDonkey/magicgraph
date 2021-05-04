@@ -57,8 +57,8 @@ Documentation is a work in progress.
     1. [PDO](#pdo)
     2. [MySQL PDO](#mysql-pdo)
     3. [Connection Factories](#connection-factories)
-14. Working with Currency 
-15. Creating HTML elements
+14. [Working with Currency](#working-with-currency)
+15. [Creating HTML elements](#creating-html-elements)
 16. Magic Graph Setup
     1. The Config Mapper 
     2. Property Factory
@@ -3766,5 +3766,97 @@ $propertyFactory = new \buffalokiwi\magicgraph\property\PropertyFactory( $config
 
 //..Use $propertyFactory to create instances of IPropertySet
 ```
+
+
+---
+
+
+## Creating HTML Elements
+
+This package probably should not have been a part of Magic Graph, and released as a separate extension.  However, the package is here and it
+is fully integrated with properties, and therefore it's not going anywhere.
+
+By using [IElementFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-htmlproperty-IElementFactory.html) implementations, it is possible
+to convert IProperty instances to [IElement](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-htmlproperty-IElement.html) and eventually to a string containing the HTML. 
+
+The default implementation of IElementFactory is [ElementFactory](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-htmlproperty-ElementFactory.html), which accepts
+a list of [IElementFactoryComponent](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-htmlproperty-IElementFactoryComponent.html).  IELementFactoryComponent instances are used
+to map a subclass of IProperty to a function resposible for converting the IProperty instance to an instance of IElement.  
+
+There is a default mapping class called [DefaultComponentMap](https://sixarmdonkey.github.io/magicgraph/classes/buffalokiwi-magicgraph-property-htmlproperty-DefaultComponentMap.html), which can be used 
+to quickly get started with ElementFactory.
+
+Here's an example:
+
+```php
+//..Create a simple model with a few properties
+$model = new buffalokiwi\magicgraph\QuickModel([
+  'numberinput' => ['type' => 'int'],
+  'stringinput' => ['type' => 'string'],
+  'dateinput' => ['type' => 'date'],
+  'boolinput' => ['type' => 'bool'],
+  'enuminput' => ['type' => 'rtenum', 'config' => ['test1','test2','test3'], 'value' => 'test1']    
+]);
+
+
+$elementFactory = new buffalokiwi\magicgraph\property\htmlproperty\ElementFactory( ...( new buffalokiwi\magicgraph\property\htmlproperty\DefaultComponentMap())->getMap());
+
+foreach( $model->getPropertySet()->getProperties() as $prop )
+{
+  echo $elementFactory->createElement( $model, $prop, $prop->getName(), null, (string)$model->getValue( $prop->getName()))->build();
+  echo '<br />';
+}
+```
+
+The above-example will generate five html inputs:
+
+```html
+<input step="1" type="number" value="0" name="numberinput" id="numberinput" />
+<br />
+<input type="text" name="stringinput" id="stringinput" />
+<br />
+<input type="date" name="dateinput" id="dateinput" />
+<br />
+<label><input type="checkbox" class=" checkbox" name="boolinput" id="boolinput" /><span></span></label>
+<br />
+<select name="enuminput" id="enuminput" >
+  <option value="test1" selected="selected" >Test1</option>
+  <option value="test2" >Test2</option>
+  <option value="test3" >Test3</option>
+</select>
+<br />
+```
+<input step="1" type="number" value="0" name="numberinput" id="numberinput" />
+<br />
+<input type="text" name="stringinput" id="stringinput" />
+<br />
+<input type="date" name="dateinput" id="dateinput" />
+<br />
+<label><input type="checkbox" class=" checkbox" name="boolinput" id="boolinput" /><span></span></label>
+<br />
+<select name="enuminput" id="enuminput" >
+  <option value="test1" selected="selected" >Test1</option>
+  <option value="test2" >Test2</option>
+  <option value="test3" >Test3</option>
+</select>
+<br />
+
+
+
+The element factory reads a configuration map with keys equal to a subclass of IProperty, and values equal to a Closure: 
+```php
+/**
+ * Converts IProperty to IElement 
+ * @param \buffalokiwi\magicgraph\property\IProperty $prop Property to convert
+ * @param string $name property/html form input name 
+ * @param string|null $id html element id attribute value 
+ * @param string $value Property value as a string 
+ * @return buffalokiwi\magicgraph\property\htmlproperty\IElement HTML Element 
+ */
+function( \buffalokiwi\magicgraph\property\IProperty $prop, string $name, 
+  ?string $id, string $value ) : buffalokiwi\magicgraph\property\htmlproperty\IElement;
+```
+
+
 
 
