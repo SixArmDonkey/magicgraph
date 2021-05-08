@@ -74,16 +74,21 @@ Documentation is a work in progress.
 Magic graph is an object mapping and persistence library written in pure PHP.  Magic Graph makes it easy to design 
 and use rich hierarchical domain models, which may incorporate various independently designed and tested behavioral 
 strategies.  
+
+### Goals
+
+This is the original set of goals for this project:
+
+1.  Easily create self-validating models
+2.  Dynamically create models at runtime
+3.  Separate model behavior from the model object
+4.  Allow models to be extended by third parties without modifying the model object or subclassing
   
   
 **Persistence**
 
-Persistence is optional, and it's possible to create object factories without using the persistence package.
-
 Magic Graph persistence uses the repository and unit of work patterns.  Currently Magic Graph includes MySQL/MariaDB adapters 
 out of the box, and additional adapters will be added in future releases.
-
-All examples in this documentation will assume that you want to use the persistence package.  
 
 ---
 
