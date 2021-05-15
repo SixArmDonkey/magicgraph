@@ -53,4 +53,12 @@ interface IObjectFactory
    * @param type $config
    */
   public function addPropertyConfig( IPropertyConfig ...$config );  
+  
+  
+  /**
+   * Test if models created by this repo are of some type.  
+   * @param string $clazz interface or class name 
+   * @return bool
+   */
+  public function isA( string $clazz ) : bool;  
 }

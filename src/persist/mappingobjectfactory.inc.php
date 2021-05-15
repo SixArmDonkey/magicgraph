@@ -58,6 +58,18 @@ class MappingObjectFactory implements IObjectFactory
   
   
   /**
+   * Test if models created by this repo are of some type.  
+   * @param string $clazz interface or class name 
+   * @return bool
+   */
+  public function isA( string $clazz ) : bool
+  {
+    $model = $this->create();
+    return !( !is_a( $model, $clazz, false ) && !is_subclass_of( $model, $clazz, false ) && !$model->instanceOf( $clazz ));      
+  }
+  
+  
+  /**
    * Adds an additional property config to this repo.
    * When models reference themselves, sometimes it's necessary for a property 
    * config to reference the repository (circular).  

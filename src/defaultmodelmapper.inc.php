@@ -63,7 +63,7 @@ class DefaultModelMapper implements IModelMapper
     
     
     if ( $maps != null )
-      $this->maps = $map;
+      $this->maps = $maps;
   }
   
   

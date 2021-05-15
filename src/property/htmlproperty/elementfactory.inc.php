@@ -54,7 +54,7 @@ class ElementFactory implements IElementFactory
    * @return IElement Element 
    * @throws HTMLPropertyException If a matching supplier does not exist.
    */
-  public function createElement( IModel $model, IProperty $property, string $name, ?string $id, string $value ) : IElement
+  public function createElement( IModel $model, IProperty $property, string $name, ?string $id, $value ) : IElement
   {
         
     $cb = [];
