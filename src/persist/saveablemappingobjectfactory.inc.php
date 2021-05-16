@@ -105,7 +105,7 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
       $this->runAfterSave( $m );
     }
   }
-  
+
 
   /**
    * Called before the repo save call is made.

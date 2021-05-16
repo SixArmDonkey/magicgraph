@@ -27,6 +27,7 @@ use buffalokiwi\magicgraph\search\ISearchQueryGenerator;
 use buffalokiwi\magicgraph\search\ISearchResults;
 use buffalokiwi\magicgraph\search\MySQLSearchQueryGenerator;
 use buffalokiwi\magicgraph\search\MySQLSearchResults;
+use buffalokiwi\magicgraph\search\SearchQueryBuilder;
 use buffalokiwi\magicgraph\ValidationException;
 use Closure;
 use Generator;
@@ -959,24 +960,16 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     return $out;    
   }  
   
-  
-  /*
-  
-  protected function getInsertProperties( IModel $model ) : IBigSet
-  {
-    return $model->getInsertProperties();
-  }
-  
-  
-  protected function getModifiedProperties( IModel $model ) : IBigSet 
-  {
-    return $model->getModifiedProperties();
-  }
-   * 
-   * 
+
+  /**
+   * Retrieve a search query builder appropriate for the repository
+   * @return ISearchQueryBuilder
    */
-  
-  
+  public function getSearchQueryBuilder() : ISearchQueryBuilder
+  {
+    return new SearchQueryBuilder();
+  }
+
   
   private function getStatement( IBigSet $properties, ?IFilter $filter = null, ?IRows $rows = null ) : string
   {

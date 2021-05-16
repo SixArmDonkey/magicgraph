@@ -20,6 +20,9 @@ use Exception;
 
 /**
  * Property service configuration 
+ * 
+ * This should be used with relationship providers.
+ * Simply adding properties can be accomplished with IPropertyConfig alone.
  */
 interface IPropertySvcConfig extends IPropertyConfig
 {

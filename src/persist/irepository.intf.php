@@ -163,4 +163,12 @@ interface IRepository extends ISaveableObjectFactory
    * @return ISearchQueryGenerator generator 
    */
   public function getSearchQueryGenerator() : ISearchQueryGenerator;     
+  
+  
+  /**
+   * Retrieve a search query builder appropriate for the repository
+   * @return ISearchQueryBuilder
+   */
+  public function getSearchQueryBuilder() : ISearchQueryBuilder;
+    
 }

@@ -229,4 +229,14 @@ class RepositoryProxy extends SaveableMappingObjectFactoryProxy implements IRepo
   {
     return $this->repo->getSearchQueryGenerator();
   }
+  
+
+  /**
+   * Retrieve a search query builder appropriate for the repository
+   * @return ISearchQueryBuilder
+   */
+  public function getSearchQueryBuilder() : ISearchQueryBuilder
+  {
+    return $this->repo->getSearchQueryBuilder();
+  }  
 }
