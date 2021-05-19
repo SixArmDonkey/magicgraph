@@ -507,7 +507,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
         $conditions[] = $col . ' in ' . $this->dbc->prepareIn( $val, $this->properties()->getProperty( $col )->getType()->is( IPropertyType::TINTEGER ));
         $values = array_merge( $values, $val );
       }
-      else if ( strpos( $val, '%' ) === false )
+      else if ( strpos((string)$val, '%' ) === false )
       {
         $conditions[] = $col . ' = ? ';
         $values[] = $val;
@@ -884,7 +884,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
         throw new \InvalidArgumentException( 'Missing prikey value for delete' );
       
       //..Set the primary key pair 
-      $updKeys[$priKey] = $model->getValue( $priKey->getName());
+      $updKeys[$priKey->getName()] = $model->getValue( $priKey->getName());
     }
     
     $this->dbc->delete( $this->table, $updKeys, 1 );

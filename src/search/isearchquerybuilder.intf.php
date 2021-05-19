@@ -43,7 +43,7 @@ interface ISearchQueryBuilder
    * @param string $value Attribute value 
    * @return ISearchQueryBuilder this 
    */
-  public function and( string $attribute, ?string $value, string $operator = self::EQUALS ) : ISearchQueryBuilder;
+  public function and( string $attribute, ?string $value, string $operator = '=' ) : ISearchQueryBuilder;
   
   
   /**
@@ -69,7 +69,7 @@ interface ISearchQueryBuilder
    * @param string $value Attribute value 
    * @return ISearchQueryBuilder this 
    */
-  public function or( string $attribute, ?string $value, string $operator = self::EQUALS ) : ISearchQueryBuilder;
+  public function or( string $attribute, ?string $value, string $operator = '=' ) : ISearchQueryBuilder;
   
   
   /**
