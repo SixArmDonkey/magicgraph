@@ -85,13 +85,12 @@ class ServiceableRepository extends RepositoryProxy
    * Otherwise, this is considered to be an insert.
    * 
    * @param IModel $model Model to save 
-   * @param bool $validate Validate the model prior to save.
    * @throws DBException For DB errors 
    * @throws ValidationException if the model fails to validate 
    */
-  public function save( IModel $model, bool $validate = true ) : void
+  public function save( IModel $model ) : void
   {
-    $this->save( $model, $validate );
+    $this->save( $model );
   }
   
   
