@@ -13,7 +13,6 @@ declare( strict_types=1 );
 namespace buffalokiwi\magicgraph\property;
 
 use buffalokiwi\magicgraph\IModel;
-use buffalokiwi\magicgraph\persist\Runnable;
 use Closure;
 use Exception;
 
@@ -57,6 +56,9 @@ abstract class BasePropSvcCfg extends BasePropertyConfig implements IPropertySvc
     }
   }
 
+  
+
+  
   
   /**
    * Retrieve a save function to be used with some transaction.

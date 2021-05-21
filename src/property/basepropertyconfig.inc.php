@@ -413,6 +413,16 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   
   
   /**
+   * Get the property config for the main property set 
+   * @return IPropertyConfig config 
+   */
+  public function getPropertyConfig() : IPropertyConfig
+  {
+    return $this;
+  }  
+  
+  
+  /**
    * Adds an additional validation closure to the stack.
    * @param Closure $f New validation function.  f( IModel $model ) : void throws ValidationException
    * @return void

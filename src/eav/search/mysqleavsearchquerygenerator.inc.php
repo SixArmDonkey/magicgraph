@@ -779,6 +779,7 @@ where a1.code in ('test','link_mfg','price','case_qty');
     }
     else
     {
+      
       if ( !empty( $attrSelect ))
       {
         $parts = [];
@@ -792,7 +793,7 @@ where a1.code in ('test','link_mfg','price','case_qty');
       }
       
       if ( !empty( $filterWhere ))
-        $filterWhere = (( empty( $entityWhere )) ? ' where ' : ' ' ) . implode( ' and ', $filterWhere );
+        $filterWhere = (( empty( $entityWhere )) ? ' where ' : ' and ' ) . implode( ' and ', $filterWhere );
       else
         $filterWhere = '';      
       
