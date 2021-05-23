@@ -61,4 +61,12 @@ interface IObjectFactory
    * @return bool
    */
   public function isA( string $clazz ) : bool;  
+  
+  
+  /**
+   * Specify columns to select.
+   * @param string $names Zero or more names.  Leave names empty to select all columns.
+   * @return IObjectFactory this 
+   */
+  public function select( string ...$names ) : IObjectFactory;  
 }

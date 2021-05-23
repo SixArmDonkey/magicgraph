@@ -43,6 +43,12 @@ class MappingObjectFactory implements IObjectFactory
    */
   private $pNames;
   
+  /**
+   * Selected names 
+   * @var IBigSet
+   */
+  private IBigSet $select;
+  
   
   public function __construct( IModelMapper $mapper, ?IPropertySet $properties = null )
   {
@@ -54,6 +60,35 @@ class MappingObjectFactory implements IObjectFactory
       $this->properties = $mapper->createAndMap([])->getPropertySet();
     
     $this->pNames = $this->properties->getMembers();
+    $this->select = new RuntimeBigSet( $this->pNames );
+  }
+  
+  
+  /**
+   * Specify columns to select.
+   * @param string $names Zero or more names.  Leave names empty to select all columns.
+   * @return IObjectFactory this 
+   * @final 
+   */
+  public final function select( string ...$names ) : IObjectFactory
+  {
+    $this->select->clear();
+    
+    if ( !empty( $names ))
+      $this->select->add( ...$names );
+    
+    return $this;
+  }
+  
+  
+  /**
+   * Retrieve the columns to select.
+   * If the set is empty, then select all columns
+   * @return IBigSet selection set 
+   */
+  protected final function getSelect() : IBigSet
+  {
+    return $this->select;
   }
   
   

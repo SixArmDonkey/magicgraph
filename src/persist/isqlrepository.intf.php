@@ -74,4 +74,12 @@ interface ISQLRepository extends IRepository
    * @return bool is locked 
    */
   public function isLocked() : bool;  
+  
+  
+  /**
+   * Specify columns to select.
+   * @param string $names Zero or more names.  Leave names empty to select all columns.
+   * @return IRepository this 
+   */
+  public function select( string ...$names ) : ISQLRepository;
 }

@@ -17,7 +17,6 @@ use InvalidArgumentException;
 
 /**
  * Valid SQL Comparison operators 
- * @deprecated Stupid
  */
 class ESQLOperator extends Enum
 {

@@ -145,4 +145,15 @@ class SQLRepositoryProxy extends RepositoryProxy implements ISQLRepository
   {
     return $this->repo->getSearchQueryGenerator();
   }
+  
+  
+  /**
+   * Specify columns to select.
+   * @param string $names Zero or more names.  Leave names empty to select all columns.
+   * @return ISQLRepository this 
+   */
+  public function select( string ...$names ) : ISQLRepository
+  {
+    return $this->repo->select( ...$names );
+  }
 }

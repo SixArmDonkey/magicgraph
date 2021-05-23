@@ -239,4 +239,15 @@ class RepositoryProxy extends SaveableMappingObjectFactoryProxy implements IRepo
   {
     return $this->repo->getSearchQueryBuilder();
   }  
+  
+  
+  /**
+   * Specify columns to select.
+   * @param string $names Zero or more names.  Leave names empty to select all columns.
+   * @return IRepository this 
+   */
+  public function select( string ...$names ) : IRepository
+  {
+    return $this->repo->select( ...$names );
+  }
 }

@@ -118,7 +118,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   {
     return $this->searchQueryGenerator;
   }
-  
+
   
   /**
    * Retrieve the database table name backing this repository.
@@ -367,8 +367,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       $vals[] = $id[$k];
     }
     
-    
-    foreach( $this->dbc->select( 'select * from ' . $this->table 
+    foreach( $this->dbc->select((new SQLSelect( $this->getSelect(), $this->table ))->getSelect()
       . ' where ' . implode( ' and ', $q ), $vals ) as $row )
     {
       return $this->create( $row );
@@ -447,34 +446,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
    */
   public function findByProperty( string $propertyName, string $value, int $limit = 100 ) : array
   {
-    return $this->findByProperties([$propertyName => $value], $limit );
-    /*
-    if ( !$this->properties()->isMember( $propertyName ))
-    {
-      $c = get_class( $this->mapper()->createAndMap( [], $this->properties()));
-      throw new \InvalidArgumentException( $propertyName . ' is not a valid property of ' . $c );
-    }
-
-    //..Use equals if there are no wildcards.
-    if ( strpos( $value, '%' ) === false )
-      $where = ' = ? ';
-    else
-      $where = ' like ? ';
-    
-    if ( $limit > 0 )
-      $where .= ' limit ' . $limit;
-    
-
-    $out = [];
-    
-    foreach( $this->dbc->select( 'select * from ' . $this->table 
-      . ' where ' . $propertyName . $where, [$value] ) as $row )
-    {
-      $out[] = $this->create( $row );
-    }    
-    
-    return $out;    
-     */
+    return $this->findByProperties([$propertyName => $value], $limit );  
   }
   
   
@@ -498,17 +470,37 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     
     foreach( $map as $col => $val )
     {
+      if ( is_array( $val ) && sizeof( $val ) == 2 )
+      {
+        $val = reset( $val );
+        $op = new ESQLOperator( end( $val ));
+      }
+      
       if ( !is_scalar( $val ) && !is_array( $val ))
         throw new \InvalidArgumentException( 'Values must be scalar or array' );
       
       //..Use equals if there are no wildcards.
       if ( is_array( $val ))
       {
-        $conditions[] = $col . ' in ' . $this->dbc->prepareIn( $val, $this->properties()->getProperty( $col )->getType()->is( IPropertyType::TINTEGER ));
+        if ( $op == null || $op->is( ESQLOperator::IN, ESQLOperator::NOT_IN ))
+        {
+          $_op = ( $op == null ) ? 'in' : $op->value();
+          $conditions[] = $col . ' ' . $_op . ' ' . $this->dbc->prepareIn( $val, $this->properties()->getProperty( $col )->getType()->is( IPropertyType::TINTEGER ));
+        }
+        else
+        {
+          $conditions[] = $op->getOperatorAndValue( $val );
+        }
+          
         $values = array_merge( $values, $val );
       }
-      else if ( strpos((string)$val, '%' ) === false )
+      else if ( $op != null )
       {
+        $conditions[] = $op->getOperatorAndValue( $val );
+        $values[] = $val;
+      }
+      else if ( strpos((string)$val, '%' ) === false )
+      {        
         $conditions[] = $col . ' = ? ';
         $values[] = $val;
       }
@@ -530,7 +522,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
 
     $out = [];
     
-    foreach( $this->dbc->select( 'select * from ' . $this->table . $where, $values ) as $row )
+    foreach( $this->dbc->select((new SQLSelect( $this->getSelect(), $this->table ))->getSelect() . $where, $values ) as $row )
     {
       $out[] = $this->create( $row );
     }    
@@ -582,7 +574,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
 
     $out = [];
     
-    foreach( $this->dbc->select( 'select * from ' . $this->table 
+    foreach( $this->dbc->select((new SQLSelect( $this->getSelect(), $this->table ))->getSelect()
       . ' where ' . $propertyName . $where, $value ) as $row )
     {
       $out[] = $this->create( $row );
@@ -655,7 +647,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     $cond = new SQLCondition( $pri->getName(), ESQLOperator::IN(), $idList );
     
     $out = [];
-    foreach( $this->dbc->select( 'select * from ' . $this->table . ' where ' . $cond->getCondition(), $idList ) as $row )
+    foreach( $this->dbc->select((new SQLSelect( $this->getSelect(), $this->table ))->getSelect() . ' where ' . $cond->getCondition(), $idList ) as $row )
     {
       $out[] = $this->create( $row );
     }
@@ -934,8 +926,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   {
     if ( $page < 1 || $page > 100 )
       throw new \InvalidArgumentException( 'Page must be between 1 and 100' );
-    else if ( $size < 1 || $size > 200 )
-      throw new \InvalidArgumentException( 'Page size must be between 1 and 200' );
+    else if ( $size < 1 || $size > 1000 )
+      throw new \InvalidArgumentException( 'Page size must be between 1 and 1000' );
     
     $dbc = $this->getDatabaseConnection();
     
@@ -949,7 +941,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
         $orderBy = ' order by ' . $orderBy;
     }
     
-    $sql = sprintf( 'select * from %s ' . $orderBy . ' limit %d,%d', $this->getTable(), $offset, $size );
+    $sql = (new SQLSelect( $this->getSelect(), $this->table ))->getSelect() . sprintf( $orderBy . ' limit %d,%d', $offset, $size );
     
     $out = [];
     foreach( $dbc->select( $sql ) as $row )

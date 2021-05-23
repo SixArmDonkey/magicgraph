@@ -170,5 +170,12 @@ interface IRepository extends ISaveableObjectFactory
    * @return ISearchQueryBuilder
    */
   public function getSearchQueryBuilder() : ISearchQueryBuilder;
-    
+  
+  
+  /**
+   * Specify columns to select.
+   * @param string $names Zero or more names.  Leave names empty to select all columns.
+   * @return IRepository this 
+   */
+  public function select( string ...$names ) : IRepository;    
 }
