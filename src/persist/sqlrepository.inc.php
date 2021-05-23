@@ -111,6 +111,18 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   
   
   /**
+   * Specify columns to select.
+   * @param string $names Zero or more names.  Leave names empty to select all columns.
+   * @return ISQLRepository this 
+   */
+  public function select( string ...$names ) : ISQLRepository
+  {
+    return parent::select( ...$names );
+  }
+  
+  
+  
+  /**
    * Retrieve the search query generator 
    * @return ISearchQueryGenerator generator 
    */
@@ -470,6 +482,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     
     foreach( $map as $col => $val )
     {
+      $op = null;
       if ( is_array( $val ) && sizeof( $val ) == 2 )
       {
         $val = reset( $val );
