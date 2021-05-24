@@ -67,10 +67,9 @@ class MappingObjectFactory implements IObjectFactory
   /**
    * Specify columns to select.
    * @param string $names Zero or more names.  Leave names empty to select all columns.
-   * @return IObjectFactory this 
-   * @final 
+   * @return IObjectFactory this  
    */
-  public final function select( string ...$names ) : IObjectFactory
+  public function select( string ...$names ) : IObjectFactory
   {
     $this->select->clear();
     

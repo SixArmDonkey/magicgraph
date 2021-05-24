@@ -191,7 +191,9 @@ class DefaultComponentMap
           $attrs['maxlength'] = $prop->getMax();
         
         if ( !empty( $prop->getPattern()))
-          $attrs['pattern'] = $prop->getPattern();
+        {          
+          $attrs['pattern'] = substr( $prop->getPattern(), 1, -1 );
+        }
         
         if ( $prop->getFlags()->hasVal( IPropertyFlags::REQUIRED ))
           $attrs['required'] = 'required';
