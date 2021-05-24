@@ -37,7 +37,7 @@ interface IElementFactory
   /**
    * For a given model, generate a series of HTML form inputs.
    * @param IModel $model
-   * @param array $attrs
+   * @param array $attrs [name => [caption,value]]
    * @return array Configuration data for an animator/renderer.
    * [
    *   'name' => [
@@ -48,4 +48,20 @@ interface IElementFactory
    * ]
    */
   public function createFormInputs( IModel $model, array $attrs = [] ) : array;  
+  
+  
+  /**
+   * Convert properties to html form inputs 
+   * @param IModel $model model 
+   * @param IProperty $properties properties to convert 
+   * @return array Configuration data for an animator/renderer.
+   * [
+   *   'name' => [
+   *     'for' => "Property Name"
+   *     '' => "Property Caption"
+   *   ],
+   *   'html' => "The html element code"
+   * ]
+   */
+  public function propertiesToFormInputs( IModel $model, IProperty ...$properties ) : array;
 }

@@ -125,8 +125,7 @@ class SQLJoinSearchFilter implements ISQLJoinFilter
   {
     return $this->props;
   }
-  
-  
+    
   
   /**
    * Retrieve the property name that triggers this condition 

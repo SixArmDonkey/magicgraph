@@ -94,7 +94,7 @@ class ElementFactory implements IElementFactory
   /**
    * For a given model, generate a series of HTML form inputs.
    * @param IModel $model
-   * @param array $attrs
+   * @param array $attrs additional attributes
    * @return array Configuration data for an animator/renderer.
    * [
    *   'name' => [
@@ -186,5 +186,104 @@ class ElementFactory implements IElementFactory
     }
 
     return $elements;  
+  }  
+  
+  
+  /**
+   * Convert properties to html form inputs 
+   * @param IModel $model model 
+   * @param IProperty $properties properties to convert 
+   * @return array Configuration data for an animator/renderer.
+   * [
+   *   'name' => [
+   *     'for' => "Property Name"
+   *     '' => "Property Caption"
+   *   ],
+   *   'html' => "The html element code"
+   * ]
+   */
+  public function propertiesToFormInputs( IModel $model, IProperty ...$properties ) : array
+  {
+    $elements = ['General' => []];
+    $ps = $model->getPropertySet();
+    
+    $hasPri = true;
+    foreach( $model->getPropertySet()->getPrimaryKeys() as $key )
+    {
+      if ( empty( $model->getValue( $key->getName())))
+      {
+        $hasPri = false;
+        break;
+      }
+    }
+    
+    
+    $attrs = [];
+    $groupMap = [];
+    
+    foreach( $properties as $prop )
+    {
+      /* @var $prop IProperty */
+      $name = $prop->getName();
+      
+      $tag = ( empty( $prop->getTag())) ? 'General' : $prop->getTag();
+      if ( !isset( $elements[$tag] ))
+        $elements[$tag] = [];
+      
+      $groupMap[$name] = $tag;
+      
+      if ( !isset( $attrs[$name] ))
+      {
+        $c = $prop->getCaption();
+        $val = $model->getValue( $name );
+        
+        if ( is_scalar( $val ))
+          $val = (string)$val;
+        else
+          $val = '__ADD__';
+        
+        $attrs[$name] = [ucfirst((empty( $c )) ? $name : $c ), $val];
+      }
+    }
+    
+    ksort( $attrs );
+    
+    foreach( $attrs as $name => $data )
+    {
+      $value = $data[1];
+      $prop = $ps->getProperty( $name );
+  
+      if ( $prop->getFlags()->hasAny( IPropertyFlags::PRIMARY, IPropertyFlags::NO_INSERT ))
+        continue;
+      else if ( $hasPri && !empty( $value ) && $prop->getFlags()->hasVal( IPropertyFlags::NO_UPDATE ))
+      {
+        continue;
+      }
+      else if ( $prop->getType()->is( IPropertyType::TMODEL, IPropertyType::TOBJECT ))
+        continue;
+      
+      if ( $value == '__ADD__' )
+      {
+        $value = $model->getValue( $name );
+      }
+      
+      if ( !is_array( $value ))
+        $value = (string)$value;
+      
+      try {        
+        $elements[$groupMap[$name]][] = [
+          'name' => [
+            'for' => $name,
+            '' => $data[0]
+          ],
+          'html' => $this->createElement( $model, $prop, $name, '', $value )->build()
+        ];
+      } catch( HTMLPropertyException $e ) {
+        trigger_error( $e->getMessage(), E_USER_WARNING );
+        trigger_error( $e->getTraceAsString(), E_USER_WARNING );
+      }
+    }
+
+    return $elements;      
   }  
 }

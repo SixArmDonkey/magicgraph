@@ -53,7 +53,7 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
    * Join filter list 
    * @var ISQLJoinFilter[] 
    */
-  private array $joinFilterList;
+  private array $joinFilterList = [];
   
   /**
    * Linked property sets
