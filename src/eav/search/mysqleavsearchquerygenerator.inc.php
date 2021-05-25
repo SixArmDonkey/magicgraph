@@ -358,20 +358,7 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
                 
                 $leftJoins[$code] = true;
                 $filterJoin[$code] = $filter->getJoin( $this->entityProps->getPrimaryKey()->getName(), $entityAlias, ( $value === null ) ? ESQLJoinType::LEFT() : ESQLJoinType::INNER());              
-              }
-              
-              /*
-              else
-              {                
-                //..Switch any "and" conditions to "or" for left joins.
-                //$andOr = 'or';
-                //..Weird.
-                //..Maybe continue instead.
-                //continue;
-                
-                //..DUMBASS.  DON'T DO ANYTHING.  WHAT THE F...
-              }
-               */
+              }             
             }
             
             $cond = $filter->prepareColumn( $name ) . $this->buildConditionOperand( $operator, $value, $varIndex, $values );
@@ -432,8 +419,12 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
               //..Add the attribute_value.value condition.  tvalue is not needed.
               $cond .= $key . '.' . $this->attrValueCols->getValue() . $this->buildConditionOperand( $operator, $value, $varIndex, $values );
             }
+            
             //..Add the join and value data 
-            $joins[] = $this->attrValueRepo->getTable() . $key;
+            if ( empty( $joins ))
+              $joins[] = $this->attrValueRepo->getTable() . $key;
+            else 
+              $joins[] = $this->attrValueRepo->getTable() . $key . ' on (' . $first . '.' . $this->attrValueCols->getEntityId() . '=' . $key . '.' . $this->attrValueCols->getEntityId() . ') ';
 
             
             //..Add to either and or or 
@@ -572,12 +563,6 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
     array_walk( $walk, function( &$item, $key ) use ($usedKeys,&$select,$maybeText,&$attributes,&$attrColFilter) {
       if ( !empty( $usedKeys[$item] ) && isset( $attributes[$usedKeys[$item]] ))
       {
-        /*
-        if ( isset( $maybeText[$usedKeys[$item]] ))
-          $select[] = 'coalesce(nullif(' . $item . '.' . $this->attrValueCols->getTextValue() . ",'')," . $item . '.' . $this->attrValueCols->getValue() . ') as ' . $usedKeys[$item];
-        else
-          $select[] = $item . '.' . $this->attrValueCols->getValue() . ' as ' . $usedKeys[$item];
-*/        
         //..Selecting this as part of the join 
         $attrColFilter[] = $usedKeys[$item];
         unset( $attributes[$usedKeys[$item]] );
@@ -612,7 +597,6 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
       else
       {
         throw new SearchException( $key . '.' . $prop->getName() . ' cannot be selected via an eav search yet (not implemented).' );
-        //$select[] = 'group_concat( distinct ' . $key . '.' . $prop->getName() . ') as `' . $key . '.' . $prop->getName() . '`';
       }
     });    
     
@@ -621,9 +605,9 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
     
     //..Get the primary key names 
     $priKeys = [];    
-    foreach( $this->entityProps->getPrimaryKeyNames() as $i => $name )
+    foreach( $this->entityProps->getPrimaryKeyNames() as $name )
     {      
-      $priKeys[] = $entityAlias . '.' . $name;// . ' as ' . 'entity_id' . (( $i > 0 ) ? $i : '' );
+      $priKeys[] = $entityAlias . '.' . $name;
     }
     
     if ( empty( $priKeys ))
@@ -764,7 +748,7 @@ where a1.code in ('test','link_mfg','price','case_qty');
         $entityAlias,
         $first,
         $this->attrValueCols->getEntityId(),
-        implode( ',', $joins ), //..10
+        implode( ' join ', $joins ), //..10
         $and,
         $or,
         $this->entityProps->getPrimaryKey()->getName(),
@@ -864,29 +848,7 @@ where a1.code in ('test','link_mfg','price','case_qty');
       
     }
    // echo $sql; die;
-    
-    
-    /*
-    select e.id,e.title,e.slug,a1.code,a1.caption,
-    coalesce(nullif(v1.tvalue,''), v1.value, '') as `value`,
-    e.id 
-    from product e 
-    join product_category_link on (product_category_link.link_target=e.id) 
-           
-    join product_attribute_value v1 on (v1.link_entity=e.id) 
-    join product_attribute a1 on (a1.id=v1.link_attribute) 
-            
-    where product_category_link.link_parent in (6 ) 
-    and (a1.code in ('price','msrp','link_mfg'))
-    limit 0,25
-     * 
-     * 
-     * 
-  select e.id,e.title,e.slug, e.id, a1.code, a1.caption, coalesce(nullif(v1.tvalue,''), v1.value, '') as value              from product e join (select vprice.link_entity from product_attribute_value vprice where                     ( vprice.link_attribute=7 and vprice.value > 0) group by vprice.link_entity limit 0,25)             idList on (e.id=idList.link_entity) join product_category_link on (product_category_link.link_target=e.id)             left join product_attribute_value v1 on (v1.link_entity=e.id) left join product_attribute a1 on (a1.id=v1.link_attribute)             where ( a1.code in ('price') ) and product_category_link.link_parent in (6);
 
-*/
-    //echo $sql ; die;
-    
       
     return $this->createQueryBuilderOutput( $builder, $this->entityProps->getPrimaryKey()->getName(), $sql, $values );
     

@@ -68,7 +68,7 @@ class GenericNamedPropertyBehavior extends PropertyBehavior implements INamedPro
   
   /**
    * Retrieve the before save function 
-   * @return Closure|null function 
+   * @return Closure|null function f( IModel ) : void
    */
   public function getBeforeSaveCallback() : ?Closure
   {
@@ -78,7 +78,7 @@ class GenericNamedPropertyBehavior extends PropertyBehavior implements INamedPro
   
   /**
    * Retrieve the after save function  
-   * @return Closure|null function 
+   * @return Closure|null function f( IModel ) : void
    */
   public function getAfterSaveCallback() : ?Closure
   {
@@ -89,7 +89,7 @@ class GenericNamedPropertyBehavior extends PropertyBehavior implements INamedPro
   /**
    * Retrieve the model validation callback.
    * f( IModel $model ) throws ValidationException
-   * @return Closure|null
+   * @return Closure|null f( IModel $model ) throws ValidationException
    */
   public function getModelValidationCallback() : ?Closure
   {
