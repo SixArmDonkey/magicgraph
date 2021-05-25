@@ -220,9 +220,11 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
             
 
             if ( !isset( $leftJoins[$code] ))
-            {        
+            {
               $leftJoins[$code] = true;
-              $filterJoin[$code] = $filter->getJoin( $this->entityProps->getPrimaryKey()->getName(), $entityAlias, ( $value === null ) ? ESQLJoinType::LEFT() : ESQLJoinType::INNER());              
+              $jf = $filter->getJoin( $this->entityProps->getPrimaryKey()->getName(), $entityAlias, ( $value === null ) ? ESQLJoinType::LEFT() : ESQLJoinType::INNER());
+              if ( !empty( $jf ))
+                $filterJoin[$code] = $jf;
             }
             
             /*
@@ -241,7 +243,9 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
             //..This is a search on a joined table 
             $join = $filter->getJoin( $this->entityProps->getPrimaryKey()->getName(), $entityAlias, ESQLJoinType::INNER());
             if ( !empty( $join ))
+            {
               $filterJoin[$prop->getName()] = $join;
+            }
             
             
             $cond = $filter->prepareColumn( $name ) . $this->buildConditionOperand( $operator, $value, $varIndex, $values );
@@ -340,10 +344,8 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
       {
         $filter = $this->joinFilterList[$code];          
         /* @var $filter ISQLJoinFilter */
-
         if ( $filter->isForeign())
         {
-
           if ( !isset( $leftJoins[$code] ))
           {
             $leftJoins[$code] = true;
@@ -481,7 +483,10 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
       $select = implode( ',', $select ) . (( !empty( $select )) ? ',' : '' );
     
     if ( !empty( $filterJoin ))
+    {
+      
       $filterJoin = ' ' . implode( ' join ', $filterJoin );
+    }
     else
       $filterJoin = '';
     
