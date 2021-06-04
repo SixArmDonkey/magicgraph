@@ -25,7 +25,7 @@ use buffalokiwi\magicgraph\property\SPropertyFlags;
 
 
 
-class DefaultFloatPropertyText extends AbstractPropertyTest
+class DefaultFloatPropertyTest extends AbstractPropertyTest
 {
   /**
    * Creates a property to test

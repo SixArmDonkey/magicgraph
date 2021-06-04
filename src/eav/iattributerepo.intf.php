@@ -21,6 +21,8 @@ use InvalidArgumentException;
 
 /**
  * Defines an attribute repo for working with attributes and attribute groups.
+ * @todo getGroupRepo() and getGroupLinkRepo() should return IAttrGroupRepo and IAttrGroupLinkRepo respectively 
+ * @todo getValueRepo should return IAttrValueRepo
  */
 interface IAttributeRepo
 { 

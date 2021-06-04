@@ -12,6 +12,7 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\eav;
 
+use buffalokiwi\buffalotools\types\BigSet;
 use buffalokiwi\magicgraph\IModel;
 
 
@@ -43,4 +44,14 @@ interface IAttributeModel extends IModel
    * @return void
    */
   public function setAttrGroupId( int $id ) : void;    
+  
+  
+  /**
+   * Retrieve a list of additional attributes attached to this model instance.
+   * @param BigSet|null $names Optional set of property names to filter results by.
+   * Any included names will be listed in the output, and anything not listed is 
+   * omitted.  Set to null to output everything (default).
+   * @return array [name => [caption,value]] properties 
+   */
+  public function getAttributes( ?BigSet $names = null ) : array;  
 } 
