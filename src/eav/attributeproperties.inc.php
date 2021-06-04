@@ -120,6 +120,12 @@ class AttributeProperties extends BasePropertyConfig implements IPropertyConfig,
     $this->flagsClass = $flagsClass;
     $this->behaviorFactory = $factory;    
     $this->addBeforeSave( function( IAttribute $attr ) {
+      //..All attributes require the subconfig flag?
+      $attr->getFlags()->add( IPropertyFlags::SUBCONFIG );
+      
+      //..Attributes MUST NOT contain the primary flag
+      $attr->getFlags()->remove( IPropertyFlags::PRIMARY );
+      
       if ( empty( $attr->getCaption()))
         $attr->setCaption( $attr->getCode());
     });
@@ -400,7 +406,9 @@ class AttributeProperties extends BasePropertyConfig implements IPropertyConfig,
             else if ( strpos( $value, ',' ) !== false )                    
               $value = explode( ',', $value );
             else
-              $value = explode( "\n", $value );
+            {
+              $value = explode( "\n", str_replace( "\r", '', $value ));
+            }
           }
           
           return $value;

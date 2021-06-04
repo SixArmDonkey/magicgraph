@@ -25,7 +25,7 @@ use InvalidArgumentException;
  * @todo getValueRepo should return IAttrValueRepo
  */
 interface IAttributeRepo
-{ 
+{   
   /**
    * Retrieve a list of all enabled attribute codes keyed by attribute id.
    * @return array [id => code]

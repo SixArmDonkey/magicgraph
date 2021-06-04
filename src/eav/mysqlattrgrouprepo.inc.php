@@ -64,7 +64,7 @@ class MySQLAttrGroupRepo extends SQLServiceableRepository implements IAttrGroupR
       $this->config->getIdColumn(), 
       $this->config->getNameColumn(), 
       $this->getRepo()->getTable());
-    
+        
     foreach( $dbc->select( $sql ) as $row )
     {
       $out[$row[$this->config->getIdColumn()]] = $row[$this->config->getNameColumn()];

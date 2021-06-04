@@ -36,7 +36,6 @@ class SelectElement extends Element
     if ( empty( $options ))
       throw new InvalidArgumentException( 'Options must not be empty' );
     
-    
     foreach( $options as $k => $v )
     {
       

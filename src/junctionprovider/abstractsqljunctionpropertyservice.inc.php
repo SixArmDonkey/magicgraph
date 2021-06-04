@@ -23,6 +23,7 @@ use buffalokiwi\magicgraph\persist\ISQLRepository;
 use buffalokiwi\magicgraph\property\IPropertySvcConfig;
 use buffalokiwi\magicgraph\ValidationException;
 use InvalidArgumentException;
+use \Exception;
 
 
 /**
@@ -166,7 +167,7 @@ abstract class AbstractSQLJunctionPropertyService extends AbstractOneManyPropert
     if ( empty( $priKeys ))
       throw new Exception( 'Parent model (' . get_class( $this->parent ) . ')must contain at least one primary key definition' );
     else if ( sizeof( $priKeys ) > 1 )
-      throw new Exception( 'Address Service cannot be natively linked to models with compound primary keys.  You must override and create your own save function.' );
+      throw new \Exception( 'Address Service cannot be natively linked to models with compound primary keys.  You must override and create your own save function.' );
     
     //..Get the parent id 
     $parentId = (string)$parent->getValue( $priKeys[0]->getName());    
