@@ -90,6 +90,13 @@ class DefaultModel implements IModel
    */
   private $validationEnabled = true;
   
+  /**
+   * Can be used instead of checking the property set for members.
+   * 
+   * @var array
+   */
+  private array $memberCache = [];
+  
   
   /**
    * If setValue is called with a non-valid property, the property and value will appear in this array.
@@ -448,14 +455,20 @@ class DefaultModel implements IModel
       return;
     }
     
-    if ( !$this->properties->isMember( $property ))
+    if ( !isset( $this->memberCache[$property] ))
+      $this->memberCache[$property] = ( $this->properties->isMember( $property )) ? $this->getProperty( $property ) : null;
+    
+    //if ( !$this->properties->isMember( $property ))
+    $prop = $this->memberCache[$property];
+    if ( $prop === null )
     {
       $this->extraData[$property] = $value;
       return;
     }
     
     //..Get the property entity.  This also checks membership and throws an exception.
-    $prop = $this->getProperty( $property );
+    //$prop = $this->getProperty( $property );
+    
     if ( $prop->getFlags()->hasVal( IPropertyFlags::PRIMARY ) && !empty( $prop->getValue()))
     {
       throw new ValidationException( 'Primary key may not be changed after instantiation' );

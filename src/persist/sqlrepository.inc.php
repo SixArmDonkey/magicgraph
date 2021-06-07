@@ -288,11 +288,9 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   {
     $f = function( ISearchQueryBuilder $query, bool $returnCount ) {
       $statement = $this->searchQueryGenerator->createQuery( $query, $returnCount );
-      
       $build = [];
       
       $entityGroups = $query->getEntityGroups();
-      
 
       foreach( $this->dbc->select( $statement->getQuery(), $statement->getValues()) as $row )
       {

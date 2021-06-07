@@ -516,7 +516,6 @@ abstract class PDOConnection extends PDO implements IPDOConnection
    */ 
   public function select( string $statement, $opt = null ) : \Generator
   {
-    //trigger_error( $statement . ' :: ' . implode( ',', $opt ), E_USER_NOTICE );
     $stmt = $this->prepareAndExec( $statement, $this->prepareOptions( $opt ));
     while (( $row = $stmt->fetch( PDO::FETCH_ASSOC, PDOConnection::FETCH_ORI_NEXT )) !== false )
     {

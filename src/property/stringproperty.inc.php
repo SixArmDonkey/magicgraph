@@ -26,8 +26,14 @@ class StringProperty extends BoundedProperty implements IStringProperty
    * Optional pattern to use when validating the string.
    * @var string
    */
-  private $pattern;
-  
+  private string $pattern;
+  private bool $hasPattern;
+  private bool $hasMin;
+  private bool $hasMax;
+  private bool $hasValidation;
+  private int $min;
+  private int $max;
+  private bool $isUseNull;
   
   /**
    * Create a new StringProperty instance 
@@ -37,6 +43,13 @@ class StringProperty extends BoundedProperty implements IStringProperty
   {
     parent::__construct( $builder );
     $this->pattern = $builder->getPattern();
+    $this->hasPattern = !empty( $this->pattern );
+    $this->hasMin = $this->getMin() > -1;
+    $this->hasMax = $this->getMax() > -1;
+    $this->min = (int)$this->getMin();
+    $this->max = (int)$this->getMax();
+    $this->isUseNull = $this->getFlags()->hasVal( SPropertyFlags::USE_NULL );
+    $this->hasValidation = $this->hasMin || $this->hasMax || $this->hasPattern;
   }
   
   
@@ -70,20 +83,26 @@ class StringProperty extends BoundedProperty implements IStringProperty
    */
   protected function validatePropertyValue( $value ) : void
   {
-    if ( $this->getFlags()->hasVal( SPropertyFlags::USE_NULL ) && $value === null )
-      return; //..This is ok
-    
-    if ( $value == null )
-      $value = '';
-    
-    if ( !is_string( $value )) //..is_string returns true for null.
+    if ( $this->isUseNull && $value === null )
+      return; //..This is ok        
+    else if ( !is_string( $value )) //..is_string returns true for null.
       throw new ValidationException( sprintf( 'Value for property %s must be a string.  Got %s', $this->getName(), ( $value == null ) ? 'null' : gettype( $value )));
-    else if ( $this->getMin() > -1 && strlen( $value ) < $this->getMin())
-      throw new ValidationException( sprintf( 'Value for property %s must be a string with a character length greater than %d', $this->getName(), $this->getMin()));
-    else if ( $this->getMax() > -1 && strlen( $value ) > $this->getMax())
-      throw new ValidationException( sprintf( 'Value for property %s must be a string with a character length less than %d', $this->getName(), $this->getMax()));
-    else if ( !empty( $this->pattern ) && !preg_match( $this->pattern, (string)$value ))
-      throw new ValidationException( sprintf( 'Value for property %s must match the pattern %s', $this->getName(), $this->pattern ));
+    
+    //..The profiler said that this could improve things a bit considering this validate method can be called thousands of times.
+    if ( $this->hasValidation )
+    {
+      if ( $value === null )
+        $value = '';
+
+      $len = ( $this->hasMin || $this->hasMax ) ? strlen( $value ) : 0;
+
+      if ( $this->hasMin && $len < $this->min )
+        throw new ValidationException( sprintf( 'Value for property %s must be a string with a character length greater than %d', $this->getName(), $this->getMin()));
+      else if ( $this->hasMax > -1 && $len > $this->max )
+        throw new ValidationException( sprintf( 'Value for property %s must be a string with a character length less than %d', $this->getName(), $this->getMax()));
+      else if ( $this->hasPattern && !preg_match( $this->pattern, $value ))
+        throw new ValidationException( sprintf( 'Value for property %s must match the pattern %s', $this->getName(), $this->pattern ));
+    }
   }
   
   
@@ -98,7 +117,7 @@ class StringProperty extends BoundedProperty implements IStringProperty
    */
   protected function preparePropertyValue( $value )
   {
-    if ( $value == null && !$this->getFlags()->hasVal( IPropertyFlags::USE_NULL ))
+    if ( $value == null && !$this->isUseNull )
       $value = '';
     
     return $value;

@@ -83,6 +83,8 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   
   private $hash;
   
+  private array $memberCache = [];
+  
   
   /**
    * Create a new DefaultPropertySet instance 
@@ -390,7 +392,7 @@ class DefaultPropertySet extends BigSet implements IPropertySet
       $f = $f->bindTo( $this );
     }
   }
-  
+
   
   /**
    * Retrieve a property by name 

@@ -100,6 +100,28 @@ abstract class AbstractProperty implements IProperty
    */
   private $tag = '';
   
+  /**
+   * If the WRITE_EMPTY flag is set.
+   * @var bool
+   */
+  private bool $isWriteEmpty = false;
+  
+  /**
+   * If the USE_NULL flag is set 
+   * @var bool
+   */
+  private bool $isUseNull = false;
+  
+  /**
+   * An empty function 
+   * @var Closure
+   */
+  private Closure $defaultValidateClosure;
+  
+  private bool $hasValidateBehaviorCallback = true; //..Must be true to start
+  
+  private ?Closure $validateBehaviorCallback = null;
+  
  
   /**
    * Validate some property value.
@@ -121,6 +143,7 @@ abstract class AbstractProperty implements IProperty
     //  throw new InvalidArgumentException( 'A valid IPropertyType instance must be supplied and have a valid non-empty value set' );
     //else if ( $builder->getFlags() == null )
     //  throw new \InvalidArgumentExcepton( 'A valid IPropertyFlags instance must be supplied' );
+    
     $name = $builder->getName();
     if ( empty( $name ))
       throw new InvalidArgumentException( "name must not be empty" );    
@@ -135,8 +158,11 @@ abstract class AbstractProperty implements IProperty
         throw new InvalidArgumentException( "name must be a non-empty alphanumeric string with optional underscores" );
     }
     
+    $this->defaultValidateClosure = function() { return true; };
     $this->type = $builder->getType();
     $this->flags = $builder->getFlags();
+    $this->isWriteEmpty = $this->flags->WRITE_EMPTY();
+    $this->isUseNull = $this->flags->USE_NULL();
     
     foreach( $builder->getBehavior() as $b )
     {
@@ -354,17 +380,21 @@ abstract class AbstractProperty implements IProperty
    */
   public final function validate( $value ) : void
   {
-    $cb = $this->getValidateBehaviorCallback();
-    
-    if ( !$cb( $this, $value ))
+    if ( $this->hasValidateBehaviorCallback )
     {
-      if ( is_array( $value ))
-        $value = implode( ',', $value );
-      
-      throw new ValidationException( '"' . $value . '" of type "' . static::class .'" is not a valid value for the "' . $this->getName() 
-         . '" property.  Check any behavior callbacks, and ensure that the property is set to the correct type.  IPropertyBehavior::getValidateCallback() failed.' );    
+      $cb = $this->validateBehaviorCallback ?? $this->getValidateBehaviorCallback();
+
+      if ( !$cb( $this, $value ))
+      {
+        if ( is_array( $value ))
+          $value = implode( ',', $value );
+
+        throw new ValidationException( '"' . $value . '" of type "' . static::class .'" is not a valid value for the "' . $this->getName() 
+           . '" property.  Check any behavior callbacks, and ensure that the property is set to the correct type.  IPropertyBehavior::getValidateCallback() failed.' );    
+      }
     }
-    else if ( !$this->flags->hasVal( IPropertyFlags::USE_NULL ) && $value === null )
+    
+    if ( !$this->isUseNull && $value === null )
     {
       
       throw new ValidationException( '"' . $this->getName() . '" property of type "' . static::class .'" must not be null.  If you want null, set the IPropertyFlags::USE_NULL flag or set the default value to some non-null value' );
@@ -443,7 +473,7 @@ abstract class AbstractProperty implements IProperty
   {
 //    if ( $this->readOnly )
 //      throw new ValidationException( $this->name . ' is read only' );
-    if ( $this->flags->WRITE_EMPTY() && !$this->testEmpty())
+    if ( $this->isWriteEmpty && !$this->testEmpty())
     {
       throw new ValidationException( $this->name . ' has already been assigned a value, and is now read only' );
     }
@@ -627,7 +657,16 @@ abstract class AbstractProperty implements IProperty
         $funcArr[] = $c;        
       }
     }
-      
+    
+    if ( empty( $funcArr ))
+    {
+      $this->hasValidateBehaviorCallback = false;
+      return $this->defaultValidateClosure;
+    }
+    else
+      $this->hasValidateBehaviorCallback = true;
+    
+    
     return function( IProperty $prop, $value ) use ($funcArr) { 
       foreach( $funcArr as $f )
       {

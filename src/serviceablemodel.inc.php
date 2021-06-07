@@ -38,6 +38,9 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
   
   /**
    * Create a model wrapper that can interact with service providers.
+   * 
+   * WARNING: $this is leaked in the constructor.  Descending classes MUST ensure that the object is fully constructed prior to calling this constructor.  
+   * 
    * @param IPropertySet $model Model properties 
    * @param IModelPropertyProvider $providers A list of service providers for this model
    */
@@ -134,7 +137,7 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
   public function toObject( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false ) : stdClass
   {
     if ( $includeModels )
-      $this->providerWarmup();
+      $this->providerWarmup( $includeArrays, $includeModels );
     
     return parent::toObject( $properties, $includeArrays, $includeModels, $includeExtra );
   }
@@ -147,17 +150,23 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
   public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false, int $_depth = 0  ) : array
   {
     if ( $includeModels )
-      $this->providerWarmup();
+      $this->providerWarmup( $includeArrays, $includeModels );
     
     return parent::toArray( $properties, $includeArrays, $includeModels, $includeExtra, $_depth );
   }  
   
   
-  private function providerWarmup()
+  private function providerWarmup( bool $includeArrays, bool $includeModels )
   {
     //..Warm up any providers.
     foreach( array_keys( $this->providers ) as $name )
     {
+      $p = $this->getPropertySet()->getProperty( $name );
+      if ( !$includeArrays && $p->getType()->is( property\IPropertyType::TARRAY ))
+        continue;
+      else if ( !$includeModels && $p->getType()->is( property\IPropertyType::TMODEL ))
+        continue;
+      
       $this->getValue( $name );
     }    
   }    

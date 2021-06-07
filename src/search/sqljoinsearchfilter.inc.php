@@ -67,6 +67,8 @@ class SQLJoinSearchFilter implements ISQLJoinFilter
    * @var IPropertySet
    */
   private IPropertySet $props;
+  
+  private string $parentIdColumn;
 
   
   /**
@@ -77,7 +79,7 @@ class SQLJoinSearchFilter implements ISQLJoinFilter
    * @param string $targetIdColumn Target id column name (for example product.  This is the parent id).
    * @throws InvalidArgumentException
    */
-  public function __construct( ISQLRepository $hostRepo, string $propertyName, string $entityIdColumn, string $targetIdColumn )
+  public function __construct( ISQLRepository $hostRepo, string $propertyName, string $entityIdColumn, string $targetIdColumn, string $parentIdColumn = '' )
   {
     $pattern = '/^[A-Za-z0-9_]+/';
     if ( empty( $propertyName ))
@@ -86,6 +88,8 @@ class SQLJoinSearchFilter implements ISQLJoinFilter
       throw new InvalidArgumentException( 'entityIdColumn must not be empty and must be alphanumeric' );
     else if ( empty( $targetIdColumn ) || !preg_match( $pattern, $targetIdColumn ))
       throw new InvalidArgumentException( 'targetIdColumn must not be empty and must be alphanumeric' );
+    else if ( !empty( $parentIdColumn ) && !preg_match( $pattern, $parentIdColumn ))
+      throw new InvalidArgumentException( 'parentIdColumn must be alphanumeric' );
     
     $this->repo= $hostRepo;
     $this->dbc = $hostRepo->getDatabaseConnection();
@@ -94,6 +98,7 @@ class SQLJoinSearchFilter implements ISQLJoinFilter
     $this->targetIdColumn = $targetIdColumn;
     $this->propertyName = $propertyName;
     $this->props = $hostRepo->createPropertySet();
+    $this->parentIdColumn = $parentIdColumn;
   }
   
   
@@ -146,6 +151,11 @@ class SQLJoinSearchFilter implements ISQLJoinFilter
    */
   public function getJoin( string $parentIdColumn, string $alias, ISQLJoinType $type ) : string
   {
+    if ( !empty( $this->parentIdColumn ))
+    {
+      $parentIdColumn = $this->parentIdColumn;
+    }
+    
     if ( empty( $parentIdColumn ) || !preg_match( '/^[A-Za-z0-9_]+/', $parentIdColumn ))
       throw new InvalidArgumentException( 'parentIdColumn must not be empty and be alphanumeric' );
     else if ( !empty( $alias ) && !preg_match( '/^[A-Za-z0-9_]+/', $alias ))

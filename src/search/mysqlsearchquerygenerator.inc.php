@@ -87,11 +87,13 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
     $this->entityProps = $entityProps;
     
         
+    
     foreach( $joinFilterList as $filter )
     {
       $this->joinFilterList[$filter->getPropertyName()] = $filter;
       $this->linkedPropertySets[$filter->getPropertyName()] = $filter->getPropertySet();
     }
+    
   }
   
   
@@ -181,7 +183,8 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
     //..This is required to prevent inner joins from overwriting left joins 
     $leftJoins = [];
     
-     
+    //..Build the columns to select 
+    $select = [];
     
     //..Build the various condition blocks     
     foreach( $builder->getConditions() as $andOr => $conditionGroups )
@@ -218,13 +221,15 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
             /* @var $filter ISQLJoinFilter */
             
             
-
-            if ( !isset( $leftJoins[$code] ))
-            {
-              $leftJoins[$code] = true;
-              $jf = $filter->getJoin( $this->entityProps->getPrimaryKey()->getName(), $entityAlias, ( $value === null ) ? ESQLJoinType::LEFT() : ESQLJoinType::INNER());
-              if ( !empty( $jf ))
-                $filterJoin[$code] = $jf;
+            if ( $filter->isForeign())
+            {              
+              if ( !isset( $leftJoins[$code] ))
+              {
+                $leftJoins[$code] = true;
+                $jf = $filter->getJoin( $this->entityProps->getPrimaryKey()->getName(), $entityAlias, ( $value === null ) ? ESQLJoinType::LEFT() : ESQLJoinType::INNER());
+                if ( !empty( $jf ))
+                  $filterJoin[$code] = $jf;
+              }
             }
             
             /*
@@ -241,12 +246,14 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
             
             
             //..This is a search on a joined table 
+            //..This is handled by the above code
+            /*
             $join = $filter->getJoin( $this->entityProps->getPrimaryKey()->getName(), $entityAlias, ESQLJoinType::INNER());
             if ( !empty( $join ))
             {
               $filterJoin[$prop->getName()] = $join;
             }
-            
+            */
             
             $cond = $filter->prepareColumn( $name ) . $this->buildConditionOperand( $operator, $value, $varIndex, $values );
             
@@ -324,10 +331,6 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
     
     //..Attributes to select 
     $attributes = $this->getAttributes( $builder );
-    
-   
-    //..Build the columns to select 
-    $select = [];
     
     //..Add any entity attribute to select 
     array_walk( $attributes, function( $unused, $code ) use (&$select,$entityAlias,&$groupBy,&$filterJoin,&$leftJoins) {
@@ -407,8 +410,14 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
       {        
         //..Used for one -> many.
         //..This is so incredibly wrong.  
-        $select[] = 'group_concat( distinct ' . $code . '.' . $subProp . ') as `' . $code . '.' . $subProp . '`';
-        $groupBy[] = $code . '.' . $subProp;
+        if ( isset( $this->joinFilterList[$code] ))
+          $pfx = $this->joinFilterList[$code]->getHostRepo()->getTable();
+        else
+          $pfx = $code;
+        
+        $select[] = $pfx . '.' . $subProp . ' as `' . $code . '.' . $subProp . '`';
+        //$select[] = 'group_concat( distinct ' . $pfx . '.' . $subProp . ') as `' . $code . '.' . $subProp . '`';
+        $groupBy[] = $pfx . '.' . $subProp;
       }
       else 
       {
@@ -485,7 +494,7 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
     if ( !empty( $filterJoin ))
     {
       
-      $filterJoin = ' ' . implode( ' join ', $filterJoin );
+      $filterJoin = ' ' . implode( ' ', $filterJoin );
     }
     else
       $filterJoin = '';
@@ -517,12 +526,11 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
       $entityAlias,
       $filterJoin,
       $entityWhere,
-      ( $returnCount ) ? '' : $groupBy,
+      '', //( $returnCount ) ? '' : $groupBy,
       $orderBy,
       $offset,
     );
 
-    
     return $this->createQueryBuilderOutput( $builder, $this->entityProps->getPrimaryKey()->getName(), $sql, $values );
   }
   
