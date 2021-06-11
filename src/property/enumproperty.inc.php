@@ -19,6 +19,8 @@ use buffalokiwi\buffalotools\types\IEnum;
 
 class EnumProperty extends ObjectProperty implements IEnumProperty
 {
+  private bool $inInit = false;
+  
   /**
    * Create a new EnumProperty instance 
    * @param IObjectPropertyBuilder $builder Builder 
@@ -106,7 +108,16 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
    */
   protected function initValue() 
   {
-    $enum = parent::initValue();
+    if ( $this->inInit )
+      return;
+    
+    try {
+      $this->inInit = true;
+      $enum = parent::initValue();
+    } finally {
+      $this->inInit = false;
+    }
+    
     if ( $enum == null )
       return $enum;
     

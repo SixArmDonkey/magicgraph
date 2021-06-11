@@ -247,6 +247,7 @@ class DefaultModel implements IModel
    * are removed from the copied model.  This will cause the repository save
    * method 
    * @return IModel Copied model 
+   * @todo This is a code smell: Property types are being checked by name.  This is not scalable.  Need a flag on properties like "can have relationship provider" or something.
    */
   public function createCopy( bool $copyIsSaveable = true, bool $removePriKeys = true ) : IModel
   {
@@ -256,9 +257,10 @@ class DefaultModel implements IModel
     //..Copy the properties over without knowing a thing about the object
     foreach( $this->getPropertySet()->getProperties() as $p )
     {
-      $r->setValue( $p->getName(), $this->getValue( $p->getName()));
+      if ( empty( $p->getValue()) && !$p->getFlags()->hasVal( IPropertyFlags::PRIMARY ))
+        $r->setValue( $p->getName(), $this->getValue( $p->getName()));
+      
     }
-    
     //..Find and remove the primary key flag from the new object.
     //..This will prevent the object from being able to be saved.
     foreach( $r->getPropertySet()->getPrimaryKeys() as $primary )

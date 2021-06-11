@@ -39,6 +39,9 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
    */
   private $createClass;
   
+  private bool $isUseNull;
+  
+  
   /**
    * Create a new ObjectProperty instance 
    * @param IObjectPropertyBuilder $builder Builder 
@@ -51,6 +54,8 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
     
     if ( empty( $this->clazz ))
       throw new InvalidArgumentException( "IObjectPropertyBuilder::getClass() must return a non-empty string that represents a fully qualified class name for property " . $builder->getName());
+    
+    $this->isUseNull = $this->getFlags()->hasVal( IPropertyFlags::USE_NULL );
   }
   
   
@@ -106,7 +111,7 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
       
       return $instance;
     }
-    else if ( $this->getFlags()->hasVal( IPropertyFlags::USE_NULL ))
+    else if ( $this->isUseNull )
     {
       return null;
     }

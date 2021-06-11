@@ -39,6 +39,10 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
    */
   private $lastId = 0;
   
+  private ?IModel $lastModel = null;
+  
+  private bool $reloadSameModels;
+  
   
   protected abstract function onSave( IModel $model ) : array;
   
@@ -56,9 +60,10 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
    * @param string $name
    * @param string $modelPropertyName Optional model property name. 
    */
-  public function __construct( IPropertySvcConfig $cfg )
+  public function __construct( IPropertySvcConfig $cfg, bool $reloadSameModels = false )
   {
     $this->propCfg = $cfg;
+    $this->reloadSameModels = $reloadSameModels;
   }
   
   
@@ -124,9 +129,19 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
           $newModel = $this->loadById( $id );
         else
           $newModel = $this->loadById( 0 );
+        
+        $this->lastModel = $newModel;
       }
-      else
+      else if ( $id > 0 && $id == $this->lastId && ( !( $value instanceof IModel ) || !$value->hasPrimaryKeyValues()))
+      {
+        if ( $this->reloadSameModels )
+          $newModel = $this->loadById( $id );
+        else
+          $newModel = $this->lastModel;
+      }
+      else 
         return $value;
+      
       
     } catch( RecordNotFoundException | InvalidArgumentException $e ) {
       //..Maybe just throw an exception since we know this is invalid 
