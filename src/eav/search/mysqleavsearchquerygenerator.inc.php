@@ -966,6 +966,9 @@ where a1.code in ('test','link_mfg','price','case_qty');
    */
   private function getAttributeIdListByCodes( array $codes ) : array
   {
+    if ( empty( $codes ))
+      return [];
+    
     $sql = sprintf( 'select %s,%s from %s where %s in ' . $this->dbc->prepareIn( $codes, false ),
       $this->attrCols->getId(),
       $this->attrCols->getCode(),

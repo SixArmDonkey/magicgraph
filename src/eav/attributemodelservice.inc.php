@@ -186,7 +186,7 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
   public function getSearchQueryGenerator() : ISearchQueryGenerator
   {
     return $this->search->getSearchQueryGenerator();
-  }  
+  }
   
   
   /**
@@ -201,19 +201,14 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
     if ( $this->search == null )
       throw new SearchException( 'Not implemented.  Pass an instance of ' . IAttributeSearch::class . ' to the ' . static::class . ' constructor to enable searching.' );
     
-    /*
-    $ps = $this->createPropertySet();
-    
-    $hasSubconfig = false;
-    foreach( $ps->getProperties( ...$builder->getConditionAttributes()) as $prop )
-    {      
-      if ( $prop->getFlags()->hasVal( IPropertyFlags::SUBCONFIG ))
-      {
-        $hasSubconfig = true;
-        break;
-      }
+    //..If no filters are present, the search generator will throw an exception
+    //  Here we simply return a page without using the search query generator
+    if ( empty( $builder->getConditionAttributes()))
+    {
+      return new \buffalokiwi\magicgraph\search\MySQLSearchResults( $builder->getPage(), $builder->getResultSize(), function() {
+        return $this->count( true );
+      }, ...$this->getPage( $builder->getPage(), $builder->getResultSize()));
     }
-    */
     
     return $this->search->search( $builder );
   }  
