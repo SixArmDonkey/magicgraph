@@ -531,6 +531,13 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
       $offset,
     );
 
+    /*
+    var_dump( $values );
+    echo $sql;
+    die;
+    */
+    
+    
     return $this->createQueryBuilderOutput( $builder, $this->entityProps->getPrimaryKey()->getName(), $sql, $values );
   }
   

@@ -314,6 +314,9 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
     //..This is required to prevent inner joins from overwriting left joins 
     $leftJoins = [];
     
+    $joinAndWhere = [];
+    $joinOrWhere = [];
+    
     
     //..Build the various condition blocks     
     foreach( $builder->getConditions() as $andOr => $conditionGroups )
@@ -368,11 +371,11 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
             switch( $andOr )
             {
               case 'and':
-                $entityAndWhere[] = $cond;
+                $joinAndWhere[] = $cond;
               break;
 
               case 'or':
-                $entityOrWhere[] = $cond;
+                $joinOrWhere[] = $cond;
               break;
 
               default:
@@ -518,18 +521,6 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
       $attrSearch = false;
     }
     
-    //..Build the and section 
-    if ( !empty( $andWhere ))
-      $and = ' (' . implode( ' and ', $andWhere ) . ') ';
-    else
-      $and = '';
-    
-    //..Build the or section 
-    $or = implode( ' or ', $orWhere );
-    
-    ///..If both and and or exist, then add "or" as a prefix to the or string 
-    if ( !empty( $andWhere ) && !empty( $orWhere ))
-      $or = ' or ' . $or;
     
     
     //..Attributes to select 
@@ -685,12 +676,7 @@ where a1.code in ('test','link_mfg','price','case_qty');
     if ( !empty( $entityOr ))
       $entityWhere[] = $entityOr;
     
-    
-    if ( !empty( $entityWhere ))
-      $entityWhere = ' where ' . implode( ' ', $entityWhere );
-    else
-      $entityWhere = '';
-    
+
     if ( empty( $select ) || $builder->isWild())
       $select = $entityAlias . '.*,';
     else 
@@ -702,6 +688,54 @@ where a1.code in ('test','link_mfg','price','case_qty');
       $filterJoin = '';
     
     
+
+    //..Build the attribute and section 
+    if ( !empty( $andWhere ))
+      $and = ' (' . implode( ' and ', array_merge( $andWhere, $entityWhere )) . ') ';
+    else
+      $and = '';
+    
+    //..Build the or section 
+    $or = implode( ' or ', $orWhere );
+    
+    ///..If both and and or exist, then add "or" as a prefix to the or string 
+    if ( !empty( $andWhere ) && !empty( $orWhere ))
+      $or = ' or ' . $or;    
+    
+    
+    
+    
+
+    //..Build the and section 
+    if ( !empty( $joinAndWhere ))
+      $joinAnd = ' (' . implode( ' and ', $joinAndWhere ) . ') ';
+    else
+      $joinAnd = '';
+    
+    //..Build the or section 
+    $joinOr = implode( ' or ', $joinOrWhere );
+    
+    ///..If both and and or exist, then add "or" as a prefix to the or string 
+    if ( !empty( $joinAndWhere ) && !empty( $joinOrWhere ))
+      $joinOr = ' or ' . $joinOr;    
+    
+    
+   
+    if ( !empty( $joinAnd ))
+    {      
+      $joinWhere[] = $joinAnd;
+    }
+    
+    if ( !empty( $joinOr ))
+      $joinWhere[] = $joinOr;
+        
+    
+    
+    if ( !empty( $joinWhere ))
+      $joinWhere = ' where ' . implode( ' ', $joinWhere );
+    else
+      $joinWhere = '';
+        
     
     if ( $attrSearch )
     {
@@ -717,7 +751,7 @@ where a1.code in ('test','link_mfg','price','case_qty');
       {
         $sql = "select count(distinct %7\$s.%13\$s) as `count` "
           . 'from %6$s %7$s join ('
-          .    'select %8$s.%9$s from %10$s where %11$s %12$s group by %8$s.%9$s '
+          .    'select %8$s.%9$s from %10$s join %6$s %7$s on (%7$s.%13$s=%8$s.%9$s) where %11$s %12$s group by %8$s.%9$s '
           . ') idList on (%7$s.%13$s=idList.%9$s) '
           . ' %20$s '//'join product_category_link cl on (cl.link_parent=e.id)'
           . ' join %14$s v1 on (v1.%9$s=%7$s.%13$s) '
@@ -728,7 +762,7 @@ where a1.code in ('test','link_mfg','price','case_qty');
       {
         $sql = "select %19\$s %1\$s, a1.%2\$s, a1.%3\$s, coalesce(nullif(v1.%4\$s,''), v1.%5\$s, '') as %5\$s "
           . 'from %6$s %7$s join ('
-          .    'select %8$s.%9$s from %10$s where %11$s %12$s group by %8$s.%9$s limit ' . $offset . ',' . $size
+          .    'select %8$s.%9$s from %10$s join %6$s %7$s on (%7$s.%13$s=%8$s.%9$s) where %11$s %12$s group by %8$s.%9$s limit ' . $offset . ',' . $size
           . ') idList on (%7$s.%13$s=idList.%9$s) '
           . ' %20$s '//'join product_category_link cl on (cl.link_parent=e.id)'
           . ' join %14$s v1 on (v1.%9$s=%7$s.%13$s) '
@@ -756,7 +790,7 @@ where a1.code in ('test','link_mfg','price','case_qty');
         $this->attrRepo->getTable(),
         $this->attrCols->getId(),
         $this->attrValueCols->getAttributeId(),
-        $entityWhere,
+        $joinWhere,//$entityWhere,
         $select, // 19
         $filterJoin, //..20 
         $filterWhere ); 
@@ -847,9 +881,11 @@ where a1.code in ('test','link_mfg','price','case_qty');
       
       
     }
-   // echo $sql; die;
-
-      
+    /*
+      var_dump( $values );
+      echo $sql;
+      die;
+      */
     return $this->createQueryBuilderOutput( $builder, $this->entityProps->getPrimaryKey()->getName(), $sql, $values );
     
     
