@@ -95,6 +95,8 @@ abstract class AbstractSQLJunctionPropertyService extends AbstractOneManyPropert
    */
   private bool $reverse;
   
+  private bool $manageDeletes;
+  
   
   /**
    * 
@@ -115,7 +117,8 @@ abstract class AbstractSQLJunctionPropertyService extends AbstractOneManyPropert
     ISQLRepository $junctionRepo, 
     ISQLRepository $targetRepo, 
     bool $readOnlyTarget = false,
-    bool $reverse = false )
+    bool $reverse = false,
+    bool $manageDeletes = false )
   {
     parent::__construct( $cfg );
     $this->junctionRepo = $junctionRepo;
@@ -124,9 +127,10 @@ abstract class AbstractSQLJunctionPropertyService extends AbstractOneManyPropert
     $this->tCols = $targetRepo->createPropertySet()->getPropertyConfig( IJunctionTargetProperties::class );
     $this->readOnly = $readOnlyTarget;
     $this->reverse = $reverse;
+    $this->manageDeletes = $manageDeletes;
     
     if ( $this->junctionRepo->getDatabaseConnection() !== $this->targetRepo->getDatabaseConnection())
-      throw new InvalidArgumentException( 'Junction and target repositories must share the same database connection.' );
+      throw new InvalidArgumentException( 'Junction and target repositories must share the same database connection.' ); //Why?
   }
   
   
@@ -167,105 +171,183 @@ abstract class AbstractSQLJunctionPropertyService extends AbstractOneManyPropert
     if ( empty( $priKeys ))
       throw new Exception( 'Parent model (' . get_class( $this->parent ) . ')must contain at least one primary key definition' );
     else if ( sizeof( $priKeys ) > 1 )
-      throw new \Exception( 'Address Service cannot be natively linked to models with compound primary keys.  You must override and create your own save function.' );
+      throw new \Exception( 'Junction Service cannot be natively linked to models with compound primary keys.  You must override and create your own save function.' );
     
     //..Get the parent id 
     $parentId = (string)$parent->getValue( $priKeys[0]->getName());    
     
     
-    //..Get the existing junction table records
-    $existingJunction = $this->junctionRepo->getForProperty( $this->jCols->getParentId(), $parentId );
-    
-    //..Target ids from the existig records
-    $existingIds = [];
-    
-    //..A map of target id => junction table record id (id property)
-    $idMap = [];
-    
-    foreach( $existingJunction as $rec )
+    if ( $this->manageDeletes )
     {
-      //..Add target id to the list
-      $existingIds[] = $rec->getValue( $this->jCols->getTargetId());
+      //..Get the existing junction table records
+      $existingJunction = $this->junctionRepo->getForProperty( $this->jCols->getParentId(), $parentId );
+
+      //..Target ids from the existig records
+      $existingIds = [];
+
+      //..A map of target id => junction table record id (id property)
+      $idMap = [];
+
+      foreach( $existingJunction as $rec )
+      {
+        //..Add target id to the list
+        $existingIds[] = $rec->getValue( $this->jCols->getTargetId());
+
+        //..Add the id map entry 
+        $idMap[$rec->getValue( $this->jCols->getTargetId())] = $rec->getValue( $this->jCols->getId());
+      }
+
+      //..Get the list of supplied target models 
+      $suppliedJunction = $parent->getValue( $this->getModelServiceConfig()->getModelPropertyName());    
+
+
+      //..A list of target model ids 
+      $suppliedIds = [];
+
+
+      //..Iterate over the list of supplied ids that do not have junction records yet
+      $newModels = [];
+
+      foreach( $suppliedJunction as $rec )
+      {
+        //..Get the target model id 
+        $newId = $rec->getValue( $this->tCols->getId());
+
+        //..If not empty, then add to the supplied ids list
+        //..Models with empty ids are new and will be added 
+        if ( !empty( $newId ))
+          $suppliedIds[] = $newId;      
+        else
+          throw new ValidationException( 'Cannot save linked record into (' . $this->junctionRepo->getTable() . ') because target model (' . $this->targetRepo->getTable() . ') has not been committed.  Please save prior to attaching the linked models.' );
+      }
+
+
+      //..List junction table id's to remove 
+      $removeIds = [];
+
+      //..Iterate over a list of existing ids that do not exist in the list of supplied ids 
+      foreach( array_diff( $existingIds, $suppliedIds ) as $targetId )
+      {
+        //..Add the id 
+        $removeIds[] = $idMap[$targetId];
+      }
+
+
+
+      foreach( array_diff( $suppliedIds, $existingIds ) as $newId )
+      {
+        //..Create the new junction table model 
+        $newModels[] = $this->junctionRepo->create([
+          $this->jCols->getParentId() => $parentId,
+          $this->jCols->getTargetId() => $newId
+        ]);
+      }        
+
+      //..Save the target models if not read only
+      $targetSave = ( $this->readOnly ) ? [] : $this->targetRepo->getSaveFunction( null, null, ...$suppliedJunction );
+
+      //..Return the save functions 
+      $toSave = $this->junctionRepo->getSaveFunction( 
+        function( IRepository $repo, IModel ...$models ) use ($parent,$priKeys) {
+          $parentId = (string)$parent->getValue( $priKeys[0]->getName());    
+          foreach( $models as $model )
+          {
+            $model->setValue( $this->jCols->getParentId(), $parentId );
+          }
+        }, 
+
+        function( IRepository $repo, IModel ...$models ) use ($removeIds) {      
+          foreach( $removeIds as $id )
+          {
+            $this->junctionRepo->removeById((string)$id );
+          }
+        },      
+        ...$newModels
+      );
+
+
+      foreach( $targetSave as $t )
+      {
+        $toSave[] = $t;
+      }      
       
-      //..Add the id map entry 
-      $idMap[$rec->getValue( $this->jCols->getTargetId())] = $rec->getValue( $this->jCols->getId());
+      return $toSave;
     }
-    
-    //..Get the list of supplied target models 
-    $suppliedJunction = $parent->getValue( $this->getModelServiceConfig()->getModelPropertyName());    
-    
-    
-    //..A list of target model ids 
-    $suppliedIds = [];
-    
-    
-    //..Iterate over the list of supplied ids that do not have junction records yet
-    $newModels = [];
-    
-    foreach( $suppliedJunction as $rec )
+    else
     {
-      //..Get the target model id 
-      $newId = $rec->getValue( $this->tCols->getId());
+      //..Get the list of supplied target models 
+      $suppliedJunction = $parent->getValue( $this->getModelServiceConfig()->getModelPropertyName());    
+
+
+      //..A list of target model ids 
+      $suppliedIds = [];
+
+
+      //..Iterate over the list of supplied ids that do not have junction records yet
+      $newModels = [];
+
+      foreach( $suppliedJunction as $rec )
+      {
+        //..Get the target model id 
+        $newId = $rec->getValue( $this->tCols->getId());
+
+        //..If not empty, then add to the supplied ids list
+        //..Models with empty ids are new and will be added 
+        if ( !empty( $newId ))
+          $suppliedIds[] = $newId;      
+        else
+          throw new ValidationException( 'Cannot save linked record into (' . $this->junctionRepo->getTable() . ') because target model (' . $this->targetRepo->getTable() . ') has not been committed.  Please save prior to attaching the linked models.' );
+      }
       
-      //..If not empty, then add to the supplied ids list
-      //..Models with empty ids are new and will be added 
-      if ( !empty( $newId ))
-        $suppliedIds[] = $newId;      
-      else
-        throw new ValidationException( 'Cannot save linked record into (' . $this->junctionRepo->getTable() . ') because target model (' . $this->targetRepo->getTable() . ') has not been committed.  Please save prior to attaching the linked models.' );
-    }
-    
-    
-    //..List junction table id's to remove 
-    $removeIds = [];
-    
-    //..Iterate over a list of existing ids that do not exist in the list of supplied ids 
-    foreach( array_diff( $existingIds, $suppliedIds ) as $targetId )
-    {
-      //..Add the id 
-      $removeIds[] = $idMap[$targetId];
-    }
-    
-    
-    
-    foreach( array_diff( $suppliedIds, $existingIds ) as $newId )
-    {
-      //..Create the new junction table model 
-      $newModels[] = $this->junctionRepo->create([
+      
+      $existingJunction = $this->junctionRepo->select( $this->jCols->getId())->findByProperties([
         $this->jCols->getParentId() => $parentId,
-        $this->jCols->getTargetId() => $newId
+        $this->jCols->getTargetId() => $suppliedIds
       ]);
-    }        
-    
-    //..Save the target models if not read only
-    $targetSave = ( $this->readOnly ) ? [] : $this->targetRepo->getSaveFunction( null, null, ...$suppliedJunction );
-    
-    //..Return the save functions 
-    $toSave = $this->junctionRepo->getSaveFunction( 
-      function( IRepository $repo, IModel ...$models ) use ($parent,$priKeys) {
-        $parentId = (string)$parent->getValue( $priKeys[0]->getName());    
-        foreach( $models as $model )
-        {
-          $model->setValue( $this->jCols->getParentId(), $parentId );
-        }
-      }, 
-              
-      function( IRepository $repo, IModel ...$models ) use ($removeIds) {      
-        foreach( $removeIds as $id )
-        {
-          $this->junctionRepo->removeById((string)$id );
-        }
-      },      
-      ...$newModels
-    );
       
       
-    foreach( $targetSave as $t )
-    {
-      $toSave[] = $t;
+      $existingIds = [];
+      foreach( $existingJunction as $rec )
+      {
+        $existingIds[] = $rec->getId();
+      }      
+      
+      //..Should probably check for duplicates first 
+      
+      foreach( array_diff( $suppliedIds, $existingIds ) as $newId )
+      {
+        //..Create the new junction table model 
+        $newModels[] = $this->junctionRepo->create([
+          $this->jCols->getParentId() => $parentId,
+          $this->jCols->getTargetId() => $newId
+        ]);
+      }
+      
+
+      //..Save the target models if not read only
+      $targetSave = ( $this->readOnly ) ? [] : $this->targetRepo->getSaveFunction( null, null, ...$suppliedJunction );
+
+      //..Return the save functions 
+      $toSave = $this->junctionRepo->getSaveFunction( 
+        function( IRepository $repo, IModel ...$models ) use ($parent,$priKeys) {
+          $parentId = (string)$parent->getValue( $priKeys[0]->getName());    
+          foreach( $models as $model )
+          {
+            $model->setValue( $this->jCols->getParentId(), $parentId );
+          }
+        }, 
+        null,      
+        ...$newModels
+      );
+
+
+      foreach( $targetSave as $t )
+      {
+        $toSave[] = $t;
+      }      
+      
+      return $toSave;      
     }
-    
-    return $toSave;
   }
   
 

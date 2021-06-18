@@ -182,5 +182,5 @@ class ArrayProperty extends AbstractProperty
   public function __toString()
   {
     return json_encode( $this->getValue());
-  }  
+  }
 }

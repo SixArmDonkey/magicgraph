@@ -137,6 +137,7 @@ class DefaultModelMapper implements IModelMapper
   {
     $this->test( $model );
     
+    
     foreach( $this->mapData( $data, true ) as $k => $v )
     {
       //..Simply ignore any non-member properties.

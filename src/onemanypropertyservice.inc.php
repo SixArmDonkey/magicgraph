@@ -82,6 +82,12 @@ class OneManyPropertyService extends AbstractOneManyPropertyService
   }
   
   
+  protected function create( array $data ) : IModel
+  {
+    return $this->repo->create( $data );
+  }  
+  
+  
   protected function loadModels( int $parentId, IModel $parent ) : array
   {
     return $this->repo->getForProperty( $this->foreignKey, (string)$parentId );

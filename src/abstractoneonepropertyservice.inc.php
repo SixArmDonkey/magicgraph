@@ -121,10 +121,11 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
   {
     try {
       $id = $model->getValue( $this->propCfg->getPropertyName());
+      
       if ( $id != $this->lastId || !( $value instanceof IModel ))
       {
         $this->lastId = $id;
-
+        
         if ( !empty( $id ))
           $newModel = $this->loadById( $id );
         else
@@ -134,6 +135,7 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
       }
       else if ( $id > 0 && $id == $this->lastId && ( !( $value instanceof IModel ) || !$value->hasPrimaryKeyValues()))
       {
+        
         if ( $this->reloadSameModels )
           $newModel = $this->loadById( $id );
         else
@@ -160,14 +162,15 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
    * @param mixed $value property value
    * @throws InvalidArgumentException if the property is invalid 
    */
-  public function setValue( IModel $model, $value ) : void
+  public function setValue( IModel $model, $value ) : mixed
   {
-    $this->getValue( $model, $value );
+    $value = $this->getValue( $model, $value );
     /* @var $value IModel */
     if ( !( $value instanceof IModel ))// || $value->getValue( $value->getPropertySet()->getPrimaryKey()->getName()) != $this->lastId )
     {
       throw new \Exception( 'This model may not be set directly' );
     }
+    return $value;
   }
   
   

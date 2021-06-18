@@ -106,11 +106,9 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
     if ( isset( $this->providers[$property] ))
     {
       $p = $this->providers[$property];
-      
-      /* @var $p IModelPropertyProvider  */
-      $p->setValue( $this, $value );
+      /* @var $p IModelPropertyProvider  */      
+      $value = $p->setValue( $this, $value );
     }
-    
     parent::setValue( $property, $value );
   }
   
@@ -154,6 +152,8 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
     
     return parent::toArray( $properties, $includeArrays, $includeModels, $includeExtra, $_depth );
   }  
+  
+  
   
   
   private function providerWarmup( bool $includeArrays, bool $includeModels )

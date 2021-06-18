@@ -294,7 +294,6 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
 
       foreach( $this->dbc->select( $statement->getQuery(), $statement->getValues()) as $row )
       {
-        
         $curGroup = '';
         foreach( $entityGroups as $g )
         {

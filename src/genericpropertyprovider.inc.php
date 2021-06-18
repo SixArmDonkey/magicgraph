@@ -108,10 +108,11 @@ class GenericPropertyProvider implements IModelPropertyProvider
    * @param mixed $value property value
    * @throws InvalidArgumentException if the property is invalid 
    */
-  public function setValue( IModel $model, $value ) : void
+  public function setValue( IModel $model, $value ) : mixed
   {
     $f = $this->setValue;
     $f( $model, $value );
+    return $value;
   }
   
   

@@ -357,7 +357,7 @@ class ProxyModel implements IModel
    * Retrieves the model
    * @return IModel model 
    */
-  protected function getModel()
+  protected function getModel() : IModel
   {
     return $this->model;
   }

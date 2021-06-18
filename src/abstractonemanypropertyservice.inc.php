@@ -48,6 +48,7 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
    */
   protected abstract function loadModels( int $parentId, IModel $parent ) : array;
   
+  protected abstract function create( array $data ) : IModel;
   
   /**
    * Create a new property service 
@@ -114,53 +115,97 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
     //..spl_object_id may cause shenanigans if the garbage collector destroys an object with an id that is in this list.
     //..We shall see as we go...  
     
-    
     /**
      * @todo Write tests for this.
      */
     $c = spl_object_id( $model );
-    if ( !isset( $this->init[$c] ))
-      $this->init[$c] = true;
     
-    if ( !isset( $this->lastId[$c] ))
-      $this->lastId[$c] = -1;
     
-    //..Need to grab the attachd models 
+    //..This allows this to accept arrays (IModel::toArray() output) instead of IModel instances.
+    //..Caveat: If the array is empty, then the db gets called.  I have no idea how to get around this one right now.
     $newData = [];
-    try {
-      $id = $model->getValue( $this->propCfg->getPropertyName());
-      
-      if (( !empty( $id ) && ( $id != $this->lastId[$c] || !is_array( $value ))) || ( empty( $value ) && $this->init[$c] ))
-      {
-        $this->init[$c] = false;
-        $this->lastId[$c] = $id;
-
-        //..No need to query for empty.
-        $newData = $this->callLoadModels( $id, $model );
-      }
-      else
-      {
-        return $value;
-      }
-      
-    } catch( RecordNotFoundException | InvalidArgumentException $e ) {
-      //..Initialize with an empty model.  I hate null.
-      //..Maybe just throw an exception since we know this is invalid 
-      //  and would result in bad links.
-      throw $e;
-      //$newModel = $this->repo->create( [] ); 
-    }
-    
-    //..Commit the loaded data 
     if ( is_array( $value ))
     {
       foreach( $value as $entry )
       {
         /* @var $entry IModel */
         //..Only add previously loaded models that do not have primary key values 
-        if ( !$this->hasAllPriKeyValues( $entry ))
-        {          
-          $newData[] = $entry;
+        if ( is_array( $entry ))
+        {
+          $entries = [];
+
+          $keys = array_keys( $entry );
+          if ( reset( $keys ) == 0 )
+          {
+            //..This is probably many entries
+            foreach( $entry as $e )
+            {
+              $newData[] = $this->create( $e );
+            }
+          }
+          else
+          {
+            //..This is probably one entry 
+            $newData[] = $this->create( $entry );
+          }
+        }
+      }
+      
+
+      if ( !empty( $newData ))
+      {
+        $this->init[$c] = false;
+        $id = $model->getValue( $this->propCfg->getPropertyName());
+        $this->lastId[$c] = $id;
+        $model->setValue( $this->propCfg->getModelPropertyName(), $newData );        
+        return $newData;
+      }
+    }
+    
+    
+    if ( empty( $newData ))
+    {
+
+      if ( !isset( $this->init[$c] ))
+        $this->init[$c] = true;
+
+      if ( !isset( $this->lastId[$c] ))
+        $this->lastId[$c] = -1;
+
+      //..Need to grab the attachd models 
+      try {
+        $id = $model->getValue( $this->propCfg->getPropertyName());
+
+        if (( !empty( $id ) && ( $id != $this->lastId[$c] || !is_array( $value ))) || ( empty( $value ) && $this->init[$c] ))
+        {
+          $this->init[$c] = false;
+          $this->lastId[$c] = $id;
+
+          //..No need to query for empty.
+          $newData = $this->callLoadModels( $id, $model );
+        }
+        else
+        {
+          return $value;
+        }
+
+      } catch( RecordNotFoundException | InvalidArgumentException $e ) {
+        //..Initialize with an empty model.  I hate null.
+        //..Maybe just throw an exception since we know this is invalid 
+        //  and would result in bad links.
+        throw $e;
+        //$newModel = $this->repo->create( [] ); 
+      }
+
+      //..Commit the loaded data 
+      if ( is_array( $value ))
+      {
+        foreach( $value as $entry )
+        {
+          if ( !$this->hasAllPriKeyValues( $entry ))
+          {          
+            $newData[] = $entry;
+          }
         }
       }
     }
@@ -168,7 +213,8 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
     $model->setValue( $this->propCfg->getModelPropertyName(), $newData );
     
     
-    //..Test if some other program wants control of what records to return.    
+    //..Test if some other program wants control of what records to return.
+    //..What?
     if ( is_string( $value ) && !empty( $value ))
     {      
       return $value;
@@ -185,9 +231,9 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
    * @param mixed $value property value
    * @throws InvalidArgumentException if the property is invalid 
    */
-  public function setValue( IModel $model, $value ) : void
+  public function setValue( IModel $model, $value ) : mixed
   {
-    $this->getValue( $model, $value );
+    return $this->getValue( $model, $value );
     /* @var $value IModel */
     /*
     if ( !is_array( $value ) && ( is_string( $value ) && empty( $value )))// || $value->getValue( $value->getPropertySet()->getPrimaryKey()->getName()) != $this->lastId )

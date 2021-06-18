@@ -515,8 +515,7 @@ abstract class PDOConnection extends PDO implements IPDOConnection
    * @param type $opt Bindings for prepared statement.  This can be an object or an array 
    */ 
   public function select( string $statement, $opt = null ) : \Generator
-  {
-    //echo $statement . '<br>';
+  {        
     $stmt = $this->prepareAndExec( $statement, $this->prepareOptions( $opt ));
     while (( $row = $stmt->fetch( PDO::FETCH_ASSOC, PDOConnection::FETCH_ORI_NEXT )) !== false )
     {

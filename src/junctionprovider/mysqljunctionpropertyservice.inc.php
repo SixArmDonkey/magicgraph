@@ -60,8 +60,15 @@ class MySQLJunctionPropertyService extends AbstractSQLJunctionPropertyService
    * @param bool $reverse Reverse parent and target when loading and saving.  Use this when the junction service is 
    * attached to the target repository.  When using reverse, the property set attached to the parent repository models 
    * MUST implement IJunctionTargetProperties.  This is not required when not using reverse.
-   * 
    * Saving is temporarily disabled when using reverse.  
+   * @param bool $manageDeletes Defaults to false, set to true, and this will take the difference between what's in the database and what is loaded 
+   * in the model and deletes those records.
+   * 
+   * ie: 
+   * model array property contains [1,3]
+   * db contains [1,2,3]
+   * 
+   * This will delete 2.
    * 
    * @throws InvalidArgumentException 
    */
@@ -70,9 +77,16 @@ class MySQLJunctionPropertyService extends AbstractSQLJunctionPropertyService
     ISQLRepository $junctionRepo, 
     ISQLRepository $targetRepo, 
     bool $readOnlyTarget = false,
-    bool $reverse = false )
+    bool $reverse = false,
+    bool $manageDeletes = false )
   {    
-    parent::__construct( $cfg, $junctionRepo, $targetRepo, $readOnlyTarget, $reverse );
+    parent::__construct( $cfg, $junctionRepo, $targetRepo, $readOnlyTarget, $reverse, $manageDeletes );
+  }
+  
+  
+  protected function create( array $data ) : IModel
+  {
+    return $this->getTargetRepo()->create( $data );
   }
   
   
@@ -82,15 +96,15 @@ class MySQLJunctionPropertyService extends AbstractSQLJunctionPropertyService
    * @return IModel[] models 
    */
   protected function loadModels( int $parentId, IModel $parent ) : array
-  {
+  {    
     $jCols = $this->getJunctionModelProps();
     $tCols = $this->getJunctionTargetProps();
-        
+    
     $out = [];
     
-    $dbc = $this->getJunctioNRepo()->getDatabaseConnection();    
+    $dbc = $this->getJunctionRepo()->getDatabaseConnection();    
     $q = 'select j.`%s` as `junction_parent_id`, t.* from `%s` j join `%s` t on (j.`%s`=t.`%s`) where j.`%s`=?';
-   
+    
     foreach( $dbc->select( 
       sprintf( $q,
         $jCols->getParentId(),
