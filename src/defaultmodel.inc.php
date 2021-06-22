@@ -216,12 +216,17 @@ class DefaultModel implements IModel
   }
   
   
+  /**
+   * WARNING: Property values MUST be copied over to the cloned model
+   * Prefer createCopy() over using clone directly.
+   */
   public function __clone() 
   {
     if ( is_object( $this->cloneNames ))
       $this->cloneNames = clone $this->cloneNames;
     $this->edited = clone $this->edited;
-    $this->properties = clone $this->properties;    
+    $this->properties = clone $this->properties;
+    $this->memberCache = [];
   }
   
   
@@ -255,12 +260,22 @@ class DefaultModel implements IModel
     $r = clone $this;
         
     //..Copy the properties over without knowing a thing about the object
+    
     foreach( $this->getPropertySet()->getProperties() as $p )
     {
-      if ( empty( $p->getValue()) && !$p->getFlags()->hasVal( IPropertyFlags::PRIMARY ))
-        $r->setValue( $p->getName(), $this->getValue( $p->getName()));
-      
+      if ( !$p->getFlags()->hasVal( IPropertyFlags::PRIMARY ) 
+        && !( $p->getFlags()->hasVal( IPropertyFlags::WRITE_EMPTY ) && !$r->getProperty( $p->getName())->isEmpty()))
+      {
+        try {
+          $r->setValue( $p->getName(), $this->getValue( $p->getName()));      
+        } catch( \Exception $e ) {
+          var_dump( $r->getValue( $p->getName()));
+          var_dump( $r->getProperty( $p->getName())->isEmpty());
+          die;
+        }
+      }
     }
+    
     //..Find and remove the primary key flag from the new object.
     //..This will prevent the object from being able to be saved.
     foreach( $r->getPropertySet()->getPrimaryKeys() as $primary )
@@ -268,7 +283,7 @@ class DefaultModel implements IModel
       if ( !$copyIsSaveable )
       {
         /* @var $primary IProperty */
-        $primary->getFlags()->remove( IPropertyFlags::PRIMARY, IPropertyFlags::REQUIRED );      
+        $primary->getFlags()->remove( IPropertyFlags::PRIMARY, IPropertyFlags::REQUIRED );
       }
       
       if ( $removePriKeys )
@@ -277,11 +292,17 @@ class DefaultModel implements IModel
         $t = $f->getActiveMembers();
         $f->clear();
         
-        //..This seems dumb.
+        //..This seems dumb
+        /*
         if ( $primary->getType()->is( IPropertyType::TSTRING ))
           $r->setValue( $primary->getName(), '' );
         else if ( $primary->getType()->is( IPropertyType::TINTEGER ))
           $r->setValue( $primary->getName(), '0' );
+        */
+        
+        //..This seems better.
+        $primary->setValue( $primary->getDefaultValue());
+        
         
         $f->add( ...$t );
       }

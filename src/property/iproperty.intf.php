@@ -160,4 +160,17 @@ interface IProperty
    * @return string tag 
    */
   public function getTag() : string;  
+  
+  
+  /**
+   * Tests that the value is empty.
+   * If no behavior is found (IS_EMPTY) then 
+   * this simply does empty( value ) && value != '0000-00-00 00:00:00'.
+   * If behavior is used, the above logic is ignored and the is_empty callback
+   * determines empty state.
+   * 
+   * Override AbstractProperty::isPropertyEmpty() to customize isEmpty without the use of behaviors.
+   * @return bool
+   */
+  public function isEmpty() : bool;
 }

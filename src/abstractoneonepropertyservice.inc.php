@@ -15,7 +15,6 @@ namespace buffalokiwi\magicgraph;
 
 use buffalokiwi\magicgraph\persist\IRunnable;
 use buffalokiwi\magicgraph\persist\RecordNotFoundException;
-use buffalokiwi\magicgraph\persist\Runnable;
 use buffalokiwi\magicgraph\property\IPropertyConfig;
 use buffalokiwi\magicgraph\property\IPropertySvcConfig;
 use InvalidArgumentException;
@@ -109,6 +108,22 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
     else
       return $res;
   }
+  
+  
+  public function deleteRelatedModels( IModel $model ) : void
+  {
+    $repo = $this->getRepository();
+    if ( empty( $repo ))
+      return;
+    
+    $id = $model->getValue( $this->propCfg->getPropertyName());
+    
+    if ( empty( $id ))
+      return;
+    
+    $repo->remove( $this->loadById( $id ));    
+  }
+    
   
   
   /**

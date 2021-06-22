@@ -99,18 +99,7 @@ abstract class AbstractProperty implements IProperty
    * @var string
    */
   private $tag = '';
-  
-  /**
-   * If the WRITE_EMPTY flag is set.
-   * @var bool
-   */
-  private bool $isWriteEmpty = false;
-  
-  /**
-   * If the USE_NULL flag is set 
-   * @var bool
-   */
-  private bool $isUseNull = false;
+
   
   /**
    * An empty function 
@@ -161,8 +150,7 @@ abstract class AbstractProperty implements IProperty
     $this->defaultValidateClosure = function() { return true; };
     $this->type = $builder->getType();
     $this->flags = $builder->getFlags();
-    $this->isWriteEmpty = $this->flags->WRITE_EMPTY();
-    $this->isUseNull = $this->flags->USE_NULL();
+    
     
     foreach( $builder->getBehavior() as $b )
     {
@@ -236,11 +224,17 @@ abstract class AbstractProperty implements IProperty
    * Clones the default value if it is an object
    * Clones flags
    * Clones the type
+   * 
+   * WARNING: Property values MUST be copied over to the cloned model
+   * 
    */
   public function __clone()
   {
     if ( is_object( $this->defaultValue ))
       $this->defaultValue = clone $this->defaultValue;
+    
+    if ( is_object( $this->value ))
+      $this->value = clone $this->value;
     
     $this->flags = clone $this->flags;
     $this->type = clone $this->type;
@@ -249,11 +243,35 @@ abstract class AbstractProperty implements IProperty
     {
       $this->behavior[$k] = clone $b;
     }
+    
+    if ( is_object( $this->config ))
+      $this->config = clone $this->config;
+    else if ( is_array( $this->config ))
+      $this->config = $this->cloneArray( $this->config );
 
     //..Does this work? 
-    //..Test says this is ok.
+    //..Test says this is ok.        
     $this->reset();
   }
+  
+  private function cloneArray( array &$data ) : array
+  {
+    $out = [];
+    foreach( $data as $k => $v )
+    {
+      if ( is_object( $v ))
+        $out[$k] = clone $v;
+      else if ( is_array( $v ))
+        $out[$k] = $this->cloneData( $v );
+      else
+        $out[$k] = $v;
+    }
+    
+    return $out;
+  }  
+  
+  
+  
   
   
   /**
@@ -394,7 +412,7 @@ abstract class AbstractProperty implements IProperty
       }
     }
     
-    if ( !$this->isUseNull && $value === null )
+    if ( !$this->isUseNull() && $value === null )
     {
       
       throw new ValidationException( '"' . $this->getName() . '" property of type "' . static::class .'" must not be null.  If you want null, set the IPropertyFlags::USE_NULL flag or set the default value to some non-null value' );
@@ -404,7 +422,7 @@ abstract class AbstractProperty implements IProperty
     
     $this->validatePropertyValue( $value );
   }
-    
+  
   
   /**
    * Tests that the value is empty.
@@ -412,10 +430,13 @@ abstract class AbstractProperty implements IProperty
    * this simply does empty( value ) && value != '0000-00-00 00:00:00'.
    * If behavior is used, the above logic is ignored and the is_empty callback
    * determines empty state.
+   * 
+   * Override AbstractProperty::isPropertyEmpty() to customize isEmpty without the use of behaviors.
    * @return bool
+   * @final
    */
-  private function testEmpty() : bool
-  {    
+  public final function isEmpty() : bool
+  {
     $hasBehavior = false;
     foreach( $this->behavior as $b )
     {
@@ -473,7 +494,7 @@ abstract class AbstractProperty implements IProperty
   {
 //    if ( $this->readOnly )
 //      throw new ValidationException( $this->name . ' is read only' );
-    if ( $this->isWriteEmpty && !$this->testEmpty())
+    if ( $this->isWriteEmpty() && !$this->isEmpty())
     {
       throw new ValidationException( $this->name . ' has already been assigned a value, and is now read only' );
     }
@@ -634,6 +655,18 @@ abstract class AbstractProperty implements IProperty
   protected function initValue()
   {
     return null;
+  }
+  
+  
+  protected final function isUseNull() : bool
+  {
+    return $this->flags->hasVal( IPropertyFlags::USE_NULL );
+  }
+  
+  
+  protected final function isWriteEmpty() : bool
+  {
+    return $this->flags->hasVal( IPropertyFlags::WRITE_EMPTY );
   }
   
   

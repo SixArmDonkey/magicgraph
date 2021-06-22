@@ -82,6 +82,17 @@ class OneManyPropertyService extends AbstractOneManyPropertyService
   }
   
   
+  /**
+   * If this relationship provider is backed by a repository, it will be returned here.
+   * @return IRepository|null
+   */
+  public function getRepository() : ?IRepository
+  {
+    return $this->repo;
+  }
+  
+  
+  
   protected function create( array $data ) : IModel
   {
     return $this->repo->create( $data );

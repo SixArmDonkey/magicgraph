@@ -33,7 +33,6 @@ class StringProperty extends BoundedProperty implements IStringProperty
   private bool $hasValidation;
   private int $min;
   private int $max;
-  private bool $isUseNull;
   
   /**
    * Create a new StringProperty instance 
@@ -48,7 +47,6 @@ class StringProperty extends BoundedProperty implements IStringProperty
     $this->hasMax = $this->getMax() > -1;
     $this->min = (int)$this->getMin();
     $this->max = (int)$this->getMax();
-    $this->isUseNull = $this->getFlags()->hasVal( SPropertyFlags::USE_NULL );
     $this->hasValidation = $this->hasMin || $this->hasMax || $this->hasPattern;
   }
   
@@ -83,7 +81,7 @@ class StringProperty extends BoundedProperty implements IStringProperty
    */
   protected function validatePropertyValue( $value ) : void
   {
-    if ( $this->isUseNull && $value === null )
+    if ( $this->isUseNull() && $value === null )
       return; //..This is ok        
     else if ( !is_string( $value )) //..is_string returns true for null.
       throw new ValidationException( sprintf( 'Value for property %s must be a string.  Got %s', $this->getName(), ( $value == null ) ? 'null' : gettype( $value )));
@@ -117,7 +115,7 @@ class StringProperty extends BoundedProperty implements IStringProperty
    */
   protected function preparePropertyValue( $value )
   {
-    if ( $value == null && !$this->isUseNull )
+    if ( $value == null && !$this->isUseNull())
       $value = '';
     
     return $value;

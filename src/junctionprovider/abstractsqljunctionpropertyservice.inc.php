@@ -134,6 +134,19 @@ abstract class AbstractSQLJunctionPropertyService extends AbstractOneManyPropert
   }
   
   
+  
+  public function deleteRelatedModels( IModel $parent ) : void
+  {
+    foreach( $this->junctionRepo->select( 
+      $this->jCols->getId())->findByProperty( 
+        $this->jCols->getParentId(), 
+        $parent->getValue( $parent->getPropertySet()->getPrimaryKey()->getName())
+      ) as $rec )
+    {
+      $this->junctionRepo->removeById((string)$rec->getValue( $this->jCols->getId()));
+    }
+  }
+  
  
   /**
    * Junction provider save function 
@@ -299,11 +312,17 @@ abstract class AbstractSQLJunctionPropertyService extends AbstractOneManyPropert
           throw new ValidationException( 'Cannot save linked record into (' . $this->junctionRepo->getTable() . ') because target model (' . $this->targetRepo->getTable() . ') has not been committed.  Please save prior to attaching the linked models.' );
       }
       
-      
-      $existingJunction = $this->junctionRepo->select( $this->jCols->getId())->findByProperties([
-        $this->jCols->getParentId() => $parentId,
-        $this->jCols->getTargetId() => $suppliedIds
-      ]);
+      if ( !empty( $suppliedIds ))
+      {
+        $existingJunction = $this->junctionRepo->select( $this->jCols->getId())->findByProperties([
+          $this->jCols->getParentId() => $parentId,
+          $this->jCols->getTargetId() => $suppliedIds
+        ]);
+      }
+      else
+      {
+        $existingJunction = [];
+      }
       
       
       $existingIds = [];

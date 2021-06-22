@@ -86,6 +86,28 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
   }
   
   
+  public function deleteRelatedModels( IModel $parent ) : void
+  {
+    $repo = $this->getRepository();
+    if ( empty( $repo ))
+      return;
+    
+    $priKey = $repo->createPropertySet()->getPrimaryKey()->getName();
+    
+    $repo->select( $priKey );
+    $idList = [];
+    foreach( $this->callLoadModels( $parent->getValue( $this->propCfg->getPropertyName()), $parent ) as $model )
+    {
+      $idList[] = $model->getValue( $priKey );
+    }
+    
+    foreach( $idList as $id )
+    {
+      $repo->removeById((string)$id );
+    }    
+  }
+  
+  
   
   /**
    * Retrieve the value of some property
@@ -128,6 +150,7 @@ abstract class AbstractOneManyPropertyService implements IModelPropertyProvider
     {
       foreach( $value as $entry )
       {
+        
         /* @var $entry IModel */
         //..Only add previously loaded models that do not have primary key values 
         if ( is_array( $entry ))

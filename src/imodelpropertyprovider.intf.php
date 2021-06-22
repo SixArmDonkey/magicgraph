@@ -12,6 +12,7 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph;
 
+use buffalokiwi\magicgraph\persist\IRepository;
 use buffalokiwi\magicgraph\persist\IRunnable;
 use buffalokiwi\magicgraph\property\IPropertySvcConfig;
 use InvalidArgumentException;
@@ -76,4 +77,13 @@ interface IModelPropertyProvider extends IPropertyServiceProvider
    * @return IRunnable
    */
   public function getSaveFunction( IModel $parent ) : array;  
+  
+  
+  /**
+   * If this relationship provider is backed by a repository, it will be returned here.
+   * @return IRepository|null
+   */
+  public function getRepository() : ?IRepository;
+  
+  public function deleteRelatedModels( IModel $model ) : void;  
 }

@@ -102,4 +102,26 @@ class MoneyProperty extends BoundedProperty implements IMoneyProperty
     else
       return $value;
   }
+  
+  
+  /**
+   * Test for empty money.
+   * 
+   * @param type $value
+   * @return bool
+   */
+  protected function isPropertyEmpty( $value ) : bool
+  {
+    if ( $value instanceof IMoney )
+    {
+      if ( $this->defaultValue instanceof IMoney )
+        return $value->equals( $this->defaultValue );
+      else if ( is_scalar( $this->defaultValue ))
+        return (string)$value->getAmount == (string)$this->defaultValue;
+      else
+        throw new \Exception( 'Money property default value must be an instance of IMoney or scalar.' );
+    }
+    
+    return empty( $value ) || $value === $this->defaultValue;
+  }  
 }

@@ -14,6 +14,7 @@ namespace buffalokiwi\magicgraph;
 
 use buffalokiwi\magicgraph\IModel;
 use buffalokiwi\magicgraph\IPropertyServiceProvider;
+use \InvalidArgumentException;
 
 
 /**
@@ -21,6 +22,15 @@ use buffalokiwi\magicgraph\IPropertyServiceProvider;
  */
 interface IServiceableModel extends IModel
 {
+  /**
+   * Retrieve a model property provider 
+   * @param string $name
+   * @return IModelPropertyProvider
+   * @throws InvalidArgumentException
+   */
+  public function getProvider( string $name ) : IModelPropertyProvider ;
+  
+  
   /**
    * Retrieve a list of property service providers
    * @return IPropertyServiceProvider[]

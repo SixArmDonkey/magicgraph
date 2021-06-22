@@ -14,8 +14,7 @@ declare( strict_types=1 );
 namespace buffalokiwi\magicgraph\junctionprovider;
 
 use buffalokiwi\magicgraph\IModel;
-use buffalokiwi\magicgraph\junctionprovider\IJunctionModelProperties;
-use buffalokiwi\magicgraph\junctionprovider\IJunctionTargetProperties;
+use buffalokiwi\magicgraph\persist\IRepository;
 use buffalokiwi\magicgraph\persist\ISQLRepository;
 use buffalokiwi\magicgraph\property\IPropertySvcConfig;
 use InvalidArgumentException;
@@ -82,6 +81,17 @@ class MySQLJunctionPropertyService extends AbstractSQLJunctionPropertyService
   {    
     parent::__construct( $cfg, $junctionRepo, $targetRepo, $readOnlyTarget, $reverse, $manageDeletes );
   }
+  
+  
+  /**
+   * Returns the junction repository 
+   * @return IRepository|null
+   */
+  public function getRepository() : ?IRepository
+  {
+    return $this->junctionRepo;
+  }
+  
   
   
   protected function create( array $data ) : IModel

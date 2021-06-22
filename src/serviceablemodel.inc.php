@@ -62,6 +62,21 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
       $p->init( $this );
     }
   }
+  
+  
+  /**
+   * Retrieve a model property provider 
+   * @param string $name
+   * @return IModelPropertyProvider
+   * @throws InvalidArgumentException
+   */
+  public function getProvider( string $name ) : IModelPropertyProvider 
+  {
+    if ( !isset( $this->providers[$name] ))
+      throw new \InvalidArgumentException( $name . ' is not a provider that has been registered with ' . static::class );
+    
+    return $this->providers[$name];
+  }
 
   
   /**

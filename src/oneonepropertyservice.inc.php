@@ -13,11 +13,9 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph;
 
+use buffalokiwi\magicgraph\persist\IRepository;
 use buffalokiwi\magicgraph\property\IPropertyConfig;
 use buffalokiwi\magicgraph\property\IPropertySvcConfig;
-use buffalokiwi\magicgraph\persist\IRepository;
-use buffalokiwi\magicgraph\persist\IRunnable;
-use buffalokiwi\magicgraph\persist\RecordNotFoundException;
 use InvalidArgumentException;
 
 
@@ -68,6 +66,17 @@ class OneOnePropertyService extends AbstractOneOnePropertyService implements IMo
     $this->repo = $repo;
   }
   
+  /**
+   * If this relationship provider is backed by a repository, it will be returned here.
+   * @return IRepository|null
+   */
+  public function getRepository() : ?IRepository
+  {
+    return $this->repo;
+  }
+  
+  
+ 
   
   protected function onSave( IModel $model ) : array
   {
@@ -78,10 +87,10 @@ class OneOnePropertyService extends AbstractOneOnePropertyService implements IMo
   /**
    * Loads an item from somewhere by id.
    * If $id == 0, then this must return an empty model.
-   * @param int $id Id 
+   * @param mixed $id Id 
    * @return IModel Model 
    */
-  protected function loadById( int $id ) : IModel
+  protected function loadById( mixed $id ) : IModel
   {
     if ( empty( $id ))
       return $this->repo->create( [] );
