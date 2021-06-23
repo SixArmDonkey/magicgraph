@@ -25,7 +25,7 @@ class ESQLOperator extends Enum
   const LESS_THAN = '<';
   const LESS_THAN_EQUAL = '<=';
   const EQUAL = '=';
-  const NOT_EQUAL = '<>';  
+  const NOT_EQUAL = '!=';
   const NOT_LIKE = 'not like';
   const LIKE = 'like';
   const IN = 'in';

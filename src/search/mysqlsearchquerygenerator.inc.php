@@ -567,6 +567,11 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
       case '=':
         $values[':VAR' . (++$varIndex)] = $value;
         return ' = :VAR' . ( $varIndex );
+        
+      case '!=':
+      case '<>':
+        $values[':VAR' . (++$varIndex)] = $value;
+        return ' != :VAR' . ( $varIndex );
     
       case 'in':
         if ( !is_array( $value ))

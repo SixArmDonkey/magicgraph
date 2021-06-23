@@ -275,7 +275,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   public function stream( ISearchQueryBuilder $builder ) : \Generator
   {    
     $builder->setLimitEnabled( false );
-    return $this->dbc->forwardCursor( $this->searchQueryGenerator->createQuery( $builder ));
+    $query = $this->searchQueryGenerator->createQuery( $builder );
+    return $this->dbc->forwardCursor( $query->getQuery(), $query->getValues());
   }
   
   
@@ -462,7 +463,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   /**
    * Only operating on properties available within this repository, 
    * return any objects matching all of the supplied criteria.
-   * @param array $map Map of [property => val]
+   * @param array $map Map of [property => val]. Can also be [property => [val, 'operator']] or something like
+   * [property => [[1,2,3], 'in']].  fun times.
    * @param int $limit Max results to return 
    * @return array Results 
    */
@@ -482,8 +484,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       $op = null;
       if ( is_array( $val ) && sizeof( $val ) == 2 )
       {
-        $val = reset( $val );
         $op = new ESQLOperator( end( $val ));
+        $val = reset( $val );
       }
       
       if ( !is_scalar( $val ) && !is_array( $val ))

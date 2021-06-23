@@ -29,6 +29,7 @@ class SearchQueryBuilder implements ISearchQueryBuilder
   const MAX_RESULT_SIZE = 1000;
   
   const EQUALS = '=';
+  const NOT_EQUALS = '!=';
   const GREATER_THAN = '>';
   const GREATER_THAN_EQUAL = '>=';
   const LESS_THAN = '<';
@@ -39,6 +40,7 @@ class SearchQueryBuilder implements ISearchQueryBuilder
   
   const VALID_OPERATORS = [
     self::EQUALS,
+    self::NOT_EQUALS,
     self::GREATER_THAN,
     self::GREATER_THAN_EQUAL,
     self::LESS_THAN,
@@ -68,6 +70,7 @@ class SearchQueryBuilder implements ISearchQueryBuilder
    */
   private array $and = [
     self::EQUALS => [],
+    self::NOT_EQUALS => [],
     self::GREATER_THAN => [],
     self::GREATER_THAN_EQUAL => [],
     self::LESS_THAN => [],
@@ -83,6 +86,7 @@ class SearchQueryBuilder implements ISearchQueryBuilder
    */
   private array $or = [
     self::EQUALS => [],
+    self::NOT_EQUALS => [],
     self::GREATER_THAN => [],
     self::GREATER_THAN_EQUAL => [],
     self::LESS_THAN => [],
