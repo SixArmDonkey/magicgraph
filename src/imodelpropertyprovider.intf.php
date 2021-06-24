@@ -85,5 +85,11 @@ interface IModelPropertyProvider extends IPropertyServiceProvider
    */
   public function getRepository() : ?IRepository;
   
+  
+  /**
+   * This will delete all of the linked models managed by this relationship provider linked to the supplied model.
+   * @param IModel $model Parent model
+   * @return void buh bye
+   */
   public function deleteRelatedModels( IModel $model ) : void;  
 }

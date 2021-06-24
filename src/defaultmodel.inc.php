@@ -985,8 +985,56 @@ class DefaultModel implements IModel
    */
   public function equals( IModel $that ) : bool
   {
-    return ( $this->hash() == $that->hash()
-      && $this->properties->equals( $that->getPropertySet()));
+    //..Check that the objects are of the same type and have the same properties 
+    if ( $this->hash() != $that->hash() 
+      || !$this->properties->equals( $that->getPropertySet()))
+    {
+      return false;
+    }
+    
+    //..Check if the primary keys match 
+    foreach( $this->getPropertySet()->getPrimaryKeyNames() as $pk )
+    {
+      $pk1 = $this->getValue( $pk );
+      try {
+        $pk2 = $that->getValue( $pk );
+        if ( $pk1 != $pk2 )
+          return false;
+      } catch (Exception $ex) {
+        return false;
+      }
+    }
+    
+    if ( !empty( $pk1 ))
+    {
+      //..Primary keys match and have been persisted 
+      return true;
+    }
+    
+        
+    //..These are new models that have not been persisted.  Check if the properties are equal.
+    //..Note: this may trigger relationship providers, which cause db queries.  
+    //..Note2: arrays and object properties are run through json_encode.
+    //..I'm trying to say this might be slow.  
+    foreach( $this->getPropertySet()->getProperties() as $p1 )
+    {
+      try {
+        $p2 = $that->getPropertySet()->getProperty( $p2 );
+        
+        if (( is_array( $p1 ) || is_object( $p1 ))
+          && json_encode( $p1 ) != json_encode( $p2 ))
+        {
+          return false;
+        }
+          
+        if ( $p1->getValue() != $p2->getValue())
+          return false;
+      } catch (Exception $ex) {
+        return false;
+      }
+    }
+    
+    return true;
   }
   
   
