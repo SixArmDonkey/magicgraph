@@ -322,6 +322,8 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
    */
   public function __construct( INamedPropertyBehavior ...$behavior )
   {
+    //..This should be optimized.
+    
     $bList = [];
     
     if ( !empty( $behavior ))
@@ -349,15 +351,36 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
       $bs = $b->getBeforeSaveCallback();
       $as = $b->getAfterSaveCallback();
       if ( $bs != null )
+      {
         $this->beforeSave[] = $bs;
+      }
       if ( $as != null )
         $this->afterSave[] = $as;
-      
     }
+
+    
+    foreach( $this->genericBehavior as $b )
+    {
+      $f = $b->getModelValidationCallback();
+      if ( $f != null )
+        $mValidate[] = $f;        
+      
+      $bs = $b->getBeforeSaveCallback();
+      $as = $b->getAfterSaveCallback();
+      if ( $bs != null )
+      {
+        $this->beforeSave[] = $bs;
+      }
+      if ( $as != null )
+        $this->afterSave[] = $as;
+    }
+    
     
     $this->mValidateData = $mValidate;
     $this->isConstructed = true;
+    
   }
+  
 
   
   /**

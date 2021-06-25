@@ -64,6 +64,7 @@ class ServiceableRepository extends RepositoryProxy
   public function getSaveFunction( ?Closure $beforeSave, ?Closure $afterSave, IModel ...$models ) : array
   {
     $tasks = $this->repo->getSaveFunction( $beforeSave, $afterSave, ...$models );
+    
     foreach( $this->providers as $p )    
     {      
       foreach( $models as $model )
@@ -74,6 +75,7 @@ class ServiceableRepository extends RepositoryProxy
         }
       }
     }
+    
     
     return $tasks;
   }

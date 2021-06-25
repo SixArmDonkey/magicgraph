@@ -76,6 +76,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
    */
   private ISearchQueryGenerator $searchQueryGenerator;
   
+  private bool $testExists;
   
   /**
    * SQL Repository 
@@ -88,7 +89,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
    * @throws InvalidArgumentException
    */
   public function __construct( string $table, IModelMapper $mapper, IDBConnection $dbc, 
-    ?IPropertySet $properties = null, ?ISearchQueryGenerator $searchQueryGenerator = null )
+    ?IPropertySet $properties = null, ?ISearchQueryGenerator $searchQueryGenerator = null,
+    bool $testExists = false )
   {
     parent::__construct( $mapper, $properties );
     
@@ -97,6 +99,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     else if ( !preg_match('/^[A-Za-z0-9_]+/', $table ))
       throw new InvalidArgumentException( 'Invalid table name' );
     
+    $this->testExists = $testExists;
     $this->table = $table;
     $this->dbc = $dbc;
     
@@ -722,9 +725,26 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     
     
     
+    $doInsert = false;
+    if ( $this->testExists )
+    {
+      $k = [];
+      foreach( $updKeys as $u )
+      {
+        $k[] = (string)$u;
+      }
+      
+      try {
+        $this->get( ...$k );
+      } catch( RecordNotFoundException $e ) {
+        $doInsert = true;
+      }
+    }
+    
+    
     
     try {
-      if ( !$hasPriValue )
+      if ( !$hasPriValue || $doInsert )
       {
         $insProps = $this->getInsertProperties( $model );
         $toSave = $model->toArray( $insProps );
@@ -747,7 +767,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
           $this->mapper()->convertArrayKeys( $toSave, false )
         );
 
-        if ( sizeof( $priKeys ) == 1 )
+        if ( sizeof( $priKeys ) == 1 && !$doInsert )
         {
           //..Set the primary key value if there's only a single key
           $key = reset( $priKeys );
