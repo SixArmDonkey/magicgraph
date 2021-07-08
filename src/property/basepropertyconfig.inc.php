@@ -57,7 +57,8 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   const FINTEGER_REQUIRED = [
     self::TYPE => IPropertyType::TINTEGER,
     self::FLAGS => [IPropertyFlags::REQUIRED],
-    self::VALUE => 0
+    self::VALUE => 0,
+    self::MIN => 0
   ];  
   
   
@@ -68,7 +69,8 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   const FINTEGER_REQ_WE = [
     self::TYPE => IPropertyType::TINTEGER,
     self::FLAGS => [IPropertyFlags::REQUIRED, IPropertyFlags::WRITE_EMPTY],
-    self::VALUE => 0    
+    self::VALUE => 0,
+    self::MIN => 0
   ];
   
   /**
@@ -78,7 +80,8 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   const FINTEGER_WE = [
     self::TYPE => IPropertyType::TINTEGER,
     self::FLAGS => [IPropertyFlags::WRITE_EMPTY],
-    self::VALUE => 0    
+    self::VALUE => 0,
+    self::MIN => 0
   ];
 
   
