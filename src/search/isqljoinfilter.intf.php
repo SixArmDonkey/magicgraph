@@ -13,9 +13,7 @@ declare( strict_types=1 );
 namespace buffalokiwi\magicgraph\search;
 
 use buffalokiwi\magicgraph\persist\ISQLRepository;
-use buffalokiwi\magicgraph\property\IPropertySet;
-use InvalidArgumentException;
-
+use buffalokiwi\magicgraph\search\ISQLJoinType;
 
 
 /**
@@ -26,35 +24,13 @@ use InvalidArgumentException;
  * property name during query generation.  Failure to validate column names will lead to SQL injection vulnerabilities.
  * ISearchQueryBuilder instances will NOT validate linked property names.
  */
-interface ISQLJoinFilter
+interface ISQLJoinFilter extends IJoinFilter
 {
-  /**
-   * Retrieve the property name that triggers this condition 
-   * @return string property name 
-   */
-  public function getPropertyName() : string;
-
-  
   /**
    * Retrieve the backing repository that manages the linked data.
    * @return ISQLRepository|null repo
    */
   public function getHostRepo() : ?ISQLRepository;
-  
-  
-  /**
-   * Should return something like ( getHostRepo() == null );
-   * @return bool is foreign
-   */
-  public function isForeign() : bool;
-  
-  
-  /**
-   * Retrieve the property set used for the join 
-   * @return IPropertySet prop set 
-   */
-  public function getPropertySet() : IPropertySet;
-  
   
   
   /**

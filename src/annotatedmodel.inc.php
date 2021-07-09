@@ -43,7 +43,7 @@ class AnnotatedModel extends DefaultModel
           $properties->addProperty( $val );
       }      
       else
-      {
+      {   
         foreach( $prop->getAttributes() as $a )
         {
           /* @var $a Attribute */

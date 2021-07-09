@@ -162,6 +162,15 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
   }
   
   
+  public function getFilter( string $propertyName ) : ISQLJoinFilter
+  {
+    if ( empty( $propertyName ) || !isset( $this->joinFilterList[$propertyName] ))
+      throw new \InvalidArgumentException( 'The supplied property name does not utilize a join filter' );
+    
+    return $this->joinFilterList[$propertyName];
+  }  
+  
+  
   /**
    * Retrieve the property set used when searching linked types (Join Filters).
    * @param string $name Trigger property name (What the IJoinFilter was registered as )

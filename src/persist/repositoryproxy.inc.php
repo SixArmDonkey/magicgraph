@@ -53,6 +53,17 @@ class RepositoryProxy extends SaveableMappingObjectFactoryProxy implements IRepo
   
   
   /**
+   * This should return something like 'mysql' or 'sqlserver' or 'redis' or 'lucene' or whatever.
+   * Each IRepository implementation should return the type here.
+   * @return string the type 
+   */
+  public function getPersistenceType() : string
+  {
+    return $this->repo->getPersistenceType();
+  }
+  
+  
+  /**
    * Retrieve an IRunnable instance to be used with some ITransaction instance.
    * This runnable will execute the supplied function prior to saving the model.
    *

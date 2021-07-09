@@ -59,4 +59,7 @@ interface ISearchQueryGenerator
    * @return array schema 
    */
   public function getSchema() : array;  
+  
+  
+  public function getFilter( string $propertyName ) : IJoinFilter;
 }

@@ -73,6 +73,7 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
    */
   private bool $loadedPrefixList = false;
   
+  
   /**
    * MySQLSearchQueryBuilder 
    * @param string $tableName The table name to run the query against 
@@ -86,14 +87,21 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
     $this->table = $tableName;
     $this->entityProps = $entityProps;
     
-        
     
     foreach( $joinFilterList as $filter )
     {
       $this->joinFilterList[$filter->getPropertyName()] = $filter;
       $this->linkedPropertySets[$filter->getPropertyName()] = $filter->getPropertySet();
     }
+  }
     
+  
+  public function getFilter( string $propertyName ) : ISQLJoinFilter
+  {
+    if ( empty( $propertyName ) || !isset( $this->joinFilterList[$propertyName] ))
+      throw new \InvalidArgumentException( 'The supplied property name does not utilize a join filter' );
+    
+    return $this->joinFilterList[$propertyName];
   }
   
   
@@ -117,6 +125,7 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
     
     return $out;
   }
+  
   
   /**
    * Retrieve the property set used when searching linked types (Join Filters).
