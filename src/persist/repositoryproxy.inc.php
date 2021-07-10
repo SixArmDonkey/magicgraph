@@ -193,9 +193,9 @@ class RepositoryProxy extends SaveableMappingObjectFactoryProxy implements IRepo
    * @param int $limit Max results to return 
    * @return array Results 
    */
-  public function findByProperties( array $map, int $limit = 100 ) : array
+  public function findByProperties( array $map, int $limit = 100, int $offset = 0 ) : array
   {
-    return $this->repo->findByProperties( $map, $limit );
+    return $this->repo->findByProperties( $map, $limit, $offset );
   }
   
   

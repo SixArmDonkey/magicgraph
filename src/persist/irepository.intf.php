@@ -138,7 +138,7 @@ interface IRepository extends ISaveableObjectFactory
    * @param int $limit Max results to return 
    * @return array Results 
    */
-  public function findByProperties( array $map, int $limit = 100 ) : array;
+  public function findByProperties( array $map, int $limit = 100, int $offset = 0 ) : array;
   
   
   /**

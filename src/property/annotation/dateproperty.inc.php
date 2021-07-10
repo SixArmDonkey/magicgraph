@@ -14,16 +14,16 @@ namespace buffalokiwi\magicgraph\property\annotation;
 
 use buffalokiwi\buffalotools\date\DateFactory;
 use buffalokiwi\magicgraph\property\EPropertyType;
+use buffalokiwi\magicgraph\property\IPropertyFlags;
 use buffalokiwi\magicgraph\property\PropertyBuilder;
 use buffalokiwi\magicgraph\property\SPropertyFlags;
-use \Attribute;
 
 
 #[Attribute]
 class DateProperty extends \buffalokiwi\magicgraph\property\DateProperty
 {
-  public function __construct( string $name, string $defaultValue = '', string $toStringFormat = 'Y-m-d H:i:s', 
-    array $flags = [], string $behaviorClass = '', string $flagsClass = SPropertyFlags::class )
+  public function __construct( string $name, ?string $defaultValue = null, string $toStringFormat = 'Y-m-d H:i:s', 
+    array $flags = [IPropertyFlags::USE_NULL], string $behaviorClass = '', string $flagsClass = SPropertyFlags::class )
   {
     $bc = ( !empty( $behaviorClass )) ? new $behaviorClass() : null;
     $fc = new $flagsClass( ...$flags );

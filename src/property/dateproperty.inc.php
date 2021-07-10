@@ -12,12 +12,15 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\property;
 
+use buffalokiwi\buffalotools\date\DateFactory;
 use buffalokiwi\buffalotools\date\DateTimeWrapper;
 use buffalokiwi\buffalotools\date\IDateFactory;
+use buffalokiwi\buffalotools\date\IDateTime;
 use buffalokiwi\magicgraph\ValidationException;
-use DateTimeImmutable;
+use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
+use InvalidArgumentException;
 
 
 /**
@@ -60,10 +63,10 @@ class DateProperty extends AbstractProperty implements IDateProperty
     parent::__construct( $builder );
     
     if ( empty( $toStringFormat ))
-      throw new \InvalidArgumentException( 'toStringFormat must not be empty' );
+      throw new InvalidArgumentException( 'toStringFormat must not be empty' );
     
     
-    $this->dateFactory = $dateFactory ?? \buffalokiwi\buffalotools\date\DateFactory::getInstance();
+    $this->dateFactory = $dateFactory ?? DateFactory::getInstance();
     $this->toStringFormat = $toStringFormat;
   }
   
@@ -132,15 +135,19 @@ class DateProperty extends AbstractProperty implements IDateProperty
       //..This is ok.
       if ( $value->getTimezone() !== false && $value->getTimezone()->getName() != 'UTC' )      
       {
-        $dt = new \DateTime();
+        $dt = new DateTime();
         $dt->setTimestamp( $value->getTimestamp());
         $dt->setTimezone( new DateTimeZone( 'UTC' ));
         $value = \DateTimeImmutable::createFromMutable( $dt );
       }
     }
-    else if ( !( $value instanceof IDateTime ))
+    else if ( $value instanceof IDateTime )
     {
-      if ( empty( $value ))
+      return $value;
+    }
+    else 
+    {      
+      if ( empty( $value ) || !is_string( $value ))
         $value = '0000-00-00 00:00:00';
       
       try {
@@ -148,8 +155,10 @@ class DateProperty extends AbstractProperty implements IDateProperty
       } catch( \Exception $e ) {
         throw new ValidationException( sprintf( 'Value %s for property %s must be parsable into a DateTime object.  Got %s', $value, $this->getName(), $e->getMessage()), 0, $e );
       }
+      
+      return new DateTimeWrapper( $value, $this->dateFactory->getLocalTimeZone());
     }
     
-    return new DateTimeWrapper( $value, $this->dateFactory->getLocalTimeZone());
+    
   }  
 }

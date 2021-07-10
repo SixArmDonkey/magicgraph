@@ -484,7 +484,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
    * @param int $limit Max results to return 
    * @return array Results 
    */
-  public function findByProperties( array $map, int $limit = 100 ) : array
+  public function findByProperties( array $map, int $limit = 100, int $offset = 0 ) : array
   {
     if ( !$this->properties()->isMember( ...array_keys( $map )))
     {
@@ -544,8 +544,11 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     
     $where = ' where ' . implode( ' and ', $conditions );
     
+    if ( $offset < 0 )
+      $offset = 0;
+    
     if ( $limit > 0 )
-      $where .= ' limit ' . $limit;
+      $where .= ' limit ' . $offset . ',' . $limit;
     
 
     $out = [];
