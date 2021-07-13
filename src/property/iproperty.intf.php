@@ -26,6 +26,21 @@ use InvalidArgumentException;
 interface IProperty
 {
   /**
+   * Checks the internal edited flag.
+   * This is set to true when setValue() is called 
+   * @return bool is edited 
+   */
+  public function isEdited() : bool;
+  
+  
+  /**
+   * Sets the internal edited flag to false 
+   * @return void
+   */
+  public function clearEditFlag() : void;
+  
+  
+  /**
    * Sets the property set to read only.
    * This is a method because the model still needs to be written to when 
    * creating instances populated from persistent storage.  The idea is for the

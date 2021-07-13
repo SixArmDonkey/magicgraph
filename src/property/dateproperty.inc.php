@@ -130,15 +130,21 @@ class DateProperty extends AbstractProperty implements IDateProperty
     if ( $value === null )
       return $value;
     
+    
     if ( $value instanceof DateTimeInterface )
     {
+     
       //..This is ok.
       if ( $value->getTimezone() !== false && $value->getTimezone()->getName() != 'UTC' )      
-      {
+      {         
         $dt = new DateTime();
         $dt->setTimestamp( $value->getTimestamp());
         $dt->setTimezone( new DateTimeZone( 'UTC' ));
-        $value = \DateTimeImmutable::createFromMutable( $dt );
+        return new DateTimeWrapper( \DateTimeImmutable::createFromMutable( $dt ), $this->dateFactory->getLocalTimeZone());
+      }
+      else 
+      {
+        return new DateTimeWrapper(( $value instanceof \DateTime ) ? \DateTimeImmutable::createFromMutable( $value ) : $value, $this->dateFactory->getLocalTimeZone());
       }
     }
     else if ( $value instanceof IDateTime )

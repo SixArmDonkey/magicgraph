@@ -23,6 +23,8 @@ use InvalidArgumentException;
  * Object properties cannot list a default value in the supplied builder instance.
  * default value is set to a new instance of the class described by IObjectPropertyBuilder::getClass()
  * To manipulate the default value, define a behavior callback to be returned by IPropertyBehavior::getInitCallback()
+ * 
+ * Note: Object properties are marked as edited when the object is replaced via setValue().
  */
 class ObjectProperty extends AbstractProperty implements IObjectProperty
 {

@@ -128,9 +128,15 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
     /* @var $enum IEnum */
     $behavior = $this->getPropertyBehavior();
     
-    $events = [];
-    
     $prop = $this;
+    
+    //..Sets the edited flag when the enum changes 
+    //..The default value has already been set, so this should be fine.
+    $enum->setOnChange( function() use($prop) {
+      $prop->setEdited();
+    });
+    
+    
     
     /* @var $b array */
     if ( $behavior != null )

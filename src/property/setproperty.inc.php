@@ -20,6 +20,8 @@ use InvalidArgumentException;
 
 /**
  * A property backed by an ISet instance
+ * 
+ * NOTE: Set properties are marked as edited when accessed
  */
 class SetProperty extends ObjectProperty implements ISetProperty
 {
@@ -134,6 +136,8 @@ class SetProperty extends ObjectProperty implements ISetProperty
    */
   protected function getPropertyValue( $value )
   {
+    //..Since we can't know if anyone edited the underlying set, we set this to edited when accessed.
+    $this->setEdited();
     /* @var $value ISet */    
     return $value;
   }  

@@ -115,7 +115,6 @@ class DefaultPropertySet extends BigSet implements IPropertySet
     
     return md5( $props );
   }
-
   
   
   public function setOnAddMember( \Closure $callback ) : void

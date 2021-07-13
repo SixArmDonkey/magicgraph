@@ -16,6 +16,10 @@ namespace buffalokiwi\magicgraph\property;
 use buffalokiwi\magicgraph\IModel;
 use buffalokiwi\magicgraph\ValidationException;
 
+
+/**
+ * Edited flag is controlled by the result of method IModel::hasEdits() of the underlying model.
+ */
 class ModelProperty extends ObjectProperty implements IModelProperty 
 {
   public function __construct( IObjectPropertyBuilder $builder )
@@ -28,6 +32,44 @@ class ModelProperty extends ObjectProperty implements IModelProperty
   {
     return $this->getValue();
   }
+  
+  
+  /**
+   * Checks the internal edited flag.
+   * This is set to true when setValue() is called 
+   * @return bool is edited 
+   */
+  public function isEdited() : bool
+  {
+    $value = $this->getValueAsModel();
+    
+    //..This handles when the value is set via IProperty::setValue()
+    if ( parent::isEdited())
+      return true;
+    
+    //..Checking for individual property edits on the nested model
+    if ( $value instanceof IModel )
+    {
+      return $value->hasEdits();
+    }
+    
+    return false;
+  }  
+  
+  
+  /**
+   * Sets the internal edited flag to false 
+   * @return void
+   */
+  public function clearEditFlag() : void
+  {
+    parent::clearEditFlag();
+    $value = $this->getValueAsModel();
+    if ( $value instanceof IModel )
+    {
+      $value->clearEditFlags();
+    }
+  }  
   
   
   protected function validatePropertyValue( $value ) : void

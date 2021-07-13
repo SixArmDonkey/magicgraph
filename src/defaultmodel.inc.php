@@ -140,10 +140,12 @@ class DefaultModel implements IModel
     $hash = md5( implode( '', $m ));
     $this->edited = new RuntimeBigSet( $m ,'@@' . $hash );  
     
-    
+    /*
     $this->properties->setOnAddMember( function( array $newMembers ) use($properties) : void {
       $this->edited->addMember( ...$newMembers );
     });
+     * 
+     */
     
     /**
      * Prefixes are used to identity a property of a child model
@@ -162,13 +164,14 @@ class DefaultModel implements IModel
         $prefixList[$p->getPrefix()] = $p->getName();
       }
       
+      /*
       if ( $p->getType()->is( IPropertyType::TENUM ))
-      {
-        /* @var $p IEnumProperty */
+      {        
         $p->getValueAsEnum()->setOnChange( function() use($p) {
           $this->edited->add( $p->getName());
         });
       }
+      */
     }
     
     
@@ -224,7 +227,7 @@ class DefaultModel implements IModel
   {
     if ( is_object( $this->cloneNames ))
       $this->cloneNames = clone $this->cloneNames;
-    $this->edited = clone $this->edited;
+    //$this->edited = clone $this->edited;
     $this->properties = clone $this->properties;
     $this->memberCache = [];
   }
@@ -266,13 +269,7 @@ class DefaultModel implements IModel
       if ( !$p->getFlags()->hasVal( IPropertyFlags::PRIMARY ) 
         && !( $p->getFlags()->hasVal( IPropertyFlags::WRITE_EMPTY ) && !$r->getProperty( $p->getName())->isEmpty()))
       {
-        try {
-          $r->setValue( $p->getName(), $this->getValue( $p->getName()));      
-        } catch( \Exception $e ) {
-          var_dump( $r->getValue( $p->getName()));
-          var_dump( $r->getProperty( $p->getName())->isEmpty());
-          die;
-        }
+        $r->setValue( $p->getName(), $this->getValue( $p->getName()));      
       }
     }
     
@@ -472,8 +469,8 @@ class DefaultModel implements IModel
       
       
       //..Set this property to edited 
-      if ( !$newProp->getFlags()->hasVal( IPropertyFlags::NO_INSERT ) && !$newProp->getFlags()->hasVal( IPropertyFlags::NO_UPDATE ))
-        $this->edited->add( $prop );   
+      //if ( !$newProp->getFlags()->hasVal( IPropertyFlags::NO_INSERT ) && !$newProp->getFlags()->hasVal( IPropertyFlags::NO_UPDATE ))
+      //  $this->edited->add( $prop );   
       
       return;
     }
@@ -485,6 +482,7 @@ class DefaultModel implements IModel
     $prop = $this->memberCache[$property];
     if ( $prop === null )
     {
+      
       $this->extraData[$property] = $value;
       return;
     }
@@ -509,10 +507,10 @@ class DefaultModel implements IModel
       }
     }
     
-    
     //..Set the value 
     $prop->setValue( $value );
     
+    /*
     //..Set this property to edited 
     if ( !$prop->getFlags()->hasVal( IPropertyFlags::NO_INSERT ) && !$prop->getFlags()->hasVal( IPropertyFlags::NO_UPDATE ))
     {
@@ -522,6 +520,7 @@ class DefaultModel implements IModel
         return;        
       }
     }
+    */
   }
     
   
@@ -535,13 +534,18 @@ class DefaultModel implements IModel
     $out = $this->getPropertyNameSet();
     $out->clear();
     
-    $out->add( ...$this->edited->getActiveMembers());
+    //$out->add( ...$this->edited->getActiveMembers());
 
     
     foreach( $this->properties->getProperties() as $p )
     {
       /* @var $p IProperty */
       
+      
+      if ( $p->isEdited())
+        $out->add( $p->getName());
+      
+      /*
       //..This is a messed up hack to ensure that changes to enum and set 
       //  properties are properly committed...
       //..This should be implemented as part of some on change event in the enum/set object
@@ -555,8 +559,11 @@ class DefaultModel implements IModel
       {
         $model = $this->getValue( $p->getName());
         if ( $model != null && $model->hasEdits())
+        {
           $out->add( $p->getName());
+        }
       }
+      */
     }
 
     
@@ -565,6 +572,7 @@ class DefaultModel implements IModel
     //  may not include the property names even though they were edited.
     //..This isn't the best way to do this.  There should be change events 
     //..and maybe require all IObjectProperty values to implement that change interface.
+    
     foreach( $out->getActiveMembers() as $name )
     {
       $val = $this->getValue( $name );
@@ -588,7 +596,17 @@ class DefaultModel implements IModel
    * @todo This method is too complex. Consider adding an isEdited property to IProperty instead of using all of this type checking.
    */
   public function hasEdits( string $prop = '' ) : bool 
-  {    
+  {
+    foreach( $this->properties->getProperties() as $prop )
+    {
+      if ( $prop->isEdited())
+        return true;
+    }
+    
+    return false;
+    
+    /*
+    
     if ( $this->testEdited( $prop ))
     {
       return true;
@@ -597,10 +615,8 @@ class DefaultModel implements IModel
     //..I didn't want to create a potentially invalid IPropertyType instance.
     foreach( $this->properties->getProperties() as $prop )
     {
-      /* @var $prop IProperty */
       if ( $prop->getType()->value() == IPropertyType::TMODEL ) 
       {
-        /* @var $model IModel */
         $model = $this->getValue( $prop->getName());
         
         if (( $model instanceof IModel ) && $model->hasEdits())
@@ -630,9 +646,10 @@ class DefaultModel implements IModel
     }
     
     return false;
+   */
   }
   
-  
+  /*
   private function testEdited( string $prop = '' ) : bool
   {
     if ( !empty( $prop ))
@@ -644,6 +661,7 @@ class DefaultModel implements IModel
       return !$this->edited->isEmpty();    
     }
   }
+  */
   
   
   /**
@@ -652,19 +670,28 @@ class DefaultModel implements IModel
    */
   public function clearEditFlags() : void
   {
-    $this->edited->clear();
+    //..Not sure this is necessary
     foreach( $this->prefixMap as $props )
     {
       foreach( $props as $data )
       {
         list( $prefix, $name ) = $data;
         $prop = $this->getProperty( $name );
-        $val = $prop->getValue();
-        if ( $val instanceof IModel )
-        {
-          $val->clearEditFlags();
-        }
+        $prop->clearEditFlag();
+        //$val = $prop->getValue(); //..calling getValue will set the edited flag 
+        //if ( $val instanceof IModel )
+       // {
+       //   $val->clearEditFlags();
+       // }
       }
+    }
+    
+    
+    //..This part is necessary
+    foreach( $this->properties->getProperties() as $prop )
+    {
+      /* @var $prop IProperty */
+      $prop->clearEditFlag();
     }
   }
   
@@ -876,6 +903,7 @@ class DefaultModel implements IModel
           $out[$prefix . $k] = $v;
         }
         
+        
         continue;
       }      
       
@@ -974,7 +1002,6 @@ class DefaultModel implements IModel
     }
     
     return $out;
-
   }
   
   

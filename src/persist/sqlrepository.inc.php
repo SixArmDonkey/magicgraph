@@ -801,9 +801,10 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
           $prop = $model->getPropertySet()->getProperty( $member );
           
           //..This should be some type of adapter.
+          //..This is stupid.  like for real, stupid.
           if ( $prop->getType()->value() == IPropertyType::TARRAY 
             && !$prop->getFlags()->hasAny( IPropertyFlags::NO_UPDATE, IPropertyFlags::NO_ARRAY_OUTPUT ))
-          {
+          {            
             $toSave[$member] = json_encode( $model->getValue( $member ));
           }
         }
@@ -821,7 +822,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       }
     } catch( \Exception | TypeError $e ) {
       $trans->rollBack();
-      
+
       throw $e;
     }
     

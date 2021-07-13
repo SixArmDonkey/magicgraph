@@ -111,6 +111,7 @@ abstract class AbstractProperty implements IProperty
   
   private ?Closure $validateBehaviorCallback = null;
   
+  private bool $isEdited = false;
  
   /**
    * Validate some property value.
@@ -214,6 +215,8 @@ abstract class AbstractProperty implements IProperty
     
     //..Set the property value
     $this->value = $this->setPropertyValue( $this->preparePropertyValue( $val ));    
+    
+    $this->isEdited = false;
     
     return $this;
   }
@@ -555,6 +558,45 @@ abstract class AbstractProperty implements IProperty
     {
       $this->value = $this->setPropertyValue( $value );
     }
+    
+    
+    
+    
+    if ( !$this->getFlags()->hasVal( IPropertyFlags::NO_INSERT ) && !$this->getFlags()->hasVal( IPropertyFlags::NO_UPDATE ))
+    {
+      $this->isEdited = true;
+    }
+  }
+  
+  
+  /**
+   * Checks the internal edited flag.
+   * This is set to true when setValue() is called 
+   * @return bool is edited 
+   */
+  public function isEdited() : bool
+  {
+    return $this->isEdited;
+  }
+  
+  
+  /**
+   * Sets the edited flag to true
+   * @return void
+   */
+  protected final function setEdited() : void
+  {
+    $this->isEdited = true;
+  }
+  
+  
+  /**
+   * Sets the internal edited flag to false 
+   * @return void
+   */
+  public function clearEditFlag() : void
+  {
+    $this->isEdited = false;
   }
   
   

@@ -53,8 +53,17 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
     //..Save the model
     $this->saveModel( $model );
     
+    //..Clear any edit flags after saving the model 
+    $model->clearEditFlags();
+    
     //..Do stuff after saving the model 
     $this->runAfterSave( $model );
+    
+    //..If the model has been modified after calling after save, then we save again!
+    if ( $model->hasEdits())
+    {
+      $this->saveModel( $model );
+    }
   }      
   
   
@@ -102,6 +111,11 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
     {
       //..Do stuff after saving the model 
       $this->runAfterSave( $m );
+      
+      if ( $m->hasEdits())
+      {
+        $this->saveModel( $m );
+      }      
     }
   }
 

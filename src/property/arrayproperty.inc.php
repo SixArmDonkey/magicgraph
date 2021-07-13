@@ -18,7 +18,9 @@ use buffalokiwi\magicgraph\ValidationException;
 
 /**
  * A property that can contain an array.
- * WARNING: Arrays are cast to strings.
+ * WARNING: Arrays may be cast to strings.
+ * 
+ * NOTE: Array properties are marked as edited when accessed
  */
 class ArrayProperty extends AbstractProperty
 {
@@ -183,4 +185,20 @@ class ArrayProperty extends AbstractProperty
   {
     return json_encode( $this->getValue());
   }
+  
+  
+  /**
+   * Called when getting a property value.
+   * Override this in child classes to modify the value prior to returning it from the getValue() method.
+   * This is the default implementation which simply returns the supplied value.
+   * @param mixed $value Value being returned
+   * @return mixed Value to return 
+   */
+  protected function getPropertyValue( $value )
+  {
+    //..Since we can't know if anyone edited the underlying set, we set this to edited when accessed.
+    $this->setEdited();
+    /* @var $value ISet */    
+    return $value;
+  }    
 }
