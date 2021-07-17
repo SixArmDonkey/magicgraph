@@ -793,7 +793,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       else 
       {      
         $props = $this->getModifiedProperties( $model );
-        
+       
         $toSave = $model->toArray( $props );
         
         foreach( $props->getActiveMembers() as $member )

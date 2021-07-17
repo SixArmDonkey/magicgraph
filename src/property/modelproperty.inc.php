@@ -64,11 +64,16 @@ class ModelProperty extends ObjectProperty implements IModelProperty
   public function clearEditFlag() : void
   {
     parent::clearEditFlag();
+    
+    //..Doing this will make relationship providers not save the model edits.
+    /*
     $value = $this->getValueAsModel();
     if ( $value instanceof IModel )
     {
       $value->clearEditFlags();
     }
+     * 
+     */
   }  
   
   

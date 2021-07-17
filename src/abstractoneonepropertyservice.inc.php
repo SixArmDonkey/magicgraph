@@ -84,6 +84,7 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
   public function getSaveFunction( IModel $parent ) : array
   {
     $id = $parent->getValue( $this->propCfg->getPropertyName());
+    
     if ( empty( $id ))
       return [];
     
@@ -91,7 +92,10 @@ abstract class AbstractOneOnePropertyService implements IModelPropertyProvider
     
     $model = $parent->getValue( $this->propCfg->getModelPropertyName());
     
+    
+    
     $res = $this->propCfg->getSaveFunction( $parent );
+    
     
     
     /* @var $model IModel */
