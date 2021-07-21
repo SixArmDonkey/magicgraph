@@ -48,4 +48,13 @@ interface IPropertyConfig
    * @return void
    */
   public function afterSave( IModel $model ) : void;
+  
+  
+  /**
+   * After each property set is loaded via the property factory, this is called to allow some
+   * property set to modify properties of another property set.
+   * @param array $config Config array - Modify this directly.
+   * @return void
+   */
+  public function modifyConfig( array &$config ) : void;  
 }

@@ -187,6 +187,7 @@ class DefaultPropertySet extends BigSet implements IPropertySet
     
     $this->config = array_merge( $this->config, $config );
     
+    
     $newNames = [];
     foreach( $this->propFactory->getProperties( ...$config ) as $property )
     {

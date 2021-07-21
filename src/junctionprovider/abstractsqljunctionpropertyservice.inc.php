@@ -303,7 +303,7 @@ abstract class AbstractSQLJunctionPropertyService extends AbstractOneManyPropert
       {
         //..Get the target model id 
         $newId = $rec->getValue( $this->tCols->getId());
-
+        
         //..If not empty, then add to the supplied ids list
         //..Models with empty ids are new and will be added 
         if ( !empty( $newId ))
@@ -314,7 +314,7 @@ abstract class AbstractSQLJunctionPropertyService extends AbstractOneManyPropert
       
       if ( !empty( $suppliedIds ))
       {
-        $existingJunction = $this->junctionRepo->select( $this->jCols->getId())->findByProperties([
+        $existingJunction = $this->junctionRepo->select( $this->jCols->getTargetId())->findByProperties([
           $this->jCols->getParentId() => $parentId,
           $this->jCols->getTargetId() => $suppliedIds
         ]);
@@ -328,7 +328,7 @@ abstract class AbstractSQLJunctionPropertyService extends AbstractOneManyPropert
       $existingIds = [];
       foreach( $existingJunction as $rec )
       {
-        $existingIds[] = $rec->getId();
+        $existingIds[] = $rec->getTargetId();
       }      
       
       //..Should probably check for duplicates first 

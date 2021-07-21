@@ -75,13 +75,18 @@ class PropertyFactory implements IPropertyFactory
     foreach( $config as $c )
     {
       try {
-        $out = array_merge( $out, $this->mapper->map( $c->getConfig()));
+        $out = array_merge( $out, $this->mapper->map( $c->getConfig()));                
       } catch( \Exception $e ) {
         trigger_error( 'Property configuration object ' . get_class( $c ) . ' contains errors and cannot be compiled', E_USER_ERROR );
         throw $e;
       }
     }
     
+    
+    foreach( $config as $c )
+    {
+      $c->modifyConfig( $out );
+    }
     
     return $out;
   }

@@ -14,12 +14,13 @@ declare( strict_types=1 );
 namespace buffalokiwi\magicgraph\property;
 
 use buffalokiwi\magicgraph\IModel;
+use buffalokiwi\magicgraph\IPropertyServiceProvider;
 use buffalokiwi\magicgraph\property\htmlproperty\IElement;
 use Closure;
 use Exception;
 
 
-abstract class BasePropertyConfig extends DefaultPropertyConfig implements IPropertyConfig
+abstract class BasePropertyConfig extends DefaultPropertyConfig implements IPropertyConfig, IPropertyServiceProvider
 {  
    /**
    * Primary key integer property 
@@ -449,6 +450,20 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   
   
   /**
+   * After each property set is loaded via the property factory, this is called to allow some
+   * property set to modify properties of another property set.
+   * @param array $config Config array - Modify this directly.
+   * @return void
+   */
+  public function modifyConfig( array &$config ) : void
+  {
+    //..do nothing
+  }
+  
+  
+  
+  
+  /**
    * Adds an additional validation closure to the stack.
    * @param Closure $f New validation function.  f( IModel $model ) : void throws ValidationException
    * @return void
@@ -525,6 +540,14 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
     $a = self::FENUM;
     $a[self::CLAZZ] = $class;
     $a[self::VALUE] = $value;
+    return $a;
+  }
+  
+  
+  protected function getArrayCfg( string $class ) : array
+  {
+    $a = self::FARRAY;
+    $a[self::CLAZZ] = $class;
     return $a;
   }
   

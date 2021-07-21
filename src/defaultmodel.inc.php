@@ -140,12 +140,10 @@ class DefaultModel implements IModel
     $hash = md5( implode( '', $m ));
     $this->edited = new RuntimeBigSet( $m ,'@@' . $hash );  
     
-    /*
+    
     $this->properties->setOnAddMember( function( array $newMembers ) use($properties) : void {
       $this->edited->addMember( ...$newMembers );
     });
-     * 
-     */
     
     /**
      * Prefixes are used to identity a property of a child model
@@ -542,9 +540,16 @@ class DefaultModel implements IModel
       /* @var $p IProperty */
       
       
+      try {
       if ( $p->isEdited())
         $out->add( $p->getName());
-      
+      } catch( \Exception $e ) {
+        var_dump( $e );
+        var_dump( $this->test);
+        var_dump( $out->getMembers());
+        var_dump( $p->getName());
+        die;
+      }
       /*
       //..This is a messed up hack to ensure that changes to enum and set 
       //  properties are properly committed...

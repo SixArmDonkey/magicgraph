@@ -722,10 +722,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     else 
     {
       $v = $model->getValue( $model->getPropertySet()->getPrimaryKey()->getName());
-      
       $hasPriValue = !empty( $v ) && $v !== '0';
     }
-    
     
     
     //..Check each pri key 
@@ -738,7 +736,6 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     /**
      * There needs to be special processing for some arrays.
      */
-    
     
     
     $doInsert = false;
