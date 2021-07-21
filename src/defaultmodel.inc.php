@@ -540,16 +540,8 @@ class DefaultModel implements IModel
       /* @var $p IProperty */
       
       
-      try {
       if ( $p->isEdited())
         $out->add( $p->getName());
-      } catch( \Exception $e ) {
-        var_dump( $e );
-        var_dump( $this->test);
-        var_dump( $out->getMembers());
-        var_dump( $p->getName());
-        die;
-      }
       /*
       //..This is a messed up hack to ensure that changes to enum and set 
       //  properties are properly committed...
