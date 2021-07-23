@@ -56,5 +56,5 @@ interface IPropertyConfig
    * @param array $config Config array - Modify this directly.
    * @return void
    */
-  public function modifyConfig( array &$config ) : void;  
+  public function modifyConfig( array &$config ) : void;
 }

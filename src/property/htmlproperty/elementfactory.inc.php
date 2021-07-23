@@ -109,6 +109,12 @@ class ElementFactory implements IElementFactory
     $elements = ['General' => []];
     $ps = $model->getPropertySet();
     
+    if ( interface_exists( '\buffalokiwi\retailrack\magicgraph\IRRPropertyFlags' ))
+      $flag = \buffalokiwi\retailrack\magicgraph\IRRPropertyFlags::NOT_EDITABLE;
+    else
+      $flag = '';
+    
+    
     $hasPri = true;
     foreach( $model->getPropertySet()->getPrimaryKeys() as $key )
     {
@@ -161,6 +167,8 @@ class ElementFactory implements IElementFactory
         continue;
       }
       else if ( $prop->getType()->is( IPropertyType::TMODEL, IPropertyType::TOBJECT ))
+        continue;
+      else if ( !empty( $flag ) && $prop->getFlags()->hasVal( $flag ))
         continue;
       
       if ( $value == '__ADD__' )

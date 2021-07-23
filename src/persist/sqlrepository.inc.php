@@ -500,8 +500,16 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       $op = null;
       if ( is_array( $val ) && sizeof( $val ) == 2 )
       {
-        $op = new ESQLOperator( end( $val ));
-        $val = reset( $val );
+        $ev = end( $val );
+        if ( is_string( $ev ))
+        {
+          try {
+            $op = new ESQLOperator( $ev );
+            $val = reset( $val );
+          } catch( \InvalidArgumentException $e ) {
+            //..do nothing
+          }
+        }
       }
       
       if ( !is_scalar( $val ) && !is_array( $val ))
@@ -760,7 +768,17 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       if ( !$hasPriValue || $doInsert )
       {
         $insProps = $this->getInsertProperties( $model );
-        $toSave = $model->toArray( $insProps );
+        
+        //..So...What happens if the model implementation returns unsanitized user data with this toArray() call.
+        //..Probably some nasty fucking things.  
+        $toSave = [];
+        foreach( $model->toArray( $insProps ) as $k => $v )
+        {
+          //..Double check that toArray() returned friendly properties 
+          if ( $insProps->isMember( $k ) && $insProps->hasVal( $k ))
+            $toSave[$k] = $v;
+        }
+        
         
         foreach( $insProps->getActiveMembers() as $member )
         {
@@ -791,7 +809,14 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       {      
         $props = $this->getModifiedProperties( $model );
        
-        $toSave = $model->toArray( $props );
+        //..Also double checking toArray() results here
+        $toSave = [];
+        foreach( $model->toArray( $props ) as $k => $v )
+        {
+          //..Double check that toArray() returned friendly properties 
+          if ( $props->isMember( $k ) && $props->hasVal( $k ))
+            $toSave[$k] = $v;
+        }
         
         foreach( $props->getActiveMembers() as $member )
         {

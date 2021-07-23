@@ -36,6 +36,11 @@ abstract class ServiceableAttributeModel extends ServiceableModel implements IAt
    */
   public function getAttributes( ?BigSet $names = null ) : array
   {        
+    if ( interface_exists( '\buffalokiwi\retailrack\magicgraph\IRRPropertyFlags' ))
+      $flag = \buffalokiwi\retailrack\magicgraph\IRRPropertyFlags::NOT_EDITABLE;
+    else
+      $flag = '';
+    
     $out = [];
     foreach( $this->getPropertySet()->getProperties() as $p )
     {
@@ -43,9 +48,12 @@ abstract class ServiceableAttributeModel extends ServiceableModel implements IAt
       
       if ( $names != null && ( !$names->isMember( $p->getName()) || !$names->hasVal( $p )))
         continue;      
-      else if ( $p->getFlags()->SUBCONFIG())
+      else if ( $p->getFlags()->SUBCONFIG() && ( empty( $flag ) || !$p->getFlags()->hasVal( $flag )))
+      {
         $out[$p->getName()] = [$p->getCaption(), $p->getValue()];
+      }
     }
+    
     return $out;
   }  
 }
