@@ -80,6 +80,9 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   
   private bool $testExists;
   
+  
+  private ?TransactionUnit $transaction = null;
+  
   /**
    * SQL Repository 
    * @param string $table Table name 
@@ -695,6 +698,36 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   }
   
   
+  
+  protected function beginTransaction() : void
+  {
+    if ( $this->transaction != null )
+      throw new \Exception( 'A transaction has already been started' );
+    
+    $this->transaction = new TransactionUnit( $this->dbc );
+  }
+  
+  
+  protected function commitTransaction() : void
+  {
+    if ( $this->transaction != null )
+    {
+      $this->transaction->commit();
+      $this->transaction = null;
+    }
+  }
+  
+  
+  protected function rollbackTransaction() : void
+  {
+    if ( $this->transaction != null )
+    {
+      $this->transaction->rollBack();
+      $this->transaction = null;
+    }
+  }  
+  
+  
   /**
    * Save some record.
    * If the primary key value is specified, this is considered to be an update.
@@ -709,7 +742,6 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   {
     $this->test( $model );
     
-    $trans = new TransactionUnit( $this->dbc );
     
     //..Get the primary key list 
     $priKeys = $model->getPropertySet()->getPrimaryKeys();
@@ -762,93 +794,83 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       }
     }
     
-    
-    
-    try {
-      if ( !$hasPriValue || $doInsert )
+    if ( !$hasPriValue || $doInsert )
+    {
+      $insProps = $this->getInsertProperties( $model );
+
+      //..So...What happens if the model implementation returns unsanitized user data with this toArray() call.
+      //..Probably some nasty fucking things.  
+      $toSave = [];
+      foreach( $model->toArray( $insProps ) as $k => $v )
       {
-        $insProps = $this->getInsertProperties( $model );
-        
-        //..So...What happens if the model implementation returns unsanitized user data with this toArray() call.
-        //..Probably some nasty fucking things.  
-        $toSave = [];
-        foreach( $model->toArray( $insProps ) as $k => $v )
+        //..Double check that toArray() returned friendly properties 
+        if ( $insProps->isMember( $k ) && $insProps->hasVal( $k ))
+          $toSave[$k] = $v;
+      }
+
+
+      foreach( $insProps->getActiveMembers() as $member )
+      {
+        $prop = $model->getPropertySet()->getProperty( $member );
+
+        //..Yep, this should be an adapter or something.
+        if ( $prop->getType()->value() == IPropertyType::TARRAY 
+          && !$prop->getFlags()->hasAny( IPropertyFlags::NO_INSERT, IPropertyFlags::NO_ARRAY_OUTPUT ))
         {
-          //..Double check that toArray() returned friendly properties 
-          if ( $insProps->isMember( $k ) && $insProps->hasVal( $k ))
-            $toSave[$k] = $v;
+          $toSave[$member] = json_encode( $model->getValue( $member ));
         }
-        
-        
-        foreach( $insProps->getActiveMembers() as $member )
-        {
-          $prop = $model->getPropertySet()->getProperty( $member );
-          
-          //..Yep, this should be an adapter or something.
-          if ( $prop->getType()->value() == IPropertyType::TARRAY 
-            && !$prop->getFlags()->hasAny( IPropertyFlags::NO_INSERT, IPropertyFlags::NO_ARRAY_OUTPUT ))
-          {
-            $toSave[$member] = json_encode( $model->getValue( $member ));
-          }
+      }
+
+      //..Insert if there are no valid pri key values 
+      $id = $this->dbc->insert( 
+        $this->table, 
+        $this->mapper()->convertArrayKeys( $toSave, false )
+      );
+
+      if ( sizeof( $priKeys ) == 1 && !$doInsert )
+      {
+        //..Set the primary key value if there's only a single key
+        $key = reset( $priKeys );
+        $model->setValue( $key->getName(), $id );
+      }
+    }
+    else 
+    {      
+      $props = $this->getModifiedProperties( $model );
+
+      //..Also double checking toArray() results here
+      $toSave = [];
+      foreach( $model->toArray( $props ) as $k => $v )
+      {
+        //..Double check that toArray() returned friendly properties 
+        if ( $props->isMember( $k ) && $props->hasVal( $k ))
+          $toSave[$k] = $v;
+      }
+
+      foreach( $props->getActiveMembers() as $member )
+      {
+        $prop = $model->getPropertySet()->getProperty( $member );
+
+        //..This should be some type of adapter.
+        //..This is stupid.  like for real, stupid.
+        if ( $prop->getType()->value() == IPropertyType::TARRAY 
+          && !$prop->getFlags()->hasAny( IPropertyFlags::NO_UPDATE, IPropertyFlags::NO_ARRAY_OUTPUT ))
+        {            
+          $toSave[$member] = json_encode( $model->getValue( $member ));
         }
-        
-        //..Insert if there are no valid pri key values 
-        $id = $this->dbc->insert( 
+      }
+
+
+      if ( !$props->isEmpty() && !empty( $toSave ))
+      {
+        //..Update if there are.
+        $this->dbc->update( 
           $this->table, 
+          $this->mapper()->convertArrayKeys( $updKeys, false ),
           $this->mapper()->convertArrayKeys( $toSave, false )
         );
-
-        if ( sizeof( $priKeys ) == 1 && !$doInsert )
-        {
-          //..Set the primary key value if there's only a single key
-          $key = reset( $priKeys );
-          $model->setValue( $key->getName(), $id );
-        }
       }
-      else 
-      {      
-        $props = $this->getModifiedProperties( $model );
-       
-        //..Also double checking toArray() results here
-        $toSave = [];
-        foreach( $model->toArray( $props ) as $k => $v )
-        {
-          //..Double check that toArray() returned friendly properties 
-          if ( $props->isMember( $k ) && $props->hasVal( $k ))
-            $toSave[$k] = $v;
-        }
-        
-        foreach( $props->getActiveMembers() as $member )
-        {
-          $prop = $model->getPropertySet()->getProperty( $member );
-          
-          //..This should be some type of adapter.
-          //..This is stupid.  like for real, stupid.
-          if ( $prop->getType()->value() == IPropertyType::TARRAY 
-            && !$prop->getFlags()->hasAny( IPropertyFlags::NO_UPDATE, IPropertyFlags::NO_ARRAY_OUTPUT ))
-          {            
-            $toSave[$member] = json_encode( $model->getValue( $member ));
-          }
-        }
-
-        
-        if ( !$props->isEmpty() && !empty( $toSave ))
-        {
-          //..Update if there are.
-          $this->dbc->update( 
-            $this->table, 
-            $this->mapper()->convertArrayKeys( $updKeys, false ),
-            $this->mapper()->convertArrayKeys( $toSave, false )
-          );
-        }
-      }
-    } catch( \Exception | TypeError $e ) {
-      $trans->rollBack();
-
-      throw $e;
     }
-    
-    $trans->commit();
   }
   
   

@@ -96,6 +96,12 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   ];
   
   
+  const FSTRING_WE = [
+    self::TYPE => IPropertyType::TSTRING,
+    self::FLAGS => [IPropertyFlags::WRITE_EMPTY],
+    self::VALUE => ''
+  ];  
+  
   /**
    * Required string property
    */

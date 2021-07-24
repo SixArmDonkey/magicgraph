@@ -13,12 +13,18 @@ namespace buffalokiwi\magicgraph\persist;
 
 use buffalokiwi\magicgraph\DBException;
 use buffalokiwi\magicgraph\IModel;
+use buffalokiwi\magicgraph\IModelMapper;
+use buffalokiwi\magicgraph\property\IPropertyConfig;
+use buffalokiwi\magicgraph\property\IPropertySet;
 use buffalokiwi\magicgraph\ValidationException;
 use Closure;
 
 
 abstract class SaveableMappingObjectFactory extends MappingObjectFactory implements ISaveableObjectFactory
 {
+  private ESaveState $saveState;
+  
+  
   /**
    * What to do when saving the model.
    * ie: commit to some database or whatever.
@@ -26,6 +32,13 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
    * @throws DBException
    */
   protected abstract function saveModel( IModel $model );
+  
+  
+  public function __construct( IModelMapper $mapper, ?IPropertySet $properties = null )
+  {
+    parent::__construct( $mapper, $properties );
+    $this->saveState = new ESaveState();
+  }
   
   
   /**
@@ -40,29 +53,50 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
   public function save( IModel $model ) : void
   {
     $this->test( $model );
-        
+
+    if ( $this->saveState->greaterThanValue( ESaveState::NONE ))
+      return;
+
+    
     //..Do stuff before validation 
     $this->beforeValidate( $model );
+        
     
+    $this->saveState->VALIDATE;
     //..Validate the model 
     $model->validate();
     
-    //..Do stuff before the save operation 
-    $this->runBeforeSave( $model );    
+    $this->beginTransaction();
     
-    //..Save the model
-    $this->saveModel( $model );
-    
-    //..Clear any edit flags after saving the model 
-    $model->clearEditFlags();
-    
-    //..Do stuff after saving the model 
-    $this->runAfterSave( $model );
-    
-    //..If the model has been modified after calling after save, then we save again!
-    if ( $model->hasEdits())
-    {
+    try {
+      //..Do stuff before the save operation 
+      $this->saveState->BEFORE_SAVE;
+      $this->runBeforeSave( $model );    
+
+      $this->saveState->SAVE;
+      //..Save the model
       $this->saveModel( $model );
+
+      //..Clear any edit flags after saving the model 
+      $model->clearEditFlags();
+
+      $this->saveState->AFTER_SAVE;
+      //..Do stuff after saving the model 
+      $this->runAfterSave( $model );
+
+      //..If the model has been modified after calling after save, then we save again!
+      if ( $model->hasEdits())
+      {
+        $model->validate();
+        $this->saveModel( $model );
+      }
+      
+      $this->commitTransaction();
+    } catch( \Exception $e ) {
+      $this->rollbackTransaction();
+      throw $e;
+    } finally {
+      $this->saveState->NONE;
     }
   }      
   
@@ -91,31 +125,52 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
   {
     $this->test( ...$model );
     
-    foreach( $model as $m )
-    {
-      $this->beforeValidate( $m );
-      $m->validate();      
-      
-      //..Do stuff before the save operation 
-      $this->runBeforeSave( $m );    
-    }
+    if ( $this->saveState->greaterThanValue( ESaveState::NONE ))
+      return;
     
-    foreach( $model as $m )
-    {
-      //..Save the model
-      $this->saveModel( $m );
-    }
+    $this->beginTransaction();
     
-    
-    foreach( $model as $m )
-    {
-      //..Do stuff after saving the model 
-      $this->runAfterSave( $m );
-      
-      if ( $m->hasEdits())
+    try {
+      $this->saveState->VALIDATE;
+      foreach( $model as $m )
       {
+        $this->beforeValidate( $m );
+        $m->validate();      
+      }
+      
+      $this->saveState->BEFORE_SAVE;
+      foreach( $model as $m )
+      {
+        //..Do stuff before the save operation 
+        $this->runBeforeSave( $m );    
+      }
+
+      $this->saveState->SAVE;
+      foreach( $model as $m )
+      {
+        //..Save the model
         $this->saveModel( $m );
-      }      
+      }
+
+      $this->saveState->AFTER_SAVE;
+      foreach( $model as $m )
+      {
+        //..Do stuff after saving the model 
+        $this->runAfterSave( $m );
+
+        if ( $m->hasEdits())
+        {
+          $m->validate();
+          $this->saveModel( $m );
+        }      
+      }
+      
+      $this->commitTransaction();
+    } catch( \Exception $e ) {
+      $this->rollbackTransaction();
+      throw $e;
+    } finally {
+      $this->saveState->NONE;
     }
   }
 
@@ -175,6 +230,25 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
   }
   
   
+  protected function beginTransaction() : void
+  {
+    //..do nothing
+  }
+  
+  
+  protected function commitTransaction() : void
+  {
+    //..do nothing
+  }
+  
+  
+  protected function rollbackTransaction() : void
+  {
+    //..do nothing 
+  }
+  
+  
+  
   private function runBeforeSave( IModel $model ) : void
   {
     $this->beforeSave( $model );
@@ -182,7 +256,7 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
     //..Run the property before save methods 
     foreach( $model->getPropertySet()->getConfigObjects() as $c )
     {
-      /* @var $c \buffalokiwi\magicgraph\property\IPropertyConfig */
+      /* @var $c IPropertyConfig */
       $c->beforeSave( $model );
     }
   }
@@ -195,7 +269,7 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
     //..Run the property before save methods 
     foreach( $model->getPropertySet()->getConfigObjects() as $c )
     {
-      /* @var $c \buffalokiwi\magicgraph\property\IPropertyConfig */
+      /* @var $c IPropertyConfig */
       $c->afterSave( $model );
     }
   }

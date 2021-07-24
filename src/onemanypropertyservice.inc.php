@@ -39,6 +39,9 @@ class OneManyPropertyService extends AbstractOneManyPropertyService
    */
   private $foreignKey;
   
+  private array $conditions = [];
+  private int $limit = 100;
+  
   
   /**
    * @param IOneManyPropSvcCfg Property Service config 
@@ -47,21 +50,35 @@ class OneManyPropertyService extends AbstractOneManyPropertyService
     $args = func_get_args();
     $num = func_num_args();
     
-    if ( $num == 1 )
-      $this->__constructnew( ...$args );
-    else if ( $num == 3 )
-      $this->__constructold( ...$args );
-    else
+    if ( empty( $args ))
       throw new InvalidArgumentException( 'Constructor accepts one or three arguments' );
+    
+    if ( $args[0] instanceof IOneManyPropSvcCfg )
+      $this->__constructnew( ...$args );
+    else
+      $this->__constructold( ...$args );
   }
   
   
-  public function __constructnew( IOneManyPropSvcCfg $cfg )
+  public function __constructnew( IOneManyPropSvcCfg $cfg, array $conditions = [], int $limit = 100 )
   {
     parent::__construct( $cfg );
     
     $this->repo = $cfg->getRepository();
     $this->foreignKey = $cfg->getForeignKey();
+    
+    if ( $limit > 0 )
+      $this->limit = $limit;
+    
+    $props = $this->repo->createPropertySet();
+    
+    foreach( $conditions as $k => $v )
+    {
+      if ( !$props->isMember( $k ))
+        throw new \InvalidArgumentException( $k . ' is not a valid member of this property set' );
+      
+      $this->conditions[$k] = $v;
+    }
   }
   
   
@@ -73,6 +90,7 @@ class OneManyPropertyService extends AbstractOneManyPropertyService
    * @param string $foreignKey Property name from supplied IRepository that is 
    * queried against IPropertySvcConfig::getPropertyName();
    * @param string $modelPropertyName Optional model property name. 
+   * @deprecated To be removed when I update composition root
    */
   public function __constructold( IPropertySvcConfig $cfg, IRepository $repo, string $foreignKey )
   {
@@ -101,6 +119,9 @@ class OneManyPropertyService extends AbstractOneManyPropertyService
   
   protected function loadModels( int $parentId, IModel $parent ) : array
   {
-    return $this->repo->getForProperty( $this->foreignKey, (string)$parentId );
+    $cond = $this->conditions;
+    $cond[$this->foreignKey] = (string)$parentId;
+    
+    return $this->repo->findByProperties( $cond, $this->limit );
   }
 }

@@ -32,6 +32,7 @@ class OneManyPropertySaveFunction implements ISaveFunction
   private $modelIdPropName;
   private $beforeSave;
   private $afterSave;
+  private bool $manageDeletes;
   
   
   /**
@@ -55,7 +56,7 @@ class OneManyPropertySaveFunction implements ISaveFunction
    * @param string $parentPropName The linked model property name that contains the id of the parent model
    * @param string $modelIdPropName The linked model id property name 
    */
-  public function __construct( IModel $parent, IRepository $repo, string $parentModelName, string $parentPropName, string $modelIdPropName, ?\Closure $beforeSave = null, ?\Closure $afterSave = null )
+  public function __construct( IModel $parent, IRepository $repo, string $parentModelName, string $parentPropName, string $modelIdPropName, ?\Closure $beforeSave = null, ?\Closure $afterSave = null, bool $manageDeletes = true )
   {
     $this->parent = $parent;
     $this->repo = $repo;
@@ -64,6 +65,7 @@ class OneManyPropertySaveFunction implements ISaveFunction
     $this->modelIdPropName = $modelIdPropName;
     $this->beforeSave = $beforeSave;
     $this->afterSave = $afterSave;
+    $this->manageDeletes = $manageDeletes;
   }
   
   public function getSaveFunction() : array
@@ -98,6 +100,8 @@ class OneManyPropertySaveFunction implements ISaveFunction
     
     $self = $this;
     
+    $md = $this->manageDeletes;
+    
     return $this->repo->getSaveFunction( 
       function( IRepository $repo, IModel ...$models ) use($priKeys,$self) {
         $parentId = (string)$self->parent->getValue( $priKeys[0]->getName());    
@@ -115,7 +119,10 @@ class OneManyPropertySaveFunction implements ISaveFunction
         }
       }, 
       
-      function( IRepository $repo, IModel ...$models ) use($ids,$priKeys,$self) {
+      function( IRepository $repo, IModel ...$models ) use($ids,$priKeys,$self, $md) {
+        if ( !$md )
+          return;
+        
         
         $parentId = (string)$self->parent->getValue( $priKeys[0]->getName());    
         foreach( $models as $a )

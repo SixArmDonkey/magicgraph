@@ -96,6 +96,11 @@ class MoneyProperty extends BoundedProperty implements IMoneyProperty
     {
       if ( empty( $value ))
         $value = '0';
+      
+      
+      if ( is_string( $value ) && strpos( $value, '.' ) === false )
+        $value .= '.00';
+      
       return $this->factory->getMoney( $value );
       
     }

@@ -18,13 +18,14 @@ namespace buffalokiwi\magicgraph\persist;
  * units of work.  Each supplied ITransaction can use a different storage
  * engine stored, on whatever network, if desired.
  * 
- * 1) Transactions are all started in the order they are received.
- * 2) Transactions are run/executed and committed in the order they were received 
- * 3) If an exception occurs, the current transaction is rolled back, and any remaining non-committed 
+ * 1) Transactions are started, run/executed and committed in the order they were received 
+ * 2) If an exception occurs, the current transaction is rolled back, and any remaining non-committed 
  * transactions are also rolled back.  
  * 
- * While this does not guarantee that everything will be rolled back, it should
- * help reduce the number of errors.
+ * This does not guarantee everything will be rolled back (commit fail or unsupported driver feature)
+ * 
+ * @todo This needs better exception handling during rollback 
+ * @todo rollback on commit fail should be an option.  We may not want to roll everything back if one of many commits failed?  Maybe?
  */
 class ChainedTransactionManager implements IRunnable
 {
