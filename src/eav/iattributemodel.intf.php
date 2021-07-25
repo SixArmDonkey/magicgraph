@@ -18,8 +18,7 @@ use buffalokiwi\magicgraph\IModel;
 
 /**
  * A model that can attach to an attribute group.
- * Attribute groups are composed of attributes that can be attached to 
- * the model at runtime.
+ * Attribute groups are composed of attributes that can be attached to the model at runtime.
  * 
  * @todo evaluate the usefulness of this interface. Seems like it also needs a getAttributes() method.
  */

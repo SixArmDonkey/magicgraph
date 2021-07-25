@@ -20,7 +20,7 @@ use InvalidArgumentException;
 /**
  * Property behavior for some property.  Extend this and override methods.
  * 
-
+ * @todo Add a rollback behavior or some sort of cleanup/error handler
  */
 class GenericNamedPropertyBehavior extends PropertyBehavior implements INamedPropertyBehavior
 {

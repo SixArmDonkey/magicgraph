@@ -74,4 +74,16 @@ class IntegerProperty extends BoundedProperty implements IIntegerProperty
   {
     return (int)$value;
   }
+  
+  
+  protected function isPropertyEmpty( $value ) : bool
+  {
+   
+    if ( is_string( $value ) && ctype_digit((string)$value ))
+      return empty((int)$value);
+    
+    return parent::isPropertyEmpty( $value );
+      
+    
+  }
 }

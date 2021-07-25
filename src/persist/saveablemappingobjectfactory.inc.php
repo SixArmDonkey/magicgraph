@@ -52,49 +52,59 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
    */
   public function save( IModel $model ) : void
   {
-    $this->test( $model );
-
-    if ( $this->saveState->greaterThanValue( ESaveState::NONE ))
-      return;
-
-    
-    //..Do stuff before validation 
-    $this->beforeValidate( $model );
-        
-    
-    $this->saveState->VALIDATE;
-    //..Validate the model 
-    $model->validate();
-    
-    $this->beginTransaction();
-    
     try {
-      //..Do stuff before the save operation 
-      $this->saveState->BEFORE_SAVE;
-      $this->runBeforeSave( $model );    
+      $this->test( $model );
 
-      $this->saveState->SAVE;
-      //..Save the model
-      $this->saveModel( $model );
-
-      //..Clear any edit flags after saving the model 
-      $model->clearEditFlags();
-
-      $this->saveState->AFTER_SAVE;
-      //..Do stuff after saving the model 
-      $this->runAfterSave( $model );
-
-      //..If the model has been modified after calling after save, then we save again!
-      if ( $model->hasEdits())
+      if ( $this->saveState->AFTER_SAVE())
       {
-        $model->validate();
-        $this->saveModel( $model );
+        //..If the model has been modified after calling after save, then we save again!
+        if ( $model->hasEdits())
+        {
+          $model->validate();
+          $this->saveModel( $model );
+          $model->clearEditFlags();
+        }
       }
-      
-      $this->commitTransaction();
-    } catch( \Exception $e ) {
-      $this->rollbackTransaction();
-      throw $e;
+
+
+      //..Do stuff before validation 
+      $this->beforeValidate( $model );
+
+
+      $this->saveState->VALIDATE;
+      //..Validate the model 
+      $model->validate();
+
+      $this->beginTransaction();
+
+      try {
+        //..Do stuff before the save operation 
+        $this->saveState->BEFORE_SAVE;
+        $this->runBeforeSave( $model );    
+
+        $this->saveState->SAVE;
+        //..Save the model
+        $this->saveModel( $model );
+
+        //..Clear any edit flags after saving the model 
+        $model->clearEditFlags();
+
+        $this->saveState->AFTER_SAVE;
+        //..Do stuff after saving the model 
+        $this->runAfterSave( $model );
+
+        //..If the model has been modified after calling after save, then we save again!
+        if ( $model->hasEdits())
+        {
+          $model->validate();
+          $this->saveModel( $model );
+        }
+
+        $this->commitTransaction();
+      } catch( \Exception $e ) {
+        $this->rollbackTransaction();
+        throw $e;
+      }
     } finally {
       $this->saveState->NONE;
     }
@@ -123,52 +133,66 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
    */
   public function saveAll( IModel ...$model ) : void
   {
-    $this->test( ...$model );
-    
-    if ( $this->saveState->greaterThanValue( ESaveState::NONE ))
-      return;
-    
-    $this->beginTransaction();
-    
     try {
-      $this->saveState->VALIDATE;
-      foreach( $model as $m )
-      {
-        $this->beforeValidate( $m );
-        $m->validate();      
-      }
-      
-      $this->saveState->BEFORE_SAVE;
-      foreach( $model as $m )
-      {
-        //..Do stuff before the save operation 
-        $this->runBeforeSave( $m );    
-      }
+      $this->test( ...$model );
 
-      $this->saveState->SAVE;
-      foreach( $model as $m )
+      if ( $this->saveState->AFTER_SAVE())
       {
-        //..Save the model
-        $this->saveModel( $m );
-      }
-
-      $this->saveState->AFTER_SAVE;
-      foreach( $model as $m )
-      {
-        //..Do stuff after saving the model 
-        $this->runAfterSave( $m );
-
-        if ( $m->hasEdits())
+        foreach( $model as $m )
         {
-          $m->validate();
+          //..If the model has been modified after calling after save, then we save again!
+          if ( $m->hasEdits())
+          {
+            $m->validate();
+            $this->saveModel( $m );
+            $m->clearEditFlags();
+          }
+        }
+      }    
+
+
+      $this->beginTransaction();
+
+      try {
+        $this->saveState->VALIDATE;
+        foreach( $model as $m )
+        {
+          $this->beforeValidate( $m );
+          $m->validate();      
+        }
+
+        $this->saveState->BEFORE_SAVE;
+        foreach( $model as $m )
+        {
+          //..Do stuff before the save operation 
+          $this->runBeforeSave( $m );    
+        }
+
+        $this->saveState->SAVE;
+        foreach( $model as $m )
+        {
+          //..Save the model
           $this->saveModel( $m );
-        }      
+        }
+
+        $this->saveState->AFTER_SAVE;
+        foreach( $model as $m )
+        {
+          //..Do stuff after saving the model 
+          $this->runAfterSave( $m );
+
+          if ( $m->hasEdits())
+          {
+            $m->validate();
+            $this->saveModel( $m );
+          }      
+        }
+
+        $this->commitTransaction();
+      } catch( \Exception $e ) {
+        $this->rollbackTransaction();
+        throw $e;
       }
-      
-      $this->commitTransaction();
-    } catch( \Exception $e ) {
-      $this->rollbackTransaction();
-      throw $e;
     } finally {
       $this->saveState->NONE;
     }

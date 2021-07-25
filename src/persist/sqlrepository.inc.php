@@ -804,8 +804,19 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       foreach( $model->toArray( $insProps ) as $k => $v )
       {
         //..Double check that toArray() returned friendly properties 
-        if ( $insProps->isMember( $k ) && $insProps->hasVal( $k ))
+        //
+        //..This may throw an exception prior to the member check.  
+        $p = $model->getPropertySet()->getProperty( $k );
+        
+        if ( $k == $p->getPrefix() || $k . '_' == $p->getPrefix())
+        {
+          continue;
+        }
+        
+        if ( $model->getPropertySet()->isMember( $k ))
+        {
           $toSave[$k] = $v;
+        }
       }
 
 
@@ -836,17 +847,31 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
     }
     else 
     {      
-      $props = $this->getModifiedProperties( $model );
+      $props = $this->getModifiedProperties( $model, true );
 
       //..Also double checking toArray() results here
       $toSave = [];
       foreach( $model->toArray( $props ) as $k => $v )
       {
         //..Double check that toArray() returned friendly properties 
-        if ( $props->isMember( $k ) && $props->hasVal( $k ))
+        
+        //..This may throw an exception prior to the member check.  
+        $p = $model->getPropertySet()->getProperty( $k );
+        
+        
+        if ( $k == $p->getPrefix() || $k . '_' == $p->getPrefix())
+        {
+          continue;
+        }
+        
+        if ( $model->getPropertySet()->isMember( $k ))
+        {
           $toSave[$k] = $v;
+        }
       }
-
+      
+      
+      
       foreach( $props->getActiveMembers() as $member )
       {
         $prop = $model->getPropertySet()->getProperty( $member );

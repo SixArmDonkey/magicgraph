@@ -527,7 +527,7 @@ class DefaultModel implements IModel
    * @return IPropertySet modified properties 
    * @final 
    */
-  public function getModifiedProperties() : IBigSet
+  public function getModifiedProperties( bool $includePrefixedProperties = true ) : IBigSet
   {
     $out = $this->getPropertyNameSet();
     $out->clear();
@@ -535,6 +535,8 @@ class DefaultModel implements IModel
     //$out->add( ...$this->edited->getActiveMembers());
 
     
+    
+      $newProps = [];
     foreach( $this->properties->getProperties() as $p )
     {
       /* @var $p IProperty */
@@ -542,6 +544,19 @@ class DefaultModel implements IModel
       
       if ( $p->isEdited())
         $out->add( $p->getName());
+      
+      
+      if ( !empty( $p->getPrefix()) && $p->getType()->is( IPropertyType::TMODEL ))
+      {
+        $pm = $p->getValue();
+        /* @var $pm IModel */
+        
+        $newProps = [];
+        foreach( $p->getValue()->getModifiedProperties()->getActiveMembers() as $p1 )
+        {
+          $newProps[] = $p->getPrefix() . $p1;
+        }
+      }
       /*
       //..This is a messed up hack to ensure that changes to enum and set 
       //  properties are properly committed...
@@ -576,6 +591,23 @@ class DefaultModel implements IModel
       if ( !is_null( $val ) && !is_scalar( $val ))
       {
         $out->add( $name );
+      }
+    }
+    
+    $out->addMember( ...$newProps );
+    $out->add( ...$newProps );
+    
+    /* @var $out buffalokiwi\buffalotools\types\IBigSet */
+    
+    
+    if ( !$includePrefixedProperties )
+    {
+      foreach( $this->properties->getProperties() as $p )
+      {
+        if ( !empty( $p->getPrefix()))
+        {
+          $out->remove( $p->getName());
+        }
       }
     }
     
@@ -894,7 +926,7 @@ class DefaultModel implements IModel
       $val = $this->getValue( $p );
       
       if ( $_depth < $this->maxDepth && !empty( $prefix ) && ( $val instanceof IModel ))
-      {
+      {        
         foreach( $val->toArray( null, $includeArrays, $includeModels, $includeExtra, $_depth + 1 ) as $k => $v )
         {
           $out[$prefix . $k] = $v;
@@ -924,9 +956,6 @@ class DefaultModel implements IModel
           
           $out[$prop->getName()] = $this->modifyToArrayValue( $prop, $a );
         }
-        //..Don't want to output invalid column names...
-        //else 
-          //$out[$prop->getName()] = $prop->__toString();
       }
       else if ( empty( $prefix ) && ( $val instanceof IModel ))
       {
@@ -1191,13 +1220,31 @@ class DefaultModel implements IModel
   {
     $out = $this->getPropertyNameSet();
     
+    $newProps = [];
     foreach( $this->properties->getProperties() as $prop )
     {
       if ( !$prop->getFlags()->hasVal( IPropertyFlags::NO_INSERT ))
       {
+      
+        if ( !empty( $prop->getPrefix()) && $prop->getType()->is( IPropertyType::TMODEL ))
+        {
+          //$pm = $prop->getValue();
+          /* @var $pm IModel */
+
+          $newProps = [];
+          foreach( $prop->getValue()->getModifiedProperties()->getActiveMembers() as $p1 )
+          {
+            $newProps[] = $prop->getPrefix() . $p1;
+          }
+        }
+        
         $out->add( $prop->getName());
       }
     }
+    
+    $out->addMember( ...$newProps );
+    $out->add( ...$newProps );
+    
     
     return $out;    
   }

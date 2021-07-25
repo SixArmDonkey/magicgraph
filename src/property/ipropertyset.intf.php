@@ -27,6 +27,7 @@ use InvalidArgumentException;
  */
 interface IPropertySet extends IBigSet
 {  
+  
   /**
    * Sets the property set to read only.
    * This is a method because the model still needs to be written to when 
@@ -174,7 +175,7 @@ interface IPropertySet extends IBigSet
   
   /**
    * Adds a property to the property set.  For a more robust solution, please use the preferred method: addPropertyConfig().
-   * @param \buffalokiwi\magicgraph\property\IProperty $prop Property to add
+   * @param IProperty $prop Property to add
    * @return void
    */
   public function addProperty( IProperty $prop ) : void;  

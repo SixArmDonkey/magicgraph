@@ -191,9 +191,9 @@ class MappingObjectFactory implements IObjectFactory
   }
   
   
-  protected function getModifiedProperties( IModel $model ) : IBigSet 
+  protected function getModifiedProperties( IModel $model, bool $includePrefixedProperties = true ) : IBigSet 
   {
-    return $this->filterPropertyNamesForSave( $model->getModifiedProperties()->getActiveMembers(), $model );
+    return $this->filterPropertyNamesForSave( $model->getModifiedProperties( $includePrefixedProperties )->getActiveMembers(), $model );
   }  
   
   
@@ -212,6 +212,7 @@ class MappingObjectFactory implements IObjectFactory
     foreach( $names as $name )
     {
       $prop = $set->getProperty( $name );
+      
       /* @var $prop IProperty */
       if ( $prop->getFlags()->hasVal( IPropertyFlags::SUBCONFIG ))
         continue;

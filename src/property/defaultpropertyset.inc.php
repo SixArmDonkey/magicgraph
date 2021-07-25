@@ -83,8 +83,8 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   
   private $hash;
   
-  private array $memberCache = [];
   
+  private array $prefixList = [];
   
   /**
    * Create a new DefaultPropertySet instance 
@@ -206,6 +206,58 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   }
   
   
+  
+    /**
+   * Check to see if const is a member of this set.
+   * @param string $const constant
+   * @return boolean is member
+   */
+  public function isMember( string ...$const ) : bool
+  {
+    foreach( $const as $c )
+    {
+      if ( !parent::isMember( $c ))
+      {
+        $p = $this->getPrefixProperty( $c );
+        if ( $p === false )
+        {
+          return false;
+        }
+        $p = $this->getProperty( $p );
+        
+        
+        if ( $p->getType()->is( IPropertyType::TMODEL ) && !$this->getProperty( $p->getName())->getValue()->getPropertySet()->isMember( substr( $c, strlen( $p->getPrefix()))))
+        {
+         
+          return false;
+        }
+      }
+
+    }
+    
+    
+    
+    return true;
+  }
+  
+  
+  private function getPrefixProperty( string $prop ) : string|false
+  {
+    foreach( $this->prefixList as $parent => $prefix )
+    {
+      if ( substr( $prop, 0, strlen( $prefix )) == $prefix )
+      {
+        return $parent;
+      }
+    }
+    
+    return false;
+  }
+  
+  
+  
+  
+  
   /**
    * Given an IProperty, initialize the property by calling reset() and add that property to the
    * DefaultPropertySet.  Call addNewMembers() after calling this method to add the property names to the underlying
@@ -240,6 +292,11 @@ class DefaultPropertySet extends BigSet implements IPropertySet
       //..Save the name 
       $this->primaryKey = $property->getName();
     }    
+    
+    if ( !empty( $property->getPrefix()))
+    {
+      $this->prefixList[$property->getName()] = $property->getPrefix();
+    }
 
     return $property->getName();
   }
@@ -403,7 +460,11 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   public function getProperty( string $name ) : IProperty
   {
     if ( !isset( $this->properties[$name] ))
-      throw new InvalidArgumentException( $name . ' is not a member of this property set' );
+    {
+      $name = $this->getPrefixProperty( $name );
+      if ( $name === false || !isset( $this->properties[$name] ))
+        throw new InvalidArgumentException( $name . ' is not a member of this property set' );
+    }
     
     return $this->properties[$name];
   }

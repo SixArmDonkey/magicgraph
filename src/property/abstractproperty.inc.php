@@ -386,6 +386,8 @@ abstract class AbstractProperty implements IProperty
    * creating instances populated from persistent storage.  The idea is for the
    * mapping object factory to call this method after filling the model, but 
    * before returning it.
+   * 
+   * I don't think this feature was ever finished.
    */
   public function setReadOnly() : void
   {
@@ -497,7 +499,7 @@ abstract class AbstractProperty implements IProperty
   {
 //    if ( $this->readOnly )
 //      throw new ValidationException( $this->name . ' is read only' );
-    if ( $this->isWriteEmpty() && !$this->isEmpty())
+    if ( $this->isWriteEmpty() && !$this->isEmpty() && $this->value !== $value )
     {
       throw new ValidationException( $this->name . ' has already been assigned a value, and is now read only' );
     }

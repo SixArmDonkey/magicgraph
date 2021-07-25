@@ -149,7 +149,7 @@ interface IModel extends IteratorAggregate, JsonSerializable
    * Retrieve a list of modified properties 
    * @return ISet modified properties 
    */
-  public function getModifiedProperties() : IBigSet;
+  public function getModifiedProperties( bool $includePrefixedProperties = true ) : IBigSet;
   
   /**
    * Gets A propertyset containing properties for insert

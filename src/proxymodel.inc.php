@@ -292,9 +292,9 @@ class ProxyModel implements IModel
    * Retrieve a list of modified properties 
    * @return ISet modified properties 
    */
-  public function getModifiedProperties() : IBigSet
+  public function getModifiedProperties( bool $includePrefixedProperties = true ) : IBigSet
   {
-    return $this->model->getModifiedProperties();
+    return $this->model->getModifiedProperties( $includePrefixedProperties );
   }
   
   /**

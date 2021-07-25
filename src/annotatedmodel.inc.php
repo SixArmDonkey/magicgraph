@@ -20,6 +20,9 @@ use ReflectionProperty;
 use Attribute;
 
   
+/**
+ * @todo Build this into defaultmodel?
+ */
 class AnnotatedModel extends DefaultModel
 {  
   
@@ -65,6 +68,8 @@ class AnnotatedModel extends DefaultModel
             throw new \Exception( 'Property ' . $prop->getName() . ' of ' . static::class . ' is not an instance of ' . IProperty::class . '.  Attribute type is invalid.' );
           }
 
+          
+          
           $properties->addProperty( $p );          
         }
       }
