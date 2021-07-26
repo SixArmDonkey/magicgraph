@@ -37,13 +37,25 @@ interface IRepository extends ISaveableObjectFactory
    * Retrieve an IRunnable instance to be used with some ITransaction instance.
    * This runnable will execute the supplied function prior to saving the model.
    *
-   * @param Closure $beforeSave What to run prior to saving f( IRepository, ...IModel )
-   * @param Closure $afterSave What to run after saving f( IRepository, ...IModel )
+   * @param Closure|null $beforeSave What to run prior to saving f( IRepository, ...IModel )
+   * @param Closure|null $afterSave What to run after saving f( IRepository, ...IModel )
    * @param IModel $models One or more models to save 
    * @return array IRunnable[] 
    */
   public function getSaveFunction( ?Closure $beforeSave, ?Closure $afterSave, IModel ...$models ) : array;
 
+  
+  /**
+   * Retrieve an IRunnable instance to be used with some ITransaction instance.
+   * This runnable will execute the supplied function prior to saving the model.
+   *
+   * @param Closure|null $beforeSave What to run prior to saving f( IRepository, ...IModel )
+   * @param Closure|null $afterSave What to run after saving f( IRepository, ...IModel )
+   * @param Closure $getModels f() : IModel[]  Retrieve the list of models to save. 
+   * @return array IRunnable[] 
+   */
+  public function getLazySaveFunction( ?Closure $beforeSave, ?Closure $afterSave, Closure $getModels ) : array;
+  
   
   /**
    * Create a unit of work against the repo.

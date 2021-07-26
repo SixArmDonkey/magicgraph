@@ -96,7 +96,7 @@ class DateProperty extends AbstractProperty implements IDateProperty
   {
     $val = $this->getValue();
     if ( $val === null )
-      return null;
+      return '';
     
     return $this->getValueAsDateTime()->format( $this->toStringFormat );
   }  

@@ -70,5 +70,9 @@ interface IPropertyFlags extends ISet
    * returned value should not be saved anywhere.
    */
   const NO_ARRAY_OUTPUT = 'noarrayoutput';
+  
+  
+  
+
 }
   

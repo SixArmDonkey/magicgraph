@@ -224,15 +224,14 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
     if ( !( $model instanceof IAttributeModel ))
       throw new InvalidArgumentException( 'model must be an instance of ' . IAttributeModel::class );
     
-    $attrValues = $this->getAttrValuesToSave( $model );
     
+    
+    $attrValues = [];
     $names = [];
-    foreach( array_keys( $attrValues ) as $name )
-    {
-      $names[] = $name;
-    }
     
-    
+    $getNames = function() use (&$names) {
+      return $names;
+    };
     
     //..This feels a bit better
     $tasks = array_merge(
@@ -243,10 +242,23 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
           if ( $model->getAttrGroupId() < 1 )
             $model->setAttrGroupId( $this->attrRepo->getDefaultAttributeGroupId());
         }
-      }, null, $model ),
+      }, function( IRepository $repo, IAttributeModel ...$models ) use(&$attrValues,&$names) {
+        foreach( $models as $model )
+        {
+          
+          
+          foreach( $this->getAttrValuesToSave( $model ) as $k => $v )
+          {
+            $attrValues[$k] = $v;
+            $names[$k] = $k;
+          }
+        }        
+      }, $model ),
 
-      $this->attrRepo->getValueRepo()->getSaveFunction( function(IRepository $repo, IAttrValue ...$attrValues ) use($names,$model) {
-        $attrsByName = $this->attrRepo->getAttributesByNameList( ...$names );
+      $this->attrRepo->getValueRepo()->getLazySaveFunction( function(IRepository $repo, IAttrValue ...$attrValues ) use($getNames,$model) {
+        $names = $getNames();
+        $attrsByName = $this->attrRepo->getAttributesByNameList( ...array_values( $names ));
+                
         
         foreach( $attrValues as $k => $val )
         {
@@ -266,7 +278,7 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
             $val->setAttributeId( $attr->getId());
           }          
         }
-      }, null, ...array_values( $attrValues ))
+      }, null, function() use(&$attrValues) { return $attrValues; })
     );
       
       
@@ -305,6 +317,8 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
     {
       $prop = $set->getProperty( $name );
       /* @var IProperty $prop */
+      
+      
       
       if ( !$prop->getFlags()->hasVal( IPropertyFlags::SUBCONFIG ))
       {

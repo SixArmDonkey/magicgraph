@@ -79,6 +79,21 @@ class RepositoryProxy extends SaveableMappingObjectFactoryProxy implements IRepo
 
   
   /**
+   * Retrieve an IRunnable instance to be used with some ITransaction instance.
+   * This runnable will execute the supplied function prior to saving the model.
+   *
+   * @param Closure|null $beforeSave What to run prior to saving f( IRepository, ...IModel )
+   * @param Closure|null $afterSave What to run after saving f( IRepository, ...IModel )
+   * @param Closure $getModels f() : IModel[]  Retrieve the list of models to save. 
+   * @return array IRunnable[] 
+   */
+  public function getLazySaveFunction( ?Closure $beforeSave, ?Closure $afterSave, Closure $getModels ) : array
+  {
+    return $this->repo->getLazySaveFunction( $beforeSave, $afterSAve, $getModels );
+  }
+
+  
+  /**
    * Create a unit of work against the repo.
    * @param Closure $action f( IRepository $repo ) : void - What to do 
    * @return IRunnable Runnable

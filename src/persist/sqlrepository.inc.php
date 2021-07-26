@@ -267,6 +267,22 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   {    
     return [new MySQLRunnable( $this, $this->getSaveClosure( $beforeSave, $afterSave, ...$models ))];
   }
+  
+  
+  /**
+   * Retrieve an IRunnable instance to be used with some ITransaction instance.
+   * This runnable will execute the supplied function prior to saving the model.
+   *
+   * @param Closure|null $beforeSave What to run prior to saving f( IRepository, ...IModel )
+   * @param Closure|null $afterSave What to run after saving f( IRepository, ...IModel )
+   * @param Closure $getModels Retrieve the list of models to save. 
+   * @return array IRunnable[] 
+   */
+  public function getLazySaveFunction( ?Closure $beforeSave, ?Closure $afterSave, Closure $getModels ) : array
+  {
+    return [new MySQLRunnable( $this, $this->getLazySaveClosure( $beforeSave, $afterSave, $getModels ))];
+  }
+  
 
   
   /**
@@ -702,8 +718,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   protected function beginTransaction() : void
   {
     if ( $this->transaction != null )
-      throw new \Exception( 'A transaction has already been started' );
-    
+      return;//throw new \Exception( 'A transaction has already been started' );
     $this->transaction = new TransactionUnit( $this->dbc );
   }
   
@@ -851,6 +866,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
 
       //..Also double checking toArray() results here
       $toSave = [];
+      
       foreach( $model->toArray( $props ) as $k => $v )
       {
         //..Double check that toArray() returned friendly properties 
@@ -869,7 +885,6 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
           $toSave[$k] = $v;
         }
       }
-      
       
       
       foreach( $props->getActiveMembers() as $member )

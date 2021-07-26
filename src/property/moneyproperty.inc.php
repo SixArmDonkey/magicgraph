@@ -120,13 +120,13 @@ class MoneyProperty extends BoundedProperty implements IMoneyProperty
     if ( $value instanceof IMoney )
     {
       if ( $this->defaultValue instanceof IMoney )
-        return $value->equals( $this->defaultValue );
-      else if ( is_scalar( $this->defaultValue ))
-        return (string)$value->getAmount == (string)$this->defaultValue;
+        return $value->equals( $this->getDefaultValue());
+      else if ( is_scalar( $this->getDefaultValue()))
+        return (string)$value->getAmount == (string)$this->getDefaultValue();
       else
         throw new \Exception( 'Money property default value must be an instance of IMoney or scalar.' );
     }
     
-    return empty( $value ) || $value === $this->defaultValue;
+    return empty( $value ) || $value === $this->getDefaultValue();
   }  
 }

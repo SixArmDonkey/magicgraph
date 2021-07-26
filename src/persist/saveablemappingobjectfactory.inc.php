@@ -64,6 +64,7 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
           $this->saveModel( $model );
           $model->clearEditFlags();
         }
+        return;
       }
 
 
@@ -91,8 +92,12 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
 
         $this->saveState->AFTER_SAVE;
         //..Do stuff after saving the model 
+        
         $this->runAfterSave( $model );
+        
+        
 
+        
         //..If the model has been modified after calling after save, then we save again!
         if ( $model->hasEdits())
         {
@@ -252,6 +257,36 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
         $afterSave( $self, ...$models );
     };
   }
+  
+  
+  /**
+   * Retrieve an IRunnable instance to be used with some ITransaction instance.
+   * This runnable will execute the supplied function prior to saving the model.
+   *
+   * @param Closure|null $beforeSave What to run prior to saving f( IRepository, ...IModel )
+   * @param Closure|null $afterSave What to run after saving f( IRepository, ...IModel )
+   * @param Closure $getModels f() : IModel[]  Retrieve a list of models to save 
+   * @return \Closure Function
+   */
+  protected final function getLazySaveClosure( ?Closure $beforeSave, ?Closure $afterSave, Closure $getModels ) : Closure
+  {
+    $self = $this;
+    return function() use($beforeSave,$afterSave, $getModels ,$self) {
+      $models = $getModels();
+      $this->test( ...$models );
+            
+      if ( $beforeSave != null && $beforeSave( $self, ...$models ) === true )
+        return;
+      
+      foreach( $models as $model )
+      {
+        $self->save( $model );
+      }
+      
+      if ( $afterSave != null )
+        $afterSave( $self, ...$models );
+    };
+  }  
   
   
   protected function beginTransaction() : void

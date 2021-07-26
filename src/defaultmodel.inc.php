@@ -611,7 +611,6 @@ class DefaultModel implements IModel
       }
     }
     
-    
     return $out;
   }
   
