@@ -205,84 +205,60 @@ class MySQLAttributeRepo extends AttributeRepo
   }
   
   
-
-
   
-  
-  /**
-   * Retrieve a list of entity id's that have the supplied attributes and values.
-   * WARNING: Do not use any type of user input as keys.  Attribute names are not checked prior to creating the query.
-   * @param array $map [attribute code => attribute value] value map 
-   * @param int $page Page number
-   * @param int $size Page size 
-   * @return array int[] entity id list 
+  /** 
+   * Retrieve a list of unique values for some list of attributes.
+   * This must only return string attribute values.
+   * Non-string attributes should still return, but have an empty value array
+   * @param string $codes List of codes 
+   * @return array [code => [value,list,...]]
+   * @return array
+   * @throws \InvalidArgumentException if codes are empty   
    */
-  /*
-  public function getEntityIdsByAttributeValue( array $map, int $page = 1, int $size = 25 ) : array
+  public function getDistinctValues( string ...$codes ) : array
   {
-    $values = [];
-    $where = [];
-    $joins = [];
+
     
-    //..This is dumb.
-    $aidList = $this->getAttributeIdListByCodes( array_keys( $map ));
+    $out = [];
     
-    
-    $first = '';
-    foreach( $map as $code => $value )
+    foreach( $codes as $code )
     {
-      if ( !preg_match( '/^[a-zA-Z0-9_]+$/', $code ))
-      {
-        throw new \InvalidArgumentException( 'Column names must be alphanumeric' );
-      }
+      if ( empty( trim( $code )))
+        continue;
       
-      
-      $key = ' v' . $code;
-      if ( empty( $first ))
-        $first = $key;
-      
-      $joins[] = $this->attrValueRepo->getTable() . $key;
-      $where[] = $key . '.' . $this->attrValueCols->getAttributeId() . '=? and ' . $key . '.' . $this->attrValueCols->getValue() . '=?';
-      $values[] = $aidList[$code];
-      $values[] = $value;
+      $out[$code] = [];
     }
     
-    if ( $page < 1 )
-      $page = 1;
+    if ( empty( $out ))
+      throw new \InvalidArgumentException( 'codes must not be empty' );
+        
+    $sql = <<<SQL
+  select distinct
+  a.%1\$s ,v.%2\$s
+from %3\$s a
+join %4\$s v  on (v.link_attribute=a.id)
+where 
+  a.code in %5\$s
+  and v.value != ''
+group by v.%2\$s
+order by v.%2\$s;
+SQL;
     
-    if ( $size < 1 )
-      $size = 1;
     
-    $offset = ( $page - 1 ) * $size;
-    
-    $sql = sprintf( 'select %1$s.%2$s from %3$s where %4$s group by %1$s.%2$s limit ' . $offset . ',' . $size,
-      $first,
-      $this->attrValueCols->getEntityId(),
-      implode( ',', $joins ),
-      implode( ' and ', $where ));
-    
-    //..Should be something like this:
-//      select
-//        v1.link_entity
-//        from 
-//        product_attribute_value v1,
-//        product_attribute_value v2 
-//        where v1.link_attribute=37 and v1.value='1'
-//        and v2.link_attribute=39 and v2.value='enabled'
-            
-            
-    $out = [];
-    foreach( $this->dbc->select( $sql, $values ) as $row )
+    foreach( $this->dbc->select( 
+      sprintf( $sql,
+        $this->attrCols->getCode(),
+        $this->attrValueCols->getValue(),
+        $this->attrRepo->getTable(),
+        $this->attrValueRepo->getTable(),
+        $this->dbc->prepareIn( $codes )),
+      $codes ) as $row )
     {
-      $out[] = $row[$this->attrValueCols->getEntityId()];
+      $out[$row[$this->attrCols->getCode()]][] = $row[$this->attrValueCols->getValue()];
     }
     
     return $out;
   }
-  
-  */
-  
-
   
   
   /**

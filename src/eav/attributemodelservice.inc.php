@@ -290,7 +290,7 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
    * Retrive the attribute repository 
    * @return IAttributeRepo Attribute repo
    */
-  protected final function getAttributeRepo() : IAttributeRepo
+  public final function getAttributeRepo() : IAttributeRepo
   {
     return $this->attrRepo;
   }

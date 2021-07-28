@@ -116,16 +116,25 @@ class AttrValueConfig extends BasePropertyConfig implements IPropertyConfig, IAt
         self::VALUE => 0       
       ],
         
+      //..All this stuff makes it so that setting value will automatically set tvalue instead of value when the 
+      //  length is greater than 255.
       self::VALUE => [
         self::TYPE => IPropertyType::TSTRING,
         self::FLAGS => [],
         self::VALUE => '',
+        self::TOARRAY => function( IModel $model, IProperty $prop, string $value ) : string {
+          if ( !empty( $model->getPropertySet()->getProperty( self::ATEXT )->getValue()))
+            return '';
+          return $value;
+        },
         self::MSETTER => function( IModel $model, IProperty $prop, string $value ) : string {
           if ( strlen( $value ) > 255 )
           {
-            $this->model->setValue( self::ATEXT, $value );
+            $model->setValue( self::ATEXT, $value );
             return '';
           }
+          else
+            $model->setValue( self::ATEXT, '' );
           
           return $value;
         },
@@ -138,8 +147,17 @@ class AttrValueConfig extends BasePropertyConfig implements IPropertyConfig, IAt
           return $value;
         }
       ],
-              
-      self::ATEXT => self::FSTRING
+      
+      self::ATEXT => [
+        self::TYPE => IPropertyType::TSTRING,
+        self::FLAGS => [],
+        self::VALUE => '',
+        self::TOARRAY => function( IModel $model, IProperty $prop, string $value ) : string {
+          if ( !empty( $model->getPropertySet()->getProperty( self::VALUE )->getValue()))
+            return '';
+          return $value;
+        }
+      ]
     ];
   }  
 }

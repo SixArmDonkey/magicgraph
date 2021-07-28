@@ -153,4 +153,17 @@ interface IAttributeRepo
    * @return array [code => bool exists] results
    */
   public function existsReport( string ...$codes ) : array;
+  
+  
+  /** 
+   * Retrieve a list of unique values for some list of attributes.
+   * This must only return string attribute values.
+   * Non-string attributes should still return, but have an empty value array
+   * @param string $codes List of codes 
+   * @return array [code => [value,list,...]]
+   * @return array
+   * @throws \InvalidArgumentException if codes are empty   
+   */
+  public function getDistinctValues( string ...$codes ) : array;
+  
 }

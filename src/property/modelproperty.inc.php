@@ -34,6 +34,9 @@ class ModelProperty extends ObjectProperty implements IModelProperty
   }
   
   
+  
+  
+  
   /**
    * Checks the internal edited flag.
    * This is set to true when setValue() is called 
@@ -120,8 +123,14 @@ class ModelProperty extends ObjectProperty implements IModelProperty
   protected function preparePropertyValue( $value )
   {
     if ( !( $value instanceof IModel ))
+    {
+      
       return $this->getValueAsModel();
+    }
     else
+    {
+      
       return $value;
+    }
   }
 }

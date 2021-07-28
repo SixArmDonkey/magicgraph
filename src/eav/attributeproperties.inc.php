@@ -389,6 +389,7 @@ class AttributeProperties extends BasePropertyConfig implements IPropertyConfig,
         self::VALUE => ''
       ],
 
+      //..Array properties are automatically json encoded when persisted
       self::ACONFIG => [
         self::TYPE => IPropertyType::TARRAY,
         self::FLAGS => [IPropertyFlags::USE_NULL],
@@ -403,15 +404,25 @@ class AttributeProperties extends BasePropertyConfig implements IPropertyConfig,
             $c = substr( trim( $value ), 0, 1 );
             if ( $c == '{' || $c == '[' )
               $value = json_decode( $value );
-            else if ( strpos( $value, ',' ) !== false )                    
-              $value = explode( ',', $value );
             else
             {
-              $value = explode( "\n", str_replace( "\r", '', $value ));
+              //..lol
+              $value = explode( ',', implode( ',', explode( "\n", str_replace( "\r", '', $value ))));
+              
             }
           }
           
-          return $value;
+          $out = [];
+          if ( is_array( $value ) || ( $value instanceof \stdClass ))
+          {
+            foreach( $value as $k => $v )
+            {
+              if ( !empty( trim( $v )))
+                $out[] = $v;
+            }
+          }
+          
+          return $out;
         },
         
         self::HTMLINPUT => function( IModel $model, IProperty $prop, string $name, string $id, $value ) use($self,&$options) : IElement {      

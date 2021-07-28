@@ -24,9 +24,13 @@ use InvalidArgumentException;
  * When using multiple property config objects, if any property name is ambiguous, the last
  * encountered instance is used.
  * 
+ * @todo is there a point to this being backed by BigSet?
+ * 
  */
 class DefaultPropertySet extends BigSet implements IPropertySet
 {
+  private static int $ref = 0;
+  
   /**
    * List of properties
    * @var IProperty[]
@@ -112,6 +116,11 @@ class DefaultPropertySet extends BigSet implements IPropertySet
     {
       $props .= implode( '', $c->getPropertyNames());
     }    
+    
+    //..This allows things like the databag to work.
+    //  Empty property sets produce the same hash, which causes collisions in the caching mechanism 
+    if ( empty( $props ))
+      $props = uniqid() . ++self::$ref;
     
     return md5( $props );
   }
@@ -228,7 +237,6 @@ class DefaultPropertySet extends BigSet implements IPropertySet
         
         if ( $p->getType()->is( IPropertyType::TMODEL ) && !$this->getProperty( $p->getName())->getValue()->getPropertySet()->isMember( substr( $c, strlen( $p->getPrefix()))))
         {
-         
           return false;
         }
       }
@@ -287,6 +295,7 @@ class DefaultPropertySet extends BigSet implements IPropertySet
     //..Add the property to the local list 
     $this->properties[$property->getName()] = $property;
 
+    
     if ( empty( $this->primaryKey ) && $property->getFlags()->hasVal( IPropertyFlags::PRIMARY ))
     {
       //..Save the name 
@@ -297,7 +306,7 @@ class DefaultPropertySet extends BigSet implements IPropertySet
     {
       $this->prefixList[$property->getName()] = $property->getPrefix();
     }
-
+    
     return $property->getName();
   }
   

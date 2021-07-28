@@ -662,11 +662,13 @@ where a1.code in ('test','link_mfg','price','case_qty');
     }
     
     
+    
     //..Build the and section 
     if ( !empty( $entityAndWhere ))
       $entityAnd = ' (' . implode( ' and ', $entityAndWhere ) . ') ';
     else
       $entityAnd = '';
+    
     
     //..Build the or section 
     $entityOr = implode( ' or ', $entityOrWhere );
@@ -700,9 +702,10 @@ where a1.code in ('test','link_mfg','price','case_qty');
 
     //..Build the attribute and section 
     if ( !empty( $andWhere ))
-      $and = ' (' . implode( ' and ', array_merge( $andWhere, $entityWhere )) . ') ';
+      $and = ' (' . implode( ' and ', array_merge( $andWhere )) . ') ';
     else
       $and = '';
+    
     
     //..Build the or section 
     $or = implode( ' or ', $orWhere );
@@ -748,6 +751,9 @@ where a1.code in ('test','link_mfg','price','case_qty');
     
     if ( $attrSearch )
     {
+      
+      $filterWhere = array_merge( $filterWhere, $entityWhere );
+      
 
       if ( !empty( $filterWhere ))
       {

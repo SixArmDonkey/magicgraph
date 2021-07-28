@@ -503,10 +503,9 @@ abstract class AbstractProperty implements IProperty
     {
       throw new ValidationException( $this->name . ' has already been assigned a value, and is now read only' );
     }
-          
     //..Prepare for validate
     $value = $this->preparePropertyValue( $value );
-    
+
     
     //..Behavior modifications 
     foreach( $this->behavior as $b )
@@ -558,11 +557,10 @@ abstract class AbstractProperty implements IProperty
     }
     else
     {
+ 
       $this->value = $this->setPropertyValue( $value );
     }
-    
-    
-    
+  
     
     if ( !$this->getFlags()->hasVal( IPropertyFlags::NO_INSERT ) && !$this->getFlags()->hasVal( IPropertyFlags::NO_UPDATE ))
     {

@@ -478,9 +478,9 @@ class DefaultModel implements IModel
     
     //if ( !$this->properties->isMember( $property ))
     $prop = $this->memberCache[$property];
+    
     if ( $prop === null )
     {
-      
       $this->extraData[$property] = $value;
       return;
     }
@@ -494,7 +494,7 @@ class DefaultModel implements IModel
     }
       
     
-    foreach( $prop->getPropertyBehavior() as $b )
+    foreach( $prop->getPropertyBehavior() as $k => $b )
     {
       /* @var $b IPropertyBehavior */
       $msetter = $b->getModelSetterCallback();
@@ -893,14 +893,19 @@ class DefaultModel implements IModel
     {
       try {
         $prop = $this->getProperty( $p );
+      } catch( \InvalidArgumentException $e ) {
+        var_dump( $e );
+        continue;
+      }
+      
+      /*
+      try {
         $prop->getPropertyBehavior();
       } catch( \InvalidArgumentException $e ) {
         //..Just skip it.  These are either orphaned attributes or attributes without values.
-        /**
-         * @todo Figure out how the property sets could differ.  This probably shouldn't be happening.  Too much code!
-         */
         continue;
       }
+      */
       
       if ( $prop->getFlags()->hasVal( IPropertyFlags::NO_ARRAY_OUTPUT ))
       {

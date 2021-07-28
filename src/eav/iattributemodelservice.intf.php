@@ -23,5 +23,9 @@ use buffalokiwi\magicgraph\persist\IRepository;
  */
 interface IAttributeModelService extends IRepository
 {
-  
+  /**
+   * Retrive the attribute repository 
+   * @return IAttributeRepo Attribute repo
+   */
+  public function getAttributeRepo() : IAttributeRepo;  
 }
