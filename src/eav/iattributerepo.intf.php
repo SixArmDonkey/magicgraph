@@ -15,7 +15,7 @@ namespace buffalokiwi\magicgraph\eav;
 use buffalokiwi\magicgraph\DBException;
 use buffalokiwi\magicgraph\persist\IRepository;
 use buffalokiwi\magicgraph\persist\RecordNotFoundException;
-use buffalokiwi\magicgraph\search\ISearchQueryBuilder;
+use buffalokiwi\magicgraph\property\IPropertyType;
 use InvalidArgumentException;
 
 
@@ -165,5 +165,15 @@ interface IAttributeRepo
    * @throws \InvalidArgumentException if codes are empty   
    */
   public function getDistinctValues( string ...$codes ) : array;
-  
+
+
+  /**
+   * Retrieve a list of attribute codes by flag 
+   * @param array $in required IPropertyFlag values 
+   * @param array $notIn forbidden IPropertyFlag values 
+   * @param IPropertyType $type
+   * @return array [Attribute codes => caption]
+   * @throws InvalidArgumentException
+   */
+  public function getAttributesByFlag( array $in = [], array $notIn = [], ?IPropertyType $type = null ) : array;
 }

@@ -470,9 +470,13 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   {
     if ( !isset( $this->properties[$name] ))
     {
-      $name = $this->getPrefixProperty( $name );
-      if ( $name === false || !isset( $this->properties[$name] ))
+      $pname = $this->getPrefixProperty( $name );
+      if ( $pname === false || !isset( $this->properties[$pname] ))
+      {
         throw new InvalidArgumentException( $name . ' is not a member of this property set' );
+      }
+      
+      return $this->properties[$pname];
     }
     
     return $this->properties[$name];

@@ -26,6 +26,8 @@ class ArrayProperty extends AbstractProperty
 {
   private $clazz;
   
+  private $initialValue;
+  
   /**
    * Create a new ArrayProperty instance 
    * @param IObjectPropertyBuilder $builder Builder 
@@ -35,9 +37,46 @@ class ArrayProperty extends AbstractProperty
     parent::__construct( $builder );
     
     $this->clazz = $builder->getClass();    
+    $this->initialValue = $this->getDefaultValue();
   }    
   
   
+  public function reset() : IProperty
+  {
+    $res = parent::reset();
+    $this->initialValue = $res->getValue();
+    return $res;
+  }
+  
+  
+  public function isEdited(): bool
+  {
+    $a = $this->getValue();
+    if ( !is_array( $a ))
+      return false;
+    else if ( empty( $a ) && empty( $this->initialValue ))
+      return false;
+    
+    if ( $this->getFlags()->hasAny( IPropertyFlags::NO_UPDATE ))
+      return false;
+    
+    foreach( $a as $v )
+    {
+      if ( !( $v instanceof \buffalokiwi\magicgraph\IModel ))
+      {
+        return $this->initialValue == $a;
+      }
+      else if ( $v->hasEdits())
+      {
+        return true;        
+      }
+    }
+    
+    return false;
+  }
+  
+  
+ 
   /**
    * Validate some property value.
    * Child classes should implement some sort of validation based on the 
@@ -196,8 +235,6 @@ class ArrayProperty extends AbstractProperty
    */
   protected function getPropertyValue( $value )
   {
-    //..Since we can't know if anyone edited the underlying set, we set this to edited when accessed.
-    $this->setEdited();
     /* @var $value ISet */    
     return $value;
   }    

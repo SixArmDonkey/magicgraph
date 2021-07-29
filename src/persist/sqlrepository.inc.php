@@ -345,14 +345,16 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
             continue;        
           
           //..This needs to be revised.
-          if ( $col == 'code' )
+          //..Not really sure why this is here.
+          if ( $col == 'code' && isset( $row['value'] ))
           {
             $col = $val;
             $val = $row['value'];
           }
 
           //..This needs to be revised.
-          if ( empty( $col ) || $col === null || $col == 'caption' || $col == 'value' )
+          //..What is this for.
+          if ( empty( $col ) || $col === null || $col == 'value' )
             continue;
 
           $build[$curGroup][$row[$statement->getUniqueId()]][$col] = $val;

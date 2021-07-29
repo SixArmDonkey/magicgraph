@@ -292,14 +292,25 @@ class AttributeProperties extends BasePropertyConfig implements IPropertyConfig,
         self::TYPE => IPropertyType::TENUM,
         self::FLAGS => [IPropertyFlags::REQUIRED, IPropertyFlags::NO_UPDATE],
         self::CLAZZ => EPropertyType::class,
-        self::VALUE => EPropertyType::TSTRING()
+        self::VALUE => EPropertyType::TSTRING(),
+        self::HTMLINPUT => function( IModel $model, IProperty $prop, string $name, ?string $id, EPropertyType|string $value ) use($self,&$options) : IElement {
+      
+          $values = ['' => ''];
+          
+          foreach(( new EPropertyType())->values() as $v )
+          {
+            $values[$v] = $v;
+          }
+      
+          return new SelectElement( self::ATYPE, self::ATYPE, (is_object($value)) ? $value->value() : '', $values );
+        }          
       ],
 
       self::ADEFAULT => [
         self::TYPE => IPropertyType::TSTRING,
         self::FLAGS => [],
         self::VALUE => '',
-        self::HTMLINPUT => function( IModel $model, IProperty $prop, string $name, string $id, $value ) use($self,&$options) : IElement {
+        self::HTMLINPUT => function( IModel $model, IProperty $prop, string $name, ?string $id, $value ) use($self,&$options) : IElement {
           //..This is hacky, but it swaps the default value input out for a dropdown box if the data type supports it.
           $c = $model->getValue( self::ACLAZZ );
           
@@ -335,18 +346,18 @@ class AttributeProperties extends BasePropertyConfig implements IPropertyConfig,
                 }
               }
               
-              return new SelectElement($name, $id, (string)$value, $options );            
+              return new SelectElement($name, $id ?? '', (string)$value, $options );            
             }
             else if ( $o instanceof ISet )
             {
               if ( empty( $options ))
                 $options = $o->getMembers();
               
-              return new SelectElement( $name, $id, (string)$value, $options,['multiple' => 'multiple', 'size' => 10]);
+              return new SelectElement( $name, $id ?? '', (string)$value, $options,['multiple' => 'multiple', 'size' => 10]);
             }
           }
           
-          return new InputElement( 'text', $name, $id, $value );
+          return new InputElement( 'text', $name, $id ?? '', $value );
         }          
       ],
 

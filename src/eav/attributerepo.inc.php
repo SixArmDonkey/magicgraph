@@ -313,7 +313,7 @@ abstract class AttributeRepo implements IAttributeRepo
     }    
     
     if ( empty( $out ))
-      throw new RecordNotFoundException( "Attribute Group " . $id . " does not exist, or has no attributes." );
+      throw new RecordNotFoundException( "Attribute Group does not exist or has no attributes." );
     
     return $out;    
   }

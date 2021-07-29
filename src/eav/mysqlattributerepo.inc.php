@@ -19,6 +19,8 @@ use buffalokiwi\magicgraph\eav\search\MySQLSearchQueryGenerator;
 use buffalokiwi\magicgraph\pdo\IDBConnection;
 use buffalokiwi\magicgraph\persist\ISQLRepository;
 use buffalokiwi\magicgraph\persist\SQLSelect;
+use buffalokiwi\magicgraph\property\IPropertyFlags;
+use buffalokiwi\magicgraph\property\IPropertyType;
 use Generator;
 use InvalidArgumentException;
 use TypeError;
@@ -251,10 +253,99 @@ SQL;
         $this->attrValueCols->getValue(),
         $this->attrRepo->getTable(),
         $this->attrValueRepo->getTable(),
-        $this->dbc->prepareIn( $codes )),
+        $this->dbc->prepareIn( $codes, false )),
       $codes ) as $row )
     {
       $out[$row[$this->attrCols->getCode()]][] = $row[$this->attrValueCols->getValue()];
+    }
+    
+    return $out;
+  }
+  
+  
+  protected function getIPropertyFlags() : IPropertyFlags
+  {
+    $flagsCol = $this->attrCols->getFlags();
+    $flags = $this->attrRepo->create()->getValue( $flagsCol );
+    if ( !( $flags instanceof IPropertyFlags ))
+      throw new \Exception( 'Failed to retrieve IPropertyFlags' );
+    
+    return $flags;
+  }
+  
+  
+  /**
+   * Retrieve a list of attribute codes by flag 
+   * @param array $in required IPropertyFlag values 
+   * @param array $notIn forbidden IPropertyFlag values 
+   * @param IPropertyType|null $type
+   * @return array [Attribute codes => caption]
+   * @throws InvalidArgumentException
+   */
+  public function getAttributesByFlag( array $in = [], array $notIn = [], ?IPropertyType $type = null ) : array
+  {
+    if ( empty( $in ) && empty( $notIn ))
+      throw new \InvalidArgumentException( 'at least one flag must be specified' );      
+    
+    $cond = [];
+    
+    $values = [];
+    
+    if ( $type != null )
+      $values[] = $type->value();
+    
+    $flagsCol = $this->attrCols->getFlags();
+    $flags = $this->getIPropertyFlags();
+    
+    
+    array_walk( $in, function( string &$v ) use (&$values,&$cond,$flagsCol,$flags) : void {
+      if ( !$flags->isMember( $v ))
+        throw new \Exception( 'Invalid property flag' );
+      
+      $values[] = $v;
+      $cond[] = ' find_in_set(?,' . $flagsCol . ') > 0 ';
+    });
+    
+    
+    array_walk( $notIn, function( string &$v ) use (&$values,&$cond,$flagsCol,$flags) : void {
+      if ( !$flags->isMember( $v ))
+        throw new \Exception( 'Invalid property flag' );
+      
+      $values[] = $v;
+      $cond[] = ' find_in_set(?,' . $flagsCol . ') = 0 ';
+    });
+           
+    
+    if ( $type != null )
+    {
+      $sql = <<<SQL
+      select %1\$s, %5\$s
+      from %2\$s
+      where %3\$s = ?
+      and %4\$s
+SQL;
+    }    
+    else
+    {
+      $sql = <<<SQL
+      select %1\$s, %5\$s
+      from %2\$s
+      where 
+        %4\$s
+SQL;      
+    }
+
+    
+    $out = [];
+    foreach( $this->dbc->select( sprintf( $sql,
+      $this->attrCols->getCode(),
+      $this->attrRepo->getTable(),
+      $this->attrCols->getType(),
+      implode( ' and ', $cond ),
+      $this->attrCols->getCaption()
+    ), $values ) as $row )
+    {
+      $out[$row[$this->attrCols->getCode()]] = $row[$this->attrCols->getCaption()];
     }
     
     return $out;

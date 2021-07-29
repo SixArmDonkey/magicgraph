@@ -19,6 +19,7 @@ use InvalidArgumentException;
 
 /**
  * Used to build the argument map for Search style queries.
+ * @todo THIS DOES NOT WORK WITH SET COLUMN TYPES  add find_in_set() support
  */
 class SearchQueryBuilder implements ISearchQueryBuilder 
 {  
