@@ -160,13 +160,18 @@ class SearchQueryBuilder implements ISearchQueryBuilder
   {
     $this->attributes = [];
     
+    
+    $hasCols = sizeof( $attributeNameList ) > 1 || ( sizeof( $attributeNameList ) == 1 && reset( $attributeNameList ) != '*' );
+    
     foreach( $attributeNameList as $a )
     {
       $attr = trim( $a );
       if ( empty( $attr ))
-        continue; //..Just skip it.
+        continue; //..Just skip it.      
       else if ( $attr == '*' )
       {
+        if ( $hasCols )
+          continue;
         //..If this is a wildcard, then only allow the asterisk as an attribute name.
         $this->attributes = [];
         $this->attributes[] = '*';
@@ -178,6 +183,7 @@ class SearchQueryBuilder implements ISearchQueryBuilder
     
     if ( empty( $this->attributes ))
       $this->attributes[] = '*';
+    
     
   }
   

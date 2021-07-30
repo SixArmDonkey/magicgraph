@@ -146,7 +146,8 @@ interface IRepository extends ISaveableObjectFactory
   /**
    * Only operating on properties available within this repository, 
    * return any objects matching all of the supplied criteria.
-   * @param array $map Map of [property => val]
+   * @param array $map Map of [property => val]. Can also be [property => [val, 'operator']] or something like
+   * [property => [[1,2,3], 'in']].
    * @param int $limit Max results to return 
    * @return array Results 
    */

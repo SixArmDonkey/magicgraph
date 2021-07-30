@@ -720,7 +720,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
   protected function beginTransaction() : void
   {
     if ( $this->transaction != null )
-      return;//throw new \Exception( 'A transaction has already been started' );
+      return;
     $this->transaction = new TransactionUnit( $this->dbc );
   }
   

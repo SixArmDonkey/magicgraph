@@ -102,7 +102,7 @@ class MySQLEAVSearch implements IAttributeSearch
   {
     $f = function( ISearchQueryBuilder $query, bool $returnCount ) {
       $statement = $this->searchQuery->createQuery( $query, $returnCount );
-     
+      
       $build = [];
 
       $entityGroups = $query->getEntityGroups();

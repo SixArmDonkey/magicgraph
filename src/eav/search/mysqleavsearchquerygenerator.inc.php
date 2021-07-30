@@ -38,6 +38,8 @@ use InvalidArgumentException;
  * A simple search query generator for mysql.
  * This is to be used with the magicgraph\eav (eav) package.
  * This is a very rough prototype, and will be revised in a future release.
+ * 
+ * @todo This barely functions, but it does function.  Mostly at night, mostly.
  */
 class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
 {
@@ -674,8 +676,8 @@ where a1.code in ('test','link_mfg','price','case_qty');
     $entityOr = implode( ' or ', $entityOrWhere );
     
     ///..If both and and or exist, then add "or" as a prefix to the or string 
-    if ( !empty( $entityAndWhere ) && !empty( $entityOrWhere ))
-      $entityOr = ' or ' . $entityOr;    
+    //if ( !empty( $entityAndWhere ) && !empty( $entityOrWhere ))
+      //$entityOr = ' or ' . $entityOr;    
     
     
    
@@ -743,6 +745,8 @@ where a1.code in ('test','link_mfg','price','case_qty');
         
     
     
+    
+    
     if ( !empty( $joinWhere ))
       $joinWhere = ' where ' . implode( ' ', $joinWhere );
     else
@@ -752,12 +756,13 @@ where a1.code in ('test','link_mfg','price','case_qty');
     if ( $attrSearch )
     {
       
+      
       $filterWhere = array_merge( $filterWhere, $entityWhere );
       
 
       if ( !empty( $filterWhere ))
       {
-        $filterWhere = (( empty( $entityWhere )) ? ' where ' : ' and ' ) . implode( ' and ', $filterWhere );
+        $filterWhere = (( empty( $joinWhere )) ? ' where ' : ' and ' ) . implode( ' and ', $filterWhere );
       }
       else
         $filterWhere = '';
