@@ -67,7 +67,8 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
    * @var IAttributeSearch|null
    */
   private ?IAttributeSearch $search;
-  
+
+  private ?IAttributeModelStrategyProcessor $saveStrategy;
   
   /**
    * Entity repo
@@ -83,13 +84,14 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
    * @param ITransactionFactory $tFact
    * @param IAttributeSearch $search
    */
-  public function __construct( IRepository $repo, IAttributeRepo $attrRepo, ITransactionFactory $tFact, ?IAttributeSearch $search = null )
+  public function __construct( IRepository $repo, IAttributeRepo $attrRepo, ITransactionFactory $tFact, ?IAttributeSearch $search = null, ?IAttributeModelStrategyProcessor $saveStrategy = null )
   {
     parent::__construct( $repo );
     $this->attrRepo = $attrRepo;
     $this->tfact = $tFact;
     $this->entityRepo = $repo;
     $this->search = $search;    
+    $this->saveStrategy = $saveStrategy;
   }
   
   
@@ -106,7 +108,7 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
    * @return array IModel[] Users 
    */
   public function getPage( int $page, int $size = 25, string $orderBy = '' ) : array
-  {  
+  {
     $out = [];
     foreach( parent::getPage( $page, $size, $orderBy ) as $p )
     {
@@ -211,7 +213,7 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
     }
     
     return $this->search->search( $builder );
-  }  
+  }
   
   
   /**
@@ -220,11 +222,11 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
    * @return IRunnable[] tasks 
    */
   public function getSaveTasks( IModel $model ) : array
-  {    
+  {
     if ( !( $model instanceof IAttributeModel ))
       throw new InvalidArgumentException( 'model must be an instance of ' . IAttributeModel::class );
-    
-    
+        
+    $saveStrategy = $this->saveStrategy;    
     
     $attrValues = [];
     $names = [];
@@ -234,51 +236,77 @@ class AttributeModelService extends RepositoryProxy implements IAttributeModelSe
     };
     
     //..This feels a bit better
+    
+    //..Tasks are executed in the order they are entered, so this should work.
+    //..The idea is to take the edited column names from the before save event and cache them
+    //..The edit flags are cleared prior to after save being called so we use the cache to determine which attribute
+    //  values to save 
+    
     $tasks = array_merge(
-      $this->getSaveFunction( function( IRepository $repo, IAttributeModel ...$models ) {
-        //..Do we want to do this?
-        foreach( $models as $model )
-        {
-          if ( $model->getAttrGroupId() < 1 )
-            $model->setAttrGroupId( $this->attrRepo->getDefaultAttributeGroupId());
-        }
-      }, function( IRepository $repo, IAttributeModel ...$models ) use(&$attrValues,&$names) {
-        foreach( $models as $model )
-        {
-          
-          
-          foreach( $this->getAttrValuesToSave( $model ) as $k => $v )
+      $this->getSaveFunction( 
+        function( IRepository $repo, IAttributeModel ...$models ) use($saveStrategy) {
+          //..Do we want to do this?
+          foreach( $models as $model )
           {
-            $attrValues[$k] = $v;
-            $names[$k] = $k;
+            if ( $model->getAttrGroupId() < 1 )
+              $model->setAttrGroupId( $this->attrRepo->getDefaultAttributeGroupId());
           }
-        }        
-      }, $model ),
-
-      $this->attrRepo->getValueRepo()->getLazySaveFunction( function(IRepository $repo, IAttrValue ...$attrValues ) use($getNames,$model) {
-        $names = $getNames();
-        $attrsByName = $this->attrRepo->getAttributesByNameList( ...array_values( $names ));
-                
-        
-        foreach( $attrValues as $k => $val )
-        {
-          /* @var $val IAttrValue */
-          //..This really should not be necessary.  Seems to be a different issue...
-          if ( $val->getEntityId() == 0 )
-            $val->setEntityId( $model->getId());
           
-          if ( $val->getAttributeId() < 1 )
+          $saveStrategy?->processBeforeSaveAttributeModel( $repo, ...$models );          
+        }, 
+        function( IRepository $repo, IAttributeModel ...$models ) use(&$attrValues,&$names,$saveStrategy) {
+          foreach( $models as $model )
           {
-            $name = $names[$k];
-            if ( isset( $attrsByName[$name] ))
-              $attr = $attrsByName[$name];
-            else
-              $attr = $this->attrRepo->getAttributeByName( $name );
-            
-            $val->setAttributeId( $attr->getId());
-          }          
-        }
-      }, null, function() use(&$attrValues) { return $attrValues; })
+
+
+            foreach( $this->getAttrValuesToSave( $model ) as $k => $v )
+            {
+              $attrValues[$k] = $v;
+              $names[$k] = $k;
+            }
+          }
+          
+          $saveStrategy?->processAfterSaveAttributeModel( $repo, ...$models );
+        }, 
+        $model 
+      ),
+
+      //..This the second set of save operations that occur after the product is saved 
+      //..The lazy save function lets us determine which models to save AFTER before save and the save event have occurred
+      $this->attrRepo->getValueRepo()->getLazySaveFunction( 
+        function(IRepository $repo, IAttrValue ...$attrValues ) use($getNames,$model,$saveStrategy) {
+          $names = $getNames();
+          $attrsByName = $this->attrRepo->getAttributesByNameList( ...array_values( $names ));
+
+
+          foreach( $attrValues as $k => $val )
+          {
+            /* @var $val IAttrValue */
+            //..This really should not be necessary.  Seems to be a different issue...
+            if ( $val->getEntityId() == 0 )
+              $val->setEntityId( $model->getId());
+
+            if ( $val->getAttributeId() < 1 )
+            {
+              $name = $names[$k];
+              if ( isset( $attrsByName[$name] ))
+                $attr = $attrsByName[$name];
+              else
+                $attr = $this->attrRepo->getAttributeByName( $name );
+
+              $val->setAttributeId( $attr->getId());
+            }          
+          }
+          
+          $saveStrategy?->processBeforeSaveAttributeValue( $repo, ...$attrValues );
+        }, 
+                
+        function(IRepository $repo, IAttrValue ...$attrValues ) use($saveStrategy) {
+          $saveStrategy?->processAfterSaveAttributeValue( $repo, ...$attrValues );
+        },      
+                
+        function() use(&$attrValues) { return $attrValues; } 
+      )
     );
       
       

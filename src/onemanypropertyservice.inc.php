@@ -53,10 +53,10 @@ class OneManyPropertyService extends AbstractOneManyPropertyService
     if ( empty( $args ))
       throw new InvalidArgumentException( 'Constructor accepts one or three arguments' );
         
-    $arg0 = ( $args[0] instanceof IOneManyPropSvcCfg );
+    $arg0 = ( $args[0] instanceof IOneManyPropSvcCfg ) && ( !isset( $args[1] ) || is_array( $args[1] ));
     $arg1 = ( isset( $args[1] ) && is_array( $args[1] ));
            
-    if ( $arg0 && $arg1 )
+    if ( $arg0 || ( $arg0 && $arg1 ))
       $this->__constructnew( ...$args );
     else
       $this->__constructold( ...$args );

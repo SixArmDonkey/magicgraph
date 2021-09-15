@@ -81,7 +81,32 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
       try {
         //..Do stuff before the save operation 
         $this->saveState->BEFORE_SAVE;
-        $this->runBeforeSave( $model );    
+        
+        //..Do stuff before the save operation 
+        $bsRes = $this->runBeforeSave( $model );    
+
+        //..Saves can be overridden in beforeSave
+        //..Weird.
+        if ( $bsRes === true )
+          return;
+        else if ( is_array( $bsRes ))
+        {
+          foreach( $bsRes as $r )
+          {
+            $bsModels[] = $r;
+          }
+
+          if ( !empty( $bsModels ))
+          {
+            array_unshift( $model );
+            $this->saveState->NONE;
+            //..Obviously, this can cause shenanigans.  
+            $this->saveAll( ...$bsModels );
+            return;
+          }
+        }        
+        
+        
 
         $this->saveState->SAVE;
         //..Save the model
@@ -166,11 +191,34 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
           $m->validate();      
         }
 
+        
+        $bsModels = [];
         $this->saveState->BEFORE_SAVE;
         foreach( $model as $m )
         {
           //..Do stuff before the save operation 
-          $this->runBeforeSave( $m );    
+          $bsRes = $this->runBeforeSave( $m );    
+          
+          //..Saves can be overridden in beforeSave
+          //..Weird.
+          if ( $bsRes === true )
+            return;
+          else if ( is_array( $bsRes ))
+          {
+            foreach( $bsRes as $r )
+            {
+              $bsModels[] = $r;
+            }
+            
+            if ( !empty( $bsModels ))
+            {
+              array_unshift( $model );
+              $this->saveState->NONE;
+              //..Obviously, this can cause shenanigans.  
+              $this->saveAll( ...$bsModels );
+              return;
+            }
+          }
         }
 
         $this->saveState->SAVE;
@@ -206,10 +254,13 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
 
   /**
    * Called before the repo save call is made.
+   * If this returns a bool and it is true, this will return and NOT save.
+   * If this returns an array of IModel, the models will be validated, run through before save, then added to the list of models to save.
    */
-  protected function beforeSave( IModel $model ) : void
+  protected function beforeSave( IModel $model ) : null|bool|IModel
   {
     //..do nothing 
+    return null;
   }
   
   
@@ -235,7 +286,12 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
    * Retrieve an IRunnable instance to be used with some ITransaction instance.
    * This runnable will execute the supplied function prior to saving the model.
    *
-   * @param Closure $beforeSave What to run prior to saving f( IRepository, ...IModel )
+   * @param Closure $beforeSave What to run prior to saving f( IRepository, ...IModel ) : void|bool|IModel[] 
+   * 
+   * If this returns a bool and it is true, this will return and NOT save.
+   * If this returns an array of IModel, the models will be validated, run through before save, then added to the list of models to save.
+   * 
+   * 
    * @param Closure $afterSave What to run after saving f( IRepository, ...IModel )
    * @param IModel $models One or more models to save 
    * @return \Closure Function
@@ -245,8 +301,22 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
     $this->test( ...$models );
     $self = $this;
     return function() use($beforeSave,$afterSave, $models,$self) {
-      if ( $beforeSave != null && $beforeSave( $self, ...$models ) === true )
-        return;
+      
+      $bsResult = ( $beforeSave != null ) ? $beforeSave( $self, ...$models ) : null;
+      
+      if ( $bsResult === true )
+        return null;
+      else if ( is_array( $bsResult ))
+      {
+        foreach( $bsResult as $r )
+        {
+          if ( !( $r instanceof IModel ))
+            throw new ValidationException( 'When returning an array from the beforeSave callback, all elements must be instances of ' . IModel::class );
+          
+          $models[] = $r;
+        }
+      }
+      
       
       foreach( $models as $model )
       {
@@ -263,7 +333,11 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
    * Retrieve an IRunnable instance to be used with some ITransaction instance.
    * This runnable will execute the supplied function prior to saving the model.
    *
-   * @param Closure|null $beforeSave What to run prior to saving f( IRepository, ...IModel )
+   * @param Closure $beforeSave What to run prior to saving f( IRepository, ...IModel ) : void|bool|IModel[] 
+   * 
+   * If this returns a bool and it is true, this will return and NOT save.
+   * If this returns an array of IModel, the models will be validated, run through before save, then added to the list of models to save.
+   * 
    * @param Closure|null $afterSave What to run after saving f( IRepository, ...IModel )
    * @param Closure $getModels f() : IModel[]  Retrieve a list of models to save 
    * @return \Closure Function
@@ -275,8 +349,20 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
       $models = $getModels();
       $this->test( ...$models );
             
-      if ( $beforeSave != null && $beforeSave( $self, ...$models ) === true )
-        return;
+      $bsResult = ( $beforeSave != null ) ? $beforeSave( $self, ...$models ) : null;
+      
+      if ( $bsResult === true )
+        return null;
+      else if ( is_array( $bsResult ))
+      {
+        foreach( $bsResult as $r )
+        {
+          if ( !( $r instanceof IModel ))
+            throw new ValidationException( 'When returning an array from the beforeSave callback, all elements must be instances of ' . IModel::class );
+          
+          $models[] = $r;
+        }
+      }
       
       foreach( $models as $model )
       {
@@ -308,16 +394,43 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
   
   
   
-  private function runBeforeSave( IModel $model ) : void
+  private function runBeforeSave( IModel $model ) : null|bool|array
   {
-    $this->beforeSave( $model );
+    $bsRes = $this->beforeSave( $model );
+    
+    if ( $bsRes === true )
+      return null;
+    else if ( is_array( $bsRes ))
+    {
+      foreach( $bsRes as $r )
+      {
+        if ( !( $r instanceof IModel ))
+          throw new ValidationException( 'When returning an array from the beforeSave callback, all elements must be instances of ' . IModel::class );
+      }
+    }
+    
     
     //..Run the property before save methods 
     foreach( $model->getPropertySet()->getConfigObjects() as $c )
     {
       /* @var $c IPropertyConfig */
-      $c->beforeSave( $model );
+      $psRes = $c->beforeSave( $model );
+      if ( $psRes === true )
+        return null;
+      
+      if ( is_array( $psRes ))
+      {
+        foreach( $psRes as $r )
+        {
+          if ( !( $r instanceof IModel ))
+            throw new ValidationException( 'When returning an array from the beforeSave callback, all elements must be instances of ' . IModel::class );
+
+          $bsRes[] = $r;
+        }      
+      }
     }
+    
+    return ( empty( $bsRes )) ? null : $bsRes;
   }
   
   
