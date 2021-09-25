@@ -41,7 +41,7 @@ use InvalidArgumentException;
  * $d->foo = 'bar';
  * $d->bar = 1;
  * $d1 = new Databag();
- * $d1 = 'nestedfoo';
+ * $d1->foo = 'nestedfoo';
  * $d->baz = $d1;
  */
 class Databag extends DefaultModel
@@ -73,8 +73,7 @@ class Databag extends DefaultModel
   {
     if ( !$this->getPropertySet()->isMember( $property ))
     {
-      
-      
+      //..Code smell.  Replace with a factory?
       if ( is_string( $value ))
       {
         $prop = (new DefaultStringProperty( $property ))->reset();

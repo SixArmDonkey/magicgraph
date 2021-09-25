@@ -45,8 +45,8 @@ class StringProperty extends BoundedProperty implements IStringProperty
     $this->hasPattern = !empty( $this->pattern );
     $this->hasMin = $this->getMin() > -1;
     $this->hasMax = $this->getMax() > -1;
-    $this->min = (int)$this->getMin();
-    $this->max = (int)$this->getMax();
+    $this->min = ( $this->getMin() != PHP_FLOAT_MIN ) ? (int)$this->getMin() : PHP_FLOAT_MIN;
+    $this->max = ( $this->getMax() != PHP_FLOAT_MAX ) ? (int)$this->getMax() : PHP_FLOAT_MAX;
     $this->hasValidation = $this->hasMin || $this->hasMax || $this->hasPattern;
   }
   
@@ -96,7 +96,7 @@ class StringProperty extends BoundedProperty implements IStringProperty
 
       if ( $this->hasMin && $len < $this->min )
         throw new ValidationException( sprintf( 'Value for property %s must be a string with a character length greater than %d', $this->getName(), $this->getMin()));
-      else if ( $this->hasMax > -1 && $len > $this->max )
+      else if ( $this->hasMax && $len > $this->max )
         throw new ValidationException( sprintf( 'Value for property %s must be a string with a character length less than %d', $this->getName(), $this->getMax()));
       else if ( $this->hasPattern && !preg_match( $this->pattern, $value ))
         throw new ValidationException( sprintf( 'Value for property %s must match the pattern %s', $this->getName(), $this->pattern ));

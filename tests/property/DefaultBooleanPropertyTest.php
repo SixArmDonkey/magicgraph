@@ -18,7 +18,7 @@ use buffalokiwi\magicgraph\property\SPropertyFlags;
  * 
  * @author John Quinn
  */
-class BooleanPropertyTest extends AbstractPropertyTest
+class DefaultBooleanPropertyTest extends AbstractPropertyTest
 {
   /**
    * Creates a property to test

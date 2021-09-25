@@ -26,7 +26,7 @@ use buffalokiwi\magicgraph\ValidationException;
 
 
 
-class DefaultIntegerPropertyText extends AbstractPropertyTest
+class DefaultIntegerPropertyTest extends AbstractPropertyTest
 {
   /**
    * Creates a property to test

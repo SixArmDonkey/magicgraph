@@ -118,6 +118,7 @@ class DefaultStringPropertyTest extends AbstractPropertyTest
     $b->setMin( 2 );
     $b->setMax( 5 );
     
+    echo '**************';
     $prop = new StringProperty( $b );
     
     $prop->setValue( 'abc' );

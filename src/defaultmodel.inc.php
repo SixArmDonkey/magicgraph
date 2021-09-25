@@ -980,7 +980,7 @@ class DefaultModel implements IModel
         //..Forcing the choice to UTC might not be the best choice
         //..Testing property types is generally a no-no.
         //..The reason for this is due to how prop->__toString() is no longer 
-        //..A reliable way to get the value as a string.  There are too many behavior options.
+        //..a reliable way to get the value as a string.  There are too many behavior options.
         //..Consider changing DateTimeWrapper::__toString() to simply output a sql timestamp        
         if ( $val instanceof IDateTime )
         {
@@ -1024,7 +1024,7 @@ class DefaultModel implements IModel
      * @todo Consider validating these properties against model/array property sets embedded within this model.
      */
     if ( $includeExtra )
-    {      
+    {
       foreach( $this->extraData as $k => $v )
       {
         $out[$k] = $v;
@@ -1055,7 +1055,9 @@ class DefaultModel implements IModel
       $pk1 = $this->getValue( $pk );
       try {
         $pk2 = $that->getValue( $pk );
-        if ( $pk1 != $pk2 )
+        
+        //..We want strict type comparision because getValue() has no return type specified.
+        if ( $pk1 !== $pk2 )
           return false;
       } catch (Exception $ex) {
         return false;
@@ -1076,7 +1078,7 @@ class DefaultModel implements IModel
     foreach( $this->getPropertySet()->getProperties() as $p1 )
     {
       try {
-        $p2 = $that->getPropertySet()->getProperty( $p2 );
+        $p2 = $that->getPropertySet()->getProperty( $p1->getName());
         
         if (( is_array( $p1 ) || is_object( $p1 ))
           && json_encode( $p1 ) != json_encode( $p2 ))
@@ -1084,7 +1086,8 @@ class DefaultModel implements IModel
           return false;
         }
           
-        if ( $p1->getValue() != $p2->getValue())
+        //..We want strict type comparision because getValue() has no return type specified.
+        if ( $p1->getValue() !== $p2->getValue())
           return false;
       } catch (Exception $ex) {
         return false;

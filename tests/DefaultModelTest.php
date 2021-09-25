@@ -344,21 +344,15 @@ class DefaultModelTest extends TestCase
   {
     $m = $this->createIModelInstance();
     $m->setValue( 'name', 'value' );
-    $props = $m->getPropertySet();
-    $this->assertInstanceOf( IPropertySet::class, $props );
     
-    $props->clear();
-    $props->add( 'name' );
-    $json = $m->toObject( $props );
-    
-    
+    $json = $m->toObject();
     $this->assertIsObject( $json );
     $this->assertTrue( isset( $json->name ));
     $this->assertEquals( 'value', $json->name );
     
-    $json = json_encode( $m );
-    $this->assertIsString( $json );
-    $this->assertEquals( "{\"name\":\"value\"}", $json );
+    $json2 = json_encode( $m );
+    $this->assertIsString( $json2 );
+    $this->assertEquals( json_encode( $json ), $json2 );
   }
   
   
@@ -388,25 +382,6 @@ class DefaultModelTest extends TestCase
     $this->assertTrue( isset( $arr['name'] ));
     $this->assertEquals( 'value', $arr['name'] );
     $this->assertEquals( 1, sizeof( $arr ));
-  }
-  
-  
-  /**
-   * Tests IModel::equals()
-   * Let A and B being instances of IModel, and test the following:
-   * 
-   * get_class( A ) == get_class( B )
-   * get_class( A::getPropertySet()) == get_class( B::getPropertySet())
-   * A::hash() == B::hash()
-   * 
-   * Expects the class name of A to match the class name of B
-   * Expects the IPropertySet instance passed to A to be the same class as The IPropertySet passed to B
-   * Expects the result of the hash methods to match.
-   */
-  public function testEquals() : void
-  {
-    $this->assertTrue( $this->instance->equals( $this->createIModelInstance()));
-    $this->assertFalse( $this->instance->equals( new QuickModel( ['name' => ['type' => 'string', 'value' => '']] )));
   }
   
   

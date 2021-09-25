@@ -109,16 +109,17 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
       
       return $instance;
     }
-    else if ( $this->isUseNull())
-    {
-      return null;
-    }
     else
     {
       try {
         $c = $this->clazz;
         return new $c();
       } catch( \Error $e ) {
+        if ( $this->isUseNull())
+        {
+          return null;
+        }
+        
         throw new \Exception( 'Failed to create instance of ' . $this->clazz . '.  This is most likely because the model requires constructor arguments.  Try adding "null" to the property flags array for the property "' . $this->getName() . '"', $e->getCode(), $e );
       }
     }

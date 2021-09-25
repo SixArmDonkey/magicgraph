@@ -25,7 +25,7 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
    * Create a new EnumProperty instance 
    * @param IObjectPropertyBuilder $builder Builder 
    */
-  public function __construct( IObjectPropertyBuilder $builder )
+  public function __construct( IObjectPropertyBuilder $builder ) 
   {
     parent::__construct( $builder );
   }  
@@ -38,7 +38,7 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
   {    
     $val = $this->getValue();
     if ( $val == null )
-      $val = $this->initValue();
+      return $this->initValue();
     
     return $val;
   }
@@ -119,7 +119,9 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
     }
     
     if ( $enum == null )
+    {
       return $enum;
+    }
     
     $dv = $this->getDefaultValue();
     if ( is_string( $dv ) && $enum->isValid( $dv ))
