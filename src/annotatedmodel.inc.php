@@ -22,6 +22,7 @@ use Attribute;
   
 /**
  * @todo Build this into defaultmodel?
+ * @todo Do this without annotations?  
  */
 class AnnotatedModel extends DefaultModel
 {  

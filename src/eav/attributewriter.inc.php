@@ -106,6 +106,11 @@ class AttributeWriter
       $attr->setMin(( isset( $config[DefaultPropertyConfig::MIN] )) ? $config[DefaultPropertyConfig::MIN] : -2147483647 );
       $attr->setPattern(( isset( $config[DefaultPropertyConfig::PATTERN] )) ? $config[DefaultPropertyConfig::PATTERN] : '' );
       $attr->setPropertyClass(( isset( $config[DefaultPropertyConfig::CLAZZ] )) ? $config[DefaultPropertyConfig::CLAZZ] : '' );
+      
+      /**
+       * @todo getType() may be deprecated in the future.  Manage eav property types within the eav package.
+       * @todo Maybe make EAVProperty extends AbstractProperty and require IPropertyType as a constructor argument to EAVProperty 
+       */
       $attr->setPropertyType( $prop->getType());
 
       $toSave[] = $attr;        

@@ -126,9 +126,10 @@ class StringProperty extends BoundedProperty implements IStringProperty
    * Called when setting a property value.
    * Casts the value to a string.
    * @param mixed $value Value being set
+   * @param mixed $curValue the current value 
    * @return string Value to set 
    */
-  protected function setPropertyValue( $value )
+  protected function setPropertyValue( $value, $curValue )
   {
     return (string)$value;
   }

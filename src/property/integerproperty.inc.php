@@ -68,9 +68,10 @@ class IntegerProperty extends BoundedProperty implements IIntegerProperty
    * Called when setting a property value.
    * Casts the value to an integer.
    * @param mixed $value Value being set
+   * @param mixed $curValue the current value 
    * @return int Value to set 
    */
-  protected function setPropertyValue( $value )
+  protected function setPropertyValue( $value, $curValue )
   {
     return (int)$value;
   }

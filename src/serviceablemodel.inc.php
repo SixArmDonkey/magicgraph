@@ -177,6 +177,10 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
     foreach( array_keys( $this->providers ) as $name )
     {
       $p = $this->getPropertySet()->getProperty( $name );
+      
+      /**
+       * @todo getType() may be deprecated.  
+       */
       if ( !$includeArrays && $p->getType()->is( property\IPropertyType::TARRAY ))
         continue;
       else if ( !$includeModels && $p->getType()->is( property\IPropertyType::TMODEL ))

@@ -167,7 +167,12 @@ class ElementFactory implements IElementFactory
         continue;
       }
       else if ( $prop->getType()->is( IPropertyType::TMODEL, IPropertyType::TOBJECT ))
+      {
+        /**
+         * @todo getType() may be deprecated.  
+         */
         continue;
+      }
       else if ( !empty( $flag ) && $prop->getFlags()->hasVal( $flag ))
         continue;
       

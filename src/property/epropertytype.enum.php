@@ -21,21 +21,5 @@ use buffalokiwi\buffalotools\types\Enum;
  */
 class EPropertyType extends Enum implements IPropertyType
 {
-  protected array $enum = [
-    self::TMONEY,
-    self::TDATE,
-    self::TSET,
-    self::TENUM,
-    self::TRTENUM,
-    self::TSTRING,
-    self::TFLOAT,
-    self::TINTEGER,
-    self::TBOOLEAN,
-    self::TARRAY,
-    self::TMODEL,
-    self::TOBJECT
-  ];
-  
-  
   protected string $value = self::TSTRING;
 }

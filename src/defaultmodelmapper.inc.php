@@ -22,6 +22,10 @@ use InvalidArgumentException;
  * Maps property names and values to a model.
  * 
  * This should only be used with a single object type.  ie: one mapper per repository.
+ * 
+ * Note: It is assumed that this will only be used to create and/or hydrate objects.
+ * Therefore, this calls IModel::hydrate() instead of IModel::setValue().  
+ * Edit flags are never set when using this model mapper implementation.
  */
 class DefaultModelMapper implements IModelMapper
 {
@@ -143,12 +147,14 @@ class DefaultModelMapper implements IModelMapper
       //..Simply ignore any non-member properties.
       //..The extra properties may be used with service providers
       try {
-        $model->setValue( $k, $v );
+        $model->hydrate( $k, $v );
+        //$model->setValue( $k, $v );
       } catch( \InvalidArgumentException $e ) {
         //..Do nothing.
       }
     }
-    $model->clearEditFlags();
+    
+    //$model->clearEditFlags();
   }
   
   
@@ -202,13 +208,19 @@ class DefaultModelMapper implements IModelMapper
     {
       throw new Exception( "createModel supplier must return an instance of " . $this->clazz . '.  Got ' . (( is_object( $model )) ? get_class( $model ) : gettype( $model )));
     }
-    
-    $model->clearEditFlags();
+      
+    //..deprecated 
+    //$model->clearEditFlags();
     
     return $model;
   }
   
   
+  /**
+   * @param array $data
+   * @param bool $dataFromDB
+   * @return array
+   */
   private function mapData( array $data, bool $dataFromDB ) : array
   {
     if ( $this->maps == null )

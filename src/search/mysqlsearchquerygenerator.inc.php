@@ -405,6 +405,9 @@ class MySQLSearchQueryGenerator implements ISearchQueryGenerator
         throw new SearchException( 'Invalid property name' );      
         
       
+      /**
+       * @todo getType() may be deprecated.  
+       */
       if ( !$skipModelCheck && $prop->getType()->is( IPropertyType::TARRAY, IPropertyType::TMODEL, IPropertyType::TOBJECT ))
       {
         return;

@@ -430,6 +430,22 @@ class DefaultModel implements IModel
     
   
   /**
+   * Bypasses readonly, no_insert and no_update restrictions if and only if the internal edited state is set to false.
+   * ie: You can't use this if you have already called setValue()
+   * @param string $property Property to set
+   * @param mixed $value property value
+   * @return void
+   * @throws InvalidArgumentException if the property is invalid 
+   * @throws ValidationException 
+   * @throws UnexpectedValueException if internal edited state is true 
+   */  
+  public function hydrate( string $property, $value ) : void
+  {
+    $this->_setValue( true, $property, $value );
+  }
+  
+  
+  /**
    * Sets the value of some property.
    * 
    * If the IProperty::getPrepare() callback is used, $aValue is supplied as an argument, and the 
@@ -447,6 +463,30 @@ class DefaultModel implements IModel
    * @throws ValidationException if value is invalid 
    */
   public function setValue( string $property, $value ) : void
+  {
+    $this->_setValue( false, $property, $value );
+  }
+  
+  
+  
+  /**
+   * Sets the value of some property.
+   * 
+   * If the IProperty::getPrepare() callback is used, $aValue is supplied as an argument, and the 
+   * result of that callback is used as the value moving forward.
+   * 
+   * The value is validated against IProperty::validate()
+   * 
+   * The value is committed to the model using commitValue() 
+   * 
+   * The edited property set has the corresponding bit enabled 
+   * 
+   * @param string $property Property to set
+   * @param mixed $value property value
+   * @throws InvalidArgumentException if the property is not a member of this model
+   * @throws ValidationException if value is invalid 
+   */
+  private function _setValue( bool $hydrate, string $property, $value ) : void
   {    
     //..Edits for a child model by prefix (see other comments in constructor and setValue)
     $res = $this->getPropertyByPrefix( $property );
@@ -485,10 +525,8 @@ class DefaultModel implements IModel
       return;
     }
     
-    //..Get the property entity.  This also checks membership and throws an exception.
-    //$prop = $this->getProperty( $property );
     
-    if ( $prop->getFlags()->hasVal( IPropertyFlags::PRIMARY ) && !empty( $prop->getValue()))
+    if ( !$hydrate && $prop->getFlags()->hasVal( IPropertyFlags::PRIMARY ) && !empty( $prop->getValue()))
     {
       throw new ValidationException( 'Primary key may not be changed after instantiation' );
     }
@@ -506,7 +544,10 @@ class DefaultModel implements IModel
     }
     
     //..Set the value 
-    $prop->setValue( $value );
+    if ( $hydrate )
+      $prop->hydrate( $value );
+    else
+      $prop->setValue( $value );
     
     /*
     //..Set this property to edited 
@@ -546,6 +587,11 @@ class DefaultModel implements IModel
         $out->add( $p->getName());
       
       
+      /**
+       * Code smell: We should not be writing code for specific property implementations in DefaultModel
+       * @todo This is one of the few instances where IProperty::getType() is used.  
+       * @todo This can probably be rewritten to use prefox instead of getType()
+       */
       if ( !empty( $p->getPrefix()) && $p->getType()->is( IPropertyType::TMODEL ))
       {
         $pm = $p->getValue();
@@ -915,6 +961,9 @@ class DefaultModel implements IModel
       //..This logic blows, but it's late and I'll fix it later.
       $prefix = $prop->getPrefix();
       
+      /**
+       * @todo getType() should be deprecated.  Figure out how to handle this without getType()
+       */
       if ( empty( $prefix ) && !$includeModels && $prop->getType()->is( IPropertyType::TMODEL, IPropertyType::TOBJECT ))
       {
         //..Without this, extra db queries can happen.
@@ -990,6 +1039,9 @@ class DefaultModel implements IModel
         }
         else if ( $prop->getType()->value() == IPropertyType::TDATE )
         {
+          /**
+           * @todo getType() should be deprecated.  Figure out how to handle this without getType()
+           */
           //..Special handling for null dates.
           $out[$prop->getName()] = null;
         }
@@ -1155,6 +1207,9 @@ class DefaultModel implements IModel
       $value = $prop->getValue();
       if ( $prop->getFlags()->hasVal( IPropertyFlags::REQUIRED ) && !$prop->getFlags()->hasVal( IPropertyFlags::PRIMARY ) && (( empty( $value ) && $value !== false ) || $value === '0000-00-00 00:00:00' ))
       {       
+        /**
+         * @todo getType() could be replaced with get_class( $prop ) 
+         */
         $message = '"' . $prop->getName() . '" property of class "' . static::class . '" of type "' . $prop->getType() .'" is REQUIRED and must not be empty.';
         if ( $throw )
           throw new ValidationException( $message );
@@ -1233,6 +1288,9 @@ class DefaultModel implements IModel
       if ( !$prop->getFlags()->hasVal( IPropertyFlags::NO_INSERT ))
       {
       
+        /**
+         * @todo getType() should be deprecated.  Try to refactor using getPrefix() instead of getType()
+         */
         if ( !empty( $prop->getPrefix()) && $prop->getType()->is( IPropertyType::TMODEL ))
         {
           //$pm = $prop->getValue();

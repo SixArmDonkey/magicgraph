@@ -28,6 +28,7 @@ use TypeError;
 
 /**
  * A MySQL based attribute repo.
+ * @todo The SQL could probably be moved out of this to create a more generic abstraction
  */
 class MySQLAttributeRepo extends AttributeRepo
 {

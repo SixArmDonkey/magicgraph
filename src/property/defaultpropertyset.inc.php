@@ -235,6 +235,9 @@ class DefaultPropertySet extends BigSet implements IPropertySet
         $p = $this->getProperty( $p );
         
         
+        /**
+         * @todo getType() may be deprecated.  
+         */
         if ( $p->getType()->is( IPropertyType::TMODEL ) && !$this->getProperty( $p->getName())->getValue()->getPropertySet()->isMember( substr( $c, strlen( $p->getPrefix()))))
         {
           return false;

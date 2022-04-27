@@ -15,17 +15,16 @@ namespace buffalokiwi\magicgraph\property;
 
 use buffalokiwi\magicgraph\ValidationException;
 use InvalidArgumentException;
-use UI\Exception\InvalidArgumentException as InvalidArgumentException2;
 use function ctype_digit;
 
 
 /**
  * A boolean property 
  */
-class BooleanProperty extends AbstractProperty implements IBooleanProperty
+abstract class BooleanProperty extends AbstractProperty implements IBooleanProperty
 {
   /**
-   * Create a new Property instance 
+   * @param IPropertyBuilder $builder Property configuration 
    */
   public function __construct( IPropertyBuilder $builder )
   {
@@ -71,9 +70,10 @@ class BooleanProperty extends AbstractProperty implements IBooleanProperty
    * Called when setting a property value.
    * Casts the value to a boolean.
    * @param mixed $value Value being set
+   * @param mixed $curValue the current value 
    * @return bool Value to set 
    */
-  protected function setPropertyValue( $value )
+  protected function setPropertyValue( $value, $curValue )
   {    
     $value = $this->strToBool( $value );
     return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
@@ -87,7 +87,7 @@ class BooleanProperty extends AbstractProperty implements IBooleanProperty
    * false, no, n, 0, (bool)false
    * @param string $s Boolean value as a string or a bool
    * @return boolean Boolean value for $s
-   * @throws InvalidArgumentException2 if $s cannot be converted
+   * @throws InvalidArgumentException if $s cannot be converted
    * @static
    */
   protected function strToBool( $s )

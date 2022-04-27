@@ -78,10 +78,21 @@ class PropertyBuilder implements IPropertyBuilder
    */
   private $tag = '';
   
+  
   /**
    * Create a new PropertyBuilder instance 
    */
-  public function __construct( IPropertyType $type, ?IPropertyFlags $flags = null, string $name = '', $defaultValue = null, ?IPropertyBehavior $behavior = null )
+  /**
+   * 
+   * @param IPropertyType $type Property type
+   * @param IPropertyFlags|null $flags
+   * @param string $name
+   * @param type $defaultValue
+   * @param IPropertyBehavior|null $behavior
+   * @todo Give serious consideration to removing IPropertyType.  I think this is only used to create the correct property object instances in DefaultConfigMapper 
+   */
+  public function __construct( IPropertyType $type, ?IPropertyFlags $flags = null, string $name = '', 
+    $defaultValue = null, ?IPropertyBehavior $behavior = null )
   {
     $this->type = $type;
     $this->flags = ( $flags == null ) ? new SPropertyFlags() : $flags;
@@ -114,12 +125,21 @@ class PropertyBuilder implements IPropertyBuilder
   }
   
   
+  /**
+   * Retrieve an arbitrary tag value 
+   * @return string
+   */
   public function getTag() : string
   {
     return $this->tag;
   }
+    
   
-  
+  /**
+   * Set an arbitrary tag value 
+   * @param string $tag value 
+   * @return void
+   */
   public function setTag( string $tag ) : void 
   {
     $this->tag = $tag;
@@ -165,12 +185,19 @@ class PropertyBuilder implements IPropertyBuilder
    */
   public function getFlags() : IPropertyFlags
   {
-    if ( !( $this->flags instanceof IPropertyFlags ))
-      throw new \Exception( 'No IPropertyFlags instance has been set.  Please set one' );
+    //..It is impossible for this exception to be thrown as long as $flags is private 
+    //if ( !( $this->flags instanceof IPropertyFlags ))
+    //  throw new \Exception( 'No IPropertyFlags instance has been set.  Please set one' );
+    
     return $this->flags;
   }
 
 
+  /**
+   * Overwrite the internal property flags instance with a new one 
+   * @param IPropertyFlags $flags flags 
+   * @return void
+   */
   public function setFlags( IPropertyFlags $flags ) : void
   {
     $this->flags = $flags;
@@ -187,12 +214,19 @@ class PropertyBuilder implements IPropertyBuilder
   }    
   
   
+  /**
+   * Sets the property name 
+   * @param string $name name 
+   * @return void
+   * @throws \InvalidArgumentException
+   */
   public function setName( string $name ) : void
   {
-    if ( empty( $name ))
+    $tn = trim( $name );
+    if ( strlen( $tn ) == 0 )
       throw new \InvalidArgumentException( 'property name must not be empty' );
     
-    $this->name = $name;
+    $this->name = $tn;
   }
   
   
@@ -210,7 +244,7 @@ class PropertyBuilder implements IPropertyBuilder
    * Retrieve the default value for some property 
    * @return mixed Default value 
    */
-  public function getDefaultValue()
+  public function getDefaultValue() : mixed 
   {
     return $this->defaultValue;
   }
@@ -259,13 +293,23 @@ class PropertyBuilder implements IPropertyBuilder
     return $this->config;
   }      
 
-  
+
+  /**
+   * Retrieve the optional prefix that may be used by some property implementations
+   * @return string
+   */
   public function getPrefix() : string
   {
     return $this->prefix;
   }
   
   
+  /**
+   * Some property implementations may utilize a prefix.
+   * This is some arbitrary string value.
+   * @param string $value The prefix 
+   * @return void
+   */
   public function setPrefix( string $value ) : void
   {
     $this->prefix = $value;

@@ -419,6 +419,9 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
             //..If the property is a bounded property and has a max length greater than 255.
             $isBounded255 = (( $prop instanceof IBoundedProperty ) && $prop->getMax() > 255 );
 
+            /**
+             * @todo getType() may be deprecated.  Base data type on detected type of the value instead of getType(), which is more betterer anyway.
+             */
             //..Add the value part of the condition 
             if ( $prop->getType()->is( IPropertyType::TSTRING ) && $isBounded255 )
             {
@@ -547,6 +550,9 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
 
         //..If the property is a bounded property and has a max length greater than 255.
         //..Add the value part of the condition 
+        /**
+         * @todo getType() may be deprecated.  Base data type on detected type of the value instead of getType(), which is more betterer anyway.
+         */
         if ( $prop->getType()->is( IPropertyType::TSTRING ) && ( $prop instanceof IBoundedProperty ) && $prop->getMax() > 255 )
           $maybeText[$code] = true;
 
@@ -581,6 +587,9 @@ class MySQLEAVSearchQueryGenerator implements ISearchQueryGenerator
       
       /* @var $prop IProperty */
       
+      /**
+       * @todo getType() may be deprecated.  Base data type on detected type of the value instead of getType(), which is more betterer anyway.
+       */
       if ( $prop->getType()->is( IPropertyType::TARRAY, IPropertyType::TMODEL, IPropertyType::TOBJECT )
        || $prop->getFlags()->hasVal( IPropertyFlags::NO_INSERT )) //..The NO_INSERT means the property IS NOT REAL.
       {

@@ -36,6 +36,7 @@ interface IProperty
   /**
    * Sets the internal edited flag to false 
    * @return void
+   * @deprecated Use hydrate() and reset()
    */
   public function clearEditFlag() : void;
   
@@ -66,11 +67,13 @@ interface IProperty
    */
   public function getPrefix() : string;
   
+  
   /**
    * Retrieve random config data
    * @return mixed
    */
   public function getConfig();
+  
   
   /**
    * Retrieve the optionally set unique identifier for this property.
@@ -79,6 +82,7 @@ interface IProperty
    */
   public function getId() : int;
   
+  
   /**
    * Retrieve the attribute caption/label.
    * If no caption is listed, this returns name.
@@ -86,7 +90,10 @@ interface IProperty
    */
   public function getCaption() : string;  
   
+  
   /**
+   * Prevents overridable method calls within the constructor and potential inconsistent/incomplete program state.
+   * 
    * Initialize and/or reset the property state to default.
    * First checks for an init callback attached to IPropertyBehavior.  If it exists, then
    * the result of that callback is used as the default value, otherwise the default value
@@ -140,11 +147,22 @@ interface IProperty
    */
   public function validate( $value ) : void;    
     
+  
   /**
    * Retrieve the default value for some property 
    * @return mixed Default value 
    */
-  public function getDefaultValue();
+  public function getDefaultValue() : mixed;
+  
+  
+  /**
+   * Bypasses readonly, no_insert and no_update restrictions.  This will always set the edited state to false.
+   * @param mixed $value Value to write 
+   * @return void
+   * @throws ValidationException 
+   * @throws UnexpectedValueException if internal edited state is true 
+   */
+  public function hydrate( $value ) : void;  
   
   
   /**
@@ -160,7 +178,7 @@ interface IProperty
    * Retrieve the stored property value 
    * @return mixed value 
    */
-  public function getValue( array $context = [] );    
+  public function getValue( array $context = [] ) : mixed;
   
   
   /**
@@ -186,6 +204,8 @@ interface IProperty
    * 
    * Override AbstractProperty::isPropertyEmpty() to customize isEmpty without the use of behaviors.
    * @return bool
+   * @todo Reconsider. Empty is a generic term, and it may be better to test against known values via getValue()
+   * @todo It makes no sense testing for an empty sql timestamp.  They differ between databases and should we consider the epoch to be empty?  Leave this for property implementations to decide.
    */
   public function isEmpty() : bool;
 }

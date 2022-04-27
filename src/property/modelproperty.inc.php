@@ -91,7 +91,11 @@ class ModelProperty extends ObjectProperty implements IModelProperty
       return;
     
     if ( empty( $value ) || !is_a( $value, $this->getClass()))
-      throw new ValidationException( sprintf( 'Value "%s" for property %s must be an instance of %s Got %s %s', (string)$value, $this->getName(), $this->getClass(), gettype( $value ), ( is_object( $value )) ? ' of class ' . get_class( $value ) : '' ));
+    {
+      throw new ValidationException( sprintf( 'Value "%s" for property %s must be an instance of %s Got %s %s', 
+        (string)$value, $this->getName(), $this->getClass(), gettype( $value ), 
+        ( is_object( $value )) ? ' of class ' . get_class( $value ) : '' ));
+    }
   }
   
   
@@ -123,8 +127,7 @@ class ModelProperty extends ObjectProperty implements IModelProperty
   protected function preparePropertyValue( $value )
   {
     if ( !( $value instanceof IModel ))
-    {
-      
+    {      
       return $this->getValueAsModel();
     }
     else

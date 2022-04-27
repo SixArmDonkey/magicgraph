@@ -36,6 +36,9 @@ abstract class ServiceableAttributeModel extends ServiceableModel implements IAt
    */
   public function getAttributes( ?BigSet $names = null ) : array
   {        
+    /**
+     * @todo What the fuck is this doing here????
+     */
     if ( interface_exists( '\buffalokiwi\retailrack\magicgraph\IRRPropertyFlags' ))
       $flag = \buffalokiwi\retailrack\magicgraph\IRRPropertyFlags::NOT_EDITABLE;
     else

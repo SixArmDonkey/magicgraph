@@ -146,6 +146,19 @@ interface IModel extends IteratorAggregate, JsonSerializable
   
   
   /**
+   * Bypasses readonly, no_insert and no_update restrictions if and only if the internal edited state is set to false.
+   * ie: You can't use this if you have already called setValue()
+   * @param string $property Property to set
+   * @param mixed $value property value
+   * @return void
+   * @throws InvalidArgumentException if the property is invalid 
+   * @throws ValidationException 
+   * @throws UnexpectedValueException if internal edited state is true 
+   */  
+  public function hydrate( string $property, $value ) : void;
+  
+  
+  /**
    * Retrieve a list of modified properties 
    * @return ISet modified properties 
    */

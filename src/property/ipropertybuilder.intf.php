@@ -8,13 +8,9 @@
  * @author John Quinn
  */
 
-
+declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\property;
-
-use Closure;
-use \InvalidArgumentException;
-
 
 
 /**
@@ -23,15 +19,34 @@ use \InvalidArgumentException;
  */
 interface IPropertyBuilder
 {
+  /**
+   * Retrieve the optional prefix that may be used by some property implementations
+   * @return string
+   */
   public function getPrefix() : string;
   
   
+  /**
+   * Some property implementations may utilize a prefix.
+   * This is some arbitrary string value.
+   * @param string $value The prefix 
+   * @return void
+   */
   public function setPrefix( string $value ) : void;
 
-  
+
+  /**
+   * Retrieve an arbitrary tag value 
+   * @return string
+   */
   public function getTag() : string;
   
   
+  /**
+   * Set an arbitrary tag value 
+   * @param string $tag value 
+   * @return void
+   */  
   public function setTag( string $tag ) : void;  
   
   /**
@@ -70,6 +85,12 @@ interface IPropertyBuilder
    */
   public function getFlags() : IPropertyFlags;  
   
+  
+  /**
+   * Overwrite the internal property flags instance with a new one 
+   * @param IPropertyFlags $flags flags 
+   * @return void
+   */
   public function setFlags( IPropertyFlags $flags ) : void;
 
 
@@ -79,7 +100,14 @@ interface IPropertyBuilder
    */
   public function getName() : string;
   
+  
+  /**
+   * Sets the property name 
+   * @param string $name
+   * @return void
+   */
   public function setName( string $name ) : void;
+  
   
   /**
    * Sets the default property value
@@ -93,12 +121,12 @@ interface IPropertyBuilder
    * Retrieve the default value for some property 
    * @return mixed Default value 
    */
-  public function getDefaultValue();
+  public function getDefaultValue() : mixed;
   
   
   /**
    * Sets callbacks to modify the property behavior 
-   * @param \buffalokiwi\magicgraph\property\IPropertyBehavior $behavior callbacks
+   * @param IPropertyBehavior $behavior callbacks
    * @return void
    */
   public function addBehavior( ?IPropertyBehavior $behavior ) : void;
@@ -106,11 +134,9 @@ interface IPropertyBuilder
 
   /**
    * Retrieve callbacks for modifying property behavior 
-   * @return \buffalokiwi\magicgraph\property\IPropertyBehavior[] callbacks
+   * @return IPropertyBehavior[] callbacks
    */
   public function getBehavior() : array;
-  
-  
   
   
   /**

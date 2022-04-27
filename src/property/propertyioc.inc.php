@@ -20,6 +20,9 @@ class PropertyIoC extends PropertyTypeIoC implements IPropertyIoC
 {
   public function create( IPropertyBuilder $builder ) : IProperty
   {
+    /**
+     * @todo getType() may be deprecated.  
+     */
     $f = $this->getFactoryFunction( $builder->getType()->value());
     $prop = $f( $builder );
     if ( !( $prop instanceof IProperty ))

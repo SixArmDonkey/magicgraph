@@ -165,6 +165,7 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
    * Lock the table via "lock tables".
    * Disables autocommit.
    * @return void
+   * @todo Do we want to force an unlock within a shutdown function?  Does the driver auto unlock?  
    */
   public function lockTable() : void
   {
@@ -346,6 +347,8 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
           
           //..This needs to be revised.
           //..Not really sure why this is here.
+          //..This probably has something to do with the EAV package
+          //..It uses 'code' as the attribute code property name, and 'value' as the mixed value property name.
           if ( $col == 'code' && isset( $row['value'] ))
           {
             $col = $val;
@@ -541,6 +544,10 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       {
         if ( $op == null || $op->is( ESQLOperator::IN, ESQLOperator::NOT_IN ))
         {
+          /**
+           * @todo getType() may be deprecated.  Base data type on detected type of the value instead of getType(), which is more betterer anyway.
+           */
+          
           $_op = ( $op == null ) ? 'in' : $op->value();
           $conditions[] = $col . ' ' . $_op . ' ' . $this->dbc->prepareIn( $val, $this->properties()->getProperty( $col )->getType()->is( IPropertyType::TINTEGER ));
         }
@@ -841,6 +848,9 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
       {
         $prop = $model->getPropertySet()->getProperty( $member );
 
+        /**
+         * @todo getType() may be deprecated.  
+         */
         //..Yep, this should be an adapter or something.
         if ( $prop->getType()->value() == IPropertyType::TARRAY 
           && !$prop->getFlags()->hasAny( IPropertyFlags::NO_INSERT, IPropertyFlags::NO_ARRAY_OUTPUT ))
@@ -895,6 +905,9 @@ class SQLRepository extends SaveableMappingObjectFactory implements ISQLReposito
 
         //..This should be some type of adapter.
         //..This is stupid.  like for real, stupid.
+        /**
+         * @todo getType() may be deprecated.  
+         */
         if ( $prop->getType()->value() == IPropertyType::TARRAY 
           && !$prop->getFlags()->hasAny( IPropertyFlags::NO_UPDATE, IPropertyFlags::NO_ARRAY_OUTPUT ))
         {            

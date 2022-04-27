@@ -20,14 +20,5 @@ use buffalokiwi\buffalotools\types\Set;
  */
 class SPropertyFlags extends Set implements IPropertyFlags
 {
-  const MEMBERS = [
-    self::PRIMARY,
-    self::USE_NULL,
-    self::REQUIRED,
-    self::NO_UPDATE,
-    self::NO_INSERT,
-    self::SUBCONFIG,
-    self::WRITE_EMPTY,
-    self::NO_ARRAY_OUTPUT
-  ];
+
 }

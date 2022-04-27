@@ -3,342 +3,336 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2022 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
 
 declare( strict_types=1 );
 
-
 use buffalokiwi\magicgraph\property\IProperty;
 use buffalokiwi\magicgraph\property\IPropertyBehavior;
+use buffalokiwi\magicgraph\property\IPropertyBuilder;
 use buffalokiwi\magicgraph\property\IPropertyFlags;
 use buffalokiwi\magicgraph\property\IPropertyType;
-use buffalokiwi\magicgraph\property\PropertyBehavior;
-use buffalokiwi\magicgraph\property\SPropertyFlags;
+use buffalokiwi\magicgraph\property\PropertyBuilder;
 use buffalokiwi\magicgraph\ValidationException;
 use PHPUnit\Framework\TestCase;
 
 
+
 /**
- * Tests the AbstractProperty class.
+ * This is the base test class for AbstractProperty
+ * Extend this to test IProperty implementations 
  * 
- * This is currently broken due to the way object comparison is "not" working.
- * Objects that are technically equal may have different internal states, therefore
- * a standard "==" comparison will not work.  Furthermore, the internal property object instance 
- * may be different than the object supplied to setValue(), so "===" will not work either.
- * 
- * When checking values returned by the property, this needs to take objects into
- * consideration.  If objects are being compared, then they should implement the 
- * same interfaces, and they should also have the same value when cast to a string.
- * All properties are required to be able to be cast to strings.
- * 
+ * @todo Write tests for __clone()
  */
 abstract class AbstractPropertyTest extends TestCase
 {
-  /**
-   * Creates a property to test
-   * @param string $name Property name
-   * @param IPropertyType $type Property type 
-   * @param IPropertyFlags $flags Property flag set 
-   * @param IPropertyBehavior $behavior Property behavior callbacks 
-   * @param mixed $defaultValue Default property value 
-   * @return IProperty instance to test
-   * @abstract
-   */
-  protected abstract function createProperty( 
-    string $name, 
-    IPropertyType $type,
-    IPropertyFlags $flags, 
-    ?IPropertyBehavior $behavior, 
-    $defaultValue 
-  ) : IProperty;
-  
-  
-  /**
-   * Retrieve the property type to test
-   * @return IPropertyType type
-   * @abstract
-   */
-  protected abstract function getPropertyType() : IPropertyType;
-  
-  
-  /**
-   * Returns some value to test.
-   * This must be of the appropriate type.
-   * DO NOT RETURN NULL.
-   * @return mixed value 
-   * @abstract
-   */
-  protected abstract function getValue();
-  
-  /**
-   * Returns a second value to test.
-   * This must be of the appropriate type.
-   * DO NOT RETURN NULL.
-   * @return mixed value 
-   * @abstract
-   */
-  protected abstract function getValue2();
-  
-
-
-  /**
-   * Tests the getName method.
-   * Expects the same name to be returned 
-   */
-  public function testGetName() : void
-  {
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), null, $this->getValue());
-    $this->assertEquals( 'test', $prop->getName());
-  }
-  
-  
-  /**
-   * Tests the getType method.
-   * Expects an IPropertyType instance 
-   * @return void
-   */
-  public function testGetType() : void
-  {
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), null, $this->getValue());
-    $this->assertInstanceOf( IPropertyType::class, $prop->getType());
-    $this->assertEquals( $this->getPropertyType()->value(), $prop->getType()->value());
-  }
-  
-  
-  /**
-   * Tests the getFlags() method.
-   * Expects an IPropertyFlags instance 
-   * @return void
-   */
-  public function testGetFlags() : void
-  {
-    $flags = new SPropertyFlags( SPropertyFlags::PRIMARY );
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), $flags, null, $this->getValue());
-    $this->assertInstanceOf( IPropertyFlags::class, $prop->getFlags());
-    $this->assertEquals( $flags->getValue(), $prop->getFlags()->getValue());
-  }
-  
-  
-  /**
-   * Tests the getPropertyBehavior() method.
-   * Expects an IPropertyBehavior instance or null 
-   * @return void
-   */
-  public function testGetPropertyBehavior() : void
-  {
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior(), $this->getValue());
-    foreach( $prop->getPropertyBehavior() as $b )
-    {
-      $this->assertInstanceOf( IPropertyBehavior::class, $b );
-    }
-  }
-  
-  
-  /**
-   * Tests that validating null on a property that does not accept null values throws a ValidationException
-   * @return void
-   */
-  public function testValidateNullException() : void 
-  {
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior(), $this->getValue());
-    $this->expectException( ValidationException::class );
-    $prop->validate( null );
-  }
-  
-  
-  /**
-   * Sets a validation behavior callback that purposely fails.
-   * Tests that validation throws a ValidationException due to the behavior callback.
-   * @return void
-   */
-  public function testValidateBehaviorCallback() : void
-  {
-    //..Test behavior validate callback 
-    //..Behavior callback will simply return false, which means invalid 
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior( function( IProperty $prop, $value ) {            
-      //..This will always fail without this line.      
-      if ( $value == $this->getValue())
-       return true;
-      
-      return false;      
-    }), $this->getValue());
+  protected const name = 'name';
+  protected const defaultValue = 'default';
+  protected const caption = 'caption';
+  protected const id = 1;
+  protected const tag = 'tag';
+  protected const config = [true];
+  protected const prefix = 'prefix';
+  protected const flagTotal = 12345;
     
-    $this->expectError();
-    $prop->validate( $this->getValue2()); //..Validate "true" to fail
-    
-    PHPUnit_Framework_Error_Warning::$enabled = false;    
-    $this->expectException( ValidationException::class );
-    $prop->validate( $this->getValue2()); //..Validate "true" to fail
-    PHPUnit_Framework_Error_Warning::$enabled = true;
+  protected $propertyBuilder = null;          
+  protected $instance = null;
+  
+  protected abstract function getInstance( ?PropertyBuilder $pb ) : IProperty;
+  
+  
+  public function setUp() : void
+  {
+    $this->propertyBuilder = $this->createPropertyBuilder();
+    $this->instance = $this->getInstance( $this->propertyBuilder );
   }
   
   
-  /**
-   * Tests the validate method.
+  /**   
+   * When name is empty, InvalidArgumentException is thrown 
+   * Supplying a name not matching [a-zA-Z0-9_]+ throws an InvalidArgumentException 
+   * Supplying the same invalid name not matching [a-zA-Z0-9_]+ a second time throws an InvalidArgumentException
    * 
-   * Passes this->getValue() as the first value
-   * Passing null without the SPropertyFlags::USE_NULL flag enabled throws an exception
-   * PropertyBehavior validate method returns false and throws an exception
-   * calls validateImplementation() to test implementation-specific validation
    * @return void
    */
-  public function testValidate() : void
-  {
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior(), $this->getValue());
+  public function testConstructor() : void
+  {    
+    try {
+      $b = $this->createPropertyBuilder( '' );
+      $this->getInstance( $b );
+      $this->fail( 'When IPropertyBuilder::getName() returns an empty string, an InvalidArgumentException must be thrown' );
+    } catch( InvalidArgumentException $e ) {
+      //..Expected
+    }
     
-    //..Should be fine.
-    $this->assertNull( $prop->validate( $this->getValue()));
     
-    //..Ensure null works when specified 
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags( SPropertyFlags::USE_NULL ), new PropertyBehavior(), $this->getValue());        
-    $this->assertNull( $prop->validate( null ));
+    try {
+      $b = $this->createPropertyBuilder( ' ' );
+      $this->getInstance( $b );
+      $this->fail( 'When IPropertyBuilder::getName() returns an empty string, an InvalidArgumentException must be thrown' );
+    } catch( InvalidArgumentException $e ) {
+      //..Expected
+    }    
+    
+    //..Just checking a few things here.  Obviously this is not an exhaustive list 
+    $b = $this->createPropertyBuilder( 'The_Name1' );
+    $this->assertSame( 'The_Name1', $this->getInstance( $b )->getName());
+    
+    $b = $this->createPropertyBuilder( 'a' );
+    $this->assertSame( 'a', $this->getInstance( $b )->getName());
+
+    
+    try {
+      $b = $this->createPropertyBuilder( 'na me' );
+      $this->getInstance( $b );
+      $this->fail( 'value returned by IPropertyBuilder::getName() must match [a-zA-Z0-9_]+' );
+    } catch( InvalidArgumentException $e ) {
+      //..Expected
+    }
+    
+
+    try {
+      $b = $this->createPropertyBuilder( '1' );
+      $this->getInstance( $b );
+      $this->fail( 'property names must start with a letter' );
+    } catch( InvalidArgumentException $e ) {
+      //..Expected
+    }    
+
+    
+    try {
+      $b = $this->createPropertyBuilder( '1a' );
+      $this->getInstance( $b );
+      $this->fail( 'property names must start with a letter' );
+    } catch( InvalidArgumentException $e ) {
+      //..Expected
+    }    
+     
+    
+    try {
+      $b = $this->createPropertyBuilder( 'name-' ); 
+      $this->getInstance( $b );
+      $this->fail( 'value returned by IPropertyBuilder::getName() must match [a-zA-Z0-9_]+' );
+    } catch( InvalidArgumentException $e ) {
+      //..Expected
+    }
     
     
-    //..Same as before, but with a successful callback 
-    //..This should not fail 
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior( function( IProperty $prop, $value ) {      
-       return true;
-    }), $this->getValue());
-    $this->assertNull( $prop->validate( $this->getValue()));        
+    try {
+      $b = $this->createPropertyBuilder( 'name#' );
+      $this->getInstance( $b );
+      $this->fail( 'value returned by IPropertyBuilder::getName() must match [a-zA-Z0-9_]+' );
+    } catch( InvalidArgumentException $e ) {
+      //..Expected
+    }
+    
+    
+    try {
+      $b = $this->createPropertyBuilder( 'name\\' );
+      $this->getInstance( $b );
+      $this->fail( 'value returned by IPropertyBuilder::getName() must match [a-zA-Z0-9_]+' );
+    } catch( InvalidArgumentException $e ) {
+      //..Expected
+    }
+    
+    
+    //..Duplicated on purpose - checks validation cache 
+    try {
+      $b = $this->createPropertyBuilder( 'name\\' );
+      $this->getInstance( $b );
+      $this->fail( 'value returned by IPropertyBuilder::getName() must match [a-zA-Z0-9_]+' );
+    } catch( InvalidArgumentException $e ) {
+      //..Expected
+    }    
+    
+    
+    //..Duplicate on purpose 
+    $b = $this->createPropertyBuilder( 'The_Name1' );
+    $this->assertSame( 'The_Name1', $this->getInstance( $b )->getName());
+        
+    $this->expectError();
+    $this->getInstance();
   }
   
   
-  /**
-   * Tests that the default value is property assigned and returned when creating a property.
-   * Also tests the IPropertyBehavior init callback where the default value can be modified.
-   * @return void
-   */
+  public function testGetTag() : void
+  {
+    $this->assertSame( self::tag, $this->getInstance( $this->createPropertyBuilder())->getTag());
+  }
+  
+  
+  public function testGetId() : void
+  {
+    $this->assertSame( self::id, $this->getInstance( $this->createPropertyBuilder())->getId());
+  }
+  
+  
   public function testGetDefaultValue() : void
   {
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior(), $this->getValue());
-    $this->assertEquals( $this->getValue(), $prop->getValue());
-
-    //..Test with a callback that can override the specified default value 
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior( null, function( $value ) {
-      return $this->getValue2();
-    }), $this->getValue());
-    
-    $this->assertEquals( $this->getValue2(), $prop->getValue());
+    $this->assertSame( self::defaultValue, $this->getInstance( $this->createPropertyBuilder())->getDefaultValue());
   }
   
   
-  
-  /**
-   * Test that validating null on a property that does not accept null
-   * throws a ValidationException 
-   * @return void
-   */
-  public function testValidateNullThrowsException() : void
+  public function testGetName() : void
   {
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior(), $this->getValue());
-    //..Test invalid value 
+    $this->assertSame( self::name, $this->getInstance( $this->createPropertyBuilder())->getName());
+  }
+  
+  
+  public function testGetType() : void
+  {
+    $this->assertSame( IPropertyType::TSTRING, $this->getInstance( $this->createPropertyBuilder())->getType()->value());
+  }
+  
+  
+  public function testGetFlags() : void
+  {
+    $this->assertSame( self::flagTotal, $this->getInstance( $this->createPropertyBuilder())->getFlags()->getTotal());
+  }
+  
+  
+  public function testGetPropertyBehavior() : void
+  {
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    
+    $b = $this->createPropertyBuilder();
+    $b->method( 'getBehavior' )->willReturn( [$b1] );
+    
+    $instance = $this->getInstance( $b );
+    $this->assertSame( 1, sizeof( $instance->getPropertyBehavior()));
+  }
+  
+  
+  public function testGetCaptionReturnsCaptionOrNameWhenEmpty() : void
+  {
+    $this->assertSame( self::caption, $this->getInstance( $this->createPropertyBuilder())->getCaption());
+    $this->assertSame( self::name, $this->getInstance( $this->createPropertyBuilder( self::name, '' ))->getCaption());
+  }
+  
+  
+  public function testGetConfig() : void
+  {
+    $this->assertSame( self::config, $this->getInstance( $this->createPropertyBuilder())->getConfig());
+  }
+  
+  
+  public function testGetPrefix() : void
+  {
+    $this->assertSame( self::prefix, $this->getInstance( $this->createPropertyBuilder())->getPrefix());
+  }          
+  
+  
+  public function testSetReadOnlyThrowsExceptionOnSetValue() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilder());
+    $instance->reset();
+    $instance->setValue( 'test' );
+    $instance->setReadOnly();
     $this->expectException( ValidationException::class );
-    $prop->setValue( null );
+    $instance->setValue( 'test' );    
   }
   
+  
+  public function testSetValueSetsAValueAndIsEdited() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilder());
+    $instance->reset();
+    $this->assertFalse( $instance->isEdited());
+    $this->assertSame( self::defaultValue, $instance->getValue());
+    $instance->setValue( 'test' );
+    $this->assertSame( 'test', $instance->getValue());
+    $this->assertTrue( $instance->isEdited());
+  }
+  
+  
+  public function testEditedIsFalseWhenNoInsertFlagIsSet() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilderWithFlags( self::name, IPropertyFlags::NO_INSERT ));
+    $instance->reset();
+    $this->assertFalse( $instance->isEdited());
+    $this->assertTrue( $instance->getFlags()->hasVal( IPropertyFlags::NO_INSERT ));
+    $instance->setValue( 'test' );
+    $this->assertFalse( $instance->isEdited());
+  }
+  
+  
+  public function testEditedIsFalseWhenNoUpdateFlagIsSet() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilderWithFlags( self::name, IPropertyFlags::NO_UPDATE ));
+    $instance->reset();
+    $this->assertFalse( $instance->isEdited());
+    $this->assertTrue( $instance->getFlags()->hasVal( IPropertyFlags::NO_UPDATE ));
+    $instance->setValue( 'test' );
+    $this->assertFalse( $instance->isEdited());
+  }
 
-  /**
-   * Tests the setValue() and getValue() methods.
-   * Ensures that values are valid, and throws exceptions if not.
-   * Tests IPropertyBehavior setter for overriding or modifying values 
-   * @return void
-   */
-  public function testGetSetValue() : void
+  
+  public function testHydrateSetsValueAndEditedIsFalse() : void
   {
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior(), $this->getValue());
-    $prop->setValue( $this->getValue2());
-    $this->assertEquals( $this->getValue2(), $prop->getValue());
     
-      
-    
-    //..Test with a callback that can override the specified default value 
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior( null, null, function( IProperty $prop, $value ) {
-      return $this->getValue2();
-    }), $this->getValue());
-    
-    $prop->setValue( $this->getValue());
-    $this->assertEquals( $this->getValue2(), $prop->getValue());
-    
-    //..Test getter override 
-    //..Test with a callback that can override the specified default value 
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior( null, null, null, function( IProperty $prop, $value ) {
-      return $this->getValue2();
-    }), $this->getValue());
-    
-    $prop->setValue( $this->getValue());
-    $this->assertEquals( (string)$this->getValue2(), (string)$prop->getValue());
   }
   
   
-  /**
-   * This must be called immediately after object creation and/or if you just
-   * want to reset the internal state of the property.
-   * The IPropertyBehavior init callback is also utilized.
-   * The init callack is tested in testGetDefaultValue()    
-   * @return void
-   */
-  public function testReset() : void
+  public function testHydrateThrowsUnexpectedValueExceptionWhenEditedIsTrue() : void
   {
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), new SPropertyFlags(), new PropertyBehavior(), $this->getValue());
-    $prop->setValue( $this->getValue2());
-    $prop->reset();
-    $this->assertEquals( $this->getValue(), $prop->getValue());    
+    
   }
   
   
+  
+  
+  
+  
+  
   /**
-   * Property cloning is required.
-   * This ensures that the internals are properly cloned.
-   * @return void
+   * Creates a property builder using protected class constants 
+   * @return type
    */
-  public function testMagicClone() : void
+  protected function createPropertyBuilder( $name = self::name, $caption = self::caption ) 
   {
-    $flags = new SPropertyFlags();
-    $behavior = new PropertyBehavior();
-    $prop = $this->makeProperty( 'test', $this->getPropertyType(), $flags, $behavior, $this->getValue());
-    //..Setting this to a different value because clone calls reset() and I want to test that reset works properly 
-    $prop->setValue( $this->getValue2());
-    $type = $prop->getType();
-    $value = $prop->getValue();
+    $f = $this->getMockBuilder( IPropertyFlags::class )->getMock();
+    $f->method( 'getTotal' )->willReturn( self::flagTotal );
     
-    $c = clone $prop;
+    $b = $this->createPropertyBuilderBase( $name, $caption );
+    $b->method( 'getFlags' )->willReturn( $f );
     
-    $this->assertSame((string)$this->getValue(), (string)$c->getValue());
-    $this->assertSame((string)$this->getValue2(), (string)$prop->getValue());
-    $this->assertNotSame( $prop, $c );
-    $this->assertNotSame( $flags, $c->getFlags());
-    foreach( $c->getPropertyBehavior() as $b )
-    {
-      $this->assertNotSame( $behavior, $b );
-    }
-    $this->assertNotSame( $type, $c->getType());
-    
-    if ( is_object( $value ))
-      $this->assertNotSame( $value, $c->getValue());
+    return $b;
   }
   
   
-  /**
-   * Calls createProperty()->reset();
-   * @param string $name
-   * @param IPropertyType $type
-   * @param IPropertyFlags $flags
-   * @param IPropertyBehavior $behavior
-   * @param type $defaultValue
-   * @return IProperty
-   * @final 
-   */
-  protected final function makeProperty( 
-    string $name, 
-    IPropertyType $type,
-    IPropertyFlags $flags, 
-    ?IPropertyBehavior $behavior, 
-    $defaultValue 
-  ) : IProperty 
+  protected function createPropertyBuilderWithFlags( $name = self::name, string ...$flags )
   {
-    return $this->createProperty( $name, $type, $flags, $behavior, $defaultValue )->reset();
+    $f = $this->getMockBuilder( IPropertyFlags::class )->getMock();
+    
+    $f->expects( $this->any())
+      ->method( 'hasVal' )
+      ->will( $this->returnCallback( fn( $p ) => in_array( $p, $flags )));
+    
+    $b = $this->createPropertyBuilderBase( $name );
+    $b->method( 'getFlags' )->willReturn( $f );
+    
+    return $b;
+  }
+  
+  
+  protected function createPropertyBuilderBase( $name = self::name, $caption = self::caption )
+  {
+    $t = $this->getMockBuilder( IPropertyType::class )->getMock();
+    $t->method( 'value' )->willReturn( IPropertyType::TSTRING );
+    
+    $b = $this->getMockBuilder( IPropertyBuilder::class )->getMock();
+    $b->method( 'getType' )->willReturn( $t );
+    $b->method( 'getName' )->willReturn( $name );
+    $b->method( 'getDefaultValue' )->willReturn( self::defaultValue );
+    $b->method( 'getCaption' )->willReturn( $caption );
+    $b->method( 'getId' )->willReturn( self::id );
+    $b->method( 'getTag' )->willReturn( self::tag );
+    $b->method( 'getConfig' )->willReturn( self::config );
+    $b->method( 'getPrefix' )->willReturn( self::prefix );
+    
+    return $b;
   }
 }

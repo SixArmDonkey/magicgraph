@@ -15,6 +15,10 @@ namespace buffalokiwi\magicgraph\property;
 use Closure;
 
 
+/**
+ * Functional implementation of IPropertyBehavior.
+ * This is an immutable DTO containing several optional event handlers defined via the constructor.
+ */
 class PropertyBehavior implements IPropertyBehavior
 {
   /**
@@ -28,8 +32,7 @@ class PropertyBehavior implements IPropertyBehavior
    * Get value callback 
    * @var Closure|null
    */
-  private $getter;
-  
+  private $getter;  
   
   /**
    * Set value callback 
@@ -41,16 +44,14 @@ class PropertyBehavior implements IPropertyBehavior
    * Get value callback 
    * @var Closure|null
    */
-  private $mgetter;
-  
+  private $mgetter;  
   
   /**
    * Set value callback 
    * @var Closure|null
    */
   private $msetter;
-  
-  
+    
   /**
    * Initializer callback 
    * @var Closure|null
@@ -89,6 +90,7 @@ class PropertyBehavior implements IPropertyBehavior
    * WARNING: Possibility of shenanigans!
    * ====================================
    * 
+   * When using non-staic closures:
    * Closures attached to this object SHOULD reference some variable equal to 
    * $this (inside the closure), instead of accessing $this directly.  
    * 
@@ -125,8 +127,7 @@ class PropertyBehavior implements IPropertyBehavior
   {
     //..This might not be so good.
     //..If the closures refernce $this, then $this will change.
-    //..Closures should probably reference some value equal to whatever $this 
-    //..was.
+    //..Closures should probably reference some value equal to whatever $this was or be static.
     if ( $this->validate != null )
       $this->validate = $this->validate->bindTo( $this );      
     if ( $this->init != null )
@@ -242,8 +243,7 @@ class PropertyBehavior implements IPropertyBehavior
   {
     return $this->mgetter;
   }  
-  
-  
+    
   
   /**
    * Callback used for initializing some value when the model is loaded.

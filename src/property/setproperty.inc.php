@@ -97,9 +97,10 @@ class SetProperty extends ObjectProperty implements ISetProperty
    * Override this in child classes to modify the value prior to committing it.
    * This is the default implementation which simply returns the supplied value.
    * @param mixed $value Value being set
+  * @param mixed $curValue the current value
    * @return mixed Value to set 
    */
-  protected function setPropertyValue( $value )
+  protected function setPropertyValue( $value, $curValue )
   {
     /* @var $value ISet */
     $set = $this->getValueAsSet();

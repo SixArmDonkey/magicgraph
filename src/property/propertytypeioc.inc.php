@@ -83,6 +83,9 @@ abstract class PropertyTypeIoC implements IPropertyTypeIoC
   
   public function createProperty( IPropertyBuilder $builder ) : IProperty
   {
+    /**
+     * @todo getType() may be deprecated.  
+     */
     $type = $builder->getType()->value();
     if ( !isset( $this->factories[$type] ))
       throw new InvalidArgumentException( sprintf( '%s is not a valid type for this property factory', $type ));

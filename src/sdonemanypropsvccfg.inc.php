@@ -32,9 +32,6 @@ use InvalidArgumentException;
  * The linked model must contain a single primary key property 
  * 
  * Use this with a OneManyPropertyService 
- * 
- * @todo extending BasePropSvcCfg might not make sense.  Consider changing this into some sort of relationship provider configuration or something.
- * 
  */
 class SDOneManyPropSvcCfg extends OneManyPropSvcCfg
 {

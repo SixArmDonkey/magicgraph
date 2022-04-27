@@ -101,9 +101,10 @@ class RuntimeEnumProperty extends AbstractProperty implements IEnumProperty
    * Override this in child classes to modify the value prior to committing it.
    * This is the default implementation which simply returns the supplied value.
    * @param mixed $value Value being set
+   * @param mixed $curValue the current value 
    * @return mixed Value to set 
    */
-  protected function setPropertyValue( $value )
+  protected function setPropertyValue( $value, $curValue )
   {
     $this->getValueAsEnum()->setValue(( $value instanceof IEnum ) ? $value->value() : $value );
     return $this->getValueAsEnum();
