@@ -140,8 +140,8 @@ abstract class AbstractProperty implements IProperty
    * @throws ValidationException If the supplied value is not valid 
    */
   protected abstract function validatePropertyValue( $value ) : void;
-  
-  
+
+
   /**
    * This is probably going to be the preferred way to instantiate properties
    * Depending on developers to call reset() after new is a bad idea.
@@ -251,6 +251,7 @@ abstract class AbstractProperty implements IProperty
     $this->value = $this->setPropertyValue( $this->preparePropertyValue( $val ), $this->value );
     
     $this->isEdited = false;
+    $this->isInitialized = true;
     
     return $this;
   }
@@ -408,7 +409,7 @@ abstract class AbstractProperty implements IProperty
     {
       if ( is_array( $value ))
         $value = implode( ',', $value );
-
+      
       throw new ValidationException( '"' . $value . '" of type "' . static::class .'" is not a valid value for the "' . $this->getName() 
          . '" property.  Check any behavior callbacks, and ensure that the property is set to the correct type.  IPropertyBehavior::getValidateCallback() failed.' );    
     }
@@ -644,27 +645,6 @@ abstract class AbstractProperty implements IProperty
     return $value;
   }
   
-  
-  /**
-   * All properties must be able to be cast to a string.
-   * If value is an array, it will be serialized by default.
-   * Classes overriding this method may change this behavior.
-   * 
-   * Values other than array are simply cast to a string.  Here be dragons.
-   * 
-   * @return string property value 
-   */
-  public function __toString()
-  {
-    if ( is_array( $this->value ))
-      return serialize( $this->value );
-    else if ( $this->value === null )
-      return null;
-    else
-      return (string)$this->value;
-  }
-  
-  
   /**
    * Sets the edited flag to true
    * @return void
@@ -788,7 +768,9 @@ abstract class AbstractProperty implements IProperty
         {
           /* @var $f \Closure */
           $r = new ReflectionFunction( $f );
-          $inObj = get_class( $r->getClosureThis()) . ' in file ' . $r->getFileName() . ' on line ' . $r->getStartLine();
+          $inObj = (( is_object( $r->getClosureThis())) ? get_class( $r->getClosureThis()) : 'Anonymous' ) 
+            . ' in file ' . $r->getFileName() . ' on line ' . $r->getStartLine();
+          
           trigger_error( 'Behavior validation failure in closure: ' . $inObj, E_USER_WARNING );          
           return false;
         }

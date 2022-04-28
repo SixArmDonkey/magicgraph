@@ -36,6 +36,10 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
   {
     return new class( $pb ) extends AbstractProperty {
       protected function validatePropertyValue( $value ) : void {}
+      
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
     };
   }
   
@@ -57,6 +61,10 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
     //..may be used to prevent directly setting the property value.  
     //  ie: when the value is an object, we can set properties of that object
     $instance = new class( $this->createPropertyBuilder( 'test' )) extends AbstractProperty {
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
+      
       protected function validatePropertyValue( $value ) : void {}
       
       //..Initialize is called during reset(), and before defaultValue is used.
@@ -176,6 +184,10 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
     
     //..Need to customize a bit 
     $instance = new class( $builder ) extends AbstractProperty {
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
+      
       protected function validatePropertyValue( $value ) : void {}
       
       protected function preparePropertyValue( $value ) : mixed {        
@@ -198,6 +210,10 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
   {
     //..Need to customize a bit 
     $instance = new class( $this->createPropertyBuilder( 'name' )) extends AbstractProperty {
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
+      
       protected function validatePropertyValue( $value ) : void {}
       
       protected function preparePropertyValue( $value ) : mixed {        
@@ -213,6 +229,116 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
     $instance->reset();
     $this->assertSame( self::defaultValue . '1' . '2', $instance->getValue());
   }
+  
+  
+  public function testSetValueCallsPreparePropertyValueBeforeSetterAndThenValidateAndFinallySetPropertyValue() : void
+  {
+    //..Need to customize a bit 
+    
+    $b = $this->createPropertyBuilder( 'name' );
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    
+    $expectedValue = self::value1 . '1s';
+    
+    $b1->method( 'getValidateCallback' )->willReturn( static function( IProperty $prop, mixed $value ) use($expectedValue) : bool {
+      return $expectedValue === $value;
+    });
+    
+    $b1->method( 'getSetterCallback' )->willReturn( static fn( IProperty $prop, mixed $value ) : mixed => $value . 's' );
+    
+  
+    $b->method( 'getBehavior' )->willReturn( [$b1] );
+    
+    $instance = new class( $b ) extends AbstractProperty {
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
+      
+      protected function validatePropertyValue( $value ) : void {}
+      
+      protected function preparePropertyValue( $value ) : mixed {        
+        return $value . '1';
+      }
+      
+      protected function setPropertyValue( $value, $curValue ) : mixed {
+        return $value . '2';
+      }
+    };
+    
+    $this->assertNull( $instance->getValue());
+    $instance->reset();
+    
+    $instance->setValue( self::value1 );
+    $this->assertSame( self::value1 . '1s' . '2', $instance->getValue());    
+  }  
+  
+  
+  public function testSetValueCallsSetterChain() : void
+  {
+    $b = $this->createPropertyBuilder( 'name' );
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b1->method( 'getSetterCallback' )->willReturn( static fn( IProperty $prop, mixed $value ) : mixed => $value . '1' );
+    
+    $b2 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b2->method( 'getSetterCallback' )->willReturn( static fn( IProperty $prop, mixed $value ) : mixed => $value . '2' );
+  
+    $b->method( 'getBehavior' )->willReturn( [$b1, $b2] );
+    
+    $instance = new class( $b ) extends AbstractProperty {
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
+      
+      protected function validatePropertyValue( $value ) : void {}
+    };
+    
+    $instance->reset();
+    $instance->setValue( self::value1 );
+    $this->assertSame( self::value1 . '1' . '2', $instance->getValue());    
+  }
+  
+  
+
+  public function testSetValueCallsOnChangeChain() : void
+  {
+    //..Change event result 1 and 2 
+    $c1 = '';
+    $c2 = '';
+    $order = [];
+    
+    
+    $b = $this->createPropertyBuilder( 'name' );
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b1->method( 'getOnChangeCallback' )->willReturn( static function( IProperty $prop, mixed $oldValue, mixed $newValue ) use(&$c1, &$order) : void {
+      $c1 = $oldValue . $newValue . '1';
+      $order[] = '1';
+    });
+    
+    $b2 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b2->method( 'getOnChangeCallback' )->willReturn( static function( IProperty $prop, mixed $oldValue, mixed $newValue ) use(&$c2, &$order) : void {
+      $c2 = $oldValue . $newValue . '2';
+      $order[] = '2';
+    });
+  
+    $b->method( 'getBehavior' )->willReturn( [$b1, $b2] );
+    
+    $instance = new class( $b ) extends AbstractProperty {
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
+      
+      protected function validatePropertyValue( $value ) : void {}
+    };
+    
+    $instance->reset();
+    $instance->setValue( self::value1 );
+    
+    $this->assertSame( self::defaultValue . self::value1 . '1', $c1 );
+    $this->assertSame( self::defaultValue . self::value1 . '2', $c2 );
+    $this->assertSame( '12', implode( '', $order ));
+  }
+  
+  
   
   
   /**

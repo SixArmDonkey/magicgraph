@@ -13,6 +13,8 @@ namespace buffalokiwi\magicgraph\property;
 
 use buffalokiwi\magicgraph\ValidationException;
 use InvalidArgumentException;
+use Stringable;
+use UnexpectedValueException;
 
 
 /**
@@ -23,7 +25,7 @@ use InvalidArgumentException;
  * The property flags are mostly used for the persistence layer, and are normally
  * accessed via IPropertySet.
  */
-interface IProperty
+interface IProperty extends Stringable
 {
   /**
    * Checks the internal edited flag.
@@ -179,13 +181,6 @@ interface IProperty
    * @return mixed value 
    */
   public function getValue( array $context = [] ) : mixed;
-  
-  
-  /**
-   * All properties must be able to be cast to a string
-   * @return string property value 
-   */
-  public function __toString();
   
   
   /**

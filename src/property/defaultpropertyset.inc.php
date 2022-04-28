@@ -26,6 +26,13 @@ use InvalidArgumentException;
  * 
  * @todo is there a point to this being backed by BigSet?
  * 
+ * Before MagicGraph, the set superclass did this:
+ * 1) Provide a container for white-listed property/column names 
+ * 2) handle edited flags
+ * 3) a way to group and return lists of property/column names for database queries, etc (bitsets make this easy)
+ * 
+ * Today, this object handles 1 and 2.  3 is no longer possible due to being backed by a BigSet.  However, the BigSet 
+ * could potentially return long[] from some method 
  */
 class DefaultPropertySet extends BigSet implements IPropertySet
 {
