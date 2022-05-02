@@ -117,7 +117,15 @@ interface IModel extends IteratorAggregate, JsonSerializable
   public function toArray( ?IBigSet $properties = null, bool $includeArrays = false, bool $includeModels = false, bool $includeExtra = false, int $_depth = 0 ) : array;
   
   
+  /**
+   * Import data from some array
+   * 
+   * @todo Is this hydration or editing?
+   * @param array $data
+   * @return void
+   */
   public function fromArray( array $data ) : void;  
+  
   
   /**
    * Test if this model is equal to some other model
@@ -131,7 +139,8 @@ interface IModel extends IteratorAggregate, JsonSerializable
    * Retrieve the value of some property
    * @param string $property Property 
    * @return mixed value
-   * @throws InvalidArgumentException if the property is invalid 
+   * @throws InvalidArgumentException if the property is invalid
+   * @throws ValidationException if getters are used and the result does not validate against the property rules 
    */
   public function getValue( string $property, array $context = [] );
   

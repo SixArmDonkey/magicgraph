@@ -25,10 +25,17 @@ use PHPUnit\Framework\TestCase;
  * This is the base test class for AbstractProperty
  * Extend this to test IProperty implementations 
  * 
+ * getValue() and setValue() are used in many of these tests, and I guess therefore "tested".
+ * 
+ * The internals of getValue() and setValue() are tested in AbstractPropertyInternalsTest 
+ * 
+ * 
+ * 
  * @todo Write tests for __clone()
  */
 abstract class AbstractPropertyTest extends TestCase
 {
+  //..Override these in some subclass when testing subclasses of AbstractProperty 
   protected const name = 'name';
   protected const defaultValue = 'default';
   protected const caption = 'caption';
@@ -39,6 +46,7 @@ abstract class AbstractPropertyTest extends TestCase
   protected const flagTotal = 12345;
   protected const value1 = 'test';
   protected const value2 = 'test2';
+  protected const invalidValue = 1;  //..Invalid value used for validation tests 
     
   protected $propertyBuilder = null;
   protected $instance = null;
@@ -276,9 +284,6 @@ abstract class AbstractPropertyTest extends TestCase
     $instance->setValue( static::value2 );
   }
   
-
-  
-  
   
   public function testEditedIsFalseWhenNoInsertFlagIsSet() : void
   {
@@ -324,9 +329,65 @@ abstract class AbstractPropertyTest extends TestCase
   }
   
   
+  /**
+   * @return void
+   */
+  public function testEditedFlagIsFalseAfterReset() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilder());
+    $instance->reset();
+    $this->assertFalse( $instance->isEdited());
+  }
+  
+  
+  /**
+   * test that reset() then editing some stuff, then calling reset() resets everything and the edit flag
+   */
+  public function testEditedFlagIsFalseAfterResetThenEditThenReset() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilder());
+    $instance->reset();
+    $this->assertFalse( $instance->isEdited());
+    $instance->setValue( static::value1 );
+    $this->assertTrue( $instance->isEdited());
+    $instance->reset();
+    $this->assertFalse( $instance->isEdited());    
+  }  
+  
+  
+  /**
+   * 
+   * @deprecated
+   */
+  public function testClearEditFlag() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilder());
+    $instance->reset();
+    $this->assertFalse( $instance->isEdited());
+    $instance->setValue( static::value1 );
+    $this->assertTrue( $instance->isEdited());
+    $instance->clearEditFlag();
+    $this->assertFalse( $instance->isEdited());        
+  }
+  
+  
+  public function testValidate() : void
+  {
+    //..Without callbacks, the default validate callback returns true (is valid).
+    //..Then protected method validatePropertyValue is called.
+    
+    $instance = $this->getInstance( $this->createPropertyBuilder());
+    $instance->reset();
+    
+    //..This should be fine
+    $instance->validate( static::value1 );
+    $this->expectException( ValidationException::class );
+    $instance->validate( static::invalidValue );
+  }
   
   
   
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   
   /**

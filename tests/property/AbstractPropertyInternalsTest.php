@@ -15,10 +15,18 @@ include_once( __DIR__ . '/AbstractPropertyTest.php' );
 use buffalokiwi\magicgraph\property\AbstractProperty;
 use buffalokiwi\magicgraph\property\IProperty;
 use buffalokiwi\magicgraph\property\IPropertyBehavior;
+use buffalokiwi\magicgraph\ValidationException;
 
 
 /**
- * Testing internals is strange, but this behavior is very important.
+ * The internals are explicitly tested because all of the properties shipped with magic graph 
+ * descend from AbstractProperty.  Subclasses depend on the functionality included within protected 
+ * methods and behavior callbacks managed by AbstractProperty.
+ * 
+ * The property builder utilized within these tests is based on a string property and MUST always be based on 
+ * strings, or not have a defined type.
+ * 
+ * Use AbstractPropertyTest as the base class for testing public methods and subclasses of AbstractProperty.
  * 
  * This tests AbstractProperty::reset()
  * 
@@ -30,12 +38,34 @@ use buffalokiwi\magicgraph\property\IPropertyBehavior;
  * 6) test that reset() then editing some stuff, then calling reset() resets everything and the edit flag
  * 7) test initValue() can write some arbitrary object to the property value, and overriding setPropertyValue can then set properties of that new value object
  */
-class AbstractPropertyResetTest extends AbstractPropertyTest
+class AbstractPropertyInternalsTest extends AbstractPropertyTest
 {
   protected function getInstance( $pb ) : IProperty
   {
-    return new class( $pb ) extends AbstractProperty {
-      protected function validatePropertyValue( $value ) : void {}
+    $dv = static::defaultValue;
+    $val1 = static::value1;
+    $val2 = static::value2;
+    
+    return new class( $pb, $dv, $val1, $val2 ) extends AbstractProperty {
+      private $dv;
+      private $v1;
+      private $v2;
+      
+      
+      public function __construct( $pb, $dv, $v1, $v2 ) {
+        parent::__construct( $pb );
+        $this->dv = $dv;
+        $this->v1 = $v1;
+        $this->v2 = $v2;
+      }
+      
+      protected function validatePropertyValue( $value ) : void {
+        if ( $value !== $this->dv && $value !== $this->v1 && $value !== $this->v2 )
+        {
+          var_dump( $value );
+          throw new ValidationException( 'value must be equal to static::value1 or static::value2' );;
+        }
+      }
       
       public function __toString() : string {
         return (string)$this->getValue();
@@ -109,7 +139,7 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
    */
   public function testResetSetsValueToDefaultValue() : void
   {
-    $instance = $this->getInstance( $this->createPropertyBuilder( 'name' ));
+    $instance = $this->getInstance( $this->createPropertyBuilder());
     $this->assertNull( $instance->getValue());
     $instance->reset();
     $this->assertSame( self::defaultValue, $instance->getValue());
@@ -122,7 +152,7 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
    */
   public function testResetInvokesInitCallback() : void
   {
-    $builder = $this->createPropertyBuilder( 'name' );
+    $builder = $this->createPropertyBuilder();
     $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
     $b1->method( 'getInitCallback' )->willReturn( fn( $val ) => $val . '1' );
     $builder->method( 'getBehavior' )->willReturn( [$b1] );
@@ -154,7 +184,7 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
    */
   public function testResetInvokesInitCallbackChain() : void
   {
-    $builder = $this->createPropertyBuilder( 'name' );
+    $builder = $this->createPropertyBuilder();
     
     $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
     $b1->method( 'getInitCallback' )->willReturn( fn( $val ) => $val . '1' );
@@ -173,7 +203,7 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
 
   public function testResetInvokesInitCallbackChainAndPreparePropertyValue() : void
   {
-    $builder = $this->createPropertyBuilder( 'name' );
+    $builder = $this->createPropertyBuilder();
     
     $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
     $b1->method( 'getInitCallback' )->willReturn( fn( $val ) => $val . '1' );
@@ -203,13 +233,14 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
   
   
   /**
-   * When calling reset, test that preparePropertyValue is called and the result is passed to setPropertyValue and then that result becomes the property value
+   * When calling reset, test that preparePropertyValue is called and the result is passed to 
+   * setPropertyValue and then that result becomes the property value
    * @return void
    */
-  public function testResetCallsSetAndPreparePropertyValue() : void
+  public function testResetCallsProtectedFunctionsSetAndPreparePropertyValue() : void
   {
     //..Need to customize a bit 
-    $instance = new class( $this->createPropertyBuilder( 'name' )) extends AbstractProperty {
+    $instance = new class( $this->createPropertyBuilder()) extends AbstractProperty {
       public function __toString() : string {
         return (string)$this->getValue();
       }
@@ -235,7 +266,7 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
   {
     //..Need to customize a bit 
     
-    $b = $this->createPropertyBuilder( 'name' );
+    $b = $this->createPropertyBuilder();
     $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
     
     $expectedValue = self::value1 . '1s';
@@ -273,9 +304,9 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
   }  
   
   
-  public function testSetValueCallsSetterChain() : void
+  public function testSetValueCallsSetterBehaviorChain() : void
   {
-    $b = $this->createPropertyBuilder( 'name' );
+    $b = $this->createPropertyBuilder();
     $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
     $b1->method( 'getSetterCallback' )->willReturn( static fn( IProperty $prop, mixed $value ) : mixed => $value . '1' );
     
@@ -299,7 +330,7 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
   
   
 
-  public function testSetValueCallsOnChangeChain() : void
+  public function testSetValueCallsOnChangeBehaviorChain() : void
   {
     //..Change event result 1 and 2 
     $c1 = '';
@@ -307,7 +338,7 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
     $order = [];
     
     
-    $b = $this->createPropertyBuilder( 'name' );
+    $b = $this->createPropertyBuilder();
     $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
     $b1->method( 'getOnChangeCallback' )->willReturn( static function( IProperty $prop, mixed $oldValue, mixed $newValue ) use(&$c1, &$order) : void {
       $c1 = $oldValue . $newValue . '1';
@@ -338,32 +369,118 @@ class AbstractPropertyResetTest extends AbstractPropertyTest
     $this->assertSame( '12', implode( '', $order ));
   }
   
-  
-  
-  
-  /**
-   * @return void
-   */
-  public function testEditedFlagIsFalseAfterReset() : void
+ 
+  public function testGetValueCallsProtectedFunctionGetPropertyValue() : void
   {
-    $instance = $this->getInstance( $this->createPropertyBuilder( 'name' ));
-    $instance->reset();
-    $this->assertFalse( $instance->isEdited());
-  }
-  
-  
-  /**
-   * test that reset() then editing some stuff, then calling reset() resets everything and the edit flag
-   */
-  public function testEditedFlagIsFalseAfterResetThenEditThenReset() : void
-  {
-    $instance = $this->getInstance( $this->createPropertyBuilder( 'name' ));
-    $instance->reset();
-    $this->assertFalse( $instance->isEdited());
-    $instance->setValue( 'test' );
-    $this->assertTrue( $instance->isEdited());
-    $instance->reset();
-    $this->assertFalse( $instance->isEdited());
+    $instance = new class( $this->createPropertyBuilder()) extends AbstractProperty {
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
+      
+      protected function validatePropertyValue( $value ) : void {}
+      
+      protected function getPropertyValue( $value ) : mixed {
+        return $value . '1';
+      }
+    };
     
+    $instance->reset();    
+    $this->assertSame( self::defaultValue . '1', $instance->getValue());
+  }  
+  
+  
+  public function testGetValueCallsGetterChain() : void
+  {
+    $b = $this->createPropertyBuilder();
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b1->method( 'getGetterCallback' )->willReturn( static fn( IProperty $prop, mixed $value ) : mixed => $value . '1' );
+    
+    $b2 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b2->method( 'getGetterCallback' )->willReturn( static fn( IProperty $prop, mixed $value ) : mixed => $value . '2' );
+  
+    $b->method( 'getBehavior' )->willReturn( [$b1, $b2] );
+    
+    $instance = new class( $b ) extends AbstractProperty {
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
+      
+      protected function validatePropertyValue( $value ) : void {}
+    };
+    
+    $instance->reset();
+    $instance->setValue( self::value1 );
+    $this->assertSame( self::value1 . '1' . '2', $instance->getValue());        
   }
+  
+  
+  public function testGetValueContextArgumentIsPassedToGetterChain() : void
+  {
+    $context = ['1'];
+    
+    $c1Context = null;
+    $c2Context = null;
+    
+    $b = $this->createPropertyBuilder();
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b1->method( 'getGetterCallback' )->willReturn( static function( IProperty $prop, mixed $value, array $context ) use(&$c1Context) : mixed {
+      $c1Context = $context;
+      return $value;
+    });
+    
+    $b2 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b2->method( 'getGetterCallback' )->willReturn( static function( IProperty $prop, mixed $value, array $context ) use(&$c2Context) : mixed {
+      $c2Context = $context;
+      return $value;
+    });
+  
+    $b->method( 'getBehavior' )->willReturn( [$b1, $b2] );
+    
+    $instance = new class( $b ) extends AbstractProperty {
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
+      
+      protected function validatePropertyValue( $value ) : void {}
+    };
+    
+    $instance->reset();
+    $instance->setValue( self::value1 );
+    $this->assertSame( self::value1, $instance->getValue( $context ));        
+    $this->assertSame( $context, $c1Context );
+    $this->assertSame( $context, $c2Context );
+  }
+  
+  
+  public function testValidateIsCalledWhenGettersAreUsedInGetValue() : void
+  {
+    $b = $this->createPropertyBuilder();
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b1->method( 'getGetterCallback' )->willReturn( static fn( IProperty $prop, mixed $value ) : mixed => $value );
+  
+    $b->method( 'getBehavior' )->willReturn( [$b1] );
+    
+    $instance = new class( $b ) extends AbstractProperty {
+      public function __toString() : string {
+        return (string)$this->getValue();
+      }
+      
+      protected function validatePropertyValue( $value ) : void {
+        throw new ValidationException();        
+      }
+    };
+    
+    $instance->reset();
+    
+    try {
+      $instance->setValue( self::value1 );
+      $this->fail( 'setValue() should be calling validatePropertyValue()' );
+    } catch( ValidationException $e ) {
+      //..Expected
+    }
+    
+    $this->expectException( ValidationException::class );
+    $this->assertSame( self::value1, $instance->getValue());
+  }
+  
 }

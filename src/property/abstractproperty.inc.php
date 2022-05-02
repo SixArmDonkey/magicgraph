@@ -264,6 +264,12 @@ abstract class AbstractProperty implements IProperty
    * Clones the type
    * 
    * WARNING: Property values MUST be copied over to the cloned model
+   * 
+   * @todo CLOSURE CLONING HAS BEEN DONE INCORRECTLY
+   * 
+   * If closures are defined as static, then the clone via bind technique being used in __clone will not work
+   * We need to first test for static, and if true, we simply assign it to the clone.  if false, then we copy/bind 
+   * 
    */
   public function __clone()
   {
@@ -410,13 +416,16 @@ abstract class AbstractProperty implements IProperty
       if ( is_array( $value ))
         $value = implode( ',', $value );
       
-      throw new ValidationException( '"' . $value . '" of type "' . static::class .'" is not a valid value for the "' . $this->getName() 
-         . '" property.  Check any behavior callbacks, and ensure that the property is set to the correct type.  IPropertyBehavior::getValidateCallback() failed.' );    
+      throw new ValidationException( '"' . $value . '" of type "' . static::class .'" is not a valid value for the "' 
+         . $this->getName() . '" property.  Check any behavior callbacks, and ensure that the property is set to ' 
+         . 'the correct type.  IPropertyBehavior::getValidateCallback() failed.' );    
     }
     
     if ( !$this->isUseNull() && $value === null )
     {
-      throw new ValidationException( '"' . $this->getName() . '" property of type "' . static::class .'" must not be null.  If you want null, set the IPropertyFlags::USE_NULL flag or set the default value to some non-null value' );
+      throw new ValidationException( '"' . $this->getName() . '" property of type "' . static::class 
+        . '" must not be null.  If you want null, set the IPropertyFlags::USE_NULL flag or set the default value '
+        . 'to some non-null value' );
     }
     
     $this->validatePropertyValue( $value );
@@ -550,6 +559,10 @@ abstract class AbstractProperty implements IProperty
     {
       throw new ValidationException( $this->name . ' has already been assigned a value, and is now read only' );
     }
+    
+    
+    
+    
     //..Prepare for validate
     $value = $this->preparePropertyValue( $value );
 
@@ -616,6 +629,7 @@ abstract class AbstractProperty implements IProperty
   /**
    * Sets the internal edited flag to false 
    * @return void
+   * @deprecated
    */
   public function clearEditFlag() : void
   {
@@ -625,22 +639,31 @@ abstract class AbstractProperty implements IProperty
   
   /**
    * Retrieve the stored property value 
+   * @param array $context Context array passed to getter callbacks 
    * @return mixed value 
+   * @throws ValidationException if getters violate property rules
    * @final 
    */
   public final function getValue( array $context = [] ) : mixed
   {
     $value = $this->getPropertyValue( $this->value );
     
+    //..If any getters were used
+    $hasGetter = false;
+    
     foreach( $this->behavior as $b )
     {
       $cb = $b->getGetterCallback();
       if ( $cb != null )
+      {
+        $hasGetter = true;
         $value = $cb( $this, $value, $context );
+      }
     }
     
-    if ( empty( $value ) && $this->flags->hasVal( IPropertyFlags::USE_NULL ))
-      return null;
+    //..Since getters can violate property rules, we need to enforce those here or we risk losing type safety.
+    if ( $hasGetter )
+      $this->validate( $value );
     
     return $value;
   }

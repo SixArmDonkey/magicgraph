@@ -178,7 +178,9 @@ interface IProperty extends Stringable
   
   /**
    * Retrieve the stored property value 
+   * @param array $context Context array passed to getter callbacks 
    * @return mixed value 
+   * @throws ValidationException if getters violate property rules
    */
   public function getValue( array $context = [] ) : mixed;
   

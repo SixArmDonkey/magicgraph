@@ -391,6 +391,7 @@ class DefaultModel implements IModel
    * @param string $property Property 
    * @return mixed value
    * @throws InvalidArgumentException if the property is not a member of the supplied IPropertySet instance  
+   * @throws ValidationException if getters are used and the result does not validate against the property rules
    */
   public function & getValue( string $property, array $context = [] )
   {
@@ -416,14 +417,19 @@ class DefaultModel implements IModel
     
     $value = $prop->getValue( $context );
     
+    $hasGetter = false;
     foreach( $prop->getPropertyBehavior() as $b )
     {
       $mgetter = $b->getModelGetterCallback();
       if ( $mgetter instanceof Closure )
       {
         $value = $mgetter( $this, $prop, $value, $context );
+        $hasGetter = true;
       }
     }
+    
+    if ( $hasGetter )
+      $prop->validate( $value );
     
     return $value;
   }
