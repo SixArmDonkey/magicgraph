@@ -40,29 +40,31 @@ use buffalokiwi\magicgraph\ValidationException;
  */
 class AbstractPropertyInternalsTest extends AbstractPropertyTest
 {
-  protected function getInstance( $pb ) : IProperty
+  protected function getInstance( $pb, $useNull = false ) : IProperty
   {
     $dv = static::defaultValue;
     $val1 = static::value1;
     $val2 = static::value2;
     
-    return new class( $pb, $dv, $val1, $val2 ) extends AbstractProperty {
+    return new class( $pb, $dv, $val1, $val2, $useNull ) extends AbstractProperty {
       private $dv;
       private $v1;
       private $v2;
+      private $useNull;
       
-      
-      public function __construct( $pb, $dv, $v1, $v2 ) {
+      public function __construct( $pb, $dv, $v1, $v2, $un ) {
         parent::__construct( $pb );
         $this->dv = $dv;
         $this->v1 = $v1;
         $this->v2 = $v2;
+        $this->useNull = $un;
       }
       
       protected function validatePropertyValue( $value ) : void {
-        if ( $value !== $this->dv && $value !== $this->v1 && $value !== $this->v2 )
+        if ( $this->useNull && $value === null )
+          return;        
+        else if ( $value !== $this->dv && $value !== $this->v1 && $value !== $this->v2 )
         {
-          var_dump( $value );
           throw new ValidationException( 'value must be equal to static::value1 or static::value2' );;
         }
       }
@@ -483,4 +485,148 @@ class AbstractPropertyInternalsTest extends AbstractPropertyTest
     $this->assertSame( self::value1, $instance->getValue());
   }
   
+  
+  public function testValidateCallsValidationCallbackChain() : void
+  {
+    $b = $this->createPropertyBuilder();
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b2 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    
+    $callChain = [];
+    
+    $b1->method( 'getValidateCallback' )->willReturn( static function( IProperty $prop, mixed $value ) use(&$callChain) : bool {
+      $callChain[] = '1';
+      return true;      
+    });
+    
+    $b2->method( 'getValidateCallback' )->willReturn( static function( IProperty $prop, mixed $value ) use(&$callChain) : bool {
+      $callChain[] = '2';
+      return true;      
+    });
+    
+    $b->method( 'getBehavior' )->willReturn( [$b1, $b2] );
+    
+    $instance = new class( $b ) extends AbstractProperty {
+      protected function validatePropertyValue( $value ) : void {}
+    };
+    
+    $this->assertNull( $instance->getValue());
+    $instance->reset();
+    $instance->validate( self::value1 );
+    $this->assertSame( '12', implode( '', $callChain ));
+  }
+  
+  
+  public function testValidateThrowsValidationExceptionWhenCallbackReturnsFalse() : void
+  {
+    $b = $this->createPropertyBuilder();
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    
+    $b1->method( 'getValidateCallback' )->willReturn( static function( IProperty $prop, mixed $value ) : bool {
+      return false;
+    });
+    
+    $b->method( 'getBehavior' )->willReturn( [$b1] );
+    
+    $instance = new class( $b ) extends AbstractProperty {
+      protected function validatePropertyValue( $value ) : void {}
+    };
+    
+    $instance->reset();
+    
+    try {
+      $this->expectError();
+      $instance->validate( self::value1 );
+      $this->fail( 'When a property validation callback fails, validate() must throw ValidationException' );
+    } catch( ValidationException $e ) {
+      //..expected 
+    }
+  }
+  
+  
+  public function testIsEmptyCallbackChainIsCalledWhenIsEmptyIsCalled() : void
+  {
+    $b = $this->createPropertyBuilder();
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    $b2 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    
+    $callChain = [];
+    
+    $b1->method( 'getIsEmptyCallback' )->willReturn( static function( IProperty $prop, mixed $value ) use(&$callChain) : bool {
+      $callChain[] = '1';
+      return true;      
+    });
+    
+    $b2->method( 'getIsEmptyCallback' )->willReturn( static function( IProperty $prop, mixed $value ) use(&$callChain) : bool {
+      $callChain[] = '2';
+      return true;      
+    });
+    
+    $b->method( 'getBehavior' )->willReturn( [$b1, $b2] );
+    
+    $instance = new class( $b ) extends AbstractProperty {
+      protected function validatePropertyValue( $value ) : void {}
+    };
+    
+    $instance->reset();
+    $instance->isEmpty();
+    $this->assertSame( '12', implode( '', $callChain ));    
+  }
+  
+    
+  public function testIsEmptyReturnsFalseWhenCallbackReturnsFalse() : void
+  {
+    $b = $this->createPropertyBuilder();
+    $b1 = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
+    
+    //..Callback always returns false 
+    $b1->method( 'getIsEmptyCallback' )->willReturn( static function( IProperty $prop, mixed $value ) use(&$callChain) : bool {
+      return false;
+    });
+    
+    $b->method( 'getBehavior' )->willReturn( [$b1] );
+    
+    $instance = new class( $b ) extends AbstractProperty {
+      protected function validatePropertyValue( $value ) : void {}
+      
+      //..Standard empty check is always true
+      protected function isPropertyEmpty( $value ) : bool {
+        return true;
+      }
+    };
+    
+    $instance->reset();
+    $this->assertFalse( $instance->isEmpty());
+  }
+  
+  
+  public function testIsEmptyCallsIsPropertyEmptyWhenNoCallbacksAreSupplied() : void
+  {
+    $b = $this->createPropertyBuilder();
+    
+    
+    $instance = new class( $b, static::value1 ) extends AbstractProperty {
+      private $val1;
+      
+      public function __construct( $b, $v1 )
+      {
+        parent::__construct( $b );
+        $this->val1 = $v1;
+      }
+      
+      protected function validatePropertyValue( $value ) : void {}
+      
+      //..Standard empty check is always true
+      protected function isPropertyEmpty( $value ) : bool {
+        return ( $value == $this->val1 );
+      }
+    };
+    
+    $instance->reset();
+    $this->assertFalse( $instance->isEmpty());
+    $instance->setValue( static::value1 );
+    $this->assertTrue( $instance->isEmpty());
+    $instance->setValue( static::value2 );
+    $this->assertFalse( $instance->isEmpty());
+  }
 }

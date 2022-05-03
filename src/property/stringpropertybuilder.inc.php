@@ -24,8 +24,6 @@ class StringPropertyBuilder extends BoundedPropertyBuilder implements IStringPro
   public function __construct( IPropertyType $type, IPropertyFlags $flags = null, string $name = '', $defaultValue = null, IPropertyBehavior $behavior = null )
   {
     parent::__construct( $type, $flags, $name, $defaultValue, $behavior );
-    $this->setMin( -1 );
-    $this->setMax( -1 );
   }
   
   

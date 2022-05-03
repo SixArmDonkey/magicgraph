@@ -49,6 +49,7 @@ interface IProperty extends Stringable
    * creating instances populated from persistent storage.  The idea is for the
    * mapping object factory to call this method after filling the model, but 
    * before returning it.
+   * @throws IllegalStateException if reset() has not been called 
    */
   public function setReadOnly() : void;
   

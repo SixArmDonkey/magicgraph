@@ -15,6 +15,8 @@ use buffalokiwi\magicgraph\ValidationException;
 use Closure;
 use InvalidArgumentException;
 use ReflectionFunction;
+use UnexpectedValueException;
+use function \json_decode;
 
 
 /**
@@ -410,9 +412,11 @@ abstract class AbstractProperty implements IProperty
   public final function validate( $value ) : void
   {
     $cb = $this->validateBehaviorCallback ?? $this->getValidateBehaviorCallback();
-
+    
     if ( !$cb( $this, $value ))
     {
+      
+      //..ehhhhh this is slightly stinky 
       if ( is_array( $value ))
         $value = implode( ',', $value );
       
@@ -429,6 +433,17 @@ abstract class AbstractProperty implements IProperty
     }
     
     $this->validatePropertyValue( $value );
+  }
+  
+  
+  /**
+   * Cast value to a string.
+   * Subclasses must override this if whatever value cannot be cast to a strin.
+   * @return string
+   */
+  public function __toString() : string 
+  {
+    return (string)$this->getValue();
   }
   
   
@@ -491,9 +506,13 @@ abstract class AbstractProperty implements IProperty
    * creating instances populated from persistent storage.  The idea is for the
    * mapping object factory to call this method after filling the model, but 
    * before returning it.
+   * @throws IllegalStateException if reset() hahs not been called 
    */
   public function setReadOnly() : void
   {
+    if ( !$this->isInitialized )
+      throw new IllegalStateException( 'Property not initialized: reset() must be called prior to setEdited()' );
+    
     $this->readOnly = true;
   }  
   
@@ -534,7 +553,7 @@ abstract class AbstractProperty implements IProperty
   {
     if ( $this->isEdited )
     {
-      throw new \UnexpectedValueException( 'Cannot hydrate "' . $this->name 
+      throw new UnexpectedValueException( 'Cannot hydrate "' . $this->name 
         . '" property after a value has been assigned.  hydrate() may only be called when isEdited() returns false.' );
     }
     
@@ -671,9 +690,13 @@ abstract class AbstractProperty implements IProperty
   /**
    * Sets the edited flag to true
    * @return void
+   * @throws IllegalStateException if reset() has not been called 
    */
   protected final function setEdited() : void
   {
+    if ( !$this->isInitialized )
+      throw new IllegalStateException( 'Property not initialized: reset() must be called prior to setEdited()' );
+      
     $this->isEdited = true;
   }  
   
@@ -789,12 +812,16 @@ abstract class AbstractProperty implements IProperty
       {
         if ( !$f( $prop, $value ))
         {
-          /* @var $f \Closure */
           $r = new ReflectionFunction( $f );
           $inObj = (( is_object( $r->getClosureThis())) ? get_class( $r->getClosureThis()) : 'Anonymous' ) 
             . ' in file ' . $r->getFileName() . ' on line ' . $r->getStartLine();
           
-          trigger_error( 'Behavior validation failure in closure: ' . $inObj, E_USER_WARNING );          
+          //..Why is this here?
+          //..This is technically a developer warning because it grabs the location of the closure.
+          //  If we depend on ValidationException thrown by validate(), we lose all of the information about the 
+          //  closure/anonymous function/whatever.
+          //..This would obviously be disabled in production 
+          trigger_error( 'Behavior validation failure in closure: ' . $inObj, E_USER_NOTICE );
           return false;
         }
       }

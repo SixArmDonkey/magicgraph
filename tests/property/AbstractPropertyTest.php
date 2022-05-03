@@ -45,7 +45,7 @@ abstract class AbstractPropertyTest extends TestCase
   protected const prefix = 'prefix';
   protected const flagTotal = 12345;
   protected const value1 = 'test';
-  protected const value2 = 'test2';
+  protected const value2 = 'testtwo';
   protected const invalidValue = 1;  //..Invalid value used for validation tests 
     
   protected $propertyBuilder = null;
@@ -385,7 +385,29 @@ abstract class AbstractPropertyTest extends TestCase
     $instance->validate( static::invalidValue );
   }
   
-  
+
+  public function testValidateThrowsExceptionWhenValueIsNullAndUseNulllFlagIsNotSet() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilderWithFlags( self::name, IPropertyFlags::USE_NULL ), true );
+    $instance->reset();
+    $instance->setValue( null );
+    $this->assertNull( $instance->getValue());
+    
+    $instance = $this->getInstance( $this->createPropertyBuilder());
+    $instance->reset();
+    
+    try {
+      $instance->setValue( null );
+      $this->fail( 'When USE_NULL is not set, supplying null to setValue() must throw a ValidationException' );
+    } catch( ValidationException $e ) {
+      //..Expected
+    }
+    
+    
+    $this->expectException( ValidationException::class );
+    $instance->validate( null );    
+  }  
+ 
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -422,13 +444,26 @@ abstract class AbstractPropertyTest extends TestCase
   }
   
   
+  protected function getPropertyBuilderClassName() : string
+  {
+    return IPropertyBuilder::class;
+  }
+  
+  
+  protected function getPropertyType() : string
+  {
+    return IPropertyType::TSTRING;
+  }
+  
+  
   protected function createPropertyBuilderBase( $name = self::name, $caption = self::caption )
   {
-    $t = $this->getMockBuilder( IPropertyType::class )->getMock();
-    $t->method( 'value' )->willReturn( IPropertyType::TSTRING );
+    $b = $this->getMockBuilder( $this->getPropertyBuilderClassName())->getMock();
     
-    $b = $this->getMockBuilder( IPropertyBuilder::class )->getMock();
+    $t = $this->getMockBuilder( IPropertyType::class )->getMock();
+    $t->method( 'value' )->willReturn( $this->getPropertyType());
     $b->method( 'getType' )->willReturn( $t );
+    
     $b->method( 'getName' )->willReturn( $name );
     $b->method( 'getDefaultValue' )->willReturn( static::defaultValue );
     $b->method( 'getCaption' )->willReturn( $caption );

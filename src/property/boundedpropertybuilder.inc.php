@@ -25,14 +25,14 @@ class BoundedPropertyBuilder extends PropertyBuilder implements IBoundedProperty
    * min length/value
    * @var float
    */
-  private $min = PHP_INT_MIN;
+  private $min = PHP_FLOAT_MIN;
   
   
   /**
    * Max length / value 
    * @var float
    */
-  private $max = PHP_INT_MAX; 
+  private $max = PHP_FLOAT_MAX; 
 
 
   
