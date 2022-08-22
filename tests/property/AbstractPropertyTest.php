@@ -35,6 +35,7 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractPropertyTest extends TestCase
 {
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //..Override these in some subclass when testing subclasses of AbstractProperty 
   protected const name = 'name';
   protected const defaultValue = 'default';
@@ -47,12 +48,78 @@ abstract class AbstractPropertyTest extends TestCase
   protected const value1 = 'test';
   protected const value2 = 'testtwo';
   protected const invalidValue = 1;  //..Invalid value used for validation tests 
-    
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  
   protected $propertyBuilder = null;
   protected $instance = null;
   
   protected abstract function getInstance( ?PropertyBuilder $pb ) : IProperty;
   
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //..Instead of defining constants, you can also override one or more of the getConstXX functions
+  //  This should allow you to test objects and other non-constanty things 
+  
+  protected function getConstName() : mixed
+  {
+    return static::name;
+  }
+  
+  
+  protected function getConstDefaultValue() : mixed
+  {
+    return static::defaultValue;
+  }
+  
+  
+  protected function getConstCaption() : mixed
+  {
+    return static::caption;
+  }
+  
+  
+  protected function getConstId() : mixed
+  {
+    return static::id;
+  }
+  
+  protected function getConstTag() : mixed
+  {
+    return static::tag;
+  }
+  
+  
+  protected function getConstPrefix() : mixed
+  {
+    return static::prefix;
+  }
+  
+  
+  protected function getConstFlagTotal() : mixed
+  {
+    return static::flagTotal;
+  }
+  
+  
+  protected function getConstValue1() : mixed
+  {
+    return static::value1;
+  }
+  
+  
+  protected function getConstValue2() : mixed
+  {
+    return static::value2;
+  }
+  
+  
+  protected function getConstInvalidValue() : mixed
+  {
+    return static::invalidValue;
+  }
+  
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   public function setUp() : void
   {
@@ -170,25 +237,25 @@ abstract class AbstractPropertyTest extends TestCase
   
   public function testGetTag() : void
   {
-    $this->assertSame( static::tag, $this->getInstance( $this->createPropertyBuilder())->getTag());
+    $this->assertSame( $this->getConstTag(), $this->getInstance( $this->createPropertyBuilder())->getTag());
   }
   
   
   public function testGetId() : void
   {
-    $this->assertSame( static::id, $this->getInstance( $this->createPropertyBuilder())->getId());
+    $this->assertSame( $this->getConstId(), $this->getInstance( $this->createPropertyBuilder())->getId());
   }
   
   
   public function testGetDefaultValue() : void
   {
-    $this->assertSame( static::defaultValue, $this->getInstance( $this->createPropertyBuilder())->getDefaultValue());
+    $this->assertSame( $this->getConstDefaultValue(), $this->getInstance( $this->createPropertyBuilder())->getDefaultValue());
   }
   
   
   public function testGetName() : void
   {
-    $this->assertSame( static::name, $this->getInstance( $this->createPropertyBuilder())->getName());
+    $this->assertSame( $this->getConstName(), $this->getInstance( $this->createPropertyBuilder())->getName());
   }
   
   
@@ -200,7 +267,7 @@ abstract class AbstractPropertyTest extends TestCase
   
   public function testGetFlags() : void
   {
-    $this->assertSame( static::flagTotal, $this->getInstance( $this->createPropertyBuilder())->getFlags()->getTotal());
+    $this->assertSame( $this->getConstFlagTotal(), $this->getInstance( $this->createPropertyBuilder())->getFlags()->getTotal());
   }
   
   
@@ -218,8 +285,8 @@ abstract class AbstractPropertyTest extends TestCase
   
   public function testGetCaptionReturnsCaptionOrNameWhenEmpty() : void
   {
-    $this->assertSame( static::caption, $this->getInstance( $this->createPropertyBuilder())->getCaption());
-    $this->assertSame( static::name, $this->getInstance( $this->createPropertyBuilder( static::name, '' ))->getCaption());
+    $this->assertSame( $this->getConstCaption(), $this->getInstance( $this->createPropertyBuilder())->getCaption());
+    $this->assertSame( $this->getConstName(), $this->getInstance( $this->createPropertyBuilder( $this->getConstName(), '' ))->getCaption());
   }
   
   
@@ -231,7 +298,7 @@ abstract class AbstractPropertyTest extends TestCase
   
   public function testGetPrefix() : void
   {
-    $this->assertSame( static::prefix, $this->getInstance( $this->createPropertyBuilder())->getPrefix());
+    $this->assertSame( $this->getConstPrefix(), $this->getInstance( $this->createPropertyBuilder())->getPrefix());
   }          
   
   
@@ -239,10 +306,10 @@ abstract class AbstractPropertyTest extends TestCase
   {
     $instance = $this->getInstance( $this->createPropertyBuilder());
     $instance->reset();
-    $instance->setValue( static::value1 );
+    $instance->setValue( $this->getConstValue1() );
     $instance->setReadOnly();
     $this->expectException( ValidationException::class );
-    $instance->setValue( static::value1 );    
+    $instance->setValue( $this->getConstValue1() );    
   }
   
   
@@ -251,9 +318,9 @@ abstract class AbstractPropertyTest extends TestCase
     $instance = $this->getInstance( $this->createPropertyBuilder());
     $instance->reset();
     $this->assertFalse( $instance->isEdited());
-    $this->assertSame( static::defaultValue, $instance->getValue());
-    $instance->setValue( static::value1 );
-    $this->assertSame( static::value1, $instance->getValue());
+    $this->assertSame( $this->getConstDefaultValue(), $instance->getValue());
+    $instance->setValue( $this->getConstValue1());
+    $this->assertSame( $this->getConstValue1(), $instance->getValue());
     $this->assertTrue( $instance->isEdited());
   }
   
@@ -264,45 +331,45 @@ abstract class AbstractPropertyTest extends TestCase
     $this->assertTrue( $instance->isEmpty());
     $instance->reset();
     $this->assertTrue( $instance->isEmpty());
-    $instance->setValue( static::value1 );
+    $instance->setValue( $this->getConstValue1() );
     $this->assertFalse( $instance->isEmpty());
   }
   
   
   public function testSetValueThrowsExceptionWhenWriteEmptyFlagIsSetAndPropertyIsNotEmpty() : void
   {
-    $instance = $this->getInstance( $this->createPropertyBuilderWithFlags( static::name, IPropertyFlags::WRITE_EMPTY ));
+    $instance = $this->getInstance( $this->createPropertyBuilderWithFlags( $this->getConstName(), IPropertyFlags::WRITE_EMPTY ));
     $instance->reset();
     
     $this->assertTrue( $instance->isEmpty());
     $this->assertTrue( $instance->getFlags()->hasVal( IPropertyFlags::WRITE_EMPTY ));
     
-    $instance->setValue( static::value1 );
+    $instance->setValue( $this->getConstValue1() );
     $this->assertFalse( $instance->isEmpty());
     
     $this->expectException( ValidationException::class );
-    $instance->setValue( static::value2 );
+    $instance->setValue( $this->getConstValue2() );
   }
   
   
   public function testEditedIsFalseWhenNoInsertFlagIsSet() : void
   {
-    $instance = $this->getInstance( $this->createPropertyBuilderWithFlags( static::name, IPropertyFlags::NO_INSERT ));
+    $instance = $this->getInstance( $this->createPropertyBuilderWithFlags( $this->getConstName(), IPropertyFlags::NO_INSERT ));
     $instance->reset();
     $this->assertFalse( $instance->isEdited());
     $this->assertTrue( $instance->getFlags()->hasVal( IPropertyFlags::NO_INSERT ));
-    $instance->setValue( static::value1 );
+    $instance->setValue( $this->getConstValue1() );
     $this->assertFalse( $instance->isEdited());
   }
   
   
   public function testEditedIsFalseWhenNoUpdateFlagIsSet() : void
   {
-    $instance = $this->getInstance( $this->createPropertyBuilderWithFlags( static::name, IPropertyFlags::NO_UPDATE ));
+    $instance = $this->getInstance( $this->createPropertyBuilderWithFlags( $this->getConstName(), IPropertyFlags::NO_UPDATE ));
     $instance->reset();
     $this->assertFalse( $instance->isEdited());
     $this->assertTrue( $instance->getFlags()->hasVal( IPropertyFlags::NO_UPDATE ));
-    $instance->setValue( static::value1 );
+    $instance->setValue( $this->getConstValue1() );
     $this->assertFalse( $instance->isEdited());
   }
 
@@ -312,20 +379,20 @@ abstract class AbstractPropertyTest extends TestCase
     $instance = $this->getInstance( $this->createPropertyBuilder());
     $instance->reset();
     $this->assertFalse( $instance->isEdited());
-    $instance->hydrate( static::value1 );
+    $instance->hydrate( $this->getConstValue1() );
     $this->assertFalse( $instance->isEdited());
-    $this->assertSame( static::value1, $instance->getValue());
+    $this->assertSame( $this->getConstValue1(), $instance->getValue());
     
-    $instance->hydrate( static::value1 );
+    $instance->hydrate( $this->getConstValue1() );
     $this->assertFalse( $instance->isEdited());
-    $this->assertSame( static::value1, $instance->getValue());
+    $this->assertSame( $this->getConstValue1(), $instance->getValue());
     
-    $instance->setValue( static::value2 );
+    $instance->setValue( $this->getConstValue2() );
     $this->assertTrue( $instance->isEdited());
-    $this->assertSame( static::value2, $instance->getValue());
+    $this->assertSame( $this->getConstValue2(), $instance->getValue());
     
     $this->expectException( UnexpectedValueException::class );
-    $instance->hydrate( static::value1 );
+    $instance->hydrate( $this->getConstValue1() );
   }
   
   
@@ -348,7 +415,7 @@ abstract class AbstractPropertyTest extends TestCase
     $instance = $this->getInstance( $this->createPropertyBuilder());
     $instance->reset();
     $this->assertFalse( $instance->isEdited());
-    $instance->setValue( static::value1 );
+    $instance->setValue( $this->getConstValue1() );
     $this->assertTrue( $instance->isEdited());
     $instance->reset();
     $this->assertFalse( $instance->isEdited());    
@@ -364,7 +431,7 @@ abstract class AbstractPropertyTest extends TestCase
     $instance = $this->getInstance( $this->createPropertyBuilder());
     $instance->reset();
     $this->assertFalse( $instance->isEdited());
-    $instance->setValue( static::value1 );
+    $instance->setValue( $this->getConstValue1() );
     $this->assertTrue( $instance->isEdited());
     $instance->clearEditFlag();
     $this->assertFalse( $instance->isEdited());        
@@ -380,9 +447,9 @@ abstract class AbstractPropertyTest extends TestCase
     $instance->reset();
     
     //..This should be fine
-    $instance->validate( static::value1 );
+    $instance->validate( $this->getConstValue1() );
     $this->expectException( ValidationException::class );
-    $instance->validate( static::invalidValue );
+    $instance->validate( $this->getConstInvalidValue() );
   }
   
 
@@ -433,7 +500,7 @@ abstract class AbstractPropertyTest extends TestCase
   protected function createPropertyBuilder( $name = self::name, $caption = self::caption ) 
   {
     $f = $this->getMockBuilder( IPropertyFlags::class )->getMock();
-    $f->method( 'getTotal' )->willReturn( static::flagTotal );
+    $f->method( 'getTotal' )->willReturn( $this->getConstFlagTotal() );
     
     $b = $this->createPropertyBuilderBase( $name, $caption );
     $b->method( 'getFlags' )->willReturn( $f );
@@ -479,12 +546,12 @@ abstract class AbstractPropertyTest extends TestCase
     $b->method( 'getType' )->willReturn( $t );
     
     $b->method( 'getName' )->willReturn( $name );
-    $b->method( 'getDefaultValue' )->willReturn( static::defaultValue );
+    $b->method( 'getDefaultValue' )->willReturn( $this->getConstDefaultValue() );
     $b->method( 'getCaption' )->willReturn( $caption );
-    $b->method( 'getId' )->willReturn( static::id );
-    $b->method( 'getTag' )->willReturn( static::tag );
+    $b->method( 'getId' )->willReturn( $this->getConstId() );
+    $b->method( 'getTag' )->willReturn( $this->getConstTag() );
     $b->method( 'getConfig' )->willReturn( static::config );
-    $b->method( 'getPrefix' )->willReturn( static::prefix );
+    $b->method( 'getPrefix' )->willReturn( $this->getConstPrefix() );
     
     return $b;
   }

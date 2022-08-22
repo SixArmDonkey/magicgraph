@@ -58,10 +58,14 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
       return; //..This is ok
 
     $cur = $this->getValueAsEnum();
-    if ((( $value instanceof IEnum ) && !is_a( $value, $this->getClass())) //( get_class( $value ) != $this->getClass()))
+    if ((( $value instanceof IEnum ) && !is_a( $value, $this->getClass())) 
       || ( !( $value instanceof IEnum ) && !$cur->isValid( $value )))
     {
-      throw new ValidationException( sprintf( 'Value "%s" for property %s must be an instance of %s or a valid member or constant name of the defined IEnum instance.  Got %s %s', (string)$value, $this->getName(), $this->getClass(), gettype( $value ), ( is_object( $value )) ? ' of class ' . get_class( $value ) : '' ));
+      throw new ValidationException( sprintf( 'Value "%s" for property %s must be an instance of %s or a '
+        . 'valid member or constant name of the defined IEnum instance.  '
+        . 'Got %s %s', 
+        (string)$value, $this->getName(), $this->getClass(), gettype( $value ), 
+        ( is_object( $value )) ? ' of class ' . get_class( $value ) : '' ));
     }
   }
   
@@ -74,10 +78,14 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
    * @param mixed $curValue the current value 
    * @return mixed Value to set 
    */
-  protected function setPropertyValue( mixed $value, mixed $curValue ) : IEnum
+  protected function setPropertyValue( mixed $value, mixed $curValue ) : ?IEnum
   {
-    if ( is_array( $value ) && !empty( $value ))
-      $value = array_values( $value )[0];
+    if ( $this->isUseNull() && $value === null )
+      return null;
+    //..WTF is this
+//    if ( is_array( $value ) && !empty( $value ))
+  //    $value = array_values( $value )[0];
+    
     
     $this->getValueAsEnum()->setValue(( $value instanceof IEnum ) ? $value->value() : $value );
     return $this->getValueAsEnum();
@@ -92,7 +100,7 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
    * @param array $context Context array
    * @return mixed Value to return 
    */
-  protected function getPropertyValue( mixed $value, array $context = [] ) : IEnum
+  protected function getPropertyValue( mixed $value, array $context = [] ) : ?IEnum
   {
     /* @var $value IEnum */    
     return $value;

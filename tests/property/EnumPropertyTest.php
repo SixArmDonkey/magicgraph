@@ -10,33 +10,49 @@
 
 declare( strict_types=1 );
 
-use buffalokiwi\buffalotools\date\DateTimeWrapper;
+use buffalokiwi\buffalotools\types\Enum;
 use buffalokiwi\magicgraph\property\EnumProperty;
-use buffalokiwi\magicgraph\property\IEnumProperty;
+use buffalokiwi\magicgraph\property\IObjectProperty;
+use buffalokiwi\magicgraph\property\IObjectPropertyBuilder;
 use buffalokiwi\magicgraph\property\IPropertyType;
 use buffalokiwi\magicgraph\ValidationException;
 
 
+class EnumPropertyTestEnum1 extends Enum
+{
+  const VALUE1 = 'value1';
+  const VALUE2 = 'value2';
+}
+
+
 class EnumPropertyTest extends AbstractPropertyTest
 {
-  protected const value1 = '';
-  protected const value2 = '2021-01-01 12:00:00';
-  protected const defaultValue = null;
   protected const invalidValue = 'foobarbaz';  //..Invalid value used for validation tests 
   
+  private $value1 = null;
+  private $value2 = null;
+  private $defaultValue = null;
+
   
+  
+  public function setUp() : void
+  {
+    parent::setUp();
+    $this->value1 = new EnumPropertyTestEnum1( EnumPropertyTestEnum1::VALUE1 );
+    $this->value2 = new EnumPropertyTestEnum1( EnumPropertyTestEnum1::VALUE2 );    
+    $this->defaultValue = new EnumPropertyTestEnum1( EnumPropertyTestEnum1::VALUE1 );
+  }
+  
+
   public function testSetValueSetsAValueAndIsEdited() : void
   {
     $instance = $this->getInstance( $this->createPropertyBuilder());
     $instance->reset();
     $this->assertFalse( $instance->isEdited());
     
-    
-    $this->assertSame( static::defaultValue, $instance->getValue());
-    $instance->setValue( static::value1 );
-    $value = $instance->getValue();
-    /* @var $value DateTimeWrapper */
-    $this->assertSame( static::value1, $value->getUTC()->format( 'Y-m-d' ));
+    $this->assertSame( EnumPropertyTestEnum1::VALUE1, $instance->getValue()->value());
+    $instance->setValue( EnumPropertyTestEnum1::VALUE2 );
+    $this->assertSame( EnumPropertyTestEnum1::VALUE2, $instance->getValue()->value());
     $this->assertTrue( $instance->isEdited());
   }
   
@@ -46,32 +62,23 @@ class EnumPropertyTest extends AbstractPropertyTest
     $instance = $this->getInstance( $this->createPropertyBuilder());
     $instance->reset();
     $this->assertFalse( $instance->isEdited());
-    $instance->hydrate( static::value1 );
+    $instance->hydrate( EnumPropertyTestEnum1::VALUE1 );
     $this->assertFalse( $instance->isEdited());
     
-    $value = $instance->getValue();
-    /* @var $value DateTimeWrapper */
+    $this->assertSame( EnumPropertyTestEnum1::VALUE1, $instance->getValue()->value());
     
-    $this->assertSame( static::value1, $instance->getValue()->getUTC()->format( 'Y-m-d' ));
-    
-    $instance->hydrate( static::value1 );
+    $instance->hydrate( EnumPropertyTestEnum1::VALUE2 );
     $this->assertFalse( $instance->isEdited());
 
-    $value = $instance->getValue();
-    /* @var $value DateTimeWrapper */
-
-    $this->assertSame( static::value1, $instance->getValue()->getUTC()->format( 'Y-m-d' ));
+    $this->assertSame( EnumPropertyTestEnum1::VALUE2, $instance->getValue()->value());
     
-    $instance->setValue( static::value2 );
+    $instance->setValue( EnumPropertyTestEnum1::VALUE2 );
     $this->assertTrue( $instance->isEdited());
     
-    $value = $instance->getValue();
-    /* @var $value DateTimeWrapper */
-    
-    $this->assertSame( static::value2, $instance->getValue()->getUTC()->format( 'Y-m-d H:i:s' ));
+    $this->assertSame( EnumPropertyTestEnum1::VALUE2, $instance->getValue()->value());
     
     $this->expectException( UnexpectedValueException::class );
-    $instance->hydrate( static::value1 );
+    $instance->hydrate( EnumPropertyTestEnum1::VALUE1 );
   }  
   
   
@@ -84,21 +91,69 @@ class EnumPropertyTest extends AbstractPropertyTest
     $instance->reset();
     
     //..This should be fine
-    $instance->validate( static::value1 );
+    $instance->validate( EnumPropertyTestEnum1::VALUE1 );
     $this->expectException( ValidationException::class );
     
     $instance->validate( static::invalidValue );
+  }    
+  
+  
+  //..Enum may never be empty
+  public function testIsEmptyReturnTrueBeforeResetOrWhenValueIsEqualToDefaultValue() : void
+  {
+    $this->expectNotToPerformAssertions();
+  }
+  
+  
+  //..Enum may never be empty
+  public function testSetValueThrowsExceptionWhenWriteEmptyFlagIsSetAndPropertyIsNotEmpty() : void
+  {
+    $this->expectNotToPerformAssertions();
   }  
   
   
-  protected function getInstance( $pb, $useNull = false ) : IEnumProperty
+  protected function getConstValue1() : mixed
   {
+    return $this->value1;
+  }
+  
+  
+  protected function getConstValue2() : mixed
+  {
+    return $this->value2;
+  }
+  
+  
+  protected function getConstDefaultValue() : mixed
+  {
+    return $this->defaultValue;
+  }
+  
+  
+  protected function getInstance( $pb, $useNull = false ) : IObjectProperty
+  {  
     return new EnumProperty( $pb );
   }  
-  
+    
+    
+  protected function getPropertyBuilderClassName() : string
+  {
+    return IObjectPropertyBuilder::class;
+  }
+ 
   
   protected function getPropertyType() : string
   {
     return IPropertyType::TENUM;
+  }
+  
+  
+  protected function createPropertyBuilderBase( $name = self::name, $caption = self::caption )
+  {
+    $b = parent::createPropertyBuilderBase( $name, $caption );
+    
+    $b->method( 'getClass' )->willReturn( EnumPropertyTestEnum1::class );
+    
+    return $b;
   }
 }
