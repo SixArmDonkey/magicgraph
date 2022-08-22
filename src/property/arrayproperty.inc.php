@@ -13,20 +13,26 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\property;
 
+use buffalokiwi\magicgraph\IModel;
 use buffalokiwi\magicgraph\ValidationException;
+use function \json_decode;
+use function \json_encode;
 
 
 /**
- * A property that can contain an array.
- * WARNING: Arrays may be cast to strings.
+ * A strictly typed array property
  * 
- * NOTE: Array properties are marked as edited when accessed
+ * Array properties are marked as edited when accessed
+ * 
+ * @todo This needs to be tested with IModel and edits
+ * @todo This needs to be tested with scalar types 
+ * @todo This needs to be tested with relationship providers and lazy/eager loading 
  */
 class ArrayProperty extends AbstractProperty
 {
   private $clazz;
-  
   private $initialValue;
+  
   
   /**
    * Create a new ArrayProperty instance 
@@ -38,45 +44,28 @@ class ArrayProperty extends AbstractProperty
     
     $this->clazz = $builder->getClass();    
     $this->initialValue = $this->getDefaultValue();
-  }    
-  
-  
-  public function reset() : IProperty
-  {
-    $res = parent::reset();
-    $this->initialValue = $res->getValue();
-    return $res;
   }
   
   
   public function isEdited(): bool
   {
-    $a = $this->getValue();
-    if ( !is_array( $a ))
-      return false;
-    else if ( empty( $a ) && empty( $this->initialValue ))
-      return false;
     
-    if ( $this->getFlags()->hasAny( IPropertyFlags::NO_UPDATE ))
-      return false;
+    if ( !$this->isRetrieved())
+      return parent::isEdited();
     
-    foreach( $a as $v )
+    
+    foreach( $this->getValue() as $v )
     {
-      if ( !( $v instanceof \buffalokiwi\magicgraph\IModel ))
-      {
-        return $this->initialValue == $a;
-      }
-      else if ( $v->hasEdits())
+      if (( $v instanceof IModel ) && $v->hasEdits())
       {
         return true;        
       }
     }
     
-    return false;
+    return parent::isEdited();
   }
   
   
- 
   /**
    * Validate some property value.
    * Child classes should implement some sort of validation based on the 
@@ -85,7 +74,7 @@ class ArrayProperty extends AbstractProperty
    * @throws ValidationException If the supplied value is not valid 
    */
   protected function validatePropertyValue( $value ) : void
-  {    
+  {
     if ( $this->getFlags()->hasVal( SPropertyFlags::USE_NULL ) && $value === null )
       return; //..This is ok       
     
@@ -96,44 +85,28 @@ class ArrayProperty extends AbstractProperty
     {
       foreach( $value as $k => &$v )
       {
-        switch( $this->clazz )
-        {
-          case 'int':
-            if ( !is_int( $v ))
-              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be an int.  Got %s', (string)$k, $this->getName(), gettype( $v )));
-
-          case 'long':
-            if ( !is_long( $v ))
-              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be a long.  Got %s', (string)$k, $this->getName(), gettype( $v )));
-            
-          case 'float':
-            if ( !is_float( $v ))
-              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be a float.  Got %s', (string)$k, $this->getName(), gettype( $v )));
-
-          case 'double':
-            if ( !is_double( $v ))
-              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be a double.  Got %s', (string)$k, $this->getName(), gettype( $v )));
-            
-          case 'bool':            
-            if ( !is_bool( $v ))
-              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be a bool.  Got %s', (string)$k, $this->getName(), gettype( $v )));
-
-          case 'string':
-            if ( !is_string( $v ))
-              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be a string.  Got %s', (string)$k, $this->getName(), gettype( $v )));
-          break;
-
-          default:
-            if ( !is_a( $v, $this->clazz, false ) && !is_subclass_of( $v, $this->clazz, false ))
-            {
-              $cls = is_object( $v ) ? ' (' . get_class( $v ) . ')' : '';
-              throw new ValidationException( sprintf( 'Array index "%s" for property %s must be an instance of %s.  Got %s', (string)$k, $this->getName(), $this->clazz, gettype( $v ) . $cls ));
-            }
-          break;            
-        }
+        $this->validateEntry( $k, $v );
       }
     }
   }
+
+  
+  /**
+   * Initialize the value property with some value.
+   * This will be immediately overwritten by the initial call to reset(), but 
+   * is useful for when value is some object type that must not be null. 
+   * 
+   * Returns null by default.
+   * 
+   * @return mixed value 
+   */
+  protected function initValue() : mixed
+  {
+    if ( $this->isUseNull())
+      return null;
+    else
+      return [];
+  }  
   
   
   /**
@@ -145,7 +118,7 @@ class ArrayProperty extends AbstractProperty
    * @param mixed $curValue the current value 
    * @return mixed Value to set 
    */
-  protected function setPropertyValue( $value, $curValue )
+  protected function setPropertyValue( $value, $curValue ) : ?array
   {
     if ( is_a( $value, $this->clazz ))
     {
@@ -170,46 +143,22 @@ class ArrayProperty extends AbstractProperty
    * @param mixed $value Value being set.
    * @return mixed value to validate and set
    */
-  protected function preparePropertyValue( $value )
+  protected function preparePropertyValue( $value ) : ?array
   {
-    //..Test for json.
-    if ( is_string( $value ))
-    {
-      $decoded = json_decode( $value );
-      if ( json_last_error() == JSON_ERROR_NONE && is_array( $decoded ))
-      {
-        return $decoded;
-      }
-    }
-    
     if ( !is_array( $value ))
     {
-      return [];
-    }
-    
-    if ( is_array( $value ) && !empty( $value ))
-    {
-      //..There's some crazy thing that can cause extra spaces to be added 
-      //..This can cause issues with other parts of the code.
-      //..I figured trim that here so we don't have to 
-      $newValue = [];
-      foreach( $value as $k => $v )
+      if ( $value === null && $this->isUseNull())
+        return null;
+      else 
       {
-        if ( is_string( $k ))
-          $k = trim( $k );
-        
-        if ( is_string( $v ))
-          $v = trim( $v );
-        
-        $newValue[$k] = $v;
+        throw new ValidationException( 'Property ' . $this->getName() 
+          . ': When USE_NULL is not set, values must be string or array' );
       }
-      $value = $newValue;
     }
     
     return $value;
   }
   
-
   
   /**
    * All properties must be able to be cast to a string.
@@ -220,7 +169,7 @@ class ArrayProperty extends AbstractProperty
    * 
    * @return string property value 
    */
-  public function __toString()
+  public function __toString() : string
   {
     return json_encode( $this->getValue());
   }
@@ -231,11 +180,58 @@ class ArrayProperty extends AbstractProperty
    * Override this in child classes to modify the value prior to returning it from the getValue() method.
    * This is the default implementation which simply returns the supplied value.
    * @param mixed $value Value being returned
+   * @param array $context Context array
    * @return mixed Value to return 
    */
-  protected function getPropertyValue( $value )
-  {
-    /* @var $value ISet */    
+  protected function getPropertyValue( $value, array $context = [] ) : ?array
+  {    
     return $value;
-  }    
+  }
+  
+  
+  private function validateEntry( int|string $k, mixed &$v ) : void
+  {
+    if ( !$this->isValidValue( $v ))
+    {
+      $cls = is_object( $v ) ? ' (' . get_class( $v ) . ')' : '';
+      throw new ValidationException( sprintf( 'Array index "%s" for property %s must be of type %s.  Got %s', (string)$k, $this->getName(), $this->clazz, gettype( $v ) . $cls ));
+    }
+  }  
+  
+  
+  private function isValidValue( mixed &$v ) : bool
+  {
+    switch( $this->clazz )
+    {
+      case 'int':
+        if ( !is_int( $v ))
+          return false;
+
+      case 'long':
+        if ( !is_long( $v ))
+          return false;
+
+      case 'float':
+        if ( !is_float( $v ))
+          return false;
+
+      case 'double':
+        if ( !is_double( $v ))
+          return false;
+
+      case 'bool':            
+        if ( !is_bool( $v ))
+          return false;
+
+      case 'string':
+        if ( !is_string( $v ))
+          return false;
+      break;
+
+      default:
+        if ( !is_a( $v, $this->clazz, false ) && !is_subclass_of( $v, $this->clazz, false ))
+          return false;
+      break;            
+    } 
+  }
 }

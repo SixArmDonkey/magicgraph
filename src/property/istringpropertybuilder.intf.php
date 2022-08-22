@@ -23,7 +23,7 @@ interface IStringPropertyBuilder extends IBoundedPropertyBuilder
    * @param string $pattern Regex 
    * @return PropertyBuilder this
    */
-  public function setPattern( string $pattern ) : PropertyBuilder;
+  public function setPattern( string $pattern ) : void;
   
   
   /**

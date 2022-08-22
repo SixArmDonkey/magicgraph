@@ -381,7 +381,7 @@ class AbstractPropertyInternalsTest extends AbstractPropertyTest
       
       protected function validatePropertyValue( $value ) : void {}
       
-      protected function getPropertyValue( $value ) : mixed {
+      protected function getPropertyValue( $value, array $context = [] ) : mixed {
         return $value . '1';
       }
     };

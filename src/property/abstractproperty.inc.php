@@ -40,68 +40,68 @@ abstract class AbstractProperty implements IProperty
    * An optional unique identifier for this property.
    * @var int
    */
-  private $id = 0;
+  private int $id = 0;
   
   /**
    * Property caption/label
    * @var string
    */
-  private $caption;
+  private string $caption;
   
   /**
    * Flags 
    * @var IPropertyFlags
    */
-  private $flags;
+  private IPropertyFlags $flags;
     
   /**
    * Property Type 
    * @var IPropertyType
    */
-  private $type;
+  private IPropertyType $type;
   
   /**
    * Property name 
    * @var string
    */
-  private $name;
+  private string $name;
   
   /**
    * Default value 
    * @var mixed
    */
-  private $defaultValue;
+  private mixed $defaultValue;
   
   /**
    * Property behavior/callbacks 
    * @var IPropertyBehavior[]
    */
-  private $behavior = [];
+  private array $behavior = [];
   
   /**
    * The stored property value 
    * @var mixed
    */
-  private $value = null;
+  private mixed $value = null;
   
   /**
    * Arbitrary configuration/context data
    * This is dependent on the property implementation
    * @var mixed
    */
-  private $config;
+  private mixed $config;
   
   /**
    * Read only flag 
    * @var bool
    */
-  private $readOnly = false;
+  private bool $readOnly = false;
   
   /**
    * An optional tag for the attribute 
    * @var string
    */
-  private $tag = '';
+  private string $tag = '';
 
   /**
    * The default validation callback used within the validate() method.  
@@ -133,6 +133,12 @@ abstract class AbstractProperty implements IProperty
    */
   private bool $isInitialized = false;
   
+  /**
+   * If getValue() has been called 
+   * @var bool
+   */
+  private bool $isGetCalled = false;
+    
  
   /**
    * Validate some property value.
@@ -209,8 +215,12 @@ abstract class AbstractProperty implements IProperty
     $this->caption = $builder->getCaption();
     $this->id = $builder->getId();
     $this->tag = $builder->getTag();
-    $this->config = $this->decodeJson( $builder->getConfig());
     $this->prefix = $builder->getPrefix();
+    
+    /**
+     * @todo This is weird and not covered by tests
+     */
+    $this->config = $this->decodeJson( $builder->getConfig());
   }
 
 
@@ -231,8 +241,9 @@ abstract class AbstractProperty implements IProperty
    * @throws ValidationException 
    * 
    * @todo Figure out how to remove this method
+   * @final 
    */
-  public function reset() : IProperty
+  public final function reset() : IProperty
   {
     $this->value = $this->initValue();
         
@@ -254,6 +265,7 @@ abstract class AbstractProperty implements IProperty
     
     $this->isEdited = false;
     $this->isInitialized = true;
+    $this->isGetCalled = false;
     
     return $this;
   }
@@ -297,6 +309,17 @@ abstract class AbstractProperty implements IProperty
     //..Does this work? 
     //..Test says this is ok.        
     $this->reset();
+  }
+  
+  
+  /**
+   * If the value has been retrieved via getValue() at least once after reset()
+   * Calling reset sets this to false
+   * @return bool
+   */
+  public function isRetrieved() : bool
+  {
+    return $this->isGetCalled;
   }
   
   
@@ -405,22 +428,25 @@ abstract class AbstractProperty implements IProperty
   
   /**
    * Test to see if some value is valid 
-   * @param type $value
+   * @param mixed $value
    * @throws ValidationException 
    * @final 
    */
-  public final function validate( $value ) : void
+  public final function validate( mixed $value ) : void
   {
     $cb = $this->validateBehaviorCallback ?? $this->getValidateBehaviorCallback();
     
+    
+    
     if ( !$cb( $this, $value ))
     {
-      
-      //..ehhhhh this is slightly stinky 
+      /**
+       * @todo This is bad code
+       */
       if ( is_array( $value ))
         $value = implode( ',', $value );
       
-      throw new ValidationException( '"' . $value . '" of type "' . static::class .'" is not a valid value for the "' 
+      throw new ValidationException( '"' . (string)$value . '" of type "' . static::class .'" is not a valid value for the "' 
          . $this->getName() . '" property.  Check any behavior callbacks, and ensure that the property is set to ' 
          . 'the correct type.  IPropertyBehavior::getValidateCallback() failed.' );    
     }
@@ -580,8 +606,6 @@ abstract class AbstractProperty implements IProperty
     }
     
     
-    
-    
     //..Prepare for validate
     $value = $this->preparePropertyValue( $value );
 
@@ -665,7 +689,7 @@ abstract class AbstractProperty implements IProperty
    */
   public final function getValue( array $context = [] ) : mixed
   {
-    $value = $this->getPropertyValue( $this->value );
+    $value = $this->getPropertyValue( $this->value, $context );
     
     //..If any getters were used
     $hasGetter = false;
@@ -684,8 +708,12 @@ abstract class AbstractProperty implements IProperty
     if ( $hasGetter )
       $this->validate( $value );
     
+    //..Remember that we retrieved the value
+    $this->isGetCalled = true;
+    
     return $value;
   }
+  
   
   /**
    * Sets the edited flag to true
@@ -736,9 +764,10 @@ abstract class AbstractProperty implements IProperty
    * Override this in child classes to modify the value prior to returning it from the getValue() method.
    * This is the default implementation which simply returns the supplied value.
    * @param mixed $value Value being returned
+   * @param array $context getValue context array 
    * @return mixed Value to return 
    */
-  protected function getPropertyValue( $value ) : mixed
+  protected function getPropertyValue( $value, array $context = [] ) : mixed
   {
     return $value;
   }

@@ -30,6 +30,7 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
     parent::__construct( $builder );
   }  
   
+  
   /**
    * Retrieve a clone of the stored enum value.
    * @return IEnum stored enum 
@@ -73,7 +74,7 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
    * @param mixed $curValue the current value 
    * @return mixed Value to set 
    */
-  protected function setPropertyValue( $value, $curValue )
+  protected function setPropertyValue( mixed $value, mixed $curValue ) : IEnum
   {
     if ( is_array( $value ) && !empty( $value ))
       $value = array_values( $value )[0];
@@ -88,9 +89,10 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
    * Override this in child classes to modify the value prior to returning it from the getValue() method.
    * This is the default implementation which simply returns the supplied value.
    * @param mixed $value Value being returned
+   * @param array $context Context array
    * @return mixed Value to return 
    */
-  protected function getPropertyValue( $value )
+  protected function getPropertyValue( mixed $value, array $context = [] ) : IEnum
   {
     /* @var $value IEnum */    
     return $value;
@@ -107,10 +109,10 @@ class EnumProperty extends ObjectProperty implements IEnumProperty
    * @return mixed value 
    * @throws \Exception 
    */
-  protected function initValue() 
+  protected function initValue() : mixed
   {
     if ( $this->inInit )
-      return;
+      return null;
     
     try {
       $this->inInit = true;

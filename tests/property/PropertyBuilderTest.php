@@ -20,78 +20,22 @@ use PHPUnit\Framework\TestCase;
 
 class PropertyBuilderTest extends TestCase
 {
-  private ?PropertyBuilder $instance = null;
+  protected ?PropertyBuilder $instance = null;
+  
+  public function getInstance( $type, $flags = null, $name = '', $defaultValue = null, ...$behavior )
+  {
+    return new PropertyBuilder( $type, $flags, $name, $defaultValue, ...$behavior );
+  }
+  
   
   public function setUp(): void
   {
     $mockType = $this->getMockBuilder( IPropertyType::class )->getMock();
     $mockType->method( 'value' )->willReturn( IPropertyType::TSTRING );
     
-    $this->instance = new PropertyBuilder( $mockType );
+    $this->instance = $this->getInstance( $mockType );
   }
-  
-  
-  /**
-   * Instantiating with zero arguments raises an ArgumentCountError 
-   * @return void
-   */
-  public function testContructorWithZeroParameters() : void
-  {
-    //..Expects an ArgumentCountError 
-    $this->expectError();
-    new PropertyBuilder();
-  }
-  
-  
-  /**
-   * The constructor accepts several arguments.
-   * IPropertyType is the only required argument
-   * @return void
-   */
-  public function testConstructorWithDefaultParameters() : void
-  {
-    $mockType = $this->getMockBuilder( IPropertyType::class )->getMock();
-    $mockType->method( 'value' )->willReturn( IPropertyType::TSTRING );
-    
-    $c = new PropertyBuilder( $mockType );
-    $this->assertInstanceOf( IEnum::class, $c->getType());    
-    $this->assertInstanceOf( IPropertyFlags::class, $c->getFlags());
-    $this->assertEquals( '', $c->getName());    
-    $this->assertNull( $c->getDefaultValue());
-    $this->assertEquals( 0, sizeof( $c->getBehavior()));
-  }
-  
-  
-  
-  /**
-   * The constructor accepts all arguments.
-   * Getter methods associated with constructor arguments returns the values supplied to the constructor 
-   * @return void
-   */
-  public function testConstructorWithAllParameters() : void
-  {
-    $mockType = $this->getMockBuilder( IPropertyType::class )->getMock();
-    $mockType->method( 'value' )->willReturn( IPropertyType::TSTRING );
-    
-    $mockFlags = $this->getMockBuilder( IPropertyFlags::class )->getMock();
-    $mockFlags->expects( $this->any())->method( 'hasVal' )->with( $this->isType( 'string' ))->willReturn( true );
-    
-    $mockBehavior = $this->getMockBuilder( IPropertyBehavior::class )->getMock();
-    
-    $c = new PropertyBuilder( $mockType, $mockFlags, 'name', 'default', $mockBehavior );
-    $this->assertInstanceOf( IEnum::class, $c->getType());    
-    
-    //..To ensure that we get the one passed to the constructor 
-    $this->assertSame( IPropertyType::TSTRING, $c->getType()->value());
-    
-    $this->assertInstanceOf( IPropertyFlags::class, $c->getFlags());
-    $this->assertTrue( $c->getFlags()->hasVal( 'value' ));
-    
-    $this->assertEquals( 'name', $c->getName());    
-    $this->assertEquals( 'default', $c->getDefaultValue());    
-    $this->assertEquals( 1, sizeof( $c->getBehavior()));
-  }
-  
+
   
   /**
    * Test id 

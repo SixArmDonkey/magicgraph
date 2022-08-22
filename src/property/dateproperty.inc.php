@@ -18,6 +18,7 @@ use buffalokiwi\buffalotools\date\IDateFactory;
 use buffalokiwi\buffalotools\date\IDateTime;
 use buffalokiwi\magicgraph\ValidationException;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use InvalidArgumentException;
@@ -113,6 +114,18 @@ class DateProperty extends AbstractProperty implements IDateProperty
   {
     if ( $this->getFlags()->hasVal( SPropertyFlags::USE_NULL ) && $value === null )
       return; //..This is ok    
+    else if ( !( $value instanceof DateTimeInterface ) 
+      && !( $value instanceof DateTimeWrapper ) 
+      && !( $value instanceof IDateTime ))
+    {
+      //..Try to parse the date
+      $data = date_parse( $value );
+      if ( !is_array( $data ) || !isset( $data['warning_count'] ) || !isset( $data['error_count'] )
+        || $data['warning_count'] > 0 || $data['error_count'] > 0 )
+      {
+        throw new ValidationException( '"' . $value . '" is not a valid date.  Core PHP Function "date_parse" returns warnings and/or errors' );
+      }
+    }
   }
   
   
@@ -125,7 +138,7 @@ class DateProperty extends AbstractProperty implements IDateProperty
    * @param mixed $value Value being set.
    * @return mixed value to validate and set
    */
-  protected function preparePropertyValue( $value )
+  protected function preparePropertyValue( $value ) : mixed
   {
     if ( $value === null )
       return $value;
@@ -140,11 +153,11 @@ class DateProperty extends AbstractProperty implements IDateProperty
         $dt = new DateTime();
         $dt->setTimestamp( $value->getTimestamp());
         $dt->setTimezone( new DateTimeZone( 'UTC' ));
-        return new DateTimeWrapper( \DateTimeImmutable::createFromMutable( $dt ), $this->dateFactory->getLocalTimeZone());
+        return new DateTimeWrapper( DateTimeImmutable::createFromMutable( $dt ), $this->dateFactory->getLocalTimeZone());
       }
       else 
       {
-        return new DateTimeWrapper(( $value instanceof \DateTime ) ? \DateTimeImmutable::createFromMutable( $value ) : $value, $this->dateFactory->getLocalTimeZone());
+        return new DateTimeWrapper(( $value instanceof \DateTime ) ? DateTimeImmutable::createFromMutable( $value ) : $value, $this->dateFactory->getLocalTimeZone());
       }
     }
     else if ( $value instanceof IDateTime )
@@ -152,11 +165,12 @@ class DateProperty extends AbstractProperty implements IDateProperty
       return $value;
     }
     else 
-    {      
+    {
       if ( empty( $value ) || !is_string( $value ))
         $value = '0000-00-00 00:00:00';
       
       try {
+        
         $value = $this->dateFactory->createDateTime( $value );
       } catch( \Exception $e ) {
         throw new ValidationException( sprintf( 'Value %s for property %s must be parsable into a DateTime object.  Got %s', $value, $this->getName(), $e->getMessage()), 0, $e );

@@ -17,6 +17,7 @@ use Closure;
 
 /**
  * Callbacks that can override behavior in a property.
+ * @todo This interface is going to be refactored. Look at commented examples for future refactor.
  */
 interface IPropertyBehavior 
 {
@@ -28,6 +29,15 @@ interface IPropertyBehavior
    * @return Closure callback
    */
   public function getValidateCallback() : ?Closure;
+  
+  
+  /**
+   * Validate some property value
+   * @param IProperty $prop
+   * @param mixed $value
+   * @return bool
+   */
+  //public function validate( IProperty $prop, mixed $value ) : bool;
     
 
   /**
@@ -43,11 +53,34 @@ interface IPropertyBehavior
   
   
   /**
+   * Filters a property value during a property level set operation.
+   * @param IProperty $prop
+   * @param mixed $value
+   * @return mixed
+   */
+  //public function propertySetter( IProperty $prop, mixed $value ) : mixed;
+  
+  
+  /**
    * Returns value to get 
    * f( IProperty, $value, array $context ) : mixed 
    * @return Closure|null
    */
   public function getGetterCallback() : ?Closure;  
+  
+  
+  /**
+   * Filters a property value during a property-level get operation.
+   * @param IProperty $prop
+   * @param mixed $value
+   * @param array $context
+   * @return mixed
+   */
+  //public function propertyGetter( IProperty $prop, mixed $value, array $context = [] ) : mixed;
+  
+  
+  
+  
   
   /**
    * Callback used for initializing some value when the model is loaded.

@@ -78,7 +78,7 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
    * @return mixed value 
    * @throws \Exception 
    */
-  protected function initValue()
+  protected function initValue() : mixed
   {
     if ( $this->createClass instanceof Closure )
     {

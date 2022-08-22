@@ -194,7 +194,7 @@ abstract class AbstractPropertyTest extends TestCase
   
   public function testGetType() : void
   {
-    $this->assertSame( IPropertyType::TSTRING, $this->getInstance( $this->createPropertyBuilder())->getType()->value());
+    $this->assertSame( $this->getPropertyType(), $this->getInstance( $this->createPropertyBuilder())->getType()->value());
   }
   
   
@@ -409,6 +409,20 @@ abstract class AbstractPropertyTest extends TestCase
   }  
  
   
+  public function setIsRetrievedIsTrueAfterGetValueAndFalseAfterReset() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilder());
+    $instance->reset();
+    $this->assertFalse( $instance->isRetrieved());
+    $instance->getValue();
+    $this->assertTrue( $instance->isRetrieved());
+    $instance->reset();
+    $this->assertFalse( $instance->isRetrieved());
+    $instance->getValue();
+    $this->assertTrue( $instance->isRetrieved());
+  }
+  
+  
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   
@@ -474,4 +488,5 @@ abstract class AbstractPropertyTest extends TestCase
     
     return $b;
   }
+  
 }

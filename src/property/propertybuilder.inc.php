@@ -80,26 +80,25 @@ class PropertyBuilder implements IPropertyBuilder
   
   
   /**
-   * Create a new PropertyBuilder instance 
-   */
-  /**
-   * 
    * @param IPropertyType $type Property type
    * @param IPropertyFlags|null $flags
    * @param string $name
    * @param type $defaultValue
-   * @param IPropertyBehavior|null $behavior
+   * @param IPropertyBehavior $behavior one or more behavior objects 
    * @todo Give serious consideration to removing IPropertyType.  I think this is only used to create the correct property object instances in DefaultConfigMapper 
    */
   public function __construct( IPropertyType $type, ?IPropertyFlags $flags = null, string $name = '', 
-    $defaultValue = null, ?IPropertyBehavior $behavior = null )
+    $defaultValue = null, IPropertyBehavior ...$behavior )
   {
     $this->type = $type;
     $this->flags = ( $flags == null ) ? new SPropertyFlags() : $flags;
     $this->name = $name;
     $this->defaultValue = $defaultValue;
-    if ( $behavior != null )
-      $this->behavior[] = $behavior;        
+    
+    foreach( $behavior as $b )
+    {
+      $this->behavior[] = $b;
+    }
   }
   
   

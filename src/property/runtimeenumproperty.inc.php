@@ -116,9 +116,10 @@ class RuntimeEnumProperty extends AbstractProperty implements IEnumProperty
    * Override this in child classes to modify the value prior to returning it from the getValue() method.
    * This is the default implementation which simply returns the supplied value.
    * @param mixed $value Value being returned
+   * @param array $context Context array
    * @return mixed Value to return 
    */
-  protected function getPropertyValue( $value )
+  protected function getPropertyValue( $value, array $context = [] )
   {
     /* @var $value IEnum */    
     return $value;

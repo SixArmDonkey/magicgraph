@@ -21,9 +21,10 @@ class StringPropertyBuilder extends BoundedPropertyBuilder implements IStringPro
    */
   private $pattern = '';
 
-  public function __construct( IPropertyType $type, IPropertyFlags $flags = null, string $name = '', $defaultValue = null, IPropertyBehavior $behavior = null )
+  public function __construct( IPropertyType $type, IPropertyFlags $flags = null, string $name = '', 
+    $defaultValue = null, IPropertyBehavior ...$behavior )
   {
-    parent::__construct( $type, $flags, $name, $defaultValue, $behavior );
+    parent::__construct( $type, $flags, $name, $defaultValue, ...$behavior );
   }
   
   
@@ -32,10 +33,9 @@ class StringPropertyBuilder extends BoundedPropertyBuilder implements IStringPro
    * @param string $pattern Regex 
    * @return PropertyBuilder this
    */
-  public function setPattern( string $pattern ) : PropertyBuilder 
+  public function setPattern( string $pattern ) : void 
   {
     $this->pattern = $pattern;
-    return $this;
   }
     
   

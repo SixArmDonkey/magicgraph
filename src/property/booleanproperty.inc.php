@@ -19,9 +19,15 @@ use function ctype_digit;
 
 
 /**
- * A boolean property 
+ * A boolean property.
+ * 
+ * When setting the value, you may use a boolean or one of the following strings:
+ * 
+ * true, yes, y, 1, on
+ * false, no, n, 0, off
+ * 
  */
-abstract class BooleanProperty extends AbstractProperty implements IBooleanProperty
+class BooleanProperty extends AbstractProperty implements IBooleanProperty
 {
   /**
    * @param IPropertyBuilder $builder Property configuration 
@@ -42,7 +48,7 @@ abstract class BooleanProperty extends AbstractProperty implements IBooleanPrope
   }
   
   
-  public function __toString()
+  public function __toString() : string
   {
     return ( $this->getValue()) ? '1' : '0';
   }
@@ -60,10 +66,12 @@ abstract class BooleanProperty extends AbstractProperty implements IBooleanPrope
     if ( $this->getFlags()->hasVal( SPropertyFlags::USE_NULL ) && $value === null )
       return; //..This is ok
     
-    $value = $this->strToBool( $value );
-    if ( !is_bool( $value ) || ( $value !== true && $value !== false ))
+    try {
+      $this->strToBool( $value );
+    } catch( \InvalidArgumentException $e ) {
       throw new ValidationException( sprintf( 'Value for property %s must be a boolean.  Got %s', $this->getName(), gettype( $value )));
-  }    
+    }      
+  }
   
   
   /**
@@ -73,10 +81,12 @@ abstract class BooleanProperty extends AbstractProperty implements IBooleanPrope
    * @param mixed $curValue the current value 
    * @return bool Value to set 
    */
-  protected function setPropertyValue( $value, $curValue )
+  protected function setPropertyValue( $value, $curValue ) : ?bool
   {    
-    $value = $this->strToBool( $value );
-    return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
+    if ( $this->isUseNull() && $value === null )
+      return $value;
+    
+    return filter_var( $this->strToBool( $value ), FILTER_VALIDATE_BOOLEAN );
   }  
   
   
@@ -90,13 +100,11 @@ abstract class BooleanProperty extends AbstractProperty implements IBooleanPrope
    * @throws InvalidArgumentException if $s cannot be converted
    * @static
    */
-  protected function strToBool( $s )
+  protected final function strToBool( $s ) : bool
   {
-    if ( empty( $s ))
-      return false;
-    else if ( is_bool( $s ))
+    if ( is_bool( $s ))
       return $s;
-    else if ( ctype_digit( (string)$s ))
+    else if ( ctype_digit((string)$s ))
       return ( $s == 1 );
     else if ( in_array( strtolower( $s ), array( 'true', 'yes', 'y', '1', 'on' )))
       return true;

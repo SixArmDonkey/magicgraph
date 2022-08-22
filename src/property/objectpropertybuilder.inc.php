@@ -24,7 +24,7 @@ class ObjectPropertyBuilder extends PropertyBuilder implements IObjectPropertyBu
    * Class name 
    * @var string 
    */
-  private $clazz = '';
+  private string $clazz = '';
   
   /**
    * A function that will create instances of the defined class.
@@ -33,26 +33,24 @@ class ObjectPropertyBuilder extends PropertyBuilder implements IObjectPropertyBu
    * f( string $clazz ) : instance of $clazz 
    * @var ?Closure
    */
-  private $createClass = null;
+  private ?Closure $createClass = null;
   
-  
-  
-  /**
-   * Create a new object property builder
-   * @param IPropertyType $type Property type
-   * @param IPropertyFlags $flags Property flags
-   * @param Closure $createClass A function that returns an instance defined by the class property.
-   * The closure must accept a string representing the class or interface name to create an instance of.
-   * 
-   * f( string $clazz ) : instance of $clazz 
-   */
-  public function __construct( IPropertyType $type, ?IPropertyFlags $flags = null, ?Closure $createClass = null )
-  {    
-    parent::__construct( $type, $flags );
-    $this->createClass = $createClass;
-  }
 
   
+    
+  /**
+   * @param IPropertyType $type Property type
+   * @param IPropertyFlags|null $flags
+   * @param string $name
+   * @param type $defaultValue
+   * @param IPropertyBehavior $behavior one or more behavior objects 
+   * @todo Give serious consideration to removing IPropertyType.  I think this is only used to create the correct property object instances in DefaultConfigMapper 
+   */
+  public function __construct( IPropertyType $type, ?IPropertyFlags $flags = null, string $name = '', 
+    $defaultValue = null, IPropertyBehavior ...$behavior )
+  {
+    parent::__construct( $type, $flags, $name, $defaultValue, ...$behavior );
+  }
   
 
   /**
@@ -65,6 +63,7 @@ class ObjectPropertyBuilder extends PropertyBuilder implements IObjectPropertyBu
     $this->clazz = $clazz;
   }
   
+  
   /**
    * When the property type is ENUM or SET, a class name must be declared.
    * The defined class manages the data within the column.
@@ -74,6 +73,20 @@ class ObjectPropertyBuilder extends PropertyBuilder implements IObjectPropertyBu
   {
     return $this->clazz;
   }    
+  
+  
+    
+  /**
+   * Create a new object property builder
+   * @param Callable $createClass A function that returns an instance defined by the class property.
+   * The closure must accept a string representing the class or interface name to create an instance of.
+   * 
+   * f( string $clazz ) : instance of $clazz 
+   */
+  public function setCreateObjectFactory( \Closure $createClass ) : void 
+  {
+    $this->createClass = $createClass;
+  }  
   
   
   /**

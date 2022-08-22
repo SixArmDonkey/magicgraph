@@ -206,4 +206,12 @@ interface IProperty extends Stringable
    * @todo It makes no sense testing for an empty sql timestamp.  They differ between databases and should we consider the epoch to be empty?  Leave this for property implementations to decide.
    */
   public function isEmpty() : bool;
+  
+  
+  /**
+   * If the value has been retrieved via getValue() at least once after reset()
+   * Calling reset sets this to false
+   * @return bool
+   */
+  public function isRetrieved() : bool;  
 }

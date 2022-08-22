@@ -38,6 +38,16 @@ interface IObjectPropertyBuilder extends IPropertyBuilder
   
   
   /**
+   * Create a new object property builder
+   * @param Callable $createClass A function that returns an instance defined by the class property.
+   * The closure must accept a string representing the class or interface name to create an instance of.
+   * 
+   * f( string $clazz ) : instance of $clazz 
+   */
+  public function setCreateObjectFactory( \Closure $createClass ) : void;  
+  
+  
+  /**
    * Retrieve an optional closure that returns a new instance of the object 
    * defined by the class property.
    * The closure MUST return the defined type.

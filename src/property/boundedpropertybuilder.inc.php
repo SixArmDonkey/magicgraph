@@ -19,8 +19,7 @@ namespace buffalokiwi\magicgraph\property;
  * min defaults to zero and max defaults to PHP_MAX_INT.
  */
 class BoundedPropertyBuilder extends PropertyBuilder implements IBoundedPropertyBuilder
-{
-  
+{  
   /**
    * min length/value
    * @var float
@@ -34,8 +33,6 @@ class BoundedPropertyBuilder extends PropertyBuilder implements IBoundedProperty
    */
   private $max = PHP_FLOAT_MAX; 
 
-
-  
   
   /**
    * Create a new BoundedPropertyBuilder instance 
@@ -44,9 +41,10 @@ class BoundedPropertyBuilder extends PropertyBuilder implements IBoundedProperty
    * @param IPropertyFlags $flags
    * @param type $defaultValue
    */
-  public function __construct( IPropertyType $type, IPropertyFlags $flags = null, string $name = '', $defaultValue = null, IPropertyBehavior $behavior = null )
+  public function __construct( IPropertyType $type, IPropertyFlags $flags = null, string $name = '', 
+    $defaultValue = null, IPropertyBehavior ...$behavior )
   {
-    parent::__construct( $type, $flags, $name, $defaultValue, $behavior );
+    parent::__construct( $type, $flags, $name, $defaultValue, ...$behavior );
   }
   
 
