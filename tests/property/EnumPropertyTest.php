@@ -11,6 +11,7 @@
 declare( strict_types=1 );
 
 use buffalokiwi\buffalotools\types\Enum;
+use buffalokiwi\buffalotools\types\IEnum;
 use buffalokiwi\magicgraph\property\EnumProperty;
 use buffalokiwi\magicgraph\property\IObjectProperty;
 use buffalokiwi\magicgraph\property\IObjectPropertyBuilder;
@@ -41,6 +42,31 @@ class EnumPropertyTest extends AbstractPropertyTest
     $this->value1 = new EnumPropertyTestEnum1( EnumPropertyTestEnum1::VALUE1 );
     $this->value2 = new EnumPropertyTestEnum1( EnumPropertyTestEnum1::VALUE2 );    
     $this->defaultValue = new EnumPropertyTestEnum1( EnumPropertyTestEnum1::VALUE1 );
+  }
+  
+  
+  public function testGetValueAsEnumReturnsEnum() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilder());
+    $instance->reset();
+    $instance->setValue( $this->value1 );
+    $this->assertInstanceOf( IEnum::class, $instance->getValueAsEnum());
+    $this->assertSame( $this->value1->value(), $instance->getValueAsEnum()->value());
+  }
+  
+  
+  
+  public function testSetValueAcceptsEnumAndString() : void
+  {
+    $instance = $this->getInstance( $this->createPropertyBuilder());
+    $instance->reset();
+    $instance->setValue( $this->value1 );
+    $this->assertInstanceOf( IEnum::class, $instance->getValue());
+    $this->assertSame( $this->value1->value(), $instance->getValue()->value());
+    
+    $instance->setValue( $this->value2->value());
+    $this->assertInstanceOf( IEnum::class, $instance->getValue());
+    $this->assertSame( $this->value2->value(), $instance->getValue()->value());
   }
   
 

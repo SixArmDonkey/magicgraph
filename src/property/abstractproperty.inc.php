@@ -841,16 +841,20 @@ abstract class AbstractProperty implements IProperty
       {
         if ( !$f( $prop, $value ))
         {
-          $r = new ReflectionFunction( $f );
-          $inObj = (( is_object( $r->getClosureThis())) ? get_class( $r->getClosureThis()) : 'Anonymous' ) 
-            . ' in file ' . $r->getFileName() . ' on line ' . $r->getStartLine();
+          if ( error_reporting() & E_USER_NOTICE == E_USER_NOTICE )
+          {
+            $r = new ReflectionFunction( $f );
+            $inObj = (( is_object( $r->getClosureThis())) ? get_class( $r->getClosureThis()) : 'Anonymous' ) 
+              . ' in file ' . $r->getFileName() . ' on line ' . $r->getStartLine();
+
+            //..Why is this here?
+            //..This is technically a developer warning because it grabs the location of the closure.
+            //  If we depend on ValidationException thrown by validate(), we lose all of the information about the 
+            //  closure/anonymous function/whatever.
+            //..This would obviously be disabled in production 
+            trigger_error( 'Behavior validation failure in closure: ' . $inObj, E_USER_NOTICE );
+          }
           
-          //..Why is this here?
-          //..This is technically a developer warning because it grabs the location of the closure.
-          //  If we depend on ValidationException thrown by validate(), we lose all of the information about the 
-          //  closure/anonymous function/whatever.
-          //..This would obviously be disabled in production 
-          trigger_error( 'Behavior validation failure in closure: ' . $inObj, E_USER_NOTICE );
           return false;
         }
       }

@@ -63,9 +63,10 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
   
   
   /**
-   * Create a new PropertyFactory using some configuration array 
-   * @param IPropertyConfig $config One or more configuration instances.
+   * @param IPropertyBuilderIoC $pbIoc Property Builder Factory 
+   * @param IPropertyIoC $pIoc IProperty Factory 
    * @param Closure|null $getPropertyFlags f() : IPropertyFlags - Retrieve a new property flags instance for use 
+   * @throws InvalidArgumentException
    */
   public function __construct( IPropertyBuilderIoC $pbIoc, IPropertyIoC $pIoc, ?Closure $getPropertyFlags = null )
   {
@@ -85,8 +86,8 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
   /**
    * Take a config array and convert it to a list of IProperty instances.
    * If anything is wrong, exceptions get thrown.
-   * @param array $config
-   * @return array IProperty[] list of properties defined in $config 
+   * @param array $config Property configuration array 
+   * @return array IProperty[] list of properties defined by $config 
    * @throws \InvalidArgumentException
    * @throws \Exception 
    */
@@ -97,11 +98,19 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
     foreach( $config as $name => $data )
     {
       if ( isset( $out[$name] ))
-        throw new InvalidArgumentException( "A property with the name: " . $name . " has already been defined. Check " . get_class( $config ));
+      {
+        throw new InvalidArgumentException( "A property with the name: " . $name . " has already been defined. Check "
+          . get_class( $config ));
+      }
       else if ( !is_array( $data ))
-        throw new InvalidArgumentException( 'Config entries must be an array.  "'  . $name . '" (encountered key) must be an array' );
+      {
+        throw new InvalidArgumentException( 'Config entries must be an array.  "'  . $name 
+          . '" (encountered key) must be an array' );
+      }      
       else if ( !isset( $data[self::TYPE] ))
+      {
         throw new InvalidArgumentException( 'Config entries must a type.  "'  . $name . '" must have a type.' );
+      }
 
       $b = $this->createBuilder( $name, $data );
       $out[$name] = $this->createProperty( $b );
@@ -119,12 +128,14 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
    * @param Closure|null $setter
    * @param Closure|null $getter
    */
-  protected function createPropertyBehavior( ?Closure $validate = null, ?Closure $init = null, ?Closure $setter = null, ?Closure $getter = null,
-    ?Closure $msetter = null, ?Closure $mgetter = null, ?Closure $onChange = null, ?Closure $isEmpty = null, ?Closure $htmlInput = null, ?Closure $toArray = null ) : IPropertyBehavior
+  protected function createPropertyBehavior( ?Closure $validate = null, ?Closure $init = null, ?Closure $setter = null,
+    ?Closure $getter = null, ?Closure $msetter = null, ?Closure $mgetter = null, ?Closure $onChange = null, 
+    ?Closure $isEmpty = null, ?Closure $htmlInput = null, ?Closure $toArray = null ) : IPropertyBehavior
   {
     //..I didn't think this was all that necessary to provide easy control over.
     //..Gonna have to subclass to override.  It's just a bucket...
-    return new PropertyBehavior( $validate, $init, $setter, $getter, $msetter, $mgetter, $onChange, $isEmpty, $htmlInput, $toArray );
+    return new PropertyBehavior( $validate, $init, $setter, $getter, $msetter, $mgetter, $onChange, 
+      $isEmpty, $htmlInput, $toArray );
   }
   
     
@@ -177,16 +188,64 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
       throw new \Exception( sprintf( 'Property factory for %s does not return an instance of IProperty.  Got %s of class %s', $builder->getType()->value(), gettype( $prop ), get_class( $prop )));
     return $prop;
   }
+  
+
+  /**
+   * Given array $data, test $key is set and if so, pass $data[$key] to $actionIfIsset and invoke.  Otherwise
+   * return null;
+   * @param array $data Data array
+   * @param string $key Key to find 
+   * @param \Closure $actionIfIsset fn( string $key, mixed $v ) : void - Invoked if isset 
+   * @return mixed|null Value or null 
+   */
+  private function getPropertyFromArray( array $data, string $key, \Closure $actionIfIsset ) : mixed 
+  {
+    if ( isset( $data[$key] ))
+    {
+      //..This cast might break things
+      $actionIfIsset((string)$key, $data[$key] );
+      return $data[$key];
+    }
     
+    return null;
+  }
+
+  
   
   private function createBuilder( string $name, array $data ) : IPropertyBuilder
   {
     if ( !is_string( $data[self::TYPE] ))
-      throw new \InvalidArgumentException( self::TYPE . ' configuration property of ' . $name . ' must be a string,  ' . gettype( $data[self::TYPE] ) . ' given.' );
+    {
+      throw new \InvalidArgumentException( self::TYPE . ' configuration property of ' . $name . ' must be a string,  ' 
+        . gettype( $data[self::TYPE] ) . ' given.' );
+    }
     
     
     $b = $this->pbIoc->create( $name, $data[self::TYPE] );
     $b->setName( $name );
+    
+    $biTest = function( string $k, mixed $v ) use ($name) : void {
+      if ( !( $v instanceof Closure ))
+        throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
+    };
+    
+    $behavior = $this->createPropertyBehavior( 
+      $this->getPropertyFromArray( $data, self::VALIDATE, $biTest ),
+      $this->getPropertyFromArray( $data, self::INIT, $biTest ),
+      $this->getPropertyFromArray( $data, self::SETTER, $biTest ),
+      $this->getPropertyFromArray( $data, self::GETTER, $biTest ),
+      $this->getPropertyFromArray( $data, self::MSETTER, $biTest ),
+      $this->getPropertyFromArray( $data, self::MGETTER, $biTest ),
+      $this->getPropertyFromArray( $data, self::CHANGE, $biTest ),
+      $this->getPropertyFromArray( $data, self::IS_EMPTY, $biTest ),
+      $this->getPropertyFromArray( $data, self::HTMLINPUT, $biTest ),
+      $this->getPropertyFromArray( $data, self::TOARRAY, $biTest )
+    );
+            
+    
+    
+    
+    
     
     $validate = null;
     $init = null;

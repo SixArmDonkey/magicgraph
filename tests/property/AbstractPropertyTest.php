@@ -20,7 +20,6 @@ use buffalokiwi\magicgraph\ValidationException;
 use PHPUnit\Framework\TestCase;
 
 
-
 /**
  * This is the base test class for AbstractProperty
  * Extend this to test IProperty implementations 
@@ -32,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  * 
  * 
  * @todo Write tests for __clone()
+ * @todo $instance->getValue() should be wrapped by a protected function: getInstanceValue( mixed $instance ) : mixed 
  */
 abstract class AbstractPropertyTest extends TestCase
 {
