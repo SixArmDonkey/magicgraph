@@ -127,8 +127,8 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
         
     
     parent::__construct(
-      new PropertyBuilderIoC( new EPropertyType(), $builders ),
-      new PropertyIoC( new EPropertyType(), $factories )
+      new PropertyBuilderFactory( new EPropertyType(), $builders ),
+      new DefaultPropertyFactory( new EPropertyType(), $factories )
     );
   }
   

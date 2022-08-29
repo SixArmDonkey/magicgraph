@@ -8,13 +8,13 @@
  * @author John Quinn
  */
 
-
 declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\property;
 
-
-interface IPropertyBuilderIoC extends IPropertyTypeIoC
+interface IPropertyTypeFactory
 {
-  public function create( string $name, string $type ) : IPropertyBuilder;
+  public function getTypes() : array;
+  
+  public function getTypeInstance() : IPropertyType;
 }

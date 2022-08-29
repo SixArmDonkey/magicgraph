@@ -24,13 +24,13 @@ class PropertySetFactory implements IPropertySetFactory
 {
   /**
    * Property factory instance 
-   * @var IPropertyFactory 
+   * @var IMappedPropertyFactory 
    */
   private $factory;
   
   /**
    * A supplier for creating IPropertySet instances.
-   * f( IPropertyFactory $factory, IPropertyConfig ...$config ) : IPropertySet 
+   * f( IMappedPropertyFactory $factory, IPropertyConfig ...$config ) : IPropertySet 
    * @var Closure 
    */
   private $createPropertySet;
@@ -38,12 +38,12 @@ class PropertySetFactory implements IPropertySetFactory
   
   /**
    * 
-   * @param \buffalokiwi\retailrack\product\IPropertyFactory $factory Property Factory
+   * @param \buffalokiwi\retailrack\product\IMappedPropertyFactory $factory Property Factory
    * @param Closure $createPropertySet A callback for creating IPropertySet instances.
-   * f( IPropertyFactory $factory, IPropertyConfig ...$config ) : IPropertySet 
+   * f( IMappedPropertyFactory $factory, IPropertyConfig ...$config ) : IPropertySet 
    * @param \buffalokiwi\retailrack\product\IPropertyConfig $config
    */
-  public function __construct( IPropertyFactory $factory, Closure $createPropertySet )
+  public function __construct( IMappedPropertyFactory $factory, Closure $createPropertySet )
   {
     $this->factory = $factory;
     $this->createPropertySet = $createPropertySet;
@@ -51,10 +51,10 @@ class PropertySetFactory implements IPropertySetFactory
   
   
   /**
-   * Retrieve the IPropertyFactory instance 
-   * @return IPropertyFactory factor 
+   * Retrieve the IMappedPropertyFactory instance 
+   * @return IMappedPropertyFactory factor 
    */
-  public function getPropertyFactory() : IPropertyFactory
+  public function getPropertyFactory() : IMappedPropertyFactory
   {
     return $this->factory;
   }
@@ -62,7 +62,7 @@ class PropertySetFactory implements IPropertySetFactory
   
   /**
    * Retrieve the callback used for creating new IPropertySet instances 
-   * @return Closure f( IPropertyFactory $factory, IPropertyConfig ...$config ) : IPropertySet 
+   * @return Closure f( IMappedPropertyFactory $factory, IPropertyConfig ...$config ) : IPropertySet 
    */
   public function getCreatePropertySetSupplier() : Closure
   {

@@ -12,7 +12,11 @@
 namespace buffalokiwi\magicgraph\property;
 
 
-interface IPropertyFactory
+/**
+ * A mapped property factory is used to convert a model property configuration array 
+ * into a set of IProperty instances.  This should utilize the IConfigMapper 
+ */
+interface IMappedPropertyFactory
 {
   /**
    * Retrieve a list of properties 

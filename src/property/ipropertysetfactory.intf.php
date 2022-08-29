@@ -23,15 +23,15 @@ use Exception;
 interface IPropertySetFactory
 {
  /**
-   * Retrieve the IPropertyFactory instance 
-   * @return IPropertyFactory factor 
+   * Retrieve the IMappedPropertyFactory instance 
+   * @return IMappedPropertyFactory factor 
    */
-  public function getPropertyFactory() : IPropertyFactory;
+  public function getPropertyFactory() : IMappedPropertyFactory;
   
   
   /**
    * Retrieve the callback used for creating new IPropertySet instances 
-   * @return Closure f( IPropertyFactory $factory, IPropertyConfig ...$config ) : IPropertySet 
+   * @return Closure f( IMappedPropertyFactory $factory, IPropertyConfig ...$config ) : IPropertySet 
    */
   public function getCreatePropertySetSupplier() : Closure;
   

@@ -15,7 +15,7 @@ namespace buffalokiwi\magicgraph\property;
 
 
 
-interface IPropertyIoC extends IPropertyTypeIoC
+interface IPropertyFactory extends IPropertyTypeFactory
 {
   public function create( IPropertyBuilder $builder ) : IProperty;
 }

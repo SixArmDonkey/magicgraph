@@ -16,7 +16,7 @@ namespace buffalokiwi\magicgraph\property;
 use Exception;
 
 
-class PropertyIoC extends PropertyTypeIoC implements IPropertyIoC
+class DefaultPropertyFactory extends PropertyTypeFactory implements IPropertyFactory
 {
   public function create( IPropertyBuilder $builder ) : IProperty
   {

@@ -39,13 +39,13 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
 {
   /**
    * PropertyBuilder instance factory 
-   * @var IPropertyBuilderIoC
+   * @var IPropertyBuilderFactory
    */
   private $pbIoc;
   
   /**
    * Property factory 
-   * @var IPropertyIoC
+   * @var IPropertyFactory
    */
   private $pIoc;
   
@@ -63,12 +63,12 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
   
   
   /**
-   * @param IPropertyBuilderIoC $pbIoc Property Builder Factory 
-   * @param IPropertyIoC $pIoc IProperty Factory 
+   * @param IPropertyBuilderFactory $pbIoc Property Builder Factory 
+   * @param IPropertyFactory $pIoc IProperty Factory 
    * @param Closure|null $getPropertyFlags f() : IPropertyFlags - Retrieve a new property flags instance for use 
    * @throws InvalidArgumentException
    */
-  public function __construct( IPropertyBuilderIoC $pbIoc, IPropertyIoC $pIoc, ?Closure $getPropertyFlags = null )
+  public function __construct( IPropertyBuilderFactory $pbIoc, IPropertyFactory $pIoc, ?Closure $getPropertyFlags = null )
   {
     $k1 = $pIoc->getTypes();
     $k2 = $pbIoc->getTypes();

@@ -59,7 +59,7 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   
   /**
    * Property factory 
-   * @var IPropertyFactory
+   * @var IMappedPropertyFactory
    */
   private $propFactory;
   
@@ -99,10 +99,10 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   
   /**
    * Create a new DefaultPropertySet instance 
-   * @param IPropertyFactory $properties Properties 
+   * @param IMappedPropertyFactory $properties Properties 
    * @throws InvalidArgumentException 
    */
-  public function __construct( IPropertyFactory $properties, IPropertyConfig ...$config )
+  public function __construct( IMappedPropertyFactory $properties, IPropertyConfig ...$config )
   {
 
     $this->hash = $this->generateHash( ...$config );

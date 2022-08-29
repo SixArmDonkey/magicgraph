@@ -12,8 +12,6 @@
 namespace buffalokiwi\magicgraph\property;
 
 
-
-
 /**
  * Maps a configuration array to a list of properties.
  * 
@@ -30,12 +28,9 @@ namespace buffalokiwi\magicgraph\property;
  *     PropertyFactory::VALIDATE => function( IProperty $prop, $value ) {},
  *     PropertyFactory::PATTERN => '/[a-z]+/', //Some pattern to use as validation 
  *   ]
- * 
  * ];
- * 
- * 
  */
-class PropertyFactory implements IPropertyFactory
+class MappedPropertyFactory implements IMappedPropertyFactory
 {
   /**
    * Config mapper 

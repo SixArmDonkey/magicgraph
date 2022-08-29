@@ -19,7 +19,7 @@ use InvalidArgumentException;
 /**
  * A factory that accepts a list of IProperty instances.
  */
-class PropertyList implements IPropertyFactory
+class PropertyList implements IMappedPropertyFactory
 {
   /**
    * Properties list 

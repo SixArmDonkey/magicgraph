@@ -21,9 +21,14 @@ use InvalidArgumentException;
 
 
 /**
+ * This is a factory factory.
  * 
+ * Internally, this will maintain a list of factories indexed by property type and when calling createProperty(), 
+ * a property of the appropriate type will be returned.
+ * 
+ * Subclasses may use getFactoryFunction(), which will return a closure (factory) used to return IProperty instances.
  */
-abstract class PropertyTypeIoC implements IPropertyTypeIoC
+abstract class PropertyTypeFactory implements IPropertyTypeFactory
 {
   /**
    * A map of property type => \Closure
@@ -42,7 +47,8 @@ abstract class PropertyTypeIoC implements IPropertyTypeIoC
   /**
    * Create a new PropertyFactory
    * @param IPropertyType $propertyTypes
-   * @param array $factories
+   * @param array $factories a map of (string)IPropertyType => fn( IPropertyBuilder ) : IProperty 
+   * Any keys of $factories must be values returned by IPropertyType::getEnumValues()
    */
   public function __construct( IPropertyType $propertyTypes, array $factories )
   {
