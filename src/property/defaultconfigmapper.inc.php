@@ -8,9 +8,7 @@
  * @author John Quinn
  */
 
-
 declare( strict_types=1 );
-
 
 namespace buffalokiwi\magicgraph\property;
 
@@ -30,7 +28,11 @@ use Exception;
  * 1) A map of IPropertyType => IPropertyBuilder factory for creating property builder instances based on type
  * 2) A map of IPropertyType => IProperty factory for creating instances of IProperty using the appropriate builder defined in step 1
  * 
- * @todo maybe make this extensible?  Create ways to create instances of 
+ * 
+ * Note: When using custom properties, this code may be better closer to the project entry point by creating an 
+ * instance of BasePropertyBuilderConfigMapper directly.  
+ * 
+ * This default implementation is provided as both a default and an example.
  */
 class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
 {
@@ -67,7 +69,11 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
     
     
     
-    
+    /**
+     * Invoking via __callStatic causes the enum to become read only by default 
+     * @todo Move this code into composition root.  
+     * @todo Figure out how to provide this code as part of a default build
+     */
     $b = EPropertyType::TBOOLEAN();
     $d = EPropertyType::TDATE();
     $f = EPropertyType::TFLOAT();
@@ -83,46 +89,51 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
     
     
     $builders =  [
-      EPropertyType::TBOOLEAN => function() use($b) { return new PropertyBuilder( $b, new SPropertyFlags()); },
-      EPropertyType::TDATE    => function() use($d) { return new PropertyBuilder( $d, new SPropertyFlags()); }, //..placeholder
-      EPropertyType::TFLOAT   => function() use($f) { return new BoundedPropertyBuilder( $f, new SPropertyFlags()); }, 
-      EPropertyType::TENUM    => function() use($e) { return new ObjectPropertyBuilder( $e, new SPropertyFlags()); },
-      EPropertyType::TRTENUM  => function() use($r) { return new PropertyBuilder( $r, new SPropertyFlags()); },
-      EPropertyType::TINTEGER => function() use($i) { return new BoundedPropertyBuilder( $i, new SPropertyFlags()); },
-      EPropertyType::TSET     => function() use($t) { return new ObjectPropertyBuilder( $t, new SPropertyFlags()); },
-      EPropertyType::TSTRING  => function() use($s) { return new StringPropertyBuilder( $s, new SPropertyFlags()); },
-      EPropertyType::TARRAY   => function() use($a) { return new ObjectPropertyBuilder( $a, new SPropertyFlags()); },
-      EPropertyType::TMODEL   => function() use($l) { return new ObjectPropertyBuilder( $l, new SPropertyFlags(), $this->createModelIOCClosure()); },
-      EPropertyType::TOBJECT  => function() use($o) { return new ObjectPropertyBuilder( $o, new SPropertyFlags()); },
+      EPropertyType::TBOOLEAN => fn() => new PropertyBuilder( $b, new SPropertyFlags()),
+      EPropertyType::TDATE    => fn() => new PropertyBuilder( $d, new SPropertyFlags()),
+      EPropertyType::TFLOAT   => fn() => new BoundedPropertyBuilder( $f, new SPropertyFlags()),
+      EPropertyType::TENUM    => fn() => new ObjectPropertyBuilder( $e, new SPropertyFlags()),
+      EPropertyType::TRTENUM  => fn() => new PropertyBuilder( $r, new SPropertyFlags()),
+      EPropertyType::TINTEGER => fn() => new BoundedPropertyBuilder( $i, new SPropertyFlags()),
+      EPropertyType::TSET     => fn() => new ObjectPropertyBuilder( $t, new SPropertyFlags()),
+      EPropertyType::TSTRING  => fn() => new StringPropertyBuilder( $s, new SPropertyFlags()),
+      EPropertyType::TARRAY   => fn() => new ObjectPropertyBuilder( $a, new SPropertyFlags()),
+      EPropertyType::TOBJECT  => fn() => new ObjectPropertyBuilder( $o, new SPropertyFlags()),
+      EPropertyType::TMODEL   => function() use($l) { 
+        $builder = new ObjectPropertyBuilder( $l, new SPropertyFlags());
+        $ccf = $this->createModelIOCClosure();
+        if ( $ccf instanceof \Closure )
+          $builder->setCreateObjectFactory( $ccf );
+      }
     ];
     
       
     $factories = [
-      EPropertyType::TBOOLEAN => function( IPropertyBuilder $builder ) { return new BooleanProperty( $builder ); },
-      EPropertyType::TDATE    => function( IPropertyBuilder $builder ) use ($df,$dateFormat) { return new DateProperty( $builder, $df, $dateFormat ); },
-      EPropertyType::TFLOAT   => function( IPropertyBuilder $builder ) { return new FloatProperty( $builder ); },
-      EPropertyType::TENUM    => function( IPropertyBuilder $builder ) { return new EnumProperty( $builder ); },
-      EPropertyType::TRTENUM  => function( IPropertyBuilder $builder ) { return new RuntimeEnumProperty( $builder ); },
-      EPropertyType::TINTEGER => function( IPropertyBuilder $builder ) { return new IntegerProperty( $builder ); },
-      EPropertyType::TSET     => function( IPropertyBuilder $builder ) { return new SetProperty( $builder ); },
-      EPropertyType::TSTRING  => function( IPropertyBuilder $builder ) { return new StringProperty( $builder ); },
-      EPropertyType::TARRAY   => function( IPropertyBuilder $builder ) { return new ArrayProperty( $builder ); },
-      EPropertyType::TMODEL   => function( IPropertyBuilder $builder ) { return new ModelProperty( $builder ); },
-      EPropertyType::TOBJECT  => function( IPropertyBuilder $builder ) { return new ObjectProperty( $builder ); },
+      EPropertyType::TBOOLEAN => fn( IPropertyBuilder $builder ) => new BooleanProperty( $builder ),
+      EPropertyType::TDATE    => fn( IPropertyBuilder $builder ) => new DateProperty( $builder, $df, $dateFormat ),
+      EPropertyType::TFLOAT   => fn( IPropertyBuilder $builder ) => new FloatProperty( $builder ),
+      EPropertyType::TENUM    => fn( IPropertyBuilder $builder ) => new EnumProperty( $builder ),
+      EPropertyType::TRTENUM  => fn( IPropertyBuilder $builder ) => new RuntimeEnumProperty( $builder ),
+      EPropertyType::TINTEGER => fn( IPropertyBuilder $builder ) => new IntegerProperty( $builder ),
+      EPropertyType::TSET     => fn( IPropertyBuilder $builder ) => new SetProperty( $builder ),
+      EPropertyType::TSTRING  => fn( IPropertyBuilder $builder ) => new StringProperty( $builder ),
+      EPropertyType::TARRAY   => fn( IPropertyBuilder $builder ) => new ArrayProperty( $builder ),
+      EPropertyType::TMODEL   => fn( IPropertyBuilder $builder ) => new ModelProperty( $builder ),
+      EPropertyType::TOBJECT  => fn( IPropertyBuilder $builder ) => new ObjectProperty( $builder )
     ];
 
         
     if ( $ioc != null )
     {
       $mf = $this->getMoneyFactory();      
-      $builders[EPropertyType::TMONEY] = function() use($m) { return new BoundedPropertyBuilder( $m, new SPropertyFlags()); };
-      $factories[EPropertyType::TMONEY] = function( IPropertyBuilder $builder ) use ($mf) { return new MoneyProperty( $builder, $mf ); };
+      $builders[EPropertyType::TMONEY] = fn() => new BoundedPropertyBuilder( $m, new SPropertyFlags());
+      $factories[EPropertyType::TMONEY] = fn( IPropertyBuilder $builder ) => new MoneyProperty( $builder, $mf );
     }
     else
     {
       //..If no IOC container is passed, back TMONEY with a string.
-      $builders[EPropertyType::TMONEY] = function() use($s) { return new StringPropertyBuilder( $s, new SPropertyFlags()); };
-      $factories[EPropertyType::TMONEY] = function( IPropertyBuilder $builder ) { return new StringProperty( $builder ); };
+      $builders[EPropertyType::TMONEY] = fn() => new StringPropertyBuilder( $s, new SPropertyFlags());
+      $factories[EPropertyType::TMONEY] = fn( IPropertyBuilder $builder ) => new StringProperty( $builder );
     }
         
     
@@ -133,7 +144,10 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
   }
   
   
-  
+  /**
+   * Used by object properties.  Creates instances of a defined class/instance type using the supplied container.
+   * @return Closure|null A factory or null 
+   */
   private function createModelIOCClosure() : ?Closure
   {
     if ( $this->ioc == null )
@@ -149,6 +163,11 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
   }  
   
   
+  /**
+   * Attempt to retrieve an instance of IMoneyFactory from a container 
+   * @return IMoneyFactory factory 
+   * @throws Exception not found 
+   */
   private function getMoneyFactory() : IMoneyFactory 
   {
     if ( $this->ioc == null )

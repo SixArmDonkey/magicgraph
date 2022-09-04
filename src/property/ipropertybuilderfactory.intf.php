@@ -21,8 +21,15 @@ namespace buffalokiwi\magicgraph\property;
  * to create #arg2, and a builder of the appropriate data type will be returned.  
  * 
  */
-interface IPropertyBuilderFactory extends IPropertyTypeFactory
+interface IPropertyBuilderFactory
 {
+  /**
+   * Retrieve a list of available property types  
+   * @return array string[] type list 
+   */
+  public function getTypes() : array;
+
+    
   /**
    * Create a property builder used to create IProperty instances of the supplied type 
    * @param string $name Property name

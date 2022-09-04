@@ -8,6 +8,7 @@
  * @author John Quinn
  */
 
+declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\property;
 
@@ -15,11 +16,13 @@ use Closure;
 use InvalidArgumentException;
 
 
-
-
 /**
  * Maps a configuration array to a list of properties.
- * The configuration array is as follows:
+ * 
+ * This is a very specific implementation based on IPropertyConst and IBehaviorConst constants.
+ * All configuration array properties within those two interfaces must be implemented here.
+ * 
+ * Some of the configuration array is this (see readme):
  * 
  * [
  *   'property_name' => [   //..This should be a constant from the property set interface for whatever model is being used 
@@ -34,6 +37,7 @@ use InvalidArgumentException;
  *   ]
  * ];
  * 
+ * @todo maybe make this extensible?  This is not good.
  */
 class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements IConfigMapper
 {
@@ -41,25 +45,38 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
    * PropertyBuilder instance factory 
    * @var IPropertyBuilderFactory
    */
-  private $pbIoc;
+  private IPropertyBuilderFactory $pbIoc;
   
   /**
    * Property factory 
    * @var IPropertyFactory
    */
-  private $pIoc;
+  private IPropertyFactory $pIoc;
   
   /**
    * A map of string => IPropertyType
    * @var array
    */
-  private $propertyTypes;
+  private array $propertyTypes;
   
   /**
    * Retrieve a new propertyFlags instance
    * @var \Closure 
    */
-  private $getPropertyFlags;
+  private ?\Closure $getPropertyFlags;
+  
+  /**
+   * Flags 
+   * @var IPropertyFlags
+   */
+  private IPropertyFlags $flags;
+  
+  /**
+   * If the flag set contains PRIMARY, NO_UPDATE and WRITE_EMPTY,
+   * PRIMARY will cause NO_UPDATE and WRITE_EMPTY to be auto set 
+   * @var bool
+   */
+  private bool $setDefaultPrimaryFlags;
   
   
   /**
@@ -74,12 +91,20 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
     $k2 = $pbIoc->getTypes();
     
     if ( sizeof( $k1 ) != sizeof( $k2 ) || !empty( array_diff( $k1, $k2 )))
-      throw new InvalidArgumentException( 'pbIoC and pIoc must have matching key sets' );
+      throw new InvalidArgumentException( 'PropertyBuilderFactory and PropertyFactory must have matching key sets' );
     
     $this->pbIoc = $pbIoc;
     $this->pIoc = $pIoc;
     $this->propertyTypes = $k1;
     $this->getPropertyFlags = $getPropertyFlags;
+    
+    //..createPropertyFlags is invoked a lot, and this test only needs to happen once.      
+    $this->flags = $this->createPropertyFlagsInstance();
+    $this->setDefaultPrimaryFlags = $this->flags->isMember( 
+      IPropertyFlags::PRIMARY, 
+      IPropertyFlags::NO_UPDATE, 
+      IPropertyFlags::WRITE_EMPTY 
+    );    
   }
 
   
@@ -113,7 +138,7 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
       }
 
       $b = $this->createBuilder( $name, $data );
-      $out[$name] = $this->createProperty( $b );
+      $out[$name] = $this->pIoc->createProperty( $b );
     }
     
     return $out;
@@ -121,12 +146,19 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
   
   
   /**
-   * Create a new PropertyBehavior instance.
-   * @param Closure|null $validate Validate closure f( IProperty, $value ) 
-   * Throw a ValidationException on error 
-   * @param Closure|null $init
-   * @param Closure|null $setter
-   * @param Closure|null $getter
+   * Create a property behavior instance.  This creates and returns instances of class: PropertyBehavior.
+   * Subclass and override if desired.
+   * @param Closure|null $validate Validate callback
+   * @param Closure|null $init Property initialization callback 
+   * @param Closure|null $setter Property setter 
+   * @param Closure|null $getter Property getter 
+   * @param Closure|null $msetter Property setter with IModel
+   * @param Closure|null $mgetter Property getter with IModel
+   * @param Closure|null $onChange change event
+   * @param Closure|null $isEmpty empty event 
+   * @param Closure|null $htmlInput converts the property to an html input 
+   * @param Closure|null $toArray used with IModel::toArray().  Determines the serialized property value.
+   * @return IPropertyBehavior The behavior instance 
    */
   protected function createPropertyBehavior( ?Closure $validate = null, ?Closure $init = null, ?Closure $setter = null,
     ?Closure $getter = null, ?Closure $msetter = null, ?Closure $mgetter = null, ?Closure $onChange = null, 
@@ -137,29 +169,27 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
     return new PropertyBehavior( $validate, $init, $setter, $getter, $msetter, $mgetter, $onChange, 
       $isEmpty, $htmlInput, $toArray );
   }
-  
-    
+
+
   /**
-   * 
-   * @return \buffalokiwi\magicgraph\IPropertyFlags
+   * create a property flags instance using the constructor-supplied flag instance factory closure, or 
+   * an instance of SPropertyFlags and initialized by $values.
+   * @param array|string|int $values An array of property flag values, a string representing a single flag value, or 
+   * an integer representing the total bitmask value.
+   * @return IPropertyFlags Flags instance 
    */
-  protected function createPropertyFlags( $values ) : IPropertyFlags
+  protected function createPropertyFlags( array|string|int $values ) : IPropertyFlags
   {
-    if ( $this->getPropertyFlags != null )
-    {
-      $f = $this->getPropertyFlags;
-      $flags = $f();
-    }
-    else
-      $flags = new SPropertyFlags();
-    
-    if ( !empty( $values ))
-    {
+    $flags = $this->createPropertyFlagsInstance();
+    if ( is_array( $values ))
       $flags->add( ...$values );
-      
-      if ( $flags->hasVal( IPropertyFlags::PRIMARY ))
-        $flags->add( IPropertyFlags::NO_UPDATE, IPropertyFlags::WRITE_EMPTY );
-    }
+    else if ( is_string( $values ))
+      $flags->add( $values );
+    else if ( is_int( $values ))
+      $flags->setValue( $values );
+    
+    if ( $this->setDefaultPrimaryFlags && $flags->hasVal( IPropertyFlags::PRIMARY ))
+      $flags->add( IPropertyFlags::NO_UPDATE, IPropertyFlags::WRITE_EMPTY );
     
     return $flags;
   }
@@ -179,16 +209,7 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
   {
     //..Do nothing.  Override this and implement something.
   }
-  
-  
-  private function createProperty( IPropertyBuilder $builder ) : IProperty 
-  {
-    $prop = $this->pIoc->create( $builder );
-    if ( !( $prop instanceof IProperty ))
-      throw new \Exception( sprintf( 'Property factory for %s does not return an instance of IProperty.  Got %s of class %s', $builder->getType()->value(), gettype( $prop ), get_class( $prop )));
-    return $prop;
-  }
-  
+    
 
   /**
    * Given array $data, test $key is set and if so, pass $data[$key] to $actionIfIsset and invoke.  Otherwise
@@ -211,7 +232,15 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
   }
 
   
-  
+  /**
+   * Maps config entries to a property builder.
+   * Behavior events are tested to ensure they are closures.
+   * 
+   * @param string $name Property name 
+   * @param array $data Configuration array 
+   * @return IPropertyBuilder A type-appropriate builder instance 
+   * @throws InvalidArgumentException
+   */
   private function createBuilder( string $name, array $data ) : IPropertyBuilder
   {
     if ( !is_string( $data[self::TYPE] ))
@@ -229,7 +258,7 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
         throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
     };
     
-    $behavior = $this->createPropertyBehavior( 
+    $b->addBehavior( $this->createPropertyBehavior( 
       $this->getPropertyFromArray( $data, self::VALIDATE, $biTest ),
       $this->getPropertyFromArray( $data, self::INIT, $biTest ),
       $this->getPropertyFromArray( $data, self::SETTER, $biTest ),
@@ -240,101 +269,30 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
       $this->getPropertyFromArray( $data, self::IS_EMPTY, $biTest ),
       $this->getPropertyFromArray( $data, self::HTMLINPUT, $biTest ),
       $this->getPropertyFromArray( $data, self::TOARRAY, $biTest )
-    );
-            
-    
-    
-    
-    
-    
-    $validate = null;
-    $init = null;
-    $setter = null;
-    $getter = null;
-    $msetter = null;
-    $mgetter = null;
-    $onChange = null;
-    $isEmpty = null;
-    $htmlInput = null;
-    $toArray = null;
+    ));
     
     foreach( $data as $k => $v )
     {
       switch( $k )
       {
         case self::SETTER:
-          if ( !( $v instanceof Closure ))
-            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-          $setter = $v;
-        break;
-
         case self::GETTER:
-          if ( !( $v instanceof Closure ))
-            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-
-          $getter = $v;
-        break;
-        
         case self::MSETTER:
-          if ( !( $v instanceof Closure ))
-            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-          $msetter = $v;
-        break;
-
         case self::MGETTER:
-          if ( !( $v instanceof Closure ))
-            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-
-          $mgetter = $v;
-        break;
-
         case self::INIT:
-          if ( !( $v instanceof Closure ))
-            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-
-          $init = $v;
-        break;
-
         case self::VALIDATE:
-          if ( !( $v instanceof Closure ))
-            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-          $validate = $v;
-        break;            
-
         case self::CHANGE:
-          if ( !( $v instanceof Closure ))
-            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-          $onChange = $v;
-        break;
-        
         case self::IS_EMPTY:
-          if ( !( $v instanceof Closure ))
-            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-          $isEmpty = $v;
-        break;
-        
         case self::HTMLINPUT:
-          if ( !( $v instanceof Closure ))
-            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-          
-          $htmlInput = $v;
-        break;
-        
         case self::TOARRAY:
-          if ( !( $v instanceof Closure ))
-            throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-
-          $toArray = $v;
+          //..do nothing
         break;
-          
-        
+      
         default:
           $this->setProperty( $b, $name, $k, $v );
         break;
       }          
     }
-    
-    $b->addBehavior( $this->createPropertyBehavior( $validate, $init, $setter, $getter, $msetter, $mgetter, $onChange, $isEmpty, $htmlInput, $toArray ));
     
     return $b;
   }
@@ -413,4 +371,28 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
       throw new \Exception( 'Failed to set property ' . $k . ' for ' . $name . ':' . $e->getMessage(), 0, $e );
     }  
   }
+  
+  
+  /**
+   * Create an instance of IPropertyFlags.
+   * If getPropertyFlags closure was supplied to the constructor, that is called.  otherwise an instance of 
+   * SPropertyFlags is returned.
+   * @return IPropertyFlags Flag set 
+   * @throws \Exception If getPropertyFlags closure does not return an instance of IPropertyFlags 
+   */
+  private function createPropertyFlagsInstance() : IPropertyFlags
+  {
+    if ( $this->getPropertyFlags != null )
+    {
+      $f = $this->getPropertyFlags;
+      $flags = $f();
+      if ( !( $flags instanceof IPropertyFlags ))
+      {
+        throw new \Exception( 'getPropertyFlags closure must return an instance of IPropertyFlags.  got ' .
+         (( is_object( $flags )) ? get_class( $flags ) : gettype( $flags )));
+      }
+    }
+    else
+      return new SPropertyFlags();
+  }  
 }

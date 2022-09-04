@@ -14,6 +14,11 @@ declare( strict_types=1 );
 
 namespace buffalokiwi\magicgraph\property;
 
+
+/**
+ * Technically, this is a factory.
+ * 
+ */
 interface IConfigMapper
 {
   /**

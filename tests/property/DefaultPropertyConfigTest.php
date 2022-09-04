@@ -20,35 +20,41 @@ use PHPUnit\Framework\TestCase;
  */
 class DefaultPropertyConfigTest extends TestCase
 {
+  const constantsToTest = [
+    'CAPTION',
+    'ID',
+    'VALUE',
+    'SETTER',
+    'GETTER',
+    'MSETTER',
+    'MGETTER',
+    'TOARRAY',
+    'TYPE',
+    'FLAGS',
+    'CLAZZ',
+    'INIT',
+    'MIN',
+    'MAX',
+    'VALIDATE',
+    'PATTERN',
+    'CONFIG',
+    'PREFIX',
+    'CHANGE',
+    'HTMLINPUT',
+    'IS_EMPTY',
+    'TAG'
+  ];
   
   
   public function testConstantsExist() : void
   {
     $r = new ReflectionClass( new DefaultPropertyConfig());
     
-    $this->assertTrue( $r->getConstant( 'CAPTION' ) !== false );
-    $this->assertTrue( $r->getConstant( 'ID' ) !== false );    
-    $this->assertTrue( $r->getConstant( 'VALUE' ) !== false );        
-    $this->assertTrue( $r->getConstant( 'SETTER' ) !== false );
-    $this->assertTrue( $r->getConstant( 'GETTER' ) !== false );    
-    $this->assertTrue( $r->getConstant( 'MSETTER' ) !== false );        
-    $this->assertTrue( $r->getConstant( 'MGETTER' ) !== false );
-    $this->assertTrue( $r->getConstant( 'TOARRAY' ) !== false );    
-    $this->assertTrue( $r->getConstant( 'TYPE' ) !== false );        
-    $this->assertTrue( $r->getConstant( 'FLAGS' ) !== false );
-    $this->assertTrue( $r->getConstant( 'CLAZZ' ) !== false );    
-    $this->assertTrue( $r->getConstant( 'INIT' ) !== false );        
-    $this->assertTrue( $r->getConstant( 'MIN' ) !== false );
-    $this->assertTrue( $r->getConstant( 'MAX' ) !== false );    
-    $this->assertTrue( $r->getConstant( 'VALIDATE' ) !== false );        
-    $this->assertTrue( $r->getConstant( 'PATTERN' ) !== false );
-    $this->assertTrue( $r->getConstant( 'CONFIG' ) !== false );    
-    $this->assertTrue( $r->getConstant( 'PREFIX' ) !== false );        
-    $this->assertTrue( $r->getConstant( 'CHANGE' ) !== false );
-    $this->assertTrue( $r->getConstant( 'HTMLINPUT' ) !== false );    
-    $this->assertTrue( $r->getConstant( 'IS_EMPTY' ) !== false );        
-    $this->assertTrue( $r->getConstant( 'TAG' ) !== false );
+    foreach( static::constantsToTest as $const )
+    {
+      $this->assertNotEmpty( $const );
+      $this->assertTrue( is_string( $const ));
+      $this->assertTrue( $r->getConstant( $const ) !== false );
+    }
   }
-  
-  
 }

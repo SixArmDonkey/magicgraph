@@ -15,6 +15,15 @@ use PHPUnit\Framework\TestCase;
 
 
 class BasePropertyBuilderConfigMapperTest extends TestCase
-{
+{ 
+  public function testBuilderAndPropertyFactoriesMustHaveMatchingPropertyTypeLists() : void
+  {
+    
+  }
   
+  
+  protected function createPropertyBuilderFactory()
+  {
+    $pb = $this->getMockBuilder( IPropertyBuilderFactory::class )->getMock();
+  }
 }

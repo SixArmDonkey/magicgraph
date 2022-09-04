@@ -51,7 +51,7 @@ class MappedPropertyFactory implements IMappedPropertyFactory
   /**
    * Retrieve the config mapper used to create IProperty instances from 
    * config arrays.
-   * @return \buffalokiwi\magicgraph\IConfigMapper Mapper 
+   * @return IConfigMapper Mapper 
    */
   public function getMapper() : IConfigMapper
   {
