@@ -151,5 +151,5 @@ interface IPropertyBuilder
    * Retrieve some arbitrary config array 
    * @return array config 
    */
-  public function getConfig() : array;  
+  public function getConfig() : array;
 }

@@ -26,6 +26,8 @@ use stdClass;
  * for the linked models.
  * 
  * Pretty much everything should descend from this model.
+ * 
+ * @todo Consider refactoring this into a decorator
  */
 class ServiceableModel extends DefaultModel implements IServiceableModel
 {
@@ -58,7 +60,9 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
       /* @var $p IPropertyServiceProvider */
       $this->providers[$p->getModelServiceConfig()->getModelPropertyName()] = $p;
       
-      //..Leaking $this in constructor.
+      /**
+       * @todo Leaking $this in constructor.
+       */
       $p->init( $this );
     }
   }
@@ -167,9 +171,7 @@ class ServiceableModel extends DefaultModel implements IServiceableModel
     
     return parent::toArray( $properties, $includeArrays, $includeModels, $includeExtra, $_depth );
   }  
-  
-  
-  
+
   
   private function providerWarmup( bool $includeArrays, bool $includeModels )
   {

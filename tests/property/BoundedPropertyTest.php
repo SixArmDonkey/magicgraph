@@ -10,8 +10,6 @@
 
 declare( strict_types=1 );
 
-use buffalokiwi\magicgraph\property\BoundedPropertyBuilder;
-use buffalokiwi\magicgraph\property\IBoundedProperty;
 use buffalokiwi\magicgraph\property\IBoundedPropertyBuilder;
 
 
@@ -21,7 +19,6 @@ abstract class BoundedPropertyTest extends AbstractPropertyTest
   //..Override these in some subclass when testing subclasses of AbstractProperty 
   protected const min = PHP_FLOAT_MIN;
   protected const max = PHP_FLOAT_MAX;
-  
   
   public function testGetMinMax() : void
   {

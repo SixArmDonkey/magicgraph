@@ -19,7 +19,7 @@ use Closure;
 
 /**
  * MySQL search results wrapper 
- * This isn't mysql specific.  It can be renamed DefaultSerachResults
+ * This isn't mysql specific.  It can be renamed DefaultSearchResults
  * @todo Rename this DefaultSearchResults or FunctionalSearchResults or something.
  */
 class MySQLSearchResults implements ISearchResults

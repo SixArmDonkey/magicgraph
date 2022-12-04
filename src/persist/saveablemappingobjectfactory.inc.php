@@ -214,7 +214,7 @@ abstract class SaveableMappingObjectFactory extends MappingObjectFactory impleme
             {
               array_unshift( $model );
               $this->saveState->NONE;
-              //..Obviously, this can cause shenanigans.  
+              //..Obviously this can cause shenanigans.  
               $this->saveAll( ...$bsModels );
               return;
             }

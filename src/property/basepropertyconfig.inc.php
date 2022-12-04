@@ -20,8 +20,9 @@ use Closure;
 use Exception;
 
 
+
 abstract class BasePropertyConfig extends DefaultPropertyConfig implements IPropertyConfig, IPropertyServiceProvider
-{  
+{
    /**
    * Primary key integer property 
    */
@@ -251,10 +252,6 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
     self::IS_EMPTY
   ];
   
-
- 
-  
-  
   
   /**
    * Cache for config array 
@@ -311,11 +308,33 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   private array $genericBehavior = [];
   
   
+  private array $behaviorFunctions = [];
+    
   /**
    * Retrieve the configuration array for generating model properties.
    */
   protected abstract function createConfig() : array;
   
+  
+  /**
+   * Create property behavior functions
+   * @return array[property name => fn( mixed $value, IPropertyBehavior ...$behavior ) : \Closure|null]
+   */
+  protected function createBehaviorFunctions()
+  {
+    return [
+      self::INIT      => fn( mixed $value, IPropertyBehavior ...$behavior ) : Closure|null => $this->getInitCallback( $value, ...$this->getFunctionList( 'getInitCallback', ...$behavior )),
+      self::VALIDATE  => fn( mixed $value, IPropertyBehavior ...$behavior ) : Closure|null => $this->getValidateCallback( $value, ...$this->getFunctionList( 'getValidateCallback', ...$behavior )),
+      self::SETTER    => fn( mixed $value, IPropertyBehavior ...$behavior ) : Closure|null => $this->getGetterSetterCallback( $value, ...$this->getFunctionList( 'getSetterCallback', ...$behavior )),
+      self::GETTER    => fn( mixed $value, IPropertyBehavior ...$behavior ) : Closure|null => $this->getGetterSetterCallback( $value, ...$this->getFunctionList( 'getGetterCallback', ...$behavior )),
+      self::MSETTER   => fn( mixed $value, IPropertyBehavior ...$behavior ) : Closure|null => $this->getModelGetterSetterCallback( $value, ...$this->getFunctionList( 'getModelSetterCallback', ...$behavior )),
+      self::MGETTER   => fn( mixed $value, IPropertyBehavior ...$behavior ) : Closure|null => $this->getModelGetterSetterCallback( $value, ...$this->getFunctionList( 'getModelGetterCallback', ...$behavior )),
+      self::CHANGE    => fn( mixed $value, IPropertyBehavior ...$behavior ) : Closure|null => $this->getOnChangeCallback( $value, ...$this->getFunctionList( 'getOnChangeCallback', ...$behavior )),
+      self::HTMLINPUT => fn( mixed $value, IPropertyBehavior ...$behavior ) : Closure|null => $this->getHTMLInputCallback( $value, ...$this->getFunctionList( 'getHTMLInputCallback', ...$behavior )),
+      self::TOARRAY   => fn( mixed $value, IPropertyBehavior ...$behavior ) : Closure|null => $this->getModelGetterSetterCallback( $value, ...$this->getFunctionList( 'getToArrayCallback', ...$behavior )),
+      self::IS_EMPTY  => fn( mixed $value, IPropertyBehavior ...$behavior ) : Closure|null => $this->getIsEmptyCallback( $value, ...$this->getFunctionList( 'getIsEmptyCallback', ...$behavior ))
+    ];
+  }
   
   
   /**
@@ -326,8 +345,8 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
    * would be based on the controlling service.  All IModelPropertyProvider
    * implementations can take advantage of beforeSave() and afterSave().
    * 
-   * UPDATE: The before/after save functionality is baked into the SaveableMappingObjectFactory.  Assuming persistence 
-   * is based on that implementation, before/after save are guaranteed to be called.
+   * UPDATE: The before/after save functionality is baked into the SaveableMappingObjectFactory.  
+   * If persistence is based on that implementation, before/after save are guaranteed to be called.
    * 
    */
   public function __construct( INamedPropertyBehavior ...$behavior )
@@ -465,8 +484,6 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   {
     //..do nothing
   }
-  
-  
   
   
   /**
@@ -629,35 +646,7 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
       $out[$key] = $f;
     }
   }
-  
-  
-  /**
-   * This is currently UNUSED. HA!
-   * @param INamedPropertyBehavior $behavior
-   * @return array
-   */
-  private function getUsedBehavior( INamedPropertyBehavior ...$behavior )
-  {
-    $out = [];
-    
-    foreach( $behavior as $b )
-    {
-      /* @var $b INamedPropertyBehavior */
-      $this->addBehaviorToArray( $out, self::INIT, $b->getInitCallback());
-      $this->addBehaviorToArray( $out, self::VALIDATE, $b->getValidateCallback());
-      $this->addBehaviorToArray( $out, self::SETTER, $b->getSetterCallback());
-      $this->addBehaviorToArray( $out, self::GETTER, $b->getGetterCallback());
-      $this->addBehaviorToArray( $out, self::MSETTER, $b->getModelSetterCallback());
-      $this->addBehaviorToArray( $out, self::MGETTER, $b->getModelGetterCallback());
-      $this->addBehaviorToArray( $out, self::CHANGE, $b->getOnChangeCallback());
-      $this->addBehaviorToArray( $out, self::HTMLINPUT, $b->getHTMLInputCallback());
-      $this->addBehaviorToArray( $out, self::TOARRAY, $b->getToArrayCallback());
-      $this->addBehaviorToArray( $out, self::IS_EMPTY, $b->getIsEmptyCallback());
-    }
-    
-    return $out;
-  }
-  
+
   
   /**
    * Process any associated behavior for some config array 
@@ -830,8 +819,6 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
   }    
   
   
-  
-  
   /**
    * Create a validate callback for multiple functions.
    * @param ?Closure $value Closure|null from property config array
@@ -856,9 +843,6 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
       return true;
     };      
   }
-  
-  
-  
   
   
   /**
@@ -921,48 +905,18 @@ abstract class BasePropertyConfig extends DefaultPropertyConfig implements IProp
    * @param mixed $value Config entry property value 
    * @param INamedPropertyBehavior $behavior Behavior for this property 
    * @return mixed value 
-   * 
-   * @todo This is not maintainable.
    */
   private function processEntry( string $prop, $value, INamedPropertyBehavior ...$behavior )
   {
     if ( empty( $behavior ))
       return $value; 
     
-    switch( $prop )
-    {
-      case self::INIT:
-        return $this->getInitCallback( $value, ...$this->getFunctionList( 'getInitCallback', ...$behavior ));
-        
-      case self::VALIDATE:
-        return $this->getValidateCallback( $value, ...$this->getFunctionList( 'getValidateCallback', ...$behavior ));
-        
-      case self::SETTER:
-        return $this->getGetterSetterCallback( $value, ...$this->getFunctionList( 'getSetterCallback', ...$behavior ));
-        
-      case self::GETTER:
-        return $this->getGetterSetterCallback( $value, ...$this->getFunctionList( 'getGetterCallback', ...$behavior ));
-                
-      case self::MSETTER:
-        return $this->getModelGetterSetterCallback( $value, ...$this->getFunctionList( 'getModelSetterCallback', ...$behavior ));
-        
-      case self::MGETTER:
-        return $this->getModelGetterSetterCallback( $value, ...$this->getFunctionList( 'getModelGetterCallback', ...$behavior ));
-        
-      case self::CHANGE:
-        return $this->getOnChangeCallback( $value, ...$this->getFunctionList( 'getOnChangeCallback', ...$behavior ));
-        
-      case self::HTMLINPUT:
-        return $this->getHTMLInputCallback( $value, ...$this->getFunctionList( 'getHTMLInputCallback', ...$behavior ));
-        
-      case self::TOARRAY:
-        return $this->getModelGetterSetterCallback( $value, ...$this->getFunctionList( 'getToArrayCallback', ...$behavior ));
-        
-      case self::IS_EMPTY:
-        return $this->getIsEmptyCallback( $value, ...$this->getFunctionList( 'getIsEmptyCallback', ...$behavior ));
-        
-      default:
-        return $value;
-    }
+    if ( empty( $this->behaviorFunctions ))
+      $this->behaviorFunctions = $this->createBehaviorFunctions();
+    
+    if ( isset( $this->behaviorFunctions[$prop] ))
+      return $this->behaviorFunctions[$prop];
+    
+    return $value;    
   }
 }

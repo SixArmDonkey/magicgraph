@@ -14,14 +14,12 @@ declare( strict_types=1 );
 namespace buffalokiwi\magicgraph;
 
 use buffalokiwi\magicgraph\property\IPropertyConfig;
-use buffalokiwi\magicgraph\persist\IRunnable;
 
 
 /**
- * A property provider is used with a ModelFactory to add additional 
- * properties to a model in addition to the model's base configuration.
+ * A property provider provides properties to a property set, sort of like traits.
  * 
- * This interface makes it possible to attach more interactive property configurations
+ * This interface makes it possible to attach additional property configurations
  * to a ServicableModel instance.
  */
 interface IPropertyServiceProvider 

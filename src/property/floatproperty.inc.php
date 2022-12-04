@@ -54,25 +54,30 @@ class FloatProperty extends BoundedProperty implements IFloatProperty
       return; //..This is ok
     
     if ( filter_var( $value, FILTER_VALIDATE_FLOAT ) === false )
-      throw new ValidationException( sprintf( 'Value for property %s must be an float.  Got %s', $this->getName(), gettype( $value )));
+      throw new ValidationException( sprintf( 'Value for property %s must be an float.  Got %s with value "%s"', $this->getName(), gettype( $value ), $value ));
     else if ( $value < $this->getMin())
     {      
-      throw new ValidationException( sprintf( 'Value %f for property %s must be an float greater than or equal to %f', $value, $this->getName(), $this->getMin()));
+      throw new ValidationException( sprintf( 'Value %f for property %s must be an float greater than or equal to %f.  Got value "%f"', $value, $this->getName(), $this->getMin(), $value ));
     }
     else if ( $value > $this->getMax())
-      throw new ValidationException( sprintf( 'Value %f for property %s must be an float less than or equal to %f', $value, $this->getName(), $this->getMax()));
+      throw new ValidationException( sprintf( 'Value %f for property %s must be an float less than or equal to %f.  Got value "%f"', $value, $this->getName(), $this->getMax(), $value ));
   }
   
   
   /**
    * Called when setting a property value.
-   * Casts the value to a float.
+   * This is called AFTER validate.
+   * Override this in child classes to modify the value prior to committing it.
+   * This is the default implementation which simply returns the supplied value.
    * @param mixed $value Value being set
-   * @param mixed $curValue the current value 
-   * @return float Value to set 
+   * @param mixed $curValue The current value 
+   * @return mixed Value to set 
    */
-  protected function setPropertyValue( $value, $curValue )
+  protected function setPropertyValue( $value, $curValue ) : mixed
   {
+    if ( $value === null )
+      return null;
+    
     return (float)$value;
   }
 }

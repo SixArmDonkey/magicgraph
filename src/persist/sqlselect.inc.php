@@ -20,6 +20,7 @@ use InvalidArgumentException;
  * A sql select part of a query.
  * This may or may not make the cut.  With some effort, this may be handy.
  * @todo determine if this sucks or not.
+ * @todo This definitely sucks.  
  */
 class SQLSelect 
 {

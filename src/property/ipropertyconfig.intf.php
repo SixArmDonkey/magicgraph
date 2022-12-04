@@ -19,7 +19,9 @@ use buffalokiwi\magicgraph\IModel;
 interface IPropertyConfig 
 {
   /**
-   * Retrieve the config array 
+   * Retrieve an array containing the definition of a property.
+   * This will be used by IConfigMapper to set properties of a property builder, which is
+   * used to create an instance of IProperty 
    * @return array config 
    */
   public function getConfig() : array;

@@ -37,7 +37,6 @@ use InvalidArgumentException;
  *   ]
  * ];
  * 
- * @todo maybe make this extensible?  This is not good.
  */
 class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements IConfigMapper
 {
@@ -79,6 +78,8 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
   private bool $setDefaultPrimaryFlags;
   
   
+  
+  
   /**
    * @param IPropertyBuilderFactory $pbIoc Property Builder Factory 
    * @param IPropertyFactory $pIoc IProperty Factory 
@@ -89,6 +90,7 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
   {
     $k1 = $pIoc->getTypes();
     $k2 = $pbIoc->getTypes();
+    
     
     if ( sizeof( $k1 ) != sizeof( $k2 ) || !empty( array_diff( $k1, $k2 )))
       throw new InvalidArgumentException( 'PropertyBuilderFactory and PropertyFactory must have matching key sets' );
@@ -122,12 +124,17 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
 
     foreach( $config as $name => $data )
     {
+      /*
+      //..This is impossible
       if ( isset( $out[$name] ))
       {
         throw new InvalidArgumentException( "A property with the name: " . $name . " has already been defined. Check "
           . get_class( $config ));
       }
-      else if ( !is_array( $data ))
+      else 
+      */
+      
+      if ( !is_array( $data ))
       {
         throw new InvalidArgumentException( 'Config entries must be an array.  "'  . $name 
           . '" (encountered key) must be an array' );
@@ -137,6 +144,7 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
         throw new InvalidArgumentException( 'Config entries must a type.  "'  . $name . '" must have a type.' );
       }
 
+      //..Any other checks should happen within the builder or property factory 
       $b = $this->createBuilder( $name, $data );
       $out[$name] = $this->pIoc->createProperty( $b );
     }
@@ -148,26 +156,29 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
   /**
    * Create a property behavior instance.  This creates and returns instances of class: PropertyBehavior.
    * Subclass and override if desired.
-   * @param Closure|null $validate Validate callback
-   * @param Closure|null $init Property initialization callback 
-   * @param Closure|null $setter Property setter 
-   * @param Closure|null $getter Property getter 
-   * @param Closure|null $msetter Property setter with IModel
-   * @param Closure|null $mgetter Property getter with IModel
-   * @param Closure|null $onChange change event
-   * @param Closure|null $isEmpty empty event 
-   * @param Closure|null $htmlInput converts the property to an html input 
-   * @param Closure|null $toArray used with IModel::toArray().  Determines the serialized property value.
+   * @param string $name The property name
+   * @param array $data The configuration array 
    * @return IPropertyBehavior The behavior instance 
    */
-  protected function createPropertyBehavior( ?Closure $validate = null, ?Closure $init = null, ?Closure $setter = null,
-    ?Closure $getter = null, ?Closure $msetter = null, ?Closure $mgetter = null, ?Closure $onChange = null, 
-    ?Closure $isEmpty = null, ?Closure $htmlInput = null, ?Closure $toArray = null ) : IPropertyBehavior
+  protected function createPropertyBehavior( string $name, array $data ) : IPropertyBehavior 
   {
-    //..I didn't think this was all that necessary to provide easy control over.
-    //..Gonna have to subclass to override.  It's just a bucket...
-    return new PropertyBehavior( $validate, $init, $setter, $getter, $msetter, $mgetter, $onChange, 
-      $isEmpty, $htmlInput, $toArray );
+    $biTest = function( string $k, mixed $v ) use ($name) : void {
+      if ( !( $v instanceof Closure ))
+        throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
+    };
+    
+    return new PropertyBehavior(
+      $this->getPropertyFromArray( $data, self::VALIDATE, $biTest ),
+      $this->getPropertyFromArray( $data, self::INIT, $biTest ),
+      $this->getPropertyFromArray( $data, self::SETTER, $biTest ),
+      $this->getPropertyFromArray( $data, self::GETTER, $biTest ),
+      $this->getPropertyFromArray( $data, self::MSETTER, $biTest ),
+      $this->getPropertyFromArray( $data, self::MGETTER, $biTest ),
+      $this->getPropertyFromArray( $data, self::CHANGE, $biTest ),
+      $this->getPropertyFromArray( $data, self::IS_EMPTY, $biTest ),
+      $this->getPropertyFromArray( $data, self::HTMLINPUT, $biTest ),
+      $this->getPropertyFromArray( $data, self::TOARRAY, $biTest )
+    );
   }
 
 
@@ -205,7 +216,7 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
    * @param string $v Property Attribute Value 
    * @throws InvalidArgumentException
    */
-  protected function setCustomProperty( PropertyBuilder $b, string $name, string $k, $v )
+  protected function setCustomProperty( IPropertyBuilder $b, string $name, string $k, $v )
   {
     //..Do nothing.  Override this and implement something.
   }
@@ -243,55 +254,25 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
    */
   private function createBuilder( string $name, array $data ) : IPropertyBuilder
   {
+    /**
+     * @todo Ask the profiler if this section would benefit from shared property builder instances 
+     * ie: Use the same buildler and reset internals vs creating new instances in a loop.
+     */
     if ( !is_string( $data[self::TYPE] ))
     {
-      throw new \InvalidArgumentException( self::TYPE . ' configuration property of ' . $name . ' must be a string,  ' 
+      throw new \InvalidArgumentException( self::TYPE . ' configuration property of ' 
+        . $name . ' must be a string,  ' 
         . gettype( $data[self::TYPE] ) . ' given.' );
     }
-    
     
     $b = $this->pbIoc->create( $name, $data[self::TYPE] );
     $b->setName( $name );
     
-    $biTest = function( string $k, mixed $v ) use ($name) : void {
-      if ( !( $v instanceof Closure ))
-        throw new InvalidArgumentException( $name . '::' . $k . ' must be a closure' );
-    };
-    
-    $b->addBehavior( $this->createPropertyBehavior( 
-      $this->getPropertyFromArray( $data, self::VALIDATE, $biTest ),
-      $this->getPropertyFromArray( $data, self::INIT, $biTest ),
-      $this->getPropertyFromArray( $data, self::SETTER, $biTest ),
-      $this->getPropertyFromArray( $data, self::GETTER, $biTest ),
-      $this->getPropertyFromArray( $data, self::MSETTER, $biTest ),
-      $this->getPropertyFromArray( $data, self::MGETTER, $biTest ),
-      $this->getPropertyFromArray( $data, self::CHANGE, $biTest ),
-      $this->getPropertyFromArray( $data, self::IS_EMPTY, $biTest ),
-      $this->getPropertyFromArray( $data, self::HTMLINPUT, $biTest ),
-      $this->getPropertyFromArray( $data, self::TOARRAY, $biTest )
-    ));
+    $b->addBehavior( $this->createPropertyBehavior( $name, $data ));
     
     foreach( $data as $k => $v )
     {
-      switch( $k )
-      {
-        case self::SETTER:
-        case self::GETTER:
-        case self::MSETTER:
-        case self::MGETTER:
-        case self::INIT:
-        case self::VALIDATE:
-        case self::CHANGE:
-        case self::IS_EMPTY:
-        case self::HTMLINPUT:
-        case self::TOARRAY:
-          //..do nothing
-        break;
-      
-        default:
-          $this->setProperty( $b, $name, $k, $v );
-        break;
-      }          
+      $this->setProperty( $b, $name, $k, $v );
     }
     
     return $b;
@@ -311,6 +292,19 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
     try {
       switch( $k )
       {
+        case self::SETTER:
+        case self::GETTER:
+        case self::MSETTER:
+        case self::MGETTER:
+        case self::INIT:
+        case self::VALIDATE:
+        case self::CHANGE:
+        case self::IS_EMPTY:
+        case self::HTMLINPUT:
+        case self::TOARRAY:
+          //..do nothing, this is handled elsewhere 
+        break;
+        
         case self::TYPE:
           //..do nothing, this must not be overridden
         break;
@@ -363,7 +357,8 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
           $b->setTag( $v );
         break;
       
-        default:
+        default:          
+          //..This is used when creating properties that need custom configuration via the buildler/mapper 
           $this->setCustomProperty( $b, $name, $k, $v );
         break;
       }
