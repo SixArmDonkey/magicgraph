@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -32,10 +32,7 @@ class ModelProperty extends ObjectProperty implements IModelProperty
   {
     return $this->getValue();
   }
-  
-  
-  
-  
+
   
   /**
    * Checks the internal edited flag.
@@ -69,26 +66,32 @@ class ModelProperty extends ObjectProperty implements IModelProperty
     parent::clearEditFlag();
     
     //..Doing this will make relationship providers not save the model edits.
+    //..I typicallly remove commented code, but I wanted to leave this here 
+    //  in case I get a "good idea" one of these days.
     /*
     $value = $this->getValueAsModel();
     if ( $value instanceof IModel )
     {
       $value->clearEditFlags();
     }
-     * 
-     */
+    */
   }  
+
   
-  
+  /**
+   * Test to see if some value is valid 
+   * @param mixed $value
+   * @throws ValidationException 
+   */
   protected function validatePropertyValue( $value ) : void
   {
-    $useNull = $this->getFlags()->hasVal( IPropertyFlags::USE_NULL );
-    if ( $useNull && $value === null )
+    if ( $this->isUseNull() && $value === null )
       return;
     
+    if ( !is_a( $value, $this->getClass()))
+      throw new ValidationException( sprintf( 'Value "%s" for property %s must be an instance of %s Got %s %s', (string)$value, $this->getName(), $this->getClass(), gettype( $value ), ( is_object( $value )) ? ' of class ' . get_class( $value ) : '' ));
+       
     $cur = $this->getValueAsModel();
-    if ( $useNull && $cur == null )
-      return;
     
     if ( empty( $value ) || !is_a( $value, $this->getClass()))
     {
@@ -109,7 +112,7 @@ class ModelProperty extends ObjectProperty implements IModelProperty
    * @return mixed value 
    * @throws \Exception 
    */
-  protected function initValue()
+  protected function initValue() : mixed
   {
     return parent::initValue();
   }
@@ -124,11 +127,15 @@ class ModelProperty extends ObjectProperty implements IModelProperty
    * @param mixed $value Value being set.
    * @return mixed value to validate and set
    */
-  protected function preparePropertyValue( $value )
+  protected function preparePropertyValue( $value ) : mixed
   {
-    if ( !( $value instanceof IModel ))
+    if ( $this->isUseNull() && $value === null )
+    {
+      return $value;
+    }
+    else if ( !( $value instanceof IModel ))
     {      
-      return $this->getValueAsModel();
+      throw new ValidationException( sprintf( 'Value for property %s must be an instance of %s Got %s %s', $this->getName(), $this->getClass(), gettype( $value ), ( is_object( $value )) ? ' of class ' . get_class( $value ) : '' ));
     }
     else
     {

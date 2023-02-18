@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -27,6 +27,12 @@ use InvalidArgumentException;
  */
 interface IPropertySet extends IBigSet
 {  
+  /**
+   * Retrieve the config mapper used to create property instances
+   * @return IConfigMapper
+   */
+  public function getConfigMapper() : IConfigMapper;
+
   
   /**
    * Sets the property set to read only.

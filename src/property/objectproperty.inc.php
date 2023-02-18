@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -16,6 +16,7 @@ namespace buffalokiwi\magicgraph\property;
 use buffalokiwi\magicgraph\ValidationException;
 use Closure;
 use InvalidArgumentException;
+use \Exception;
 
 
 /**
@@ -82,9 +83,11 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
   {
     if ( $this->createClass instanceof Closure )
     {
+    
       $c = $this->createClass;
       try {
         $instance = $c( $this->clazz );
+        
         if ( $instance == null )
         {
           //..Simply try to create it 
@@ -106,6 +109,7 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
       
       if ( !is_a( $instance, $this->clazz ))
         throw new \Exception( 'Property backing object must be an instance of ' . $this->clazz . ' for property ' . $this->getName());
+
       
       return $instance;
     }
@@ -128,10 +132,73 @@ class ObjectProperty extends AbstractProperty implements IObjectProperty
   
   protected function validatePropertyValue( $value ) : void
   {
-    if ( $this->getFlags()->hasVal( IPropertyFlags::USE_NULL ) && $value === null )
+    if ( $this->isUseNull() && $value === null )
       return;
     
     if ( empty( $value ) || !is_a( $value, $this->getClass()))
       throw new ValidationException( sprintf( 'Value "%s" for property %s must be an instance of %s Got %s %s', (string)$value, $this->getName(), $this->getClass(), gettype( $value ), ( is_object( $value )) ? ' of class ' . get_class( $value ) : '' ));
   }  
+  
+  
+  /**
+   * Called when setting a property value.
+   * This is called AFTER validate.
+   * Override this in child classes to modify the value prior to committing it.
+   * This is the default implementation which simply returns the supplied value.
+   * @param mixed $value Value being set
+   * @param mixed $curValue The current value 
+   * @return mixed Value to set 
+   */
+  protected function setPropertyValue( $value, $curValue ) : mixed
+  {
+    $valueIsA = is_a( $value, $this->getClass());
+    $curValueIsA = is_a( $curValue, $this->getClass());
+    
+    if ( !$this->isInitialized())
+    {
+      if ( !$this->isUseNull() && !$valueIsA && !$curValueIsA )
+      {
+        throw new Exception( 'Invalid object property configuration for property "' . $this->getName() . '": '
+          . 'Null values not allowed and initValue was not able to create an instance of "' . $this->getClass() . '"' );
+      }
+      else if ( !$this->isUseNull() && !$valueIsA )
+      {
+        //..This will be the value returned by AbstractProperty::initValue()
+        return $curValue;
+      }
+      else if ( !$this->isUseNull())
+      {
+        //..The builder may return an instance of something via getDefaultValue()
+        return $value;
+      }
+      else if ( $this->isUseNull() && ( $value === null || $valueIsA ))
+      {
+        return $value;
+      }
+      else 
+      {
+        throw new Exception( 'Invalid object property configuration for property "' . $this->getName() 
+          . '": Property value is not null or an instance of ' 
+          . $this->getClass() . ' got ' . (( is_object( $value )) ? get_class( $value ) : gettype( $value )));
+      }    
+    }
+    else if ( !$this->isUseNull() && $value === null )
+    {
+      throw new Exception( 'Null values are not allowed for property "' . $this->getName() . '"' );
+    }
+    else if ( !$this->isUseNull() && !$valueIsA )
+    {
+      throw new Exception( 'Invalid object property configuration for property "' . $this->getName() 
+        . '": Property value is not null or an instance of ' 
+        . $this->getClass() . ' got ' . (( is_object( $value )) ? get_class( $value ) : gettype( $value )));
+    }
+    else if ( $this->isUseNull() && $value !== null && !$valueIsA )
+    {
+      throw new Exception( 'Invalid object property configuration for property "' . $this->getName() 
+        . '": Property value is not null or an instance of ' 
+        . $this->getClass() . ' or null.  Got ' . (( is_object( $value )) ? get_class( $value ) : gettype( $value )));
+    }
+    
+    return $value;
+  }
 }

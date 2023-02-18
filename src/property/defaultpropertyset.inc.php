@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -111,6 +111,8 @@ class DefaultPropertySet extends BigSet implements IPropertySet
     
     $this->propFactory = $properties;
 
+
+    
     $this->addPropertyConfig( ...$config );
   }
   
@@ -136,6 +138,16 @@ class DefaultPropertySet extends BigSet implements IPropertySet
   public function setOnAddMember( \Closure $callback ) : void
   {
     $this->onAddMember[] = $callback;
+  }
+  
+  
+  /**
+   * Retrieve the config mapper used to create property instances
+   * @return IConfigMapper
+   */
+  public function getConfigMapper() : IConfigMapper
+  {
+    return $this->propFactory->getMapper();    
   }
   
   

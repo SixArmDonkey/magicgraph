@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -33,7 +33,7 @@ class QuickPropertyConfig extends BasePropertyConfig implements IPropertyConfig
    * @param array $config Config data array 
    * @param \Closure $onValidate f( IModel ) throws ValidationException
    */
-  public function __construct( array $config, ?Closure $onValidate = null, \buffalokiwi\magicgraph\property\INamedPropertyBehavior ...$behavior )
+  public function __construct( array $config, ?Closure $onValidate = null, INamedPropertyBehavior ...$behavior )
   {
     parent::__construct( ...$behavior );
     $this->config = $config;

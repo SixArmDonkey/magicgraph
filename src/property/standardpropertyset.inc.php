@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -25,6 +25,6 @@ class StandardPropertySet extends DefaultPropertySet implements IPropertySet
    */
   public function __construct( IPropertyConfig ...$config )
   {
-    parent::__construct( new PropertyFactory( new DefaultConfigMapper()), ...$config );
+    parent::__construct( new MappedPropertyFactory( new DefaultConfigMapper()), ...$config );
   }
 }

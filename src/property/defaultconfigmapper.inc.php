@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -18,6 +18,7 @@ use buffalokiwi\magicgraph\IModel;
 use buffalokiwi\magicgraph\money\IMoneyFactory;
 use Closure;
 use Exception;
+use InvalidArgumentException;
 
 
 /**
@@ -33,6 +34,12 @@ use Exception;
  * instance of BasePropertyBuilderConfigMapper directly.  
  * 
  * This default implementation is provided as both a default and an example.
+ * 
+ * 
+ * This may be shared everywhere.
+ * 
+ * ===================================
+ * 
  */
 class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
 {
@@ -58,19 +65,16 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
   public function __construct( ?IIOC $ioc = null, string $dateFormat = 'Y-m-d H:i:s' )
   {
     if ( empty( $dateFormat ))
-      throw new \InvalidArgumentException( 'Date format must not be empty' );
+      throw new InvalidArgumentException( 'Date format must not be empty' );
     
     $this->dateFormat = $dateFormat;
     $this->ioc = $ioc;
-    if ( $ioc != null )
-      $df = $ioc->getInstance( IDateFactory::class );
-    else
-      $df = null;
     
     
     
     /**
-     * Invoking via __callStatic causes the enum to become read only by default 
+     * Invoking via __callStatic causes the enum to become read only by default.
+     * We can share the same instance between all property instances.
      * @todo Move this code into composition root.  
      * @todo Figure out how to provide this code as part of a default build
      */
@@ -87,6 +91,10 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
     $l = EPropertyType::TMODEL();
     $o = EPropertyType::TOBJECT();
     
+    
+    
+    
+
     
     $builders =  [
       EPropertyType::TBOOLEAN => fn() => new PropertyBuilder( $b, new SPropertyFlags()),
@@ -121,10 +129,11 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
       EPropertyType::TMODEL   => fn( IPropertyBuilder $builder ) => new ModelProperty( $builder ),
       EPropertyType::TOBJECT  => fn( IPropertyBuilder $builder ) => new ObjectProperty( $builder )
     ];
-
-        
+    
+            
     if ( $ioc != null )
     {
+      $df = $ioc->getInstance( IDateFactory::class );
       $mf = $this->getMoneyFactory();      
       $builders[EPropertyType::TMONEY] = fn() => new BoundedPropertyBuilder( $m, new SPropertyFlags());
       $factories[EPropertyType::TMONEY] = fn( IPropertyBuilder $builder ) => new MoneyProperty( $builder, $mf );
@@ -132,6 +141,7 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
     else
     {
       //..If no IOC container is passed, back TMONEY with a string.
+      $df = null;
       $builders[EPropertyType::TMONEY] = fn() => new StringPropertyBuilder( $s, new SPropertyFlags());
       $factories[EPropertyType::TMONEY] = fn( IPropertyBuilder $builder ) => new StringProperty( $builder );
     }
@@ -139,7 +149,7 @@ class DefaultConfigMapper extends BasePropertyBuilderConfigMapper
     
     parent::__construct(
       new PropertyBuilderFactory( new EPropertyType(), $builders ),
-      new DefaultPropertyFactory( new EPropertyType(), $factories )
+      new PropertyFactory( new EPropertyType(), $factories )
     );
   }
   

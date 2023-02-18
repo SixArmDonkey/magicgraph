@@ -41,7 +41,7 @@ class DatePropertyTest extends AbstractPropertyTest
   }
   
   
-  public function testHydrateSetsValueAndEditedIsFalseAndThrowsExceptionWhenEditedIsTrue() : void
+  public function testHydrateSetsValueWhenEditedIsFalseAndThrowsExceptionWhenEditedIsTrue() : void
   {
     $instance = $this->getInstance( $this->createPropertyBuilder());
     $instance->reset();

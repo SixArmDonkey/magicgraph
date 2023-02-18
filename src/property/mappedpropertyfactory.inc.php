@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -15,7 +15,7 @@ namespace buffalokiwi\magicgraph\property;
 /**
  * Maps a configuration array to a list of properties.
  * 
- * The configuration array is as follows:
+ * The default configuration array is as follows:
  * 
  * [
  *   'property_name' => [   //..This should be a constant from the property set interface for whatever model is being used 
@@ -29,6 +29,10 @@ namespace buffalokiwi\magicgraph\property;
  *     PropertyFactory::PATTERN => '/[a-z]+/', //Some pattern to use as validation 
  *   ]
  * ];
+ * 
+ * 
+ * Note: The IConfigMapper instance will determine the exact configuration array syntax.
+ * 
  */
 class MappedPropertyFactory implements IMappedPropertyFactory
 {
@@ -72,7 +76,8 @@ class MappedPropertyFactory implements IMappedPropertyFactory
       try {
         $out = array_merge( $out, $this->mapper->map( $c->getConfig()));                
       } catch( \Exception $e ) {
-        trigger_error( 'Property configuration object ' . get_class( $c ) . ' contains errors and cannot be compiled', E_USER_ERROR );
+        trigger_error( 'Property configuration object ' . get_class( $c ) 
+          . ' contains errors and cannot be compiled', E_USER_ERROR );
         throw $e;
       }
     }

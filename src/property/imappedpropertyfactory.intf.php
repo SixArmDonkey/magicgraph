@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -24,4 +24,12 @@ interface IMappedPropertyFactory
    * @return IProperty[] properties
    */
   public function getProperties( IPropertyConfig ...$config ) : array;
+  
+  
+  /**
+   * Retrieve the config mapper used to create IProperty instances from 
+   * config arrays.
+   * @return IConfigMapper Mapper 
+   */
+  public function getMapper() : IConfigMapper;  
 }

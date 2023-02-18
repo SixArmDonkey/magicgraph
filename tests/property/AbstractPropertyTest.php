@@ -374,10 +374,11 @@ abstract class AbstractPropertyTest extends TestCase
   }
 
   
-  public function testHydrateSetsValueAndEditedIsFalseAndThrowsExceptionWhenEditedIsTrue() : void
+  public function testHydrateSetsValueWhenEditedIsFalseAndThrowsExceptionWhenEditedIsTrue() : void
   {
     $instance = $this->getInstance( $this->createPropertyBuilder());
     $instance->reset();
+
     $this->assertFalse( $instance->isEdited());
     $instance->hydrate( $this->getConstValue1() );
     $this->assertFalse( $instance->isEdited());
@@ -453,7 +454,7 @@ abstract class AbstractPropertyTest extends TestCase
   }
   
 
-  public function testValidateThrowsExceptionWhenValueIsNullAndUseNulllFlagIsNotSet() : void
+  public function testValidateThrowsExceptionWhenValueIsNullAndUseNullFlagIsNotSet() : void
   {
     $instance = $this->getInstance( $this->createPropertyBuilderWithFlags( self::name, IPropertyFlags::USE_NULL ), true );
     $instance->reset();

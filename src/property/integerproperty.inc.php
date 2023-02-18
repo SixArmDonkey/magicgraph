@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -52,7 +52,7 @@ class IntegerProperty extends BoundedProperty implements IIntegerProperty
    */
   protected function validatePropertyValue( $value ) : void
   {
-    if ( $this->getFlags()->hasVal( SPropertyFlags::USE_NULL ) && $value === null )
+    if ( $this->isUseNull() && $value === null )
       return; //..This is ok
     
     if ( filter_var( $value, FILTER_VALIDATE_INT ) === false )
@@ -71,8 +71,11 @@ class IntegerProperty extends BoundedProperty implements IIntegerProperty
    * @param mixed $curValue the current value 
    * @return int Value to set 
    */
-  protected function setPropertyValue( $value, $curValue )
+  protected function setPropertyValue( $value, $curValue ) : mixed
   {
+    if ( $this->isUseNull())
+      return null;
+    
     return (int)$value;
   }
   
@@ -83,8 +86,6 @@ class IntegerProperty extends BoundedProperty implements IIntegerProperty
     if ( is_string( $value ) && ctype_digit((string)$value ))
       return empty((int)$value);
     
-    return parent::isPropertyEmpty( $value );
-      
-    
+    return parent::isPropertyEmpty( $value );    
   }
 }

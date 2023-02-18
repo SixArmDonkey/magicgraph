@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  * 
  * @author John Quinn
  */
@@ -124,16 +124,6 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
 
     foreach( $config as $name => $data )
     {
-      /*
-      //..This is impossible
-      if ( isset( $out[$name] ))
-      {
-        throw new InvalidArgumentException( "A property with the name: " . $name . " has already been defined. Check "
-          . get_class( $config ));
-      }
-      else 
-      */
-      
       if ( !is_array( $data ))
       {
         throw new InvalidArgumentException( 'Config entries must be an array.  "'  . $name 
@@ -150,6 +140,30 @@ class BasePropertyBuilderConfigMapper extends DefaultPropertyConfig implements I
     }
     
     return $out;
+  }
+  
+  
+  /**
+   * Create an IProperty instance 
+   * @param IPropertyType $type Type to create
+   * @param string $name Name 
+   * @param mixed $value Value to set
+   * @param array $more Extra configuration options 
+   * @return IProperty The new property
+   * @throws InvalidArgumentException 
+   */
+  public function createPropertyByType( IPropertyType $type, string $name, mixed $value, array $more = [] ) : IProperty
+  {
+    $res = $this->map([ $name => array_merge([
+      self::TYPE => $type->value(),
+      self::VALUE => $value,
+      self::FLAGS => [IPropertyFlags::USE_NULL]
+    ], $more )]);
+    
+    if ( empty( $res ))
+      throw new InvalidArgumentException( 'Invalid property configuration' );
+    
+    return reset( $res );
   }
   
   

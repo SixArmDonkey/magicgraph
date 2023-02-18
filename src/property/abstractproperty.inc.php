@@ -3,7 +3,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  *
- * Copyright (c) 2012-2020 John Quinn <john@retail-rack.com>
+ * Copyright (c) 2019 John Quinn <johnquinn3@gmail.com>
  *
  * @author John Quinn
  */
@@ -267,6 +267,8 @@ abstract class AbstractProperty implements IProperty
     $this->isInitialized = true;
     $this->isGetCalled = false;
     
+    
+    
     return $this;
   }
   
@@ -523,6 +525,16 @@ abstract class AbstractProperty implements IProperty
   protected function isPropertyEmpty( $value ) : bool
   {
     return !$this->isInitialized || $value === $this->defaultValue;
+  }
+  
+  
+  /**
+   * If the property has been initialized (reset has been invoked)
+   * @return bool
+   */
+  protected function isInitialized() : bool
+  {
+    return $this->isInitialized;
   }
   
   
